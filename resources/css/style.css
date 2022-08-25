@@ -1,0 +1,17 @@
+.card-border {
+    border-width: 0.08rem !important;
+    border-color: darkgray !important;
+}
+
+.card-border2 {
+    border-width: 1px !important;
+    border-color: red !important;
+    /* background-color: pink; */
+    display: block;
+    box-sizing: border-box;
+}
+
+.no-border {
+    border: 0;
+    box-shadow: none; /* You may want to include this as bootstrap applies these styles too */
+}
