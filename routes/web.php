@@ -16,6 +16,7 @@ use App\Http\Controllers\SetController;
 |
 */
 
+
 Route::get('/', [\App\Http\Controllers\Controller::class,'index'])->name('index');
 Route::get('/home', [\App\Http\Controllers\Controller::class,'home']);
 Route::get('/calender' , [\App\Http\Controllers\Controller::class,'showCalender'])->name('calender');
@@ -28,25 +29,25 @@ Route::get('/show-item/{id}' , [\App\Http\Controllers\Controller::class,'showIte
 
 Auth::routes();
 
-Route::group(['prefix' => 'item'] , function() {
-    // Route::get('/', [\App\Http\Controllers\Controller::class, 'items'])->name('items');
-    Route::get('/get-items' , [ItemController::class,'getItems'])->name('get-items');
+// Route::group(['prefix' => 'item'] , function() {
+//     // Route::get('/', [\App\Http\Controllers\Controller::class, 'items'])->name('items');
+//     Route::get('/get-items' , [ItemController::class,'getItems'])->name('get-items');
 
-});
+// });
 
-Route::group(['prefix' => 'set'] , function() {
-    // Route::get('/', [\App\Http\Controllers\Controller::class, 'items'])->name('items');
-    Route::get('/get-sets' , [setController::class,'getSets'])->name('get-sets');
-    Route::get('/create-set/{id}' , [\App\Http\Controllers\SetItemController::class,'createSet'])->name('create-set');
-    Route::get('/get-matching-items/{id}' , [\App\Http\Controllers\SetItemController::class,'getMatchingItems'])->name('get-matching-items');
-    Route::post('/add-item-to-set/{id}' , [\App\Http\Controllers\SetItemController::class,'addItemToSet'])->name('addItemToSet');
+// Route::group(['prefix' => 'set'] , function() {
+//     // Route::get('/', [\App\Http\Controllers\Controller::class, 'items'])->name('items');
+//     Route::get('/get-sets' , [setController::class,'getSets'])->name('get-sets');
+//     Route::get('/create-set/{id}' , [\App\Http\Controllers\SetItemController::class,'createSet'])->name('create-set');
+//     Route::get('/get-matching-items/{id}' , [\App\Http\Controllers\SetItemController::class,'getMatchingItems'])->name('get-matching-items');
+//     Route::post('/add-item-to-set/{id}' , [\App\Http\Controllers\SetItemController::class,'addItemToSet'])->name('addItemToSet');
     
 
-});
+// });
 
 // Route::get('/get-sets' , [SetController::class,'getSets'])->name('get-sets');
-Route::resource('item', ItemController::class);
-Route::resource('set', SetController::class);
+// Route::resource('item', ItemController::class);
+// Route::resource('set', SetController::class);
 
 
 
