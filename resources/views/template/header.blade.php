@@ -26,7 +26,7 @@
     <link rel="stylesheet" type="text/css" href="{{ url('/resources/css/plugins/charts/chart-apex.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url('/resources/css/plugins/extensions/ext-component-toastr.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url('/resources/css/style.css') }}">
-   
+    
 
    
     <link rel="stylesheet" type="text/css" href="{{ url('/resources/vendors/css/tables/datatable/dataTables.bootstrap5.min.css') }}">
@@ -35,8 +35,6 @@
   
 
     <link rel="stylesheet" type="text/css" href="{{ url('/resources/css/plugins/forms/form-validation.css') }}">
-
-
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 

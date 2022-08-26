@@ -48,7 +48,7 @@
           <span class=" menu-title text-truncate" data-i18n="Patients">Sales</span></a>
       </li>
       <li class=" nav-item"><a class="d-flex align-items-center" ">
-          <span class=" menu-title text-truncate" data-i18n="Patients">Commidion</span></a>
+          <span class=" menu-title text-truncate" data-i18n="Patients">Commision</span></a>
       </li>
       <li class=" nav-item"><a class="d-flex align-items-center" ">
           <span class=" menu-title text-truncate" data-i18n="Patients">Recovery</span></a>
