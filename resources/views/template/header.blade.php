@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>CSSD</title>
+    <title>Alaksa Digital</title>
     <meta charset="UTF-8">
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
@@ -41,10 +41,10 @@
 </head>
 
 <body class="vertical-layout vertical-menu-modern  navbar-floating footer-static menu-collapsed" data-open="click" data-menu="vertical-menu-modern" data-col="">
-    @include('template.main-header')
-  
-        @include('template.sidebar')
-   
+        @if(Auth::user())
+            @include('template.main-header')
+            @include('template.sidebar')
+        @endif
     
 
     <div class="app-content content ">
