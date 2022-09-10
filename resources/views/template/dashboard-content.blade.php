@@ -89,9 +89,7 @@
                                             <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
                                             <polyline points="17 6 23 6 23 12"></polyline>
                                         </svg>
-                                       
                                     </div>
-                                    
                                 </div>
                                 <div class="my-auto">
                                     <h4 class="fw-bolder mb-0">230k</h4>
@@ -149,13 +147,10 @@
                                     <p class="card-text font-small-3 mb-0">Charity</p>
                                 </div>
                             </div>
-                        </div>
-                       
-                       
+                        </div>     
                     </div>
                 </div>
             </div>
-
         </section>
 
     </div>
