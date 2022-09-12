@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>Alaksa Digital</title>
+    <title>Alpha Digital</title>
     <meta charset="UTF-8">
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">

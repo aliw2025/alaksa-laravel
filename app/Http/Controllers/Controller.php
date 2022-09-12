@@ -20,46 +20,50 @@ class Controller extends BaseController
     public function index()
     {
         return view("template.dashboard-content");
-       
     }
+    
     public function home()
     {
         //return view("home");
         return view("template.dashboard-content");
-
     }
-     
-    public function items(){
-        $items = Item::orderBy('id','asc')->paginate(5);
-    
-        return view('cssd.items',compact('items'))
+
+    public function items()
+    {
+        $items = Item::orderBy('id', 'asc')->paginate(5);
+
+        return view('cssd.items', compact('items'))
             ->with('i', (request()->input('page', 1) - 1) * 5);
         // $items = Item::all();
         // dd($items);
         // return view('cssd.items', compact( 'items', 'items'));
     }
 
-    public function testSet(){
+    public function testSet()
+    {
 
         $set = Set::find(2);
         //  dd($set);
-         return $set->items;
+        return $set->items;
     }
 
-    public function testAdd($id){
+    public function testAdd($id)
+    {
 
         $set  = Set::find(1);
         // dd($set);
-        $set->items()->attach($id,['quantity' => 3]); 
+        $set->items()->attach($id, ['quantity' => 3]);
         return $set;
     }
 
-    public function showSet(Set $id){
-        $set = Set :: find($id)->first();
+    public function showSet(Set $id)
+    {
+        $set = Set::find($id)->first();
         return $set;
     }
 
-    public function showItem(Item $id){
+    public function showItem(Item $id)
+    {
         // dd($item);
         $item = Item::find($id)->first();
         return $item;
@@ -83,6 +87,4 @@ class Controller extends BaseController
         curl_close($curl);
         print_r($data);
     }
-
-   
 }

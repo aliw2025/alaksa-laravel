@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\SetController;
+use App\Http\Controllers\InvestorController;
+
 
 
 /*
@@ -28,6 +30,8 @@ Route::get('/show-set/{id}' , [\App\Http\Controllers\Controller::class,'showSet'
 Route::get('/show-item/{id}' , [\App\Http\Controllers\Controller::class,'showItem'])->name('showItem');
 
 Auth::routes();
+Route::resource('investor', InvestorController::class);
+
 
 // Route::group(['prefix' => 'item'] , function() {
 //     // Route::get('/', [\App\Http\Controllers\Controller::class, 'items'])->name('items');
