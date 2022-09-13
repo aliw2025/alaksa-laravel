@@ -7,70 +7,38 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
-use App\Models\Item;
-use App\Models\Set;
+
 use Carbon\Cli\Invoker;
 use finfo;
 
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+
     public function __construct()
     {
         $this->middleware('auth');
     }
+
     public function index()
-    {   $investors = Investor::all();  
+    {   
+        $investors = Investor::all();  
         return view("template.dashboard-content",compact('investors'));
     }
     
-    public function home()
+    public function home($id)
     {
+        $investor = Investor::find($id);
+        // dd($investor);
         //return view("home");
-        return view("template.dashboard-content");
+        return view("template.dashboard-content",compact('investor'));
+    }
+    public function showInvestments(){
+
+        return view("capital-investments.capital-investment");
     }
 
-    public function items()
-    {   
-        $items = Item::orderBy('id', 'asc')->paginate(5);
-
-        return view('cssd.items', compact('items'))
-            ->with('i', (request()->input('page', 1) - 1) * 5);
-        // $items = Item::all();
-        // dd($items);
-        // return view('cssd.items', compact( 'items', 'items'));
-    }
-
-    public function testSet()
-    {
-
-        $set = Set::find(2);
-        //  dd($set);
-        return $set->items;
-    }
-
-    public function testAdd($id)
-    {
-
-        $set  = Set::find(1);
-        // dd($set);
-        $set->items()->attach($id, ['quantity' => 3]);
-        return $set;
-    }
-
-    public function showSet(Set $id)
-    {
-        $set = Set::find($id)->first();
-        return $set;
-    }
-
-    public function showItem(Item $id)
-    {
-        // dd($item);
-        $item = Item::find($id)->first();
-        return $item;
-    }
-
+   
     // unused routes
     public function testSQL()
     {

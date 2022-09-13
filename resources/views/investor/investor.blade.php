@@ -10,16 +10,10 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <!-- <div class="d-flex justify-content-end">
-                        <div>
-                            <button onclick="window.location='{{route("investor.create")}}'" href="http://localhost/cssd/quotations/create" type="reset" class="btn btn-primary me-1 waves-effect waves-float waves-light">
-                                Add New
-                            </button>
-                        </div>
-                    </div> -->
+                   
                     <div class="row ">
                         <div class="col-12 table-responsive">
-                            <table id="items-table" class="table">
+                            <table id="investor-table" class="table">
                                 <thead class="thead-dark">
                                     <tr style="background-color:red !important;">
                                         <th style="width: 2px !important">#</th>
@@ -151,7 +145,7 @@
     $(document).ready(function() {
 
         $(document).ready(function() {
-            $('#items-table').DataTable();
+            $('#investor-table').DataTable();
         });
 
     });

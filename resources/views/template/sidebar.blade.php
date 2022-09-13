@@ -17,8 +17,9 @@
   <div class="shadow-bottom" style="display: none;"></div>
   <div class="main-menu-content ps ps--active-y" style="height: 806.625px;">
     <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
+      <!------------------------------------------- Alpha Digital --------------------------------------------------->
       <li class=" nav-item">
-        <a class="d-flex align-items-center" href="index-2.html">
+        <a class="d-flex align-items-center" href="#">
           <i data-feather="home"></i><span class="menu-title text-truncate" data-i18n="Dashboards">Alpha Digital</span>
         </a>
         <ul class="menu-content">
@@ -36,12 +37,12 @@
           </li>
         </ul>
       </li>
+      <!------------------------------------------- investor --------------------------------------------------->
       <li class=" nav-item">
-        <a class="d-flex align-items-center" href="index-2.html">
+        <a class="d-flex align-items-center" href="#">
           <i data-feather='users'></i>
           <span class="menu-title text-truncate" data-i18n="Dashboards">Investors</span>
         </a>
-       {{-- {{Route::currentRouteName()}} --}}
         <ul class="menu-content">
           <li>
             <a class="d-flex align-items-center @if(request()->is('investor.create')) active text-white @endif" href="{{route('investor.create')}}">
@@ -49,26 +50,173 @@
               <span class="menu-item text-truncate" data-i18n="eCommerce">Add New</span>
             </a>
           </li>
-          @foreach($investors as $investor)
+          @php
+          $inv = \App\Models\Investor::where('id','!=',0)->get();
+          @endphp
+          @foreach($inv as $investor)
           <li>
-            <a class="d-flex align-items-center ">
+            <a href="{{route('home',$investor->id)}}" class="d-flex align-items-center ">
               <i data-feather="circle"></i>
               <span class="menu-item text-truncate" data-i18n="eCommerce">{{$investor->prefix}}</span>
             </a>
           </li>
-
           @endforeach
+        </ul>
+      </li>
+      <!------------------------------------------- Inventory --------------------------------------------------->
+      <li class=" nav-item">
+        <a class="d-flex align-items-center" href="#">
+          <i data-feather='file-text'></i>
+          <span class="menu-title text-truncate" data-i18n="Dashboards">Inventory</span>
+        </a>
+
+        <ul class="menu-content">
+          <li class=" nav-item">
+            <a class="d-flex align-items-center" href="#">
+              <i data-feather="circle"></i>
+              <span class="menu-title text-truncate" data-i18n="Dashboards">Update Inventory</span>
+            </a>
+            <ul class="menu-content">
+              @php
+              $inv_sales = \App\Models\Investor::all();
+              @endphp
+              @foreach($inv_sales as $investor)
+              <li>
+                <a href="{{route('home',$investor->id)}}" class="d-flex align-items-center ">
+                  <i data-feather="circle"></i>
+                  <span class="menu-item text-truncate" data-i18n="eCommerce">{{$investor->prefix}}</span>
+                </a>
+              </li>
+              @endforeach
+            </ul>
+          </li>
+          <li class=" nav-item">
+            <a class="d-flex align-items-center" href="#">
+              <i data-feather="circle"></i>
+              <span class="menu-title text-truncate" data-i18n="Dashboards">Reports</span>
+            </a>
+            <ul class="menu-content">
+
+              @foreach($inv_sales as $investor)
+              <li>
+                <a href="{{route('home',$investor->id)}}" class="d-flex align-items-center ">
+                  <i data-feather="circle"></i>
+                  <span class="menu-item text-truncate" data-i18n="eCommerce">{{$investor->prefix}}</span>
+                </a>
+              </li>
+              @endforeach
+            </ul>
+          </li>
 
         </ul>
       </li>
+      <!------------------------------------------- Sales --------------------------------------------------->
       <li class=" nav-item">
-        <a href="{{route('investor.create')}}" class="d-flex align-items-center ">
-          <i data-feather='file-text'></i>
-          <span class=" menu-title text-truncate" data-i18n="inventory">Inventory</span>
+        <a class="d-flex align-items-center" href="#">
+          <i data-feather='trending-up'></i>
+          <span class="menu-title text-truncate" data-i18n="Dashboards">Sales</span>
         </a>
+        <ul class="menu-content">
+          <li class=" nav-item">
+            <a class="d-flex align-items-center" href="#">
+              <i data-feather="circle"></i>
+              <span class="menu-title text-truncate" data-i18n="Dashboards">New Sale</span>
+            </a>
+            <ul class="menu-content">
+              @foreach($inv_sales as $investor)
+              <li>
+                <a href="{{route('home',$investor->id)}}" class="d-flex align-items-center ">
+                  <i data-feather="circle"></i>
+                  <span class="menu-item text-truncate" data-i18n="eCommerce">{{$investor->prefix}}</span>
+                </a>
+              </li>
+              @endforeach
+            </ul>
+          </li>
+          <li class=" nav-item">
+            <a class="d-flex align-items-center" href="#">
+              <i data-feather="circle"></i>
+              <span class="menu-title text-truncate" data-i18n="Dashboards">Reports</span>
+            </a>
+            <ul class="menu-content">
+              @php
+              $inv_sales = \App\Models\Investor::all();
+              @endphp
+              @foreach($inv_sales as $investor)
+              <li>
+                <a href="{{route('home',$investor->id)}}" class="d-flex align-items-center ">
+                  <i data-feather="circle"></i>
+                  <span class="menu-item text-truncate" data-i18n="eCommerce">{{$investor->prefix}}</span>
+                </a>
+              </li>
+              @endforeach
+            </ul>
+          </li>
+        </ul>
       </li>
-      <li class=" nav-item"><a class="d-flex align-items-center">
-          <span class=" menu-title text-truncate" data-i18n="sales">Sales</span></a>
+      <!------------------------------------------- receivables --------------------------------------------------->
+      <li class=" nav-item">
+        <a class="d-flex align-items-center" href="#">
+        <i data-feather='arrow-down'></i>
+          <span class="menu-title text-truncate" data-i18n="Dashboards">Receivables</span>
+        </a>
+        <ul class="menu-content">
+          <li class="nav-item">
+            <a class="d-flex align-items-center" href="#">
+              <i data-feather="circle"></i>
+              <span class="menu-title text-truncate" data-i18n="Dashboards">Reciepts</span>
+            </a>
+            <ul class="menu-content">
+              @php
+              $inv_sales = \App\Models\Investor::all();
+              @endphp
+              @foreach($inv_sales as $investor)
+              <li class="nav-item">
+                <a class="d-flex align-items-center" href="#">
+                  <!-- <i data-feather="circle"></i> -->
+                  <span style="font-size: 12px;" class="menu-title text-truncate" data-i18n="Dashboards">{{$investor->prefix}}</span>
+                </a>
+                <ul class="menu-content">
+                  <li class="nav-item">
+                    <a class="d-flex align-items-center" href="#">
+                      <i data-feather="circle"></i>
+                      <span style="font-size: 12px;" class=" text-truncate" data-i18n="Dashboards">Due Installments</span>
+                    </a>
+                   
+                  </li>
+                  <li class="nav-item">
+                    <a class="d-flex align-items-center" href="#">
+                      <i data-feather="circle"></i>
+                      <span style="font-size: 12px;" class=" text-truncate" data-i18n="Dashboards">Cash Sales</span>
+                    </a>
+                   
+                  </li>
+                  
+                </ul>
+              </li>
+              @endforeach
+            </ul>
+          </li>
+          <li class=" nav-item">
+            <a class="d-flex align-items-center" href="#">
+              <i data-feather="circle"></i>
+              <span class="menu-title text-truncate" data-i18n="Dashboards">Reports</span>
+            </a>
+            <ul class="menu-content">
+              @php
+              $inv_sales = \App\Models\Investor::all();
+              @endphp
+              @foreach($inv_sales as $investor)
+              <li>
+                <a href="{{route('home',$investor->id)}}" class="d-flex align-items-center ">
+                  <i data-feather="circle"></i>
+                  <span class="menu-item text-truncate" data-i18n="eCommerce">{{$investor->prefix}}</span>
+                </a>
+              </li>
+              @endforeach
+            </ul>
+          </li>
+        </ul>
       </li>
       <li class=" nav-item"><a class="d-flex align-items-center">
           <span class=" menu-title text-truncate" data-i18n="comision">Commision</span></a>

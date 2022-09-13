@@ -1,10 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ItemController;
-use App\Http\Controllers\SetController;
-use App\Http\Controllers\InvestorController;
 
+use App\Http\Controllers\InvestorController;
 
 
 /*
@@ -20,14 +18,9 @@ use App\Http\Controllers\InvestorController;
 
 
 Route::get('/', [\App\Http\Controllers\Controller::class,'index'])->name('index');
-Route::get('/home', [\App\Http\Controllers\Controller::class,'home']);
+Route::get('/home/{id}', [\App\Http\Controllers\Controller::class,'home'])->name('home');
 Route::get('/calender' , [\App\Http\Controllers\Controller::class,'showCalender'])->name('calender');
-
-// test routes
-Route::get('/test-set' , [\App\Http\Controllers\Controller::class,'testSet'])->name('testSet');
-Route::get('/test-add/{id}' , [\App\Http\Controllers\Controller::class,'testAdd'])->name('testAdd');
-Route::get('/show-set/{id}' , [\App\Http\Controllers\Controller::class,'showSet'])->name('showSet');
-Route::get('/show-item/{id}' , [\App\Http\Controllers\Controller::class,'showItem'])->name('showItem');
+Route::get('/capital-investments' , [\App\Http\Controllers\Controller::class,'showInvestments'])->name('capital-investments');
 
 Auth::routes();
 Route::resource('investor', InvestorController::class);

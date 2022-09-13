@@ -16,7 +16,9 @@ class InvestorController extends Controller
     public function index()
     {
         //
-        $investors = Investor ::all();
+        // $investors = Investor ::all();
+        $investors = Investor::where('id','!=',0)->get();  
+
         return view('investor.investor',compact('investors'));
     }
 
@@ -27,7 +29,9 @@ class InvestorController extends Controller
      */
     public function create()
     {
-        $investors = Investor ::all();
+        // $investors = Investor ::all();
+        $investors = Investor::where('id','!=',0)->get();  
+
         return view('investor.investor',compact('investors'));
         return view('investor.add-new-investor',compact('investors'));
     }
