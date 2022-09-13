@@ -43,13 +43,16 @@ class InvestorController extends Controller
         //
         $validated = $request->validate(
             [
-                'investor_name' => 'required|unique:investors',
-                'email' => 'required',
-                'phone' => 'required',
-                'prefix' => 'required',
+                'investor_name' => 'required',
+                'email' => 'required|email|unique:investors',
+                'phone' => 'required|min:8|max:11|unique:investors',
+                'prefix' => 'required|unique:investors',
             ],[
-                'investor_name.required' => 'Please enter investor Name',
-                'investor_name.unique' => ' investor Name already exists'
+                
+                'investor_name.unique' => ' investor Name already exists',
+                'email.unique' => ' Email already exists',
+                'phone.unique' => ' Number already exists',
+                'prefix.unique' => ' prefix already exists'
             ]
         );
         $investor = new Investor();
@@ -81,6 +84,9 @@ class InvestorController extends Controller
     public function edit(Investor $investor)
     {
         //
+        $investors = Investor ::all();
+        
+        return view('investor.investor',compact('investors','investor'));
     }
 
     /**
@@ -93,6 +99,30 @@ class InvestorController extends Controller
     public function update(Request $request, Investor $investor)
     {
         //
+
+        $validated = $request->validate(
+            [
+               'investor_name' => 'required',
+                'email' => 'required|email|unique:investors,email,'.$investor->id,
+                'phone' => 'required|min:8|max:11|unique:investors,phone,'.$investor->id,
+                'prefix' => 'required|unique:investors,prefix,'.$investor->id,
+            ],[
+                
+                'investor_name.unique' => ' investor Name already exists',
+                'email.unique' => ' Email already exists',
+                'phone.unique' => ' Number already exists',
+                'prefix.unique' => ' prefix already exists'
+            ]
+        );
+       
+        $investor->investor_name = $request->investor_name;
+        $investor->email = $request->email;
+        $investor->phone = $request->phone;
+        $investor->prefix = $request->prefix;
+        $investor->save();
+        return redirect()->route('investor.index');
+
+
     }
 
     /**

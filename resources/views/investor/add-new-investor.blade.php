@@ -21,6 +21,7 @@
                     @csrf
                     <div class="row w-50 mx-auto">
                         <div class=" ">
+                            {{$investossdsr->investor_name}}
                             <!-- <input id="investorName" name="investor_name" class="@error('investor_name') is-invalid @enderror form-control" autocomplete="off" id="exampleDataList" placeholder="Enter investor Name"> -->
                             <div class="mb-1">
                                 <label class="form-label" for="first-name-vertical">Investor Name</label>
@@ -34,7 +35,7 @@
                         <div class="">
                             <div class="mb-1">
                                 <label class="form-label" for="email-id-vertical">Email</label>
-                                <input type="email" id="email" class="@error('email') is-invalid @enderror form-control" name="email" placeholder="Email">
+                                <input value="{{old('email')}}"  type="email" id="email" class="@error('email') is-invalid @enderror form-control" name="email" placeholder="Email">
                                 @error('email')
                                 <div class="alert alert-danger">{{ $message }}</div>
                                 @enderror
@@ -42,8 +43,11 @@
                         </div>
                         <div class="">
                             <div class="mb-1">
+                                {{-- @if(isset($investor)) --}}
+                                
+                                {{-- @endif --}}
                                 <label class="form-label" for="contact-info-vertical">Mobile</label>
-                                <input type="number" id="contact-info-vertical" class="@error('phone') is-invalid @enderror form-control" name="phone" placeholder="Mobile">
+                                <input  value="{{old('phone')}}" type="number" id="contact-info-vertical" class="@error('phone') is-invalid @enderror form-control" name="phone" placeholder="Mobile">
                                 @error('phone')
                                 <div class="alert alert-danger">{{ $message }}</div>
                                 @enderror

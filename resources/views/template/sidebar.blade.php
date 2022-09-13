@@ -41,18 +41,19 @@
           <i data-feather='users'></i>
           <span class="menu-title text-truncate" data-i18n="Dashboards">Investors</span>
         </a>
+       {{-- {{Route::currentRouteName()}} --}}
         <ul class="menu-content">
           <li>
-            <a class="d-flex align-items-center" href="{{route('investor.create')}}">
+            <a class="d-flex align-items-center @if(request()->is('investor.create')) active text-white @endif" href="{{route('investor.create')}}">
               <i data-feather="circle"></i>
               <span class="menu-item text-truncate" data-i18n="eCommerce">Add New</span>
             </a>
           </li>
           @foreach($investors as $investor)
           <li>
-            <a class="d-flex align-items-center">
+            <a class="d-flex align-items-center ">
               <i data-feather="circle"></i>
-              <span class="menu-item text-truncate" data-i18n="eCommerce">{{$investor->investor_name}}</span>
+              <span class="menu-item text-truncate" data-i18n="eCommerce">{{$investor->prefix}}</span>
             </a>
           </li>
 
