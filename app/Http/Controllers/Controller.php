@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Investor;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
 use App\Models\Item;
 use App\Models\Set;
+use Carbon\Cli\Invoker;
 use finfo;
 
 class Controller extends BaseController
@@ -18,8 +20,8 @@ class Controller extends BaseController
         $this->middleware('auth');
     }
     public function index()
-    {
-        return view("template.dashboard-content");
+    {   $investors = Investor::all();  
+        return view("template.dashboard-content",compact('investors'));
     }
     
     public function home()
@@ -29,7 +31,7 @@ class Controller extends BaseController
     }
 
     public function items()
-    {
+    {   
         $items = Item::orderBy('id', 'asc')->paginate(5);
 
         return view('cssd.items', compact('items'))

@@ -27,8 +27,9 @@ class InvestorController extends Controller
      */
     public function create()
     {
-        //
-        return view('investor.add-new-investor');
+        $investors = Investor ::all();
+        return view('investor.investor',compact('investors'));
+        return view('investor.add-new-investor',compact('investors'));
     }
 
     /**
@@ -40,6 +41,24 @@ class InvestorController extends Controller
     public function store(Request $request)
     {
         //
+        $validated = $request->validate(
+            [
+                'investor_name' => 'required|unique:investors',
+                'email' => 'required',
+                'phone' => 'required',
+                'prefix' => 'required',
+            ],[
+                'investor_name.required' => 'Please enter investor Name',
+                'investor_name.unique' => ' investor Name already exists'
+            ]
+        );
+        $investor = new Investor();
+        $investor->investor_name = $request->investor_name;
+        $investor->email = $request->email;
+        $investor->phone = $request->phone;
+        $investor->prefix = $request->prefix;
+        $investor->save();
+        return redirect()->route('investor.index');
     }
 
     /**
@@ -85,5 +104,7 @@ class InvestorController extends Controller
     public function destroy(Investor $investor)
     {
         //
+        $investor->delete();
+       return redirect()->route('investor.index');
     }
 }

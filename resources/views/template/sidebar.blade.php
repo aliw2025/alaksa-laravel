@@ -19,10 +19,21 @@
     <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
       <li class=" nav-item">
         <a class="d-flex align-items-center" href="index-2.html">
-          <i data-feather="home"></i><span class="menu-title text-truncate" data-i18n="Dashboards">Dashboards</span>
+          <i data-feather="home"></i><span class="menu-title text-truncate" data-i18n="Dashboards">Alpha Digital</span>
         </a>
         <ul class="menu-content">
-
+          <li>
+            <a class="d-flex align-items-center" href="{{route('investor.create')}}">
+              <i data-feather="circle"></i>
+              <span class="menu-item text-truncate" data-i18n="eCommerce">Capital Investments</span>
+            </a>
+          </li>
+          <li>
+            <a class="d-flex align-items-center" href="{{route('investor.create')}}">
+              <i data-feather="circle"></i>
+              <span class="menu-item text-truncate" data-i18n="eCommerce">Analytics</span>
+            </a>
+          </li>
         </ul>
       </li>
       <li class=" nav-item">
@@ -32,21 +43,26 @@
         </a>
         <ul class="menu-content">
           <li>
-            <a class="d-flex align-items-center" href="{{route('investor.index')}}">
-              <i data-feather="circle"></i>
-              <span class="menu-item text-truncate" data-i18n="Analytics">View</span>
-            </a>
-          </li>
-          <li>
             <a class="d-flex align-items-center" href="{{route('investor.create')}}">
               <i data-feather="circle"></i>
-              <spanclass="menu-item text-truncate" data-i18n="eCommerce">Add New</span>
+              <span class="menu-item text-truncate" data-i18n="eCommerce">Add New</span>
             </a>
           </li>
+          @foreach($investors as $investor)
+          <li>
+            <a class="d-flex align-items-center">
+              <i data-feather="circle"></i>
+              <span class="menu-item text-truncate" data-i18n="eCommerce">{{$investor->investor_name}}</span>
+            </a>
+          </li>
+
+          @endforeach
+
         </ul>
       </li>
       <li class=" nav-item">
         <a href="{{route('investor.create')}}" class="d-flex align-items-center ">
+          <i data-feather='file-text'></i>
           <span class=" menu-title text-truncate" data-i18n="inventory">Inventory</span>
         </a>
       </li>

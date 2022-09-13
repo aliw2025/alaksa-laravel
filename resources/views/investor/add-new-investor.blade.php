@@ -8,21 +8,29 @@
             </div>
         </div>
         <div class="card-body">
+            <div class="d-flex">
+                <!-- <div>
+                    <a href='{{route("investor.index")}}'" type=" reset" class="">
+                        View All
+                    </a>
+                </div> -->
+            </div>
             <div class="container">
                 <form method="POST" class="form form-vertical" autocomplete="on" action="{{route('investor.store')}}">
 
-                        @csrf
+                    @csrf
                     <div class="row w-50 mx-auto">
                         <div class=" ">
                             <!-- <input id="investorName" name="investor_name" class="@error('investor_name') is-invalid @enderror form-control" autocomplete="off" id="exampleDataList" placeholder="Enter investor Name"> -->
                             <div class="mb-1">
-                                <label class="form-label" for="first-name-vertical">investor Name</label>
+                                <label class="form-label" for="first-name-vertical">Investor Name</label>
                                 <input type="text" id="investorName" class=" @error('investor_name') is-invalid @enderror form-control" name="investor_name" placeholder="investor Name">
                                 @error('investor_name')
                                 <div class="alert alert-danger">{{ $message }}</div>
                                 @enderror
                             </div>
                         </div>
+
                         <div class="">
                             <div class="mb-1">
                                 <label class="form-label" for="email-id-vertical">Email</label>
@@ -41,7 +49,17 @@
                                 @enderror
                             </div>
                         </div>
-                        <div class="">
+                        <div class=" ">
+                            <!-- <input id="investorName" name="investor_name" class="@error('investor_name') is-invalid @enderror form-control" autocomplete="off" id="exampleDataList" placeholder="Enter investor Name"> -->
+                            <div class="mb-1">
+                                <label class="form-label" for="first-name-vertical">Investor Short Name</label>
+                                <input type="text" id="prefix" class=" @error('prefix') is-invalid @enderror form-control" name="prefix" placeholder="Short Name">
+                                @error('prefix')
+                                <div class="alert alert-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+                        <!-- <div class="">
                             <div class="mb-1">
                                 <label class="form-label" for="exampleFormControlTextarea1">Address</label>
                                 <textarea name="address" class="@error('address') is-invalid @enderror form-control" id="exampleFormControlTextarea1" rows="2" placeholder="Address"></textarea>
@@ -49,9 +67,9 @@
                                 <div class="alert alert-danger">{{ $message }}</div>
                                 @enderror
                             </div>
-                        </div>
+                        </div> -->
                         <div class="">
-                            <button type="submit" class="btn btn-primary me-1 waves-effect waves-float waves-light">Submit</button>
+                            <button type="submit" class="btn btn-primary me-1 waves-effect waves-float waves-light">Add</button>
                             <button type="reset" class="btn btn-outline-secondary waves-effect">Reset</button>
                         </div>
                     </div>
