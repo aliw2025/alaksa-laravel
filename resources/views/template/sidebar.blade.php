@@ -45,7 +45,7 @@
         <ul class="menu-content">
           <li>
             <a class="d-flex align-items-center @if(request()->is('investor.create')) active text-white @endif" href="{{route('investor.create')}}">
-              <i data-feather="circle"></i>
+              {{-- <i data-feather="circle"></i> --}}
               <span class="menu-item text-truncate" data-i18n="eCommerce">Add New</span>
             </a>
           </li>
