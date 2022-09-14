@@ -40,7 +40,6 @@
                                         <td >
                                             <div class="d-flex align-items-center">
 
-                                            
                                             <form class="" method="POST" autocomplete="on" action="{{ route('investor.destroy',$inv->id)}}">
                                                 @csrf
                                                 {{ method_field('DELETE') }}
@@ -95,7 +94,8 @@
                                         @enderror
                                     </div>
                                 </div>
-
+                                <input  value="{{old('investor_type',isset($investor)? $investor->type:'2')}}" type="hidden" id="investor_type" class="@error('investor_type') is-invalid @enderror form-control" name="investor_type" placeholder="Email">
+                                
                                 <div class="">
                                     <div class="mb-1">
                                         <label   class="form-label" for="email-id-vertical">Email</label>

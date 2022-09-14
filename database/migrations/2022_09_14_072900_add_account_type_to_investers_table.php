@@ -13,15 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('investors', function (Blueprint $table) {
+        Schema::table('investors', function (Blueprint $table) {
+            //
+            $table->integer('investor_type');
 
-            $table->id();
-            $table->string('investor_name');
-            $table->string('email');
-            $table->string('phone');
-            $table->string('prefix');
-            // $table->integer('investor_type');
-            $table->timestamps();
         });
     }
 
@@ -32,10 +27,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('investors');
+        Schema::table('investors', function (Blueprint $table) {
+            //
+        });
     }
 };
-
-
-
-// admin erp user investors . 

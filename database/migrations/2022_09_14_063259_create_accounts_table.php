@@ -13,15 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('investors', function (Blueprint $table) {
+        Schema::create('accounts', function (Blueprint $table) {
 
             $table->id();
-            $table->string('investor_name');
-            $table->string('email');
-            $table->string('phone');
-            $table->string('prefix');
-            // $table->integer('investor_type');
             $table->timestamps();
+            $table->float('opening_balance');
+            $table->float('current_balance');
+            $table->unsignedBigInteger('owner');
+            $table->foreign('owner')->references('id')->on('investors');            
         });
     }
 
@@ -32,10 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('investors');
+        Schema::dropIfExists('accounts');
     }
 };
-
-
-
-// admin erp user investors . 

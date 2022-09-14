@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Investor;
+use App\Models\Account;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -20,25 +21,48 @@ class Controller extends BaseController
         $this->middleware('auth');
     }
 
-    public function index()
-    {   
-        $investors = Investor::all();  
-        return view("template.dashboard-content",compact('investors'));
+    public function setup()
+    {
+
+        $investor = Investor::where('investor_type', '=', 1)->first();
+        if ($investor === null) {
+            $investor = new Investor();
+            $investor->investor_name = "Alpha digital";
+            $investor->email = "support@alphaDigital.com";
+            $investor->phone = "00000000";
+            $investor->prefix = "Company";
+            $investor->investor_type = 1;
+            $investor->save();
+
+            $account = new Account();
+            $account->opening_balance = 0;
+            $account->current_balance = 0;
+            $account->owner = $investor->id;
+            $account->save();
+
+        } else {
+
+
+        }
     }
-    
+    public function index()
+    {
+        $investors = Investor::all();
+        return view("template.dashboard-content", compact('investors'));
+    }
+
     public function home($id)
     {
         $investor = Investor::find($id);
-        // dd($investor);
-        //return view("home");
-        return view("template.dashboard-content",compact('investor'));
+        return view("template.dashboard-content", compact('investor'));
     }
-    public function showInvestments(){
+    public function showInvestments()
+    {
 
         return view("capital-investments.capital-investment");
     }
 
-   
+
     // unused routes
     public function testSQL()
     {

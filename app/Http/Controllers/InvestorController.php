@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Investor;
+use App\Models\Account;
 use Carbon\Cli\Invoker;
 use Illuminate\Http\Request;
 
@@ -17,9 +18,9 @@ class InvestorController extends Controller
     {
         //
         // $investors = Investor ::all();
-        $investors = Investor::where('id','!=',0)->get();  
-
+        $investors = Investor::where('investor_type','!=',1)->get();  
         return view('investor.investor',compact('investors'));
+
     }
 
     /**
@@ -30,8 +31,7 @@ class InvestorController extends Controller
     public function create()
     {
         // $investors = Investor ::all();
-        $investors = Investor::where('id','!=',0)->get();  
-
+        $investors = Investor::where('investor_type','!=',1)->get();  
         return view('investor.investor',compact('investors'));
         return view('investor.add-new-investor',compact('investors'));
     }
@@ -59,12 +59,22 @@ class InvestorController extends Controller
                 'prefix.unique' => ' prefix already exists'
             ]
         );
+
         $investor = new Investor();
         $investor->investor_name = $request->investor_name;
         $investor->email = $request->email;
         $investor->phone = $request->phone;
         $investor->prefix = $request->prefix;
+        $investor->investor_type = $request->investor_type;
         $investor->save();
+
+        $account = new Account();
+        $account->opening_balance = 0;
+        $account->current_balance = 0;
+        $account->owner= $investor->id;
+        $account->save();
+      
+
         return redirect()->route('investor.index');
     }
 
