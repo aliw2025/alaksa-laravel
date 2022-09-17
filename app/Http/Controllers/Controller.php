@@ -16,6 +16,7 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
+    
     public function __construct()
     {
         $this->middleware('auth');
@@ -60,6 +61,9 @@ class Controller extends BaseController
     {
 
         return view("capital-investments.capital-investment");
+    }
+    public function showInventory(){
+        return view('inventory.inventory');
     }
 
 

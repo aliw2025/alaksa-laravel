@@ -22,6 +22,10 @@ Route::get('/setup', [\App\Http\Controllers\Controller::class,'setup'])->name('s
 
 Route::get('/home/{id}', [\App\Http\Controllers\Controller::class,'home'])->name('home');
 Route::get('/calender' , [\App\Http\Controllers\Controller::class,'showCalender'])->name('calender');
+
+// temporary routes
+Route::get('/inventory' , [\App\Http\Controllers\Controller::class,'showInventory'])->name('inventory');
+Route::get('/purchase' , [\App\Http\Controllers\Controller::class,'showPurchase'])->name('purchase');
 Route::get('/capital-investments' , [\App\Http\Controllers\Controller::class,'showInvestments'])->name('capital-investments');
 
 Auth::routes();

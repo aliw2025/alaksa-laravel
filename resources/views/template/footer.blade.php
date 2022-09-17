@@ -3,6 +3,14 @@
 <!-- BEGIN: Page Vendor JS-->
 <script src="{{ url('/resources/vendors/js/charts/apexcharts.min.js') }}"></script>
 <script src="{{ url('/resources/vendors/js/extensions/toastr.min.js') }}"></script>
+
+    <!-- BEGIN: Page Vendor JS-->
+    <script src="{{ url('/resources/vendors/js/tables/datatable/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ url('/resources/vendors/js/tables/datatable/dataTables.bootstrap5.min.js') }}"></script>
+    <script src="{{ url('/resources/vendors/js/tables/datatable/dataTables.responsive.min.js') }}"></script>
+    <script src="{{ url('/resources/vendors/js/tables/datatable/responsive.bootstrap5.min.js') }}"></script>
+    <script src="{{ url('/resources/vendors/js/tables/datatable/datatables.checkboxes.min.js') }}"></script>
+    <script src="{{ url('/resources/vendors/js/tables/datatable/datatables.buttons.min.js') }}"></script>
 <!-- END: Page Vendor JS-->
 
 <!-- BEGIN: Theme JS-->

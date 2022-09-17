@@ -64,7 +64,7 @@
         </ul>
       </li>
       <!------------------------------------------- Inventory --------------------------------------------------->
-      <li class=" nav-item">
+      <li class=" nav-item">  
         <a class="d-flex align-items-center" href="#">
           <i data-feather='file-text'></i>
           <span class="menu-title text-truncate" data-i18n="Dashboards">Inventory</span>
@@ -82,7 +82,7 @@
               @endphp
               @foreach($inv_sales as $investor)
               <li>
-                <a href="{{route('home',$investor->id)}}" class="d-flex align-items-center ">
+                <a href="{{route('inventory')}}" class="d-flex align-items-center ">
                   <i data-feather="circle"></i>
                   <span class="menu-item text-truncate" data-i18n="eCommerce">{{$investor->prefix}}</span>
                 </a>
@@ -218,6 +218,11 @@
           </li>
         </ul>
       </li>
+    <!------------------------------------------- Purchase --------------------------------------------------->
+    <li class=" nav-item"><a class="d-flex align-items-center">
+          <span class=" menu-title text-truncate" data-i18n="comision">Purchase</span></a>
+      </li>
+
       <li class=" nav-item"><a class="d-flex align-items-center">
           <span class=" menu-title text-truncate" data-i18n="comision">Commision</span></a>
       </li>
