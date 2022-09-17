@@ -65,6 +65,9 @@ class Controller extends BaseController
     public function showInventory(){
         return view('inventory.inventory');
     }
+    public function showPurchase(){
+        return view('purchase.purchase');
+    }
 
 
     // unused routes

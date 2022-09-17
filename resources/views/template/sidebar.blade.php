@@ -219,7 +219,7 @@
         </ul>
       </li>
     <!------------------------------------------- Purchase --------------------------------------------------->
-    <li class=" nav-item"><a class="d-flex align-items-center">
+    <li class=" nav-item"><a href="{{route('purchase')}}" class="d-flex align-items-center">
           <span class=" menu-title text-truncate" data-i18n="comision">Purchase</span></a>
       </li>
 

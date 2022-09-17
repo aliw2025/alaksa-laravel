@@ -26,6 +26,7 @@ Route::get('/calender' , [\App\Http\Controllers\Controller::class,'showCalender'
 // temporary routes
 Route::get('/inventory' , [\App\Http\Controllers\Controller::class,'showInventory'])->name('inventory');
 Route::get('/purchase' , [\App\Http\Controllers\Controller::class,'showPurchase'])->name('purchase');
+
 Route::get('/capital-investments' , [\App\Http\Controllers\Controller::class,'showInvestments'])->name('capital-investments');
 
 Auth::routes();

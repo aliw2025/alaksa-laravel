@@ -26,6 +26,10 @@
     <link rel="stylesheet" type="text/css" href="{{ url('/resources/css/plugins/charts/chart-apex.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url('/resources/css/plugins/extensions/ext-component-toastr.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url('/resources/css/style.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url('/resources/css/pages/app-invoice.min.css')}}">    
+    <link rel="stylesheet" type="text/css" href="{{ url('/resources/css/core/menu/menu-types/vertical-menu.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url('/resources/css/plugins/forms/pickers/form-pickadate.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url('/resources/css/plugins/forms/form-validation.css') }}">
     
 
    
@@ -36,7 +40,17 @@
 
     <link rel="stylesheet" type="text/css" href="{{ url('/resources/css/plugins/forms/form-validation.css') }}">
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    
+      <!-- vendor css  -->
+      <link rel="stylesheet" type="text/css" href=".{{ url('/resources/vendors/css/pickers/pickadate/pickadate.css') }}">
+      <link rel="stylesheet" type="text/css" href="{{ url('/resources/vendors/css/pickers/flatpickr/flatpickr.min.css') }}">
+      <!-- end vendor  css  -->
+  
+      {{-- theme css --}}
+      <link rel="stylesheet" type="text/css" href="{{ url('/resources/css/plugins/forms/pickers/form-flat-pickr.min.css') }}">
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
 
 </head>
 
