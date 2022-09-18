@@ -3,6 +3,13 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\InvestorController;
+use App\Http\Controllers\AccountController;
+use App\Http\Controllers\ItemController;
+use App\Http\Controllers\StoreController;
+use App\Http\Controllers\InventoryController;
+
+
+
 
 
 /*
@@ -19,7 +26,6 @@ use App\Http\Controllers\InvestorController;
 
 Route::get('/', [\App\Http\Controllers\Controller::class,'index'])->name('index');
 Route::get('/setup', [\App\Http\Controllers\Controller::class,'setup'])->name('setup');
-
 Route::get('/home/{id}', [\App\Http\Controllers\Controller::class,'home'])->name('home');
 Route::get('/calender' , [\App\Http\Controllers\Controller::class,'showCalender'])->name('calender');
 
@@ -31,6 +37,12 @@ Route::get('/capital-investments' , [\App\Http\Controllers\Controller::class,'sh
 
 Auth::routes();
 Route::resource('investor', InvestorController::class);
+Route::resource('account', AccountController::class);
+Route::resource('item', ItemController::class);
+Route::resource('store', StoreController::class);
+Route::resource('inventory', InventoryController::class);
+
+
 
 
 // Route::group(['prefix' => 'item'] , function() {

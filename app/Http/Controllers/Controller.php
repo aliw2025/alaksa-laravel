@@ -34,16 +34,29 @@ class Controller extends BaseController
             $investor->prefix = "Company";
             $investor->investor_type = 1;
             $investor->save();
+            // cash account
+            // $account = new Account();
+            // $account->account_name($investor->prefix.'cash');
+            // $account->owner = $investor->id;
+            // $account->save();
 
-            $account = new Account();
-            $account->opening_balance = 0;
-            $account->current_balance = 0;
-            $account->owner = $investor->id;
-            $account->save();
+            //supplies account
+            // $account = new Account();
+            // $account->account_name($investor->prefix.'supplies');
+            // $account->owner = $investor->id;
+            // $account->save();
+
+             //account
+            //  $account = new Account();
+            //  $account->account_name($investor->prefix.'payable_account');
+            //  $account->owner = $investor->id;
+            //  $account->save();
+
+
 
         } else {
 
-
+            
         }
     }
     public function index()

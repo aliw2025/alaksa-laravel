@@ -59,7 +59,7 @@ class InvestorController extends Controller
                 'prefix.unique' => ' prefix already exists'
             ]
         );
-
+        
         $investor = new Investor();
         $investor->investor_name = $request->investor_name;
         $investor->email = $request->email;
@@ -69,8 +69,8 @@ class InvestorController extends Controller
         $investor->save();
 
         $account = new Account();
-        $account->opening_balance = 0;
-        $account->current_balance = 0;
+        // $account->opening_balance = 0;
+        // $account->current_balance = 0;
         $account->owner= $investor->id;
         $account->save();
       

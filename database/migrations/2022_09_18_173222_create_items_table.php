@@ -13,17 +13,17 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('accounts', function (Blueprint $table) {
 
+        Schema::create('items', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->string('category');
+            $table->string('make');
+            $table->string('model');
+            $table->string('supplier');
             $table->timestamps();
-            $table->string('account_name');
-            $table->unsignedBigInteger('accountType');
-            $table->unsignedBigInteger('owner');
-            $table->foreign('owner')->references('id')->on('investors');
-
-        
         });
+
     }
 
     /**
@@ -33,6 +33,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('accounts');
+        Schema::dropIfExists('items');
     }
 };

@@ -13,16 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('accounts', function (Blueprint $table) {
-
+        Schema::create('stores', function (Blueprint $table) {
             $table->id();
+            $table->string('store_name');
+            $table->string('address');
             $table->timestamps();
-            $table->string('account_name');
-            $table->unsignedBigInteger('accountType');
-            $table->unsignedBigInteger('owner');
-            $table->foreign('owner')->references('id')->on('investors');
-
-        
         });
     }
 
@@ -33,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('accounts');
+        Schema::dropIfExists('stores');
     }
 };

@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('email');
             $table->string('phone');
             $table->string('prefix');
-            // $table->integer('investor_type');
+            $table->integer('investor_type');
             $table->timestamps();
         });
     }
