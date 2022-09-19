@@ -82,7 +82,7 @@
               @endphp
               @foreach($inv_sales as $investor)
               <li>
-                <a href="{{route('inventory')}}" class="d-flex align-items-center ">
+                <a href="{{route('list-inventory')}}" class="d-flex align-items-center ">
                   <i data-feather="circle"></i>
                   <span class="menu-item text-truncate" data-i18n="eCommerce">{{$investor->prefix}}</span>
                 </a>
