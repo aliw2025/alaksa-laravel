@@ -71,7 +71,9 @@ class InvestorController extends Controller
         $account = new Account();
         // $account->opening_balance = 0;
         // $account->current_balance = 0;
+        $account->account_name = $investor->prefix.'_cash';
         $account->owner= $investor->id;
+        $account->accountType = 1;
         $account->save();
       
 

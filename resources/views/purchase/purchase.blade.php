@@ -1,7 +1,7 @@
 @extends('template.header')
 @section('section')
     <div class="content-wrapper container-xxl p-0">
-       
+
         <div class="content-body">
             <section class="invoice-add-wrapper">
                 <div class="row invoice-add">
@@ -13,16 +13,17 @@
                                 <div class="d-flex justify-content-between flex-md-row flex-column invoice-spacing mt-0">
                                     <div>
                                         <div class="logo-wrapper">
-                                                
+
                                             <h3 class="text-primary invoice-logo">Alpha Digital</h3>
                                         </div>
                                         <p class="card-text mb-25">Office 149, 450 South Brand Brooklyn</p>
                                         <p class="card-text mb-25">San Diego County, CA 91905, USA</p>
                                         <p class="card-text mb-0">+1 (123) 456 7891, +44 (876) 543 2198</p>
+                                        
                                     </div>
                                     <div class="invoice-number-date mt-md-0 mt-2">
-                                        <div class="d-flex align-items-center justify-content-md-end mb-1">
-                                            <h4 class="invoice-title">Invoice</h4>
+                                        <div class="d-flex align-items-center justify-content-between mb-1">
+                                            <h4 class="invoice-title">Purchase</h4>
                                             <div class="input-group input-group-merge invoice-edit-input-group">
                                                 <div class="input-group-text">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
@@ -43,84 +44,32 @@
                                                     placeholder="53634">
                                             </div>
                                         </div>
-                                        <div class="d-flex align-items-center mb-1">
+                                        <div class="d-flex align-items-center justify-content-between mb-1">
                                             <span class="title">Date:</span>
                                             <input type="text"
                                                 class="form-control invoice-edit-input date-picker flatpickr-input"
                                                 readonly="readonly">
                                         </div>
-                                        <div class="d-flex align-items-center">
+                                        <div class="d-flex align-items-center justify-content-between">
+                                            <span class="title">Investor</span>
+                                            <input type="text" class="form-control invoice-edit-input ">
+                                        </div>
+
+                                        <div class="d-flex align-items-center justify-content-between mt-1">
+                                            <span class="title">Supplier</span>
+                                            <input type="text" class="form-control invoice-edit-input ">
+                                        </div>
+                                        {{-- <div class="d-flex align-items-center justify-content-between">
                                             <span class="title">Due Date:</span>
                                             <input type="text"
                                                 class="form-control invoice-edit-input due-date-picker flatpickr-input"
                                                 readonly="readonly">
-                                        </div>
+                                        </div> --}}
                                     </div>
                                 </div>
                             </div>
                             <!-- Header ends -->
-
                             <hr class="invoice-spacing">
-
-                            <!-- Address and Contact starts -->
-                            <div class="card-body invoice-padding pt-0">
-                                <div class="row row-bill-to invoice-spacing">
-                                    <div class="col-xl-8 mb-lg-1 col-bill-to ps-0">
-                                        <h6 class="invoice-to-title">Invoice To:</h6>
-                                        <div class="invoice-customer">
-                                            <select class="invoiceto form-select select2-hidden-accessible"
-                                                data-select2-id="3" tabindex="-1" aria-hidden="true">
-                                                <option data-select2-id="5"></option>
-                                                <option value="shelby">Shelby Company Limited</option>
-                                                <option value="hunters">Hunters Corp</option>
-                                            </select><span class="select2 select2-container select2-container--default"
-                                                dir="ltr" data-select2-id="4" style="width: 506.65625px;"><span
-                                                    class="selection"><span
-                                                        class="select2-selection select2-selection--single"
-                                                        role="combobox" aria-haspopup="true" aria-expanded="false"
-                                                        tabindex="0" aria-disabled="false"
-                                                        aria-labelledby="select2-xkhh-container"><span
-                                                            class="select2-selection__rendered"
-                                                            id="select2-xkhh-container" role="textbox"
-                                                            aria-readonly="true"><span
-                                                                class="select2-selection__placeholder">Select
-                                                                Customer</span></span><span
-                                                            class="select2-selection__arrow" role="presentation"><b
-                                                                role="presentation"></b></span></span></span><span
-                                                    class="dropdown-wrapper" aria-hidden="true"></span></span>
-                                        </div>
-                                    </div>
-                                    <div class="col-xl-4 p-0 ps-xl-2 mt-xl-0 mt-2">
-                                        <h6 class="mb-2">Payment Details:</h6>
-                                        <table>
-                                            <tbody>
-                                                <tr>
-                                                    <td class="pe-1">Total Due:</td>
-                                                    <td><strong>$12,110.55</strong></td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="pe-1">Bank name:</td>
-                                                    <td>American Bank</td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="pe-1">Country:</td>
-                                                    <td>United States</td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="pe-1">IBAN:</td>
-                                                    <td>ETD95476213874685</td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="pe-1">SWIFT code:</td>
-                                                    <td>BR91905</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Address and Contact ends -->
-
                             <!-- Product Details starts -->
                             <div class="card-body invoice-padding invoice-product-details">
                                 <form class="source-item">
@@ -129,40 +78,32 @@
                                             <div class="row">
                                                 <div class="col-12 d-flex product-details-border position-relative pe-0">
                                                     <div class="row w-100 pe-lg-0 pe-1 py-2">
-                                                        <div class="col-lg-5 col-12 mb-lg-0 mb-2 mt-lg-0 mt-2">
+                                                        <div class="col-lg-3 col-12 mb-lg-0 mb-2 mt-lg-0 mt-2">
                                                             <p class="card-text col-title mb-md-50 mb-0">Item</p>
                                                             <select class="form-select item-details">
-                                                                <option value="App Design">App Design</option>
-                                                                <option value="App Customization" selected="">App
-                                                                    Customization</option>
-                                                                <option value="ABC Template">ABC Template</option>
-                                                                <option value="App Development">App Development</option>
+                                                                <option value="item">Item 1</option>
+                                                                <option value="item">Item 2</option>
+                                                                <option value="item">Item 3</option>
                                                             </select>
-                                                            <textarea class="form-control mt-2" rows="1">Customization &amp; Bug Fixes</textarea>
                                                         </div>
-                                                        <div class="col-lg-3 col-12 my-lg-0 my-2">
+                                                        <div class="col-lg-2 col-12 my-lg-0 my-2">
                                                             <p class="card-text col-title mb-md-2 mb-0">Cost</p>
                                                             <input type="text" class="form-control" value="24"
                                                                 placeholder="24">
-                                                            <div class="mt-2">
-                                                                <span>Discount:</span>
-                                                                <span class="discount">0%</span>
-                                                                <span class="tax-1 ms-50" data-bs-toggle="tooltip"
-                                                                    data-bs-placement="top" title=""
-                                                                    data-bs-original-title="Tax 1">0%</span>
-                                                                <span class="tax-2 ms-50" data-bs-toggle="tooltip"
-                                                                    data-bs-placement="top" title=""
-                                                                    data-bs-original-title="Tax 2">0%</span>
-                                                            </div>
                                                         </div>
                                                         <div class="col-lg-2 col-12 my-lg-0 my-2">
                                                             <p class="card-text col-title mb-md-2 mb-0">Qty</p>
                                                             <input type="number" class="form-control" value="1"
                                                                 placeholder="1">
                                                         </div>
+                                                        <div class="col-lg-2 col-12 my-lg-0 my-2">
+                                                            <p class="card-text col-title mb-md-2 mb-0">Discount</p>
+                                                            <input type="number" class="form-control" value="1"
+                                                                placeholder="1">
+                                                        </div>
                                                         <div class="col-lg-2 col-12 mt-lg-0 mt-2">
                                                             <p class="card-text col-title mb-md-50 mb-0">Price</p>
-                                                            <p class="card-text mb-0">$24.00</p>
+                                                            <p class="card-text mb-0">PKR 24.00</p>
                                                         </div>
                                                     </div>
                                                     <div
@@ -280,30 +221,26 @@
                             <div class="card-body invoice-padding">
                                 <div class="row invoice-sales-total-wrapper">
                                     <div class="col-md-6 order-md-1 order-2 mt-md-0 mt-3">
-                                        <div class="d-flex align-items-center mb-1">
-                                            <label for="salesperson" class="form-label">Salesperson:</label>
-                                            <input type="text" class="form-control ms-50" id="salesperson"
-                                                placeholder="Edward Crowley">
-                                        </div>
+                                    
                                     </div>
                                     <div class="col-md-6 d-flex justify-content-end order-md-2 order-1">
                                         <div class="invoice-total-wrapper">
                                             <div class="invoice-total-item">
                                                 <p class="invoice-total-title">Subtotal:</p>
-                                                <p class="invoice-total-amount">$1800</p>
+                                                <p class="invoice-total-amount">PKR 1800</p>
                                             </div>
                                             <div class="invoice-total-item">
                                                 <p class="invoice-total-title">Discount:</p>
-                                                <p class="invoice-total-amount">$28</p>
+                                                <p class="invoice-total-amount">PKR 28</p>
                                             </div>
-                                            <div class="invoice-total-item">
+                                            {{-- <div class="invoice-total-item">
                                                 <p class="invoice-total-title">Tax:</p>
                                                 <p class="invoice-total-amount">21%</p>
-                                            </div>
+                                            </div> --}}
                                             <hr class="my-50">
                                             <div class="invoice-total-item">
                                                 <p class="invoice-total-title">Total:</p>
-                                                <p class="invoice-total-amount">$1690</p>
+                                                <p class="invoice-total-amount">PKR 1690</p>
                                             </div>
                                         </div>
                                     </div>
@@ -334,42 +271,21 @@
                         <div class="card">
                             <div class="card-body">
                                 <button class="btn btn-primary w-100 mb-75 waves-effect waves-float waves-light"
-                                    disabled="">Send Invoice</button>
-                                <a href="app-invoice-preview.html"
-                                    class="btn btn-outline-primary w-100 mb-75 waves-effect">Preview</a>
-                                <button type="button" class="btn btn-outline-primary w-100 waves-effect">Save</button>
+                                    disabled="">Save</button>
+                                {{-- <a href="app-invoice-preview.html"
+                                    class="btn btn-outline-primary w-100 mb-75 waves-effect">Preview</a> --}}
+                                <button type="button" class="btn btn-outline-primary w-100 waves-effect">Preview</button>
                             </div>
                         </div>
                         <div class="mt-2">
-                            <p class="mb-50">Accept payments via</p>
+                            <p class="mb-50">Selected Account</p>
                             <select class="form-select">
                                 <option value="Bank Account">Bank Account</option>
                                 <option value="Paypal">Paypal</option>
                                 <option value="UPI Transfer">UPI Transfer</option>
                             </select>
                             <div class="invoice-terms mt-1">
-                                <div class="d-flex justify-content-between">
-                                    <label class="invoice-terms-title mb-0" for="paymentTerms">Payment Terms</label>
-                                    <div class="form-check form-switch">
-                                        <input type="checkbox" class="form-check-input" checked=""
-                                            id="paymentTerms">
-                                        <label class="form-check-label" for="paymentTerms"></label>
-                                    </div>
-                                </div>
-                                <div class="d-flex justify-content-between py-1">
-                                    <label class="invoice-terms-title mb-0" for="clientNotes">Client Notes</label>
-                                    <div class="form-check form-switch">
-                                        <input type="checkbox" class="form-check-input" checked="" id="clientNotes">
-                                        <label class="form-check-label" for="clientNotes"></label>
-                                    </div>
-                                </div>
-                                <div class="d-flex justify-content-between">
-                                    <label class="invoice-terms-title mb-0" for="paymentStub">Payment Stub</label>
-                                    <div class="form-check form-switch">
-                                        <input type="checkbox" class="form-check-input" id="paymentStub">
-                                        <label class="form-check-label" for="paymentStub"></label>
-                                    </div>
-                                </div>
+                                
                             </div>
                         </div>
                     </div>
@@ -458,5 +374,5 @@
 
         </div>
     </div>
-<script src="{{ url('/resources/js/scripts/pages/app-invoice.min.js')}}"></script>
+    <script src="{{ url('/resources/js/scripts/pages/app-invoice.min.js') }}"></script>
 @endsection

@@ -7,6 +7,8 @@ use App\Http\Controllers\AccountController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\StoreController;
 use App\Http\Controllers\InventoryController;
+use App\Http\Controllers\PurchaseController;
+
 
 
 
@@ -31,7 +33,7 @@ Route::get('/calender' , [\App\Http\Controllers\Controller::class,'showCalender'
 
 // temporary routes
 Route::get('/list-inventory' , [\App\Http\Controllers\Controller::class,'showInventory'])->name('list-inventory');
-Route::get('/purchase' , [\App\Http\Controllers\Controller::class,'showPurchase'])->name('purchase');
+// Route::get('/purchase' , [\App\Http\Controllers\Controller::class,'showPurchase'])->name('purchase');
 
 Route::get('/capital-investments' , [\App\Http\Controllers\Controller::class,'showInvestments'])->name('capital-investments');
 
@@ -41,6 +43,8 @@ Route::resource('account', AccountController::class);
 Route::resource('item', ItemController::class);
 Route::resource('store', StoreController::class);
 Route::resource('inventory', InventoryController::class);
+Route::resource('purchase', PurchaseController::class);
+
 
 
 

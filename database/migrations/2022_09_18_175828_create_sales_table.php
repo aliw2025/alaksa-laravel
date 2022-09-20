@@ -15,10 +15,8 @@ return new class extends Migration
     {
         Schema::create('sales', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('item_id');
-            $table->unsignedBigInteger('investor_id');
-            $table->unsignedBigInteger('quantity');
-            $table->float('unit_price');
+            $table->string('invoice_no');
+            $table->unsignedBigInteger('store_id');
             $table->timestamps();
             $table->timestamps();
         });
