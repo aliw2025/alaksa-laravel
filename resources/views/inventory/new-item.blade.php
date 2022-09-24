@@ -23,6 +23,8 @@
                                         <th scope="col">Category</th>
                                         <th scope="col">Make</th>
                                         <th scope="col">Model</th>
+                                        <th scope="col">Action</th>
+
                                         {{-- <th scope="col">Supplier</th> --}}
                                     </tr>
                                 </thead>
@@ -31,27 +33,27 @@
                                     $count = 1;
                                     @endphp
                                     @if(isset($items))
-                                    @foreach ($items as $item)
+                                    @foreach ($items as $i)
                                     <tr>
                                         <th style="width: 2px !important">{{$count}}</th>
-                                        <td>{{ $item->id }}</td>
-                                        <td>{{ $item->mame }}</td>
-                                        <td>{{ $item->category }}</td>
-                                        <td>{{ $item->make }}</td>
-                                        <td>{{ $item->model }}</td>
+                                        <td>{{$i->id}}</td>
+                                        <td>{{ $i->name }}</td>
+                                        <td>{{ $i->category }}</td>
+                                        <td>{{ $i->make }}</td>
+                                        <td>{{ $i->model }}</td>
                                         {{-- <td>{{ $item->Supplier }}</td> --}}
                                         <td >
                                             <div class="d-flex align-items-center">
 
-                                            <form class="" method="POST" autocomplete="on" action="{{ route('investor.destroy',$inv->id)}}">
+                                            <form class="" method="POST" autocomplete="on" action="{{ route('item.destroy',$i->id)}}">
                                                 @csrf
                                                 {{ method_field('DELETE') }}
-                                                <button style="border:0ch;background-color:white !important;" id="btnDel{{$inv->id}}" type="submit" class=""><i data-feather='trash-2'></i></button>
+                                                <button style="border:0ch;background-color:white !important;" id="btnDel{{$i->id}}" type="submit" class=""><i data-feather='trash-2'></i></button>
                                             </form>
-                                            <form class="" method="GET  " autocomplete="on" action="{{ route('investor.edit',$inv->id)}}">
+                                            <form class="" method="GET" autocomplete="on" action="{{ route('item.edit',$i->id)}}">
                                                 @csrf
                                                 {{ method_field('GET') }}
-                                                <button style="border:0ch;background-color:white !important;" id="btnDel{{$inv->id}}" type="submit" class=""><i data-feather='edit'></i></button>
+                                                <button style="border:0ch;background-color:white !important;" id="btnDel{{$i->id}}" type="submit" class=""><i data-feather='edit'></i></button>
                                             </form>
                                         </div>
                                         </td>

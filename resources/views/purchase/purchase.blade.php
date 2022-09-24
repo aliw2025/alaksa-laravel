@@ -81,9 +81,9 @@
                                                         <div class="col-lg-3 col-12 mb-lg-0 mb-2 mt-lg-0 mt-2">
                                                             <p class="card-text col-title mb-md-50 mb-0">Item</p>
                                                             <select class="form-select item-details">
-                                                                <option value="item">Item 1</option>
-                                                                <option value="item">Item 2</option>
-                                                                <option value="item">Item 3</option>
+                                                                @foreach( $items as $item)
+                                                                <option value="item">{{$item->name}}</option>
+                                                                @endforeach
                                                             </select>
                                                         </div>
                                                         <div class="col-lg-2 col-12 my-lg-0 my-2">
@@ -152,34 +152,8 @@
                                                                         id="discount-input">
                                                                 </div>
                                                                 <div class="form-row mt-50">
-                                                                    <div class="mb-1 col-md-6">
-                                                                        <label for="tax-1-input" class="form-label">Tax
-                                                                            1</label>
-                                                                        <select name="group-a[0][tax-1-input]"
-                                                                            id="tax-1-input"
-                                                                            class="form-select tax-select">
-                                                                            <option value="0%" selected="">0%
-                                                                            </option>
-                                                                            <option value="1%">1%</option>
-                                                                            <option value="10%">10%</option>
-                                                                            <option value="18%">18%</option>
-                                                                            <option value="40%">40%</option>
-                                                                        </select>
-                                                                    </div>
-                                                                    <div class="mb-1 col-md-6">
-                                                                        <label for="tax-2-input" class="form-label">Tax
-                                                                            2</label>
-                                                                        <select name="group-a[0][tax-2-input]"
-                                                                            id="tax-2-input"
-                                                                            class="form-select tax-select">
-                                                                            <option value="0%" selected="">0%
-                                                                            </option>
-                                                                            <option value="1%">1%</option>
-                                                                            <option value="10%">10%</option>
-                                                                            <option value="18%">18%</option>
-                                                                            <option value="40%">40%</option>
-                                                                        </select>
-                                                                    </div>
+                                                                    
+                                                                   
                                                                 </div>
                                                                 <div class="dropdown-divider my-1"></div>
                                                                 <div class="d-flex justify-content-between">
@@ -372,6 +346,63 @@
                 <!-- /Add New Customer Sidebar -->
             </section>
 
+        </div>
+        <div class="card">
+            <div class="col-md-6 mb-1" data-select2-id="46">
+                <label class="form-label" for="select2-basic">Basic</label>
+                <div class="position-relative" data-select2-id="45"><select class="select2 form-select select2-hidden-accessible" id="select2-basic" data-select2-id="select2-basic" tabindex="-1" aria-hidden="true">
+                  <option value="AK" data-select2-id="2">Alaska</option>
+                  <option value="HI" data-select2-id="53">Hawaii</option>
+                  <option value="CA" data-select2-id="54">California</option>
+                  <option value="NV" data-select2-id="55">Nevada</option>
+                  <option value="OR" data-select2-id="56">Oregon</option>
+                  <option value="WA" data-select2-id="57">Washington</option>
+                  <option value="AZ" data-select2-id="58">Arizona</option>
+                  <option value="CO" data-select2-id="59">Colorado</option>
+                  <option value="ID" data-select2-id="60">Idaho</option>
+                  <option value="MT" data-select2-id="61">Montana</option>
+                  <option value="NE" data-select2-id="62">Nebraska</option>
+                  <option value="NM" data-select2-id="63">New Mexico</option>
+                  <option value="ND" data-select2-id="64">North Dakota</option>
+                  <option value="UT" data-select2-id="65">Utah</option>
+                  <option value="WY" data-select2-id="66">Wyoming</option>
+                  <option value="AL" data-select2-id="67">Alabama</option>
+                  <option value="AR" data-select2-id="68">Arkansas</option>
+                  <option value="IL" data-select2-id="69">Illinois</option>
+                  <option value="IA" data-select2-id="70">Iowa</option>
+                  <option value="KS" data-select2-id="71">Kansas</option>
+                  <option value="KY" data-select2-id="72">Kentucky</option>
+                  <option value="LA" data-select2-id="73">Louisiana</option>
+                  <option value="MN" data-select2-id="74">Minnesota</option>
+                  <option value="MS" data-select2-id="75">Mississippi</option>
+                  <option value="MO" data-select2-id="76">Missouri</option>
+                  <option value="OK" data-select2-id="77">Oklahoma</option>
+                  <option value="SD" data-select2-id="78">South Dakota</option>
+                  <option value="TX" data-select2-id="79">Texas</option>
+                  <option value="TN" data-select2-id="80">Tennessee</option>
+                  <option value="WI" data-select2-id="81">Wisconsin</option>
+                  <option value="CT" data-select2-id="82">Connecticut</option>
+                  <option value="DE" data-select2-id="83">Delaware</option>
+                  <option value="FL" data-select2-id="84">Florida</option>
+                  <option value="GA" data-select2-id="85">Georgia</option>
+                  <option value="IN" data-select2-id="86">Indiana</option>
+                  <option value="ME" data-select2-id="87">Maine</option>
+                  <option value="MD" data-select2-id="88">Maryland</option>
+                  <option value="MA" data-select2-id="89">Massachusetts</option>
+                  <option value="MI" data-select2-id="90">Michigan</option>
+                  <option value="NH" data-select2-id="91">New Hampshire</option>
+                  <option value="NJ" data-select2-id="92">New Jersey</option>
+                  <option value="NY" data-select2-id="93">New York</option>
+                  <option value="NC" data-select2-id="94">North Carolina</option>
+                  <option value="OH" data-select2-id="95">Ohio</option>
+                  <option value="PA" data-select2-id="96">Pennsylvania</option>
+                  <option value="RI" data-select2-id="97">Rhode Island</option>
+                  <option value="SC" data-select2-id="98">South Carolina</option>
+                  <option value="VT" data-select2-id="99">Vermont</option>
+                  <option value="VA" data-select2-id="100">Virginia</option>
+                  <option value="WV" data-select2-id="101">West Virginia</option>
+                </select><span class="select2 select2-container select2-container--default select2-container--above select2-container--focus" dir="ltr" data-select2-id="1" style="width: 100%;"><span class="selection"><span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-disabled="false" aria-labelledby="select2-select2-basic-container"><span class="select2-selection__rendered" id="select2-select2-basic-container" role="textbox" aria-readonly="true" title="Nevada">Nevada</span><span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span></div>
+              </div>
         </div>
     </div>
     <script src="{{ url('/resources/js/scripts/pages/app-invoice.min.js') }}"></script>

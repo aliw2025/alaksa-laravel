@@ -59,7 +59,7 @@ class InvestorController extends Controller
                 'prefix.unique' => ' prefix already exists'
             ]
         );
-        
+
         $investor = new Investor();
         $investor->investor_name = $request->investor_name;
         $investor->email = $request->email;
@@ -83,7 +83,7 @@ class InvestorController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Investor  $investor
+     * @param  \App\Models\pInvestor  $investor
      * @return \Illuminate\Http\Response
      */
     public function show(Investor $investor)

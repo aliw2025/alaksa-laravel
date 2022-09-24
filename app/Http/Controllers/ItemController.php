@@ -14,7 +14,9 @@ class ItemController extends Controller
      */
     public function index()
     {
-        //
+        //s
+        $items = Item::all();
+        return view('inventory.new-item', compact('items'));
     }
 
     /**
@@ -25,7 +27,8 @@ class ItemController extends Controller
     public function create()
     {
         //
-        return view('inventory.new-item');
+        $items = Item::all();
+        return view('inventory.new-item', compact('items'));
     }
 
     /**
@@ -37,6 +40,14 @@ class ItemController extends Controller
     public function store(Request $request)
     {
         //
+        $item = new Item();
+        $item->name = $request->name;
+        $item->category = $request->category;
+        $item->make = $request->make;
+        $item->model = $request->model;
+        $item->save();
+
+        return redirect()->route('item.create');
     }
 
     /**
@@ -48,6 +59,7 @@ class ItemController extends Controller
     public function show(Item $item)
     {
         //
+       
     }
 
     /**
@@ -57,11 +69,13 @@ class ItemController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit(Item $item)
-    {
-        //
+    {   
+         
+        $items = Item::all();
+        return view('inventory.new-item', compact('items','item'));
     }
 
-    /**
+    /** 
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -69,8 +83,14 @@ class ItemController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Item $item)
-    {
-        //
+    {   
+       
+        $item->name = $request->name;
+        $item->category = $request->category;
+        $item->make = $request->make;
+        $item->model = $request->model;
+        $item->save();
+        return redirect()->route('item.create');
     }
 
     /**
@@ -82,5 +102,7 @@ class ItemController extends Controller
     public function destroy(Item $item)
     {
         //
+        $item->delete();
+        return redirect()->route('item.create');
     }
 }

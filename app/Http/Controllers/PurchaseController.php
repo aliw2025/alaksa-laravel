@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Investor;
 use App\Models\Purchase;
+use App\Models\Item;
 use Illuminate\Http\Request;
 
 class PurchaseController extends Controller
@@ -23,8 +25,9 @@ class PurchaseController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create()
-    {
-        return view('purchase.purchase');
+    {   $items = Item::all();
+        $investors = Investor::all();
+        return view('purchase.purchase',compact('items','investors'));
     }
 
     /**
