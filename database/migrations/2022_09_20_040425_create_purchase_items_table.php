@@ -22,6 +22,7 @@ return new class extends Migration
             $table->float('trade_discount');
             $table->unsignedBigInteger('purchase_id');
             $table->timestamps();
+            
         });
     }
 
