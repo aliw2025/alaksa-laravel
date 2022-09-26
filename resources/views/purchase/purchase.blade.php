@@ -50,9 +50,9 @@
                                                 class="form-control invoice-edit-input date-picker flatpickr-input"
                                                 readonly="readonly">
                                         </div>
-                                        <div class="d-flex align-items-center justify-content-between">
+                                        <div  class="d-flex align-items-center justify-content-between">
                                             <span class="title">Investor:</span>
-                                            <div class=" align-items-center"><select class="invoice-edit-input select2 form-select select2-hidden-accessible" id="select2-basic" data-select2-id="select2-basic" tabindex="-1" aria-hidden="true">
+                                            <div style="width: 11.21rem; max-width:11.21rem; " class="align-items-center"><select  class=" select2 select2-hidden-accessible form-control invoice-edit-input" id="select2-basic" data-select2-id="select2-basic" tabindex="-1" aria-hidden="true">
                                               <option value="AK" data-select2-id="2">Alaska</option>
                                               <option value="HI">Hawaii</option>
                                               <option value="CA">California</option>
@@ -371,7 +371,7 @@
     <script src="{{ url('/resources/js/scripts/pages/app-invoice.min.js') }}"></script>
     <script>
         $(document).ready(function(){
-            console.log('waserer');
+          
             $('.select2-selection__arrow').hide();
         });
     </script>
