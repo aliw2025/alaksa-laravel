@@ -372,7 +372,7 @@
     <script>
         $(document).ready(function(){
           
-           
+            // $('.select2-selection__arrow').hide();
         });
     </script>
 @endsection
