@@ -31,19 +31,16 @@
     <link rel="stylesheet" type="text/css" href="{{ url('/resources/css/plugins/forms/pickers/form-pickadate.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url('/resources/css/plugins/forms/form-validation.css') }}">
     
-
-   
     <link rel="stylesheet" type="text/css" href="{{ url('/resources/vendors/css/tables/datatable/dataTables.bootstrap5.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url('/resources/vendors/css/tables/datatable/responsive.bootstrap5.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url('/resources/vendors/css/tables/datatable/buttons.bootstrap5.min.css') }}">
-  
-
+    <link rel="stylesheet" type="text/css" href="{{ url('/resources/vendors/css/forms/select/select2.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url('/resources/css/plugins/forms/form-validation.css') }}">
 
 
     
       <!-- vendor css  -->
-      <link rel="stylesheet" type="text/css" href=".{{ url('/resources/vendors/css/pickers/pickadate/pickadate.css') }}">
+      <link rel="stylesheet" type="text/css" href="{{ url('/resources/vendors/css/pickers/pickadate/pickadate.css') }}">
       <link rel="stylesheet" type="text/css" href="{{ url('/resources/vendors/css/pickers/flatpickr/flatpickr.min.css') }}">
       <!-- end vendor  css  -->
   
