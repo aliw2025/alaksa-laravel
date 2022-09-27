@@ -18,6 +18,10 @@ class ItemController extends Controller
         $items = Item::all();
         return view('inventory.new-item', compact('items'));
     }
+    public function getItems(){
+        $items = Item::all();
+        return $items;
+    }
 
     /**
      * Show the form for creating a new resource.
