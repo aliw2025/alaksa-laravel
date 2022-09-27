@@ -18,11 +18,15 @@ class ItemController extends Controller
         $items = Item::all();
         return view('inventory.new-item', compact('items'));
     }
-    public function getItems(){
-        $items = Item::all();
+    /**
+     * Show  return matcing items
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getItems(Request $request){
+        $items = Item::where('name','like', '%'. $request->key .'%')->get();
         return $items;
     }
-
     /**
      * Show the form for creating a new resource.
      *
