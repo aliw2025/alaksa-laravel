@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Investor;
 use App\Models\Purchase;
 use App\Models\Item;
+use App\Models\PurchaseItem;
 use Illuminate\Http\Request;
 
 class PurchaseController extends Controller
@@ -38,7 +39,30 @@ class PurchaseController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        
+        $investor = Investor::find($request->investor_id);
+        $purchase = new Purchase();
+        $purchase->purchase_no = $investor->prefix.'-'.$purchase->id;
+        $purchase->investor_id = $request->investor_id;
+        $purchase->store_id = 1;
+        $purchase->supplier = $request->supplier;
+        $purchase->purchase_date = $request->purchase_date;
+        $purchase->save();
+        
+        for ($a=0 ; $a<count($request->qty); $a++) {
+            echo $a.'<br>';
+            $purchase_item = new PurchaseItem();
+            $purchase_item->item_id = $request->item_id[$a];
+            $purchase_item->quantity = $request->qty[$a];
+            $purchase_item->unit_cost = $request->cost[$a];
+            $purchase_item->trade_discount = 0;
+            $purchase_item->purchase_id = $purchase->id;
+            $purchase_item->save();
+        
+        }
+
+        return $purchase;
+       
     }
 
     /**

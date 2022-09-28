@@ -16,7 +16,6 @@ return new class extends Migration
         Schema::create('purchase_items', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('item_id');
-            $table->unsignedBigInteger('investor_id');
             $table->unsignedBigInteger('quantity');
             $table->float('unit_cost');
             $table->float('trade_discount');
