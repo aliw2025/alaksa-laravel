@@ -170,7 +170,7 @@
                                         <hr class="my-50">
                                         <div class="invoice-total-item">
                                             <p class="invoice-total-title">Total:</p>
-                                            <p id="totalAmount" class="invoice-total-amount">PKR</p><span><p class="invoice-total-amount">24000</p></span>
+                                            <p class="invoice-total-amount">PKR</p><span><p   id="totalAmount" class="invoice-total-amount">0</p></span>
                                         </div>
                                     </div>
                                 </div>
@@ -312,13 +312,19 @@
                                             </div>`;
         $('.repeater-wrapper').append(maarkup);
     })
-
+    // var lastVall= 0;
     function calRowTotal(rowId) {
-
+        
         var qty = $('#qty' + rowId).val();
         var cost = $('#cost' + rowId).val();
         var total = qty * cost;
         $("#rowTotal" + rowId).val("PKR " + total.toFixed(2).toString());
+        var subTotal =  $("#totalAmount").text();
+        var sum = subTotal+total
+        $("#totalAmount").text(sum);
+        console.log('sub total');
+        console.log(subTotal);
+
 
 
     }
