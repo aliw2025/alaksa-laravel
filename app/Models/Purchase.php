@@ -8,4 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Purchase extends Model
 {
     use HasFactory;
+    // protected $primaryKey = 'purchase_no';
+    
+    public function items()
+    {
+        return $this->belongsToMany(Item::class,'purchase_items','purchase_id','item_id')->withPivot('quantity', 'unit_cost','trade_discount','created_at','updated_at');;
+    }
 }

@@ -37,6 +37,8 @@ Route::get('/list-inventory' , [\App\Http\Controllers\Controller::class,'showInv
 
 Route::get('/capital-investments' , [\App\Http\Controllers\Controller::class,'showInvestments'])->name('capital-investments');
 Route::get('/get-items' , [\App\Http\Controllers\ItemController::class,'getItems'])->name('get-items');
+Route::get('/get-purchase-items/{id}' , [\App\Http\Controllers\PurchaseController::class,'showPurchaseItems'])->name('get-purchase-items');
+Route::get('/get-purchases/{id}' , [\App\Http\Controllers\PurchaseController::class,'showPurchases'])->name('get-purchases');
 
 Auth::routes();
 Route::resource('investor', InvestorController::class);

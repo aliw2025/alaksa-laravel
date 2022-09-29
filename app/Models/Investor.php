@@ -4,8 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Investor extends Model
 {
     use HasFactory;
+    
+    public function purchases()
+    {
+        // ->withPivot('store_id', 'supplier','purchase_date','created_at','updated_at')
+        return $this->hasMany(Purchase::class);
+    }
 }

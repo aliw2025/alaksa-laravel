@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Investor;
+use App\Models\InvestorLeadger;
+
 use App\Models\Purchase;
 use App\Models\Item;
 use App\Models\PurchaseItem;
@@ -47,14 +49,14 @@ class PurchaseController extends Controller
         if($id ==null){
             $id = 1;
         }
-        
+        $purchase->id=$id+1;
         $purchase->purchase_no = $investor->prefix.'-'.$id+1;
         $purchase->investor_id = $request->investor_id;
         $purchase->store_id = 1;
         $purchase->supplier = $request->supplier;
         $purchase->purchase_date = $request->purchase_date;
         $purchase->save();
-        
+        // 
         for ($a=0 ; $a<count($request->qty); $a++) {
             echo $a.'<br>';
             $purchase_item = new PurchaseItem();
@@ -66,9 +68,30 @@ class PurchaseController extends Controller
             $purchase_item->save();
         
         }
+        
+        $ledgerEntry = new InvestorLeadger();
+        $ledgerEntry->investor_id = $investor->id;
+        $ledgerEntry->transaction_type = "purchase";
+        $ledgerEntry->transaction_id = $purchase->id;
+        $ledgerEntry->value =  $purchase->items->sum('cost')*-1;
+        $ledgerEntry->date = $investor->created_at;
+        $ledgerEntry->save();
+        
 
         return redirect()->route('purchase.create');
        
+    }
+
+    public function showPurchaseItems($id){
+
+        $purchase = Purchase::find($id);
+        return $purchase->items;
+    }
+
+    public function showPurchases($id){
+
+        $investor = Investor::find($id);
+        return $investor->purchases;
     }
 
     /**
