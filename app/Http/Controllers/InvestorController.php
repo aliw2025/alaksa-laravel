@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Investor;
 use App\Models\Account;
+use App\Models\InvestorLeadger;
 use Carbon\Cli\Invoker;
 use Illuminate\Http\Request;
 
@@ -69,13 +70,20 @@ class InvestorController extends Controller
         $investor->save();
 
         $account = new Account();
-        // $account->opening_balance = 0;
-        // $account->current_balance = 0;
         $account->account_name = $investor->prefix.'_cash';
         $account->owner= $investor->id;
         $account->accountType = 1;
+        $account->opening_balance = $request->opening_balance;
         $account->save();
       
+        $ledgerEntry = new InvestorLeadger();
+        $ledgerEntry->investor_id = $investor->id;
+        $ledgerEntry->transaction_type = "opening";
+        $ledgerEntry->transaction_id = $investor->id;
+        $ledgerEntry->value =  $request->opening_balance;
+        $ledgerEntry->date = $investor->created_at;
+        $ledgerEntry->save();
+
 
         return redirect()->route('investor.index');
     }
