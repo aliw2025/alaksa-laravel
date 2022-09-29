@@ -37,12 +37,18 @@ class PurchaseController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+    
     public function store(Request $request)
     {
         
         $investor = Investor::find($request->investor_id);
         $purchase = new Purchase();
-        $purchase->purchase_no = $investor->prefix.'-'.$purchase->id;
+        $id = Purchase::max('id');
+        if($id ==null){
+            $id = 1;
+        }
+        
+        $purchase->purchase_no = $investor->prefix.'-'.$id+1;
         $purchase->investor_id = $request->investor_id;
         $purchase->store_id = 1;
         $purchase->supplier = $request->supplier;
@@ -61,7 +67,7 @@ class PurchaseController extends Controller
         
         }
 
-        return $purchase;
+        return redirect()->route('purchase.create');
        
     }
 
