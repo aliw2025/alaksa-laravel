@@ -20,9 +20,11 @@ return new class extends Migration
             $table->string('account_name');
             $table->unsignedBigInteger('accountType');
             $table->unsignedBigInteger('owner');
+            $table->float('opening_balance');
             $table->foreign('owner')->references('id')->on('investors');
+            
 
-        
+            
         });
     }
 

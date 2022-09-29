@@ -63,6 +63,17 @@
                                 @enderror
                             </div>
                         </div>
+                        <div class=" ">
+                            <!-- <input id="investorName" name="investor_name" class="@error('investor_name') is-invalid @enderror form-control" autocomplete="off" id="exampleDataList" placeholder="Enter investor Name"> -->
+                            <div class="mb-1">
+                                <label class="form-label" for="first-name-vertical">Opening Balance</label>
+                                <input type="number" id="opening_balance" class=" @error('prefix') is-invalid @enderror form-control" name="opening_balance" placeholder="Short Name">
+                                @error('opening_balance')
+                                <div class="alert alert-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+
                         <!-- <div class="">
                             <div class="mb-1">
                                 <label class="form-label" for="exampleFormControlTextarea1">Address</label>
