@@ -17,6 +17,8 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('store_id');
             $table->unsignedBigInteger('item_id');
+            $table->unsignedBigInteger('investor_id');
+            $table->float('unit_cost');
             $table->unsignedBigInteger('quantity');
             $table->timestamps();
         });

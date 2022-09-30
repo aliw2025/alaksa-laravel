@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Inventory;
 use App\Models\Investor;
 use App\Models\InvestorLeadger;
 
@@ -44,6 +45,7 @@ class PurchaseController extends Controller
     {
         
         $investor = Investor::find($request->investor_id);
+        // creating purchase transactions
         $purchase = new Purchase();
         $id = Purchase::max('id');
         if($id ==null){
@@ -56,9 +58,11 @@ class PurchaseController extends Controller
         $purchase->supplier = $request->supplier;
         $purchase->purchase_date = $request->purchase_date;
         $purchase->save();
-        // 
+
+        //  saving each item of the purchase transaction
         for ($a=0 ; $a<count($request->qty); $a++) {
             echo $a.'<br>';
+            // saving purchase items
             $purchase_item = new PurchaseItem();
             $purchase_item->item_id = $request->item_id[$a];
             $purchase_item->quantity = $request->qty[$a];
@@ -66,18 +70,29 @@ class PurchaseController extends Controller
             $purchase_item->trade_discount = 0;
             $purchase_item->purchase_id = $purchase->id;
             $purchase_item->save();
+            
+            // updating inventory
+            $inventory = new Inventory();
+            $inventory->store_id = $purchase->store_id;
+            $inventory->item_id = $purchase_item->item_id;
+            $inventory->investor_id = $purchase->investor_id;
+            $inventory->unit_cost = $purchase_item->unit_cost;
+            $inventory->quantity = $purchase_item->quantity;
+            $inventory->save();
+            
         
         }
         
+        // adding entry in leadger
         $ledgerEntry = new InvestorLeadger();
         $ledgerEntry->investor_id = $investor->id;
         $ledgerEntry->transaction_type = "purchase";
         $ledgerEntry->transaction_id = $purchase->id;
-        $ledgerEntry->value =  $purchase->items->sum('cost')*-1;
+        $ledgerEntry->value =  $request->total_amount*-1;
         $ledgerEntry->date = $investor->created_at;
         $ledgerEntry->save();
         
-
+        
         return redirect()->route('purchase.create');
        
     }
@@ -86,12 +101,14 @@ class PurchaseController extends Controller
 
         $purchase = Purchase::find($id);
         return $purchase->items;
+
     }
 
     public function showPurchases($id){
 
         $investor = Investor::find($id);
         return $investor->purchases;
+
     }
 
     /**
