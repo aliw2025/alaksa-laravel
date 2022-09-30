@@ -14,9 +14,8 @@ return new class extends Migration
     public function up()
     {   
         Schema::create('purchases', function (Blueprint $table) {
-            // $table->id();
-            $table->unsignedBigInteger('id');
-            $table->string('purchase_no')->primary();
+            $table->id();
+            $table->string('purchase_no');
             $table->unsignedBigInteger('investor_id');
             $table->unsignedBigInteger('store_id');
             $table->string('supplier');
