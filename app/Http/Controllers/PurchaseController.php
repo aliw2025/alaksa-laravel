@@ -72,25 +72,36 @@ class PurchaseController extends Controller
             $purchase_item->save();
             
             // updating inventory
-            $inventory = new Inventory();
-            $inventory->store_id = $purchase->store_id;
-            $inventory->item_id = $purchase_item->item_id;
-            $inventory->investor_id = $purchase->investor_id;
-            $inventory->unit_cost = $purchase_item->unit_cost;
-            $inventory->quantity = $purchase_item->quantity;
-            $inventory->save();
-            
+            // $investor =Investor::Find($purchase->investor_id);
+            $inventory = Inventory::where('investor_id','=',$purchase->investor_id)->where('item_id','=',$purchase_item->item_id)->first();
+          
+            if($inventory==null){
+                $inventory = new Inventory();
+                $inventory->store_id = $purchase->store_id;
+                $inventory->item_id = $purchase_item->item_id;
+                $inventory->investor_id = $purchase->investor_id;
+                $inventory->unit_cost = $purchase_item->unit_cost;
+                $inventory->quantity = $purchase_item->quantity;
+                $inventory->save();
+            }else{
+                // dd($inventory);
+                $inventory->quantity = $inventory->quantity +$purchase_item->quantity;
+                $inventory->save();
+            }
+           
+        
         
         }
         
         // adding entry in leadger
         $ledgerEntry = new InvestorLeadger();
-        $ledgerEntry->investor_id = $investor->id;
+        $ledgerEntry->account_id = $investor->account->id;
         $ledgerEntry->transaction_type = "purchase";
         $ledgerEntry->transaction_id = $purchase->id;
         $ledgerEntry->value =  $request->total_amount*-1;
         $ledgerEntry->date = $investor->created_at;
         $ledgerEntry->save();
+
         
         
         return redirect()->route('purchase.create');

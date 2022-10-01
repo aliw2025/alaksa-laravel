@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Inventory;
+use App\Models\Investor;
 use Illuminate\Http\Request;
 
 class InventoryController extends Controller
@@ -81,5 +82,16 @@ class InventoryController extends Controller
     public function destroy(Inventory $inventory)
     {
         //
+    }
+
+    public function showInventory($investor_id){
+
+
+        $investor = Investor::Find($investor_id);
+
+        $inventory_items= $investor->inventories;
+
+        return view('inventory.inventory',compact('inventory_items','investor'));
+        
     }
 }

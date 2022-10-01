@@ -72,12 +72,15 @@ class InvestorController extends Controller
         $account = new Account();
         $account->account_name = $investor->prefix.'_cash';
         $account->owner= $investor->id;
-        $account->accountType = 1;
+        $account->account_type = 1;
         $account->opening_balance = $request->opening_balance;
         $account->save();
+
+
+
       
         $ledgerEntry = new InvestorLeadger();
-        $ledgerEntry->investor_id = $investor->id;
+        $ledgerEntry->account_id = $investor->account->id;
         $ledgerEntry->transaction_type = "opening";
         $ledgerEntry->transaction_id = $investor->id;
         $ledgerEntry->value =  $request->opening_balance;

@@ -14,5 +14,14 @@ class Investor extends Model
     {
         // ->withPivot('store_id', 'supplier','purchase_date','created_at','updated_at')
         return $this->hasMany(Purchase::class);
+        
+    }
+
+    public function account(){
+        return $this->hasOne(Account::class,'owner');
+    }
+    public function inventories(){
+
+        return $this->hasMany(Inventory::class,'investor_id');
     }
 }

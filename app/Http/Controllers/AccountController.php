@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\InvestorLeadger;
 use App\Models\Account;
 use Illuminate\Http\Request;
 
@@ -71,7 +72,10 @@ class AccountController extends Controller
     {
         //
     }
+    public function balance(Account $account){
 
+        return $account->$investor_leadgers;
+    }
     /**
      * Remove the specified resource from storage.
      *

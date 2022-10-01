@@ -32,13 +32,18 @@ Route::get('/home/{id}', [\App\Http\Controllers\Controller::class,'home'])->name
 Route::get('/calender' , [\App\Http\Controllers\Controller::class,'showCalender'])->name('calender');
 
 // temporary routes
-Route::get('/list-inventory' , [\App\Http\Controllers\Controller::class,'showInventory'])->name('list-inventory');
 // Route::get('/purchase' , [\App\Http\Controllers\Controller::class,'showPurchase'])->name('purchase');
 
 Route::get('/capital-investments' , [\App\Http\Controllers\Controller::class,'showInvestments'])->name('capital-investments');
+
 Route::get('/get-items' , [\App\Http\Controllers\ItemController::class,'getItems'])->name('get-items');
+
 Route::get('/get-purchase-items/{id}' , [\App\Http\Controllers\PurchaseController::class,'showPurchaseItems'])->name('get-purchase-items');
+
 Route::get('/get-purchases/{id}' , [\App\Http\Controllers\PurchaseController::class,'showPurchases'])->name('get-purchases');
+
+Route::get('/list-inventory/{id}' , [\App\Http\Controllers\InventoryController::class,'showInventory'])->name('list-inventory');
+
 
 Auth::routes();
 Route::resource('investor', InvestorController::class);

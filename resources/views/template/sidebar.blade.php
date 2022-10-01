@@ -89,15 +89,16 @@
                             <i data-feather="circle"></i>
                             <span class=" menu-title text-truncate" data-i18n="comision">Purchase Items</span></a>
                     </li>
-                    <li class=" nav-item">
+                    @php
+                        $inv_sales = \App\Models\Investor::all();
+                    @endphp
+                    {{-- <li class=" nav-item">
                         <a class="d-flex align-items-center" href="#">
                             <i data-feather="circle"></i>
                             <span class="menu-title text-truncate" data-i18n="Dashboards">Update Inventory</span>
                         </a>
                         <ul class="menu-content">
-                            @php
-                                $inv_sales = \App\Models\Investor::all();
-                            @endphp
+
                             @foreach ($inv_sales as $investor)
                                 <li>
                                     <a href="{{ route('list-inventory') }}" class="d-flex align-items-center ">
@@ -108,7 +109,7 @@
                                 </li>
                             @endforeach
                         </ul>
-                    </li>
+                    </li> --}}
                     <li class=" nav-item">
                         <a class="d-flex align-items-center" href="#">
                             <i data-feather="circle"></i>
@@ -118,7 +119,7 @@
 
                             @foreach ($inv_sales as $investor)
                                 <li>
-                                    <a href="{{ route('home', $investor->id) }}" class="d-flex align-items-center ">
+                                    <a href="{{ route('list-inventory',$investor->id) }}" class="d-flex align-items-center ">
                                         <i data-feather="circle"></i>
                                         <span class="menu-item text-truncate"
                                             data-i18n="eCommerce">{{ $investor->prefix }}</span>
@@ -245,7 +246,7 @@
                 </ul>
             </li>
             <!------------------------------------------- Purchase --------------------------------------------------->
-            <li class=" nav-item"><a  class="d-flex align-items-center">
+            <li class=" nav-item"><a class="d-flex align-items-center">
                     <span class=" menu-title text-truncate" data-i18n="comision">Purchase</span></a>
             </li>
 

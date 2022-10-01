@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Investor;
+use App\Models\InvestorLeadger;
 use App\Models\Account;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
@@ -25,6 +26,7 @@ class Controller extends BaseController
     public function setup()
     {
 
+        // company investor has always type 1
         $investor = Investor::where('investor_type', '=', 1)->first();
         if ($investor === null) {
             $investor = new Investor();
@@ -35,11 +37,21 @@ class Controller extends BaseController
             $investor->investor_type = 1;
             $investor->save();
             // cash account
-            // $account = new Account();
-            // $account->account_name($investor->prefix.'cash');
-            // $account->owner = $investor->id;
-            // $account->save();
+            
+            $account = new Account();
+            $account->account_name=$investor->prefix.'cash';
+            $account->account_type =1;
+            $account->opening_balance=10000000;
+            $account->owner = $investor->id;
+            $account->save();
 
+            $ledgerEntry = new InvestorLeadger();
+            $ledgerEntry->account_id = $investor->account->id;
+            $ledgerEntry->transaction_type = "opening";
+            $ledgerEntry->transaction_id = $investor->id;
+            $ledgerEntry->value = $account->opening_balance;
+            $ledgerEntry->date = $investor->created_at;
+            $ledgerEntry->save();
             //supplies account
             // $account = new Account();
             // $account->account_name($investor->prefix.'supplies');
@@ -56,7 +68,7 @@ class Controller extends BaseController
 
         } else {
 
-            
+           
         }
     }
     public function index()
@@ -75,9 +87,7 @@ class Controller extends BaseController
 
         return view("capital-investments.capital-investment");
     }
-    public function showInventory(){
-        return view('inventory.inventory');
-    }
+  
     public function showPurchase(){
         return view('purchase.purchase');
     }
