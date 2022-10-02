@@ -102,23 +102,25 @@ class PurchaseController extends Controller
         $ledgerEntry->date = $investor->created_at;
         $ledgerEntry->save();
 
-        
-        
-        return redirect()->route('purchase.create');
+        return redirect()->route('get-purchases',$investor->id);
        
     }
 
     public function showPurchaseItems($id){
 
         $purchase = Purchase::find($id);
-        return $purchase->items;
+        $purchase_items = $purchase->items;
+        // return $purchase_items;
+        // dd($purchase_items);
+        return view('purchase.purchase-item-list',compact('purchase_items'));
 
     }
 
     public function showPurchases($id){
 
         $investor = Investor::find($id);
-        return $investor->purchases;
+        $purchases= $investor->purchases;
+        return view('purchase.purchases-list',compact('purchases','investor'));
 
     }
 

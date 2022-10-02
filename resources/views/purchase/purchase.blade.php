@@ -13,10 +13,10 @@
                                     <div class="d-flex justify-content-between flex-md-row flex-column invoice-spacing mt-0">
                                         <div>
                                             <div class="logo-wrapper">
-                                                <h3 class="text-primary invoice-logo">Alpha Digital</h3>
+                                                <h3 class="ms-0 text-primary invoice-logo">Alpha Digital</h3>
                                             </div>
-                                            <p class="card-text mb-25">Office 149, 450 South Brand Brooklyn</p>
-                                            <p class="card-text mb-25">San Diego County, CA 91905, USA</p>
+                                            <p class="card-text mb-25">Office 149,Mustafa plaza</p>
+                                            <p class="card-text mb-25">Ring Road Peshawar, PK</p>
                                             <p class="card-text mb-0">+1 (123) 456 7891, +44 (876) 543 2198</p>
 
                                         </div>
