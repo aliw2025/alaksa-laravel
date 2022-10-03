@@ -20,7 +20,6 @@ return new class extends Migration
             $table->string('category');
             $table->string('make');
             $table->string('model');
-            // $table->string('supplier');
             $table->timestamps();
         });
 

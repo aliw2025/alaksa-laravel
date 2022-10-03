@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('invoice_no');
             $table->unsignedBigInteger('store_id');
             $table->timestamps();
-            $table->timestamps();
+            
         });
     }
 
