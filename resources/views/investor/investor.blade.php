@@ -126,7 +126,7 @@
                                         @enderror
                                     </div>
                                 </div>
-
+                                @if (!isset($investor))
                                 <div class=" ">
                                     <!-- <input id="investorName" name="investor_name" class="@error('investor_name') is-invalid @enderror form-control" autocomplete="off" id="exampleDataList" placeholder="Enter investor Name"> -->
                                     <div class="mb-1">
@@ -137,6 +137,9 @@
                                         @enderror
                                     </div>
                                 </div>
+                                
+                                @endif
+                               
 
                                 <div class="">
                                     @if (isset($investor))
