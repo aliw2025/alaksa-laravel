@@ -28,6 +28,8 @@ use App\Http\Controllers\PurchaseController;
 
 Route::get('/', [\App\Http\Controllers\Controller::class,'index'])->name('index');
 Route::get('/setup', [\App\Http\Controllers\Controller::class,'setup'])->name('setup');
+Route::get('/test/{id}', [\App\Http\Controllers\Controller::class,'testSql'])->name('test');
+
 Route::get('/home/{id}', [\App\Http\Controllers\Controller::class,'home'])->name('home');
 Route::get('/calender' , [\App\Http\Controllers\Controller::class,'showCalender'])->name('calender');
 

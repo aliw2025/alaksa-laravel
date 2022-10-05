@@ -44,6 +44,7 @@ class PurchaseController extends Controller
     public function store(Request $request)
     {
         
+        
         $investor = Investor::find($request->investor_id);
         // creating purchase transactions
         $purchase = new Purchase();
@@ -95,12 +96,13 @@ class PurchaseController extends Controller
         
         // adding entry in leadger
         $ledgerEntry = new InvestorLeadger();
-        $ledgerEntry->account_id = $investor->account->id;
+        $ledgerEntry->account_id = $investor->accounts->where('account_type',2)->first()->id;
         $ledgerEntry->transaction_type = "purchase";
         $ledgerEntry->transaction_id = $purchase->id;
         $ledgerEntry->value =  $request->total_amount*-1;
         $ledgerEntry->date = $investor->created_at;
         $ledgerEntry->save();
+        
 
         return redirect()->route('get-purchases',$investor->id);
        

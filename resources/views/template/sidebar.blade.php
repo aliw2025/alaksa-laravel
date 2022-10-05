@@ -31,6 +31,19 @@
                         Digital</span>
                 </a>
                 <ul class="menu-content">
+                    @php
+                        $comp = \App\Models\Investor::where('investor_type','=',1)->first();  
+                    @endphp
+                    
+                     <li>
+                         <a href="{{ route('home', $comp->id) }}" class="d-flex align-items-center ">
+                             <i data-feather="circle"></i>
+                             <span class="menu-item text-truncate"
+                                 data-i18n="eCommerce">Dashboard</span>
+                         </a>
+                     </li>
+                 
+
                     <li>
                         {{-- href="{{ route('investor.create') }}" --}}
                         {{-- href="{{ route('investor.create') }}" --}}
@@ -62,7 +75,7 @@
                         </a>
                     </li>
                     @php
-                        $inv = \App\Models\Investor::where('id', '!=', 0)->get();
+                        $inv = \App\Models\Investor::where('investor_type','!=',1)->get();  
                     @endphp
                     @foreach ($inv as $investor)
                         <li>

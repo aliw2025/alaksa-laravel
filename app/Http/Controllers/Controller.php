@@ -38,18 +38,32 @@ class Controller extends BaseController
             $investor->save();
             // cash account
             
-            $account = new Account();
-            $account->account_name=$investor->prefix.'cash';
-            $account->account_type =1;
-            $account->opening_balance=10000000;
-            $account->owner = $investor->id;
-            $account->save();
+            $account_cash = new Account();
+            $account_cash->account_name=$investor->prefix.'_cash';
+            $account_cash->account_type =1;
+            $account_cash->opening_balance=10000000;
+            $account_cash->owner = $investor->id;
+            $account_cash->save();
+
+            $account_pay = new Account();
+            $account_pay->account_name = $investor->prefix.'_payables';
+            $account_pay->owner= $investor->id;
+            $account_pay->account_type = 2;
+            $account_pay->opening_balance = 0;
+            $account_pay->save();
+
+            $account_rcv = new Account();
+            $account_rcv->account_name = $investor->prefix.'_recievables';
+            $account_rcv->owner= $investor->id;
+            $account_rcv->account_type = 3;
+            $account_rcv->opening_balance = 0;
+            $account_rcv->save();
 
             $ledgerEntry = new InvestorLeadger();
-            $ledgerEntry->account_id = $investor->account->id;
+            $ledgerEntry->account_id = $account_cash->id;
             $ledgerEntry->transaction_type = "opening";
             $ledgerEntry->transaction_id = $investor->id;
-            $ledgerEntry->value = $account->opening_balance;
+            $ledgerEntry->value = $account_cash->opening_balance;
             $ledgerEntry->date = $investor->created_at;
             $ledgerEntry->save();
             //supplies account
@@ -94,9 +108,16 @@ class Controller extends BaseController
 
 
     // unused routes
-    public function testSQL()
-    {
-        return \Illuminate\Support\Facades\DB::table('users')->get();
+    public function testSql($id)
+
+    {    
+        $investor = Investor::find($id);
+        // return $investor->accounts->where('account_type',1)->first();
+        return $investor->accounts->where('account_type',1)->first()->investor;
+        
+        
+
+        // return \Illuminate\Support\Facades\DB::table('users')->get();
     }
 
     public function testOracle()

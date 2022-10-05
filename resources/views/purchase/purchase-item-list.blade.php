@@ -6,7 +6,7 @@
             <div class="card">
                 <div class="card-header">
                     <div class="card-title">
-                        <h4 class="">Purchases</h4>
+                        <h4 class="">Purchase Items</h4>
                     </div>
                 </div>
                 <div class="card-body">

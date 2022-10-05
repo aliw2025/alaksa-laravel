@@ -17,8 +17,8 @@ class Investor extends Model
         
     }
 
-    public function account(){
-        return $this->hasOne(Account::class,'owner');
+    public function accounts(){
+        return $this->hasMany(Account::class,'owner');
     }
     public function inventories(){
 

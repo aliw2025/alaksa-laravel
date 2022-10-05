@@ -78,15 +78,28 @@ class InvestorController extends Controller
 
 
 
+        $account = new Account();
+        $account->account_name = $investor->prefix.'_payables';
+        $account->owner= $investor->id;
+        $account->account_type = 2;
+        $account->opening_balance = 0;
+        $account->save();
+
+        $account = new Account();
+        $account->account_name = $investor->prefix.'_recievables';
+        $account->owner= $investor->id;
+        $account->account_type = 3;
+        $account->opening_balance = 0;
+        $account->save();
       
+
         $ledgerEntry = new InvestorLeadger();
-        $ledgerEntry->account_id = $investor->account->id;
+        $ledgerEntry->account_id = $investor->accounts->where('account_type',1)->first()->id;
         $ledgerEntry->transaction_type = "opening";
         $ledgerEntry->transaction_id = $investor->id;
         $ledgerEntry->value =  $request->opening_balance;
         $ledgerEntry->date = $investor->created_at;
         $ledgerEntry->save();
-
 
         return redirect()->route('investor.index');
     }
