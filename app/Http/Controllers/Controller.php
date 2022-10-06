@@ -109,8 +109,11 @@ class Controller extends BaseController
 
     // unused routes
     public function testSql($id)
-
     {    
+        // $num = sprintf('%10d', $id+1);
+        return str_pad(22, 10, '0', STR_PAD_LEFT);
+        // $purchase->purchase_no = $investor->prefix.'22'.$num;
+
         $investor = Investor::find($id);
         // return $investor->accounts->where('account_type',1)->first();
         return $investor->accounts->where('account_type',1)->first()->investor;

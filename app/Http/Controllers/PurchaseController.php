@@ -48,12 +48,13 @@ class PurchaseController extends Controller
         $investor = Investor::find($request->investor_id);
         // creating purchase transactions
         $purchase = new Purchase();
-        $id = Purchase::max('id');
+        // $id = Purchase::max('id');
+        $id = Purchase::where('investor_id','=',$request->investor_id)->max('id');
         if($id ==null){
             $id = 1;
         }
-        $purchase->id=$id+1;
-        $purchase->purchase_no = $investor->prefix.'-'.$id+1;
+        $num = str_pad($id+1, 10, '0', STR_PAD_LEFT);
+        $purchase->purchase_no = $investor->prefix.'22'.$num;
         $purchase->investor_id = $request->investor_id;
         $purchase->store_id = 1;
         $purchase->supplier = $request->supplier;

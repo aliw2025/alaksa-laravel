@@ -56,7 +56,7 @@
                                                     readonly="readonly">
                                             </div>
                                             <div class="d-flex align-items-center justify-content-between">
-                                                <span class="title">Investor:</span>
+                                                <span class="title">Account:</span>
                                                 <div style="width: 11.21rem; max-width:11.21rem; "
                                                     class="align-items-center">
                                                     <select name = "investor_id"
@@ -64,7 +64,7 @@
                                                         id="select2-basic" data-select2-id="select2-basic" tabindex="-1"
                                                         aria-hidden="true">
                                                         @foreach ($investors as $investor)
-                                                            <option value="{{ $investor->id }}">{{ $investor->prefix }}
+                                                            <option value="{{ $investor->id }}">{{ $investor->investor_name }}
                                                             </option>
                                                         @endforeach
                                                     </select>
