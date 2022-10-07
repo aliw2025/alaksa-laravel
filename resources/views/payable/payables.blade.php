@@ -6,7 +6,7 @@
             <div class="card">
                 <div class="card-header">
                     <div class="card-title">
-                        <h4 class="">Purchases</h4>
+                        <h4 class="">Payables</h4>
                     </div>
                 </div>
                 <div class="card-body">
@@ -14,29 +14,30 @@
                     <div class="row ">
                    
                         <div  class="col-12 table-responsive ">
-                            <table id="investor-table" class="table">
+                            <table id="payables-table" class="table">
                                 <thead class="thead-dark">
                                     <tr style="background-color:red !important;">
                                         <th style="width: 2px !important">#</th>
-                                        <th scope="col">Purchase NO</th>  
+                                        <th scope="col">Purchase No</th>
+                                        <th scope="col">Remaining Amount</th>  
+                                        <th scope="col">total Amount</th>
                                         <th scope="col">Supplier</th>
-                                        <th scope="col">Date</th>
-                                        <th scope="col">Action</th>
-                                        {{-- <th scope="col">Action</th> --}}
+                                        
+                                       
                                     </tr>
                                 </thead>
-                                <tbody class="inventory-iems-body" id="inventory-iems-body">
+                                <tbody class="inventory-iems-body" id="nventory-iems-body">
                                     @php
                                         $count = 1
                                     @endphp
-                                    @foreach ($purchases as $pur)
+                                    @foreach ($payables as $payables)
 
                                     <tr>
                                         <td>{{$count}}</td>
-                                        <td>{{$pur->purchase_no}}</td>
-                                        <td>{{$pur->supplier}}</td>
-                                        <td>{{$pur->purchase_date}}</td>
-                                        <td><a style="text-decoration: none;color:black" href="{{route('get-purchase-items',$pur->id)}}"><i data-feather='eye'></i></a></td>
+                                        <td>{{$payables->purchase->purchase_no}}</td>
+                                        <td>{{$payables->remaining_value}}</td>
+                                        <td>{{$payables->total_value}}</td>
+                                        <td>{{$payables->purchase->supplier}}</td>
                                        
                                       
                                     </tr>
@@ -63,7 +64,7 @@
 
         $(document).ready(function() {
             console.log('i am datatable');
-            $('#investor-table').DataTable();
+            $('#payables-table').DataTable();
         });
 
     });

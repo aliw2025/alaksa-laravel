@@ -73,7 +73,19 @@
 
                                             <div class="d-flex align-items-center justify-content-between mt-1">
                                                 <span class="title">Supplier</span>
-                                                <input name = "supplier" type="text" class="form-control invoice-edit-input ">
+                                                {{-- <select class="form-control" name="supplier" id=""></select> --}}
+                                                <div style="width: 11.21rem; max-width:11.21rem; "
+                                                class="align-items-center">
+                                                <select name="supplier" class="form-select" aria-label="Default select example">
+
+                                                   @foreach ($suppliers as $sup)
+                                                   <option value="{{$sup->id}}">{{$sup->name}}</option>
+                                                   @endforeach
+                                                   
+                                                   
+                                                  </select>
+                                                </div>
+                                                {{-- <input name = "supplier" type="text" class="form-control invoice-edit-input "> --}}
                                             </div>
                                         </div>
                                     </div>

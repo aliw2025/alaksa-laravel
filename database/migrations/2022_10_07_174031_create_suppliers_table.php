@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-
     /**
      * Run the migrations.
      *
@@ -14,16 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-
-        Schema::create('payables', function (Blueprint $table) {
-
+        Schema::create('suppliers', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('transaction_id');
-            $table->double('total_value');
-            $table->double('remaining_value');
+            $table->string('name');
+            $table->string('email');
+            $table->string('phone');
+            $table->string('address')->nullable();
             $table->timestamps();
-
-
+            
         });
     }
 
@@ -34,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('payables');
+        Schema::dropIfExists('suppliers');
     }
 };

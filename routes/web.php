@@ -8,6 +8,9 @@ use App\Http\Controllers\ItemController;
 use App\Http\Controllers\StoreController;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\PurchaseController;
+use App\Http\Controllers\PayableController;
+use App\Http\Controllers\SupplierController;
+
 
 
 
@@ -46,6 +49,8 @@ Route::get('/get-purchases/{id}' , [\App\Http\Controllers\PurchaseController::cl
 
 Route::get('/list-inventory/{id}' , [\App\Http\Controllers\InventoryController::class,'showInventory'])->name('list-inventory');
 
+Route::get('/get-payables/{id}' , [\App\Http\Controllers\PayableController::class,'getPayables'])->name('get-payables');
+
 
 Auth::routes();
 Route::resource('investor', InvestorController::class);
@@ -54,6 +59,10 @@ Route::resource('item', ItemController::class);
 Route::resource('store', StoreController::class);
 Route::resource('inventory', InventoryController::class);
 Route::resource('purchase', PurchaseController::class);
+Route::resource('payable',PayableController::class);
+Route::resource('supplier',SupplierController::class);
+
+
 
 
 

@@ -100,6 +100,10 @@
                             <i data-feather="circle"></i>
                             <span class=" menu-title text-truncate" data-i18n="comision">Define Item</span></a>
                     </li>
+                    <li class=" nav-item"><a href="{{ route('supplier.create') }}" class="d-flex align-items-center">
+                        <i data-feather="circle"></i>
+                        <span class=" menu-title text-truncate" data-i18n="comision">Define Supplier</span></a>
+                </li>
                     {{-- <li class=" nav-item"><a href="{{ route('purchase.create') }}" class="d-flex align-items-center">
                             <i data-feather="circle"></i>
                             <span class=" menu-title text-truncate" data-i18n="comision">Purchase Items</span></a>
@@ -279,8 +283,41 @@
                 </li>
                 </ul>
             </li>
-           
+            <!------------------------------------------- Payables --------------------------------------------------->
+            <li class=" nav-item">
+                <a class="d-flex align-items-center" href="#">
+                    <i data-feather='arrow-up'></i> 
+                    <span class="menu-title text-truncate" data-i18n="Dashboards">Payables</span>
+                </a>
+                <ul class="menu-content">
+                    @php
+                        $inv_sales = \App\Models\Investor::all();
+                    @endphp
+                     <li class=" nav-item"><a href="{{ route('purchase.create') }}" class="d-flex align-items-center">
+                        <i data-feather="circle"></i>
+                        <span class=" menu-title text-truncate" data-i18n="comision">Pay Bills</span></a>
+                </li>
+                <li class=" nav-item">
+                    <a class="d-flex align-items-center" href="#">
+                        <i data-feather="circle"></i>
+                        <span class="menu-title text-truncate" data-i18n="Dashboards">Reports</span>
+                    </a>
+                    <ul class="menu-content">
 
+                        @foreach ($inv_sales as $investor)
+                            <li>
+                                <a href="{{ route('get-payables', $investor->id) }}"
+                                    class="d-flex align-items-center ">
+                                    <i data-feather="circle"></i>
+                                    <span class="menu-item text-truncate"
+                                        data-i18n="eCommerce">{{ $investor->prefix }}</span>
+                                </a>
+                            </li>
+                        @endforeach
+                    </ul>
+                </li>
+                </ul>
+            </li>
             <li class=" nav-item"><a class="d-flex align-items-center">
                     <span class=" menu-title text-truncate" data-i18n="comision">Commision</span></a>
             </li>

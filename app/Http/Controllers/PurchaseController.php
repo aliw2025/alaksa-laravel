@@ -9,6 +9,8 @@ use App\Models\InvestorLeadger;
 use App\Models\Purchase;
 use App\Models\Item;
 use App\Models\PurchaseItem;
+use App\Models\Payable;
+use App\Models\Supplier;
 use Illuminate\Http\Request;
 
 class PurchaseController extends Controller
@@ -29,9 +31,11 @@ class PurchaseController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create()
+
     {   $items = Item::all();
         $investors = Investor::all();
-        return view('purchase.purchase',compact('items','investors'));
+        $suppliers = Supplier::all();
+        return view('purchase.purchase',compact('items','investors','suppliers'));
     }
 
     /**
@@ -48,8 +52,8 @@ class PurchaseController extends Controller
         $investor = Investor::find($request->investor_id);
         // creating purchase transactions
         $purchase = new Purchase();
-        // $id = Purchase::max('id');
-        $id = Purchase::where('investor_id','=',$request->investor_id)->max('id');
+        $id = Purchase::max('id');
+        // $id = Purchase::where('investor_id','=',$request->investor_id)->max('id');
         if($id ==null){
             $id = 1;
         }
@@ -90,11 +94,15 @@ class PurchaseController extends Controller
                 $inventory->quantity = $inventory->quantity +$purchase_item->quantity;
                 $inventory->save();
             }
-           
-        
         
         }
         
+        $payable = new Payable();
+        $payable->transaction_id =  $purchase->id;
+        $payable->remaining_value = $request->total_amount;
+        $payable->total_value=$request->total_amount;
+        $payable->save();
+       
         // adding entry in leadger
         $ledgerEntry = new InvestorLeadger();
         $ledgerEntry->account_id = $investor->accounts->where('account_type',2)->first()->id;
@@ -104,6 +112,7 @@ class PurchaseController extends Controller
         $ledgerEntry->date = $investor->created_at;
         $ledgerEntry->save();
         
+
 
         return redirect()->route('get-purchases',$investor->id);
        
