@@ -34,7 +34,7 @@
                     @php
                         $comp = \App\Models\Investor::where('investor_type','=',1)->first();  
                     @endphp
-                    
+                    @if($comp!=null)
                      <li>
                          <a href="{{ route('home', $comp->id) }}" class="d-flex align-items-center ">
                              <i data-feather="circle"></i>
@@ -42,7 +42,7 @@
                                  data-i18n="eCommerce">Dashboard</span>
                          </a>
                      </li>
-                 
+                    @endif
 
                     <li>
                         {{-- href="{{ route('investor.create') }}" --}}
@@ -77,6 +77,7 @@
                     @php
                         $inv = \App\Models\Investor::where('investor_type','!=',1)->get();  
                     @endphp
+                   
                     @foreach ($inv as $investor)
                         <li>
                             <a href="{{ route('home', $investor->id) }}" class="d-flex align-items-center ">
@@ -86,6 +87,7 @@
                             </a>
                         </li>
                     @endforeach
+                   
                 </ul>
             </li>
             <!------------------------------------------- Inventory --------------------------------------------------->

@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('purchase_no');
             $table->unsignedBigInteger('investor_id');
             $table->unsignedBigInteger('store_id');
-            $table->string('supplier');
+            $table->unsignedBigInteger('supplier');
             $table->date('purchase_date');
             $table->timestamps();
         }); 

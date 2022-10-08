@@ -30,14 +30,14 @@
                                     @php
                                         $count = 1
                                     @endphp
-                                    @foreach ($payables as $payables)
+                                    @foreach ($purchases as $pur)
 
                                     <tr>
                                         <td>{{$count}}</td>
-                                        <td>{{$payables->purchase->purchase_no}}</td>
-                                        <td>{{$payables->remaining_value}}</td>
-                                        <td>{{$payables->total_value}}</td>
-                                        <td>{{$payables->purchase->supplier}}</td>
+                                        <td>{{$pur->payable->purchase->purchase_no}}</td>
+                                        <td>{{$pur->payable->remaining_value}}</td>
+                                        <td>{{$pur->payable->total_value}}</td>
+                                        <td>{{$pur->payable->purchase->supplier}}</td>
                                        
                                       
                                     </tr>

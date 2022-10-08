@@ -33,7 +33,7 @@ class Controller extends BaseController
             $investor->investor_name = "Alpha digital";
             $investor->email = "support@alphaDigital.com";
             $investor->phone = "00000000";
-            $investor->prefix = "Company";
+            $investor->prefix = "AD";
             $investor->investor_type = 1;
             $investor->save();
             // cash account
@@ -84,6 +84,7 @@ class Controller extends BaseController
 
            
         }
+        return redirect()->route('index');
     }
     public function index()
     {

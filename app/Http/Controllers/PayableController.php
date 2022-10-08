@@ -20,16 +20,17 @@ class PayableController extends Controller
         return view ('payable.payables',compact('payables'));
 
     }
+
     public function getPayables($id)
     {
-    
-        $investor_purchases = Purchase::whereIn('id',Payable::all()->pluck('transaction_id'))->where('investor_id','=',$id)->pluck('id');
-        $payables = Payable::whereIn('transaction_id',$investor_purchases)->get();
-
-        return view ('payable.payables',compact('payables'));
+        // dd($id);
+        $purchases = Purchase::where('investor_id','=',$id);
+        dd($purchases);
+        // $investor_purchases = Purchase::whereIn('id',Payable::all()->pluck('transaction_id'))->where('investor_id','=',$id)->pluck('id');
+        // $payables = Payable::whereIn('transaction_id',$investor_purchases)->get();
+        return view ('payable.payables',compact('purchases'));
 
     }
-
     /**
      * Show the form for creating a new resource.
      *
