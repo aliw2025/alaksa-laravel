@@ -11,7 +11,7 @@ class Payable extends Model
 
     public function purchase()
     {
-            return $this->belongsto(Purchase::class,'transaction_id');
+            return $this->belongsTo(Purchase::class,'transaction_id');
     }
 
    

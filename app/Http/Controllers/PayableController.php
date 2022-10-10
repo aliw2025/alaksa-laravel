@@ -24,8 +24,9 @@ class PayableController extends Controller
     public function getPayables($id)
     {
         // dd($id);
-        $purchases = Purchase::where('investor_id','=',$id);
-        dd($purchases);
+        $purchases = Purchase::where('investor_id','=',$id)->get();
+        // return $purchases;
+        // dd($purchases);
         // $investor_purchases = Purchase::whereIn('id',Payable::all()->pluck('transaction_id'))->where('investor_id','=',$id)->pluck('id');
         // $payables = Payable::whereIn('transaction_id',$investor_purchases)->get();
         return view ('payable.payables',compact('purchases'));

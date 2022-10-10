@@ -34,7 +34,7 @@
 
                                     <tr>
                                         <td>{{$count}}</td>
-                                        <td>{{$pur->payable->purchase->purchase_no}}</td>
+                                        <td>{{$pur->purchase_no}}</td>
                                         <td>{{$pur->payable->remaining_value}}</td>
                                         <td>{{$pur->payable->total_value}}</td>
                                         <td>{{$pur->payable->purchase->supplier}}</td>
