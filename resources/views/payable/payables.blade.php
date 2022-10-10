@@ -10,9 +10,7 @@
                     </div>
                 </div>
                 <div class="card-body">
-
                     <div class="row ">
-                   
                         <div  class="col-12 table-responsive ">
                             <table id="payables-table" class="table">
                                 <thead class="thead-dark">
@@ -22,8 +20,7 @@
                                         <th scope="col">Remaining Amount</th>  
                                         <th scope="col">total Amount</th>
                                         <th scope="col">Supplier</th>
-                                        
-                                       
+                                        <th scope="col">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody class="inventory-iems-body" id="nventory-iems-body">
@@ -31,23 +28,18 @@
                                         $count = 1
                                     @endphp
                                     @foreach ($purchases as $pur)
-
                                     <tr>
-                                        <td>{{$count}}</td>
+                                       <td>{{$count}}</td>
                                         <td>{{$pur->purchase_no}}</td>
                                         <td>{{$pur->payable->remaining_value}}</td>
                                         <td>{{$pur->payable->total_value}}</td>
                                         <td>{{$pur->payable->purchase->supplier}}</td>
-                                       
-                                      
+                                        <td> <a href="#">pay</a> </td>
                                     </tr>
                                     @php
                                         $count = $count+1
                                     @endphp
-
                                     @endforeach
-                                 
-                            
                                 </tbody>
                             </table>
                         </div>
@@ -57,7 +49,6 @@
         </div>
     </div>
 </div>
-
 <script type="text/javascript">
 
     $(document).ready(function() {

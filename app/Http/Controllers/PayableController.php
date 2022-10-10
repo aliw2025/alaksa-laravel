@@ -70,8 +70,9 @@ class PayableController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit(Payable $payable)
-    {
+    {   
         //
+        return view('payable.pay');
     }
 
     /**
