@@ -6,11 +6,10 @@
             <div class="card">
                 <div class="card-header">
                     <div class="card-title">
-                        <h4 class="">Supplier</h4>
+                        <h4 class="">Suppliers</h4>
                     </div>
                 </div>
                 <div class="card-body">
-
                     <div class="row ">
                         <div class="col-12 table-responsive">
                             <table id="investor-table" class="table">
@@ -18,8 +17,7 @@
                                     <tr style="background-color:red !important;">
                                         <th style="width: 2px !important">#</th>
                                         <th scope="col">Supplier name</th>
-                                        <th scope="col">Short name</th>
-                                        <th scope="col">Email</th>
+                                        <th scope="col">Address</th>
                                         <th scope="col">Phone</th>
                                         <th scope="col">Date Created</th>
                                         <th scope="col">Action</th>
@@ -125,7 +123,20 @@
                                         @enderror
                                     </div>
                                 </div>
-                              
+                                
+                                @if (!isset($supplier))
+                                <div class=" ">
+                                    <!-- <input id="investorName" name="investor_name" class="@error('investor_name') is-invalid @enderror form-control" autocomplete="off" id="exampleDataList" placeholder="Enter investor Name"> -->
+                                    <div class="mb-1">
+                                        <label class="form-label" for="first-name-vertical">Opening Balances</label>
+                                        <input type="number" id="opening_balance" class=" @error('prefix') is-invalid @enderror form-control" name="opening_balance" value="0" placeholder="Opening Balance">
+                                        @error('opening_balance')
+                                        <div class="alert alert-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                </div>
+                                
+                                @endif
                                
 
                                 <div class="">
