@@ -122,8 +122,7 @@ class PurchaseController extends Controller
 
         $purchase = Purchase::find($id);
         $purchase_items = $purchase->items;
-        // return $purchase_items;
-        // dd($purchase_items);
+       
         return view('purchase.purchase-item-list',compact('purchase_items'));
 
     }

@@ -15,7 +15,7 @@ class Purchase extends Model
         return $this->belongsToMany(Item::class,'purchase_items','purchase_id','item_id')->withPivot('quantity', 'unit_cost','trade_discount','created_at','updated_at');;
     }
     public function payable(){
-        // dd('waseem');
+      
         return $this->hasOne(Payable::class,'transaction_id');
     }
     
