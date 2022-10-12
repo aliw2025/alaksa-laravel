@@ -1,0 +1,57 @@
+
+
+ΔASSETS = ΔLIABILITIES + ΔEQUITY + ΔREVENUES - ΔEXPENSES
+Example
+1  investor opening balance of 1000
+2  investor purchase inventory of 100
+3. investor pay 100 for inventory 
+
+
+
+1 account                        debit         credit
+  investor_cash                1000                    
+  investor_equity                                   1000                                                  
+
+2 investor_supplies           100          
+  supplier_pay_able                              100
+
+3 supplier_pay_able.        100 
+   investor_cash				          100 	 
+
+
+investor    customer     supplier
+
+purchase                 
+id  purchase_no    investor_id 
+
+
+sale
+id sale_no  customer_id     investor_id                              
+
+supplier_payments
+id               supplier_id        investor_id  
+
+
+                                       
+			
+
+Transactions 
+tran_id          doc_id   doc_type ( sale ,pur, payment)    date
+
+
+Leadger
+transaction_id  transaction_type   account  amount date
+
+
+
+
+
+
+
+
+
+account mapping
+investor_cash    investor_equity
+
+
+
