@@ -24,8 +24,6 @@ return new class extends Migration
             $table->morphs('owner');
             // opening balance of the account
             $table->double('opening_balance');
-            // creating forieng key constraints
-            $table->foreign('owner')->references('id')->on('investors');
             // time stamps
             $table->timestamps();
         });

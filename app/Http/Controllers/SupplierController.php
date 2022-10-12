@@ -61,6 +61,19 @@ class SupplierController extends Controller
         $supplier->phone = $request->phone;
         $supplier->address = $request->address;
         $supplier->save();
+
+        // $investor_eq= $investor->charOfAccounts()->create([
+        //     'account_name' => $investor->prefix . '_equity',
+        //     'account_type' => 5,
+        //     'opening_balance' => -$request->opening_balance
+        // ]);
+
+        // $investor->leadgerEntries()->create([
+        //     'account_id'=> $investor_cash->id ,
+        //     'value'=> $request->opening_balance,
+        //     'date'=>$investor->created_at
+
+        // ]);        
         return redirect()->route('supplier.index');
     }
 

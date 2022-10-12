@@ -93,32 +93,42 @@ class Controller extends BaseController
 
         $type = new AccountType();
         $type->name="cash";
-        $type->catgory="Assets";
-        
+        $type->category="Assets";
+        $type->save();
+
         $type = new AccountType();
         $type->name="Equipment";
-        $type->catgory="Assets";
+        $type->category="Assets";
+        $type->save();
 
         $type = new AccountType();
         $type->name="inventory";
-        $type->catgory="Assets";
+        $type->category="Assets";
+        $type->save();
 
         $type = new AccountType();
         $type->name="Account Receivable";
-        $type->catgory="Assets";
+        $type->category="Assets";
+        $type->save();
 
         $type = new AccountType();
         $type->name="equity";
-        $type->catgory="equity";
+        $type->category="equity";
+        $type->save();
 
         $type = new AccountType();
         $type->name="Account Payable";
-        $type->catgory="Liabilty";
+        $type->category="Liabilty";
+        $type->save();
 
         $type = new AccountType();
         $type->name="Expenses";
-        $type->catgory="Salary Expenses";
+        $type->category="Expenses";
+        $type->save();
 
+        
+
+        return redirect()->route('index');
 
 
 
@@ -157,7 +167,7 @@ class Controller extends BaseController
         // return $investor->accounts->where('account_type',1)->first();
         return $investor->accounts->where('account_type',1)->first()->investor;
         
-        
+        // return  $investor->leadgerEntries()->where('transaction_type','=','App\Models\Investor')->get();
 
         // return \Illuminate\Support\Facades\DB::table('users')->get();
     }

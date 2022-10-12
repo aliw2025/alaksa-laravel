@@ -33,4 +33,9 @@ class Investor extends Model
         return $this->hasMany(Inventory::class,'investor_id');
     }
     
+    public function leadgerEntries(){
+
+        return $this->morphMany(GLeadger::class,'transaction');
+    }
+
 }
