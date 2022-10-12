@@ -20,8 +20,17 @@ class Investor extends Model
     public function accounts(){
         return $this->hasMany(Account::class,'owner');
     }
+
+
+    public function charOfAccounts(){
+
+        return $this->morphMany(ChartOfAccount::class,'owner');
+
+    }
+
     public function inventories(){
 
         return $this->hasMany(Inventory::class,'investor_id');
     }
+    
 }

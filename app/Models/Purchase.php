@@ -18,5 +18,9 @@ class Purchase extends Model
       
         return $this->hasOne(Payable::class,'transaction_id');
     }
+    public function leadgerEntries(){
+
+        return $this->morphMany(GLeadger::class,'transaction');
+    }
     
 }

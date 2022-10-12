@@ -61,6 +61,7 @@ class InvestorController extends Controller
             ]
         );
 
+        // define invertor
         $investor = new Investor();
         $investor->investor_name = $request->investor_name;
         $investor->email = $request->email;
@@ -69,6 +70,7 @@ class InvestorController extends Controller
         $investor->investor_type = $request->investor_type;
         $investor->save();
 
+        //  define cash account
         $account = new Account();
         $account->account_name = $investor->prefix.'_cash';
         $account->owner= $investor->id;
@@ -76,20 +78,20 @@ class InvestorController extends Controller
         $account->opening_balance = $request->opening_balance;
         $account->save();
 
-
-
+        //  define inventory asset account
         $account = new Account();
-        $account->account_name = $investor->prefix.'_payables';
-        $account->owner= $investor->id;
-        $account->account_type = 2;
-        $account->opening_balance = 0;
-        $account->save();
-
-        $account = new Account();
-        $account->account_name = $investor->prefix.'_recievables';
+        $account->account_name = $investor->prefix.'_inventory';
         $account->owner= $investor->id;
         $account->account_type = 3;
         $account->opening_balance = 0;
+        $account->save();
+
+        // define equity asset account
+        $account = new Account();
+        $account->account_name = $investor->prefix.'_equity';
+        $account->owner= $investor->id;
+        $account->account_type = 1;
+        $account->opening_balance = - $request->opening_balance;
         $account->save();
       
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Investor;
 use App\Models\InvestorLeadger;
 use App\Models\Account;
+use App\Models\AccountType;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -86,6 +87,43 @@ class Controller extends BaseController
         }
         return redirect()->route('index');
     }
+
+    public function createAccountTypes(){
+
+
+        $type = new AccountType();
+        $type->name="cash";
+        $type->catgory="Assets";
+        
+        $type = new AccountType();
+        $type->name="Equipment";
+        $type->catgory="Assets";
+
+        $type = new AccountType();
+        $type->name="inventory";
+        $type->catgory="Assets";
+
+        $type = new AccountType();
+        $type->name="Account Receivable";
+        $type->catgory="Assets";
+
+        $type = new AccountType();
+        $type->name="equity";
+        $type->catgory="equity";
+
+        $type = new AccountType();
+        $type->name="Account Payable";
+        $type->catgory="Liabilty";
+
+        $type = new AccountType();
+        $type->name="Expenses";
+        $type->catgory="Salary Expenses";
+
+
+
+
+    }
+
     public function index()
     {
         $investors = Investor::all();
