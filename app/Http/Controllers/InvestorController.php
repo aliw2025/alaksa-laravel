@@ -100,7 +100,7 @@ class InvestorController extends Controller
             'value'=> $request->opening_balance,
             'date'=>$investor->created_at
 
-        ]);
+        ]); 
 
         $investor->leadgerEntries()->create([
             'account_id'=> $investor_eq->id ,

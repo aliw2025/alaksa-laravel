@@ -96,21 +96,37 @@ class PurchaseController extends Controller
             }
         
         }
+        // getting inventory account of the investor
+        $inv_acc_id =  $investor->charOfAccounts->where('account_type',3)->first()->id;
+        $purchase->leadgerEntries()->create([
+            'account_id'=>  $inv_acc_id,
+            'value'=> $request->total_amount,
+            'date'=>$purchase->purchase_date        
+        ]);  
+        //  getting supplier payable account of the supplier
+        $supplier = Supplier::find($request->supplier);
+        $sup_acc_id = $supplier->charOfAccounts->where('account_type',6)->first()->id;
+        $purchase->leadgerEntries()->create([
+            'account_id'=>  $sup_acc_id,
+            'value'=> -$request->total_amount,
+            'date'=>$purchase->purchase_date       
+        ]);  
         
-        $payable = new Payable();
-        $payable->transaction_id =  $purchase->id;
-        $payable->remaining_value = $request->total_amount;
-        $payable->total_value=$request->total_amount;
-        $payable->save();
+
+        // $payable = new Payable();
+        // $payable->transaction_id =  $purchase->id;
+        // $payable->remaining_value = $request->total_amount;
+        // $payable->total_value=$request->total_amount;
+        // $payable->save();
        
-        // adding entry in leadger
-        $ledgerEntry = new InvestorLeadger();
-        $ledgerEntry->account_id = $investor->accounts->where('account_type',2)->first()->id;
-        $ledgerEntry->transaction_type = "purchase";
-        $ledgerEntry->transaction_id = $purchase->id;
-        $ledgerEntry->value =  $request->total_amount*-1;
-        $ledgerEntry->date = $investor->created_at;
-        $ledgerEntry->save();
+        // // adding entry in leadger
+        // $ledgerEntry = new InvestorLeadger();
+        // $ledgerEntry->account_id = $investor->accounts->where('account_type',2)->first()->id;
+        // $ledgerEntry->transaction_type = "purchase";
+        // $ledgerEntry->transaction_id = $purchase->id;
+        // $ledgerEntry->value =  $request->total_amount*-1;
+        // $ledgerEntry->date = $investor->created_at;
+        // $ledgerEntry->save();
         
 
 

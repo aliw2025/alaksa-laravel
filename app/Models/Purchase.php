@@ -22,5 +22,13 @@ class Purchase extends Model
 
         return $this->morphMany(GLeadger::class,'transaction');
     }
+    public function leadgerValue(){
+        return ($this->leadgerEntries());
+        return $this->leadgerEntries()->first()->get();
+    }
+    public function psupplier(){
+      
+        return $this->belongsTo(Supplier::class,'supplier');
+    }
     
 }
