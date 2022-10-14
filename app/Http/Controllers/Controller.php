@@ -18,7 +18,7 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
-    
+
     public function __construct()
     {
         $this->middleware('auth');
@@ -38,100 +38,93 @@ class Controller extends BaseController
             $investor->investor_type = 1;
             $investor->save();
             // cash account
+
             
-            $account_cash = new Account();
-            $account_cash->account_name=$investor->prefix.'_cash';
-            $account_cash->account_type =1;
-            $account_cash->opening_balance=10000000;
-            $account_cash->owner = $investor->id;
-            $account_cash->save();
+            //  creating the chart of accounts
+            $investor_cash = $investor->charOfAccounts()->create([
+                'account_name' => $investor->prefix . '_cash',
+                'account_type' => 1,
+                'opening_balance' => 0
+            ]);
 
-            $account_pay = new Account();
-            $account_pay->account_name = $investor->prefix.'_payables';
-            $account_pay->owner= $investor->id;
-            $account_pay->account_type = 2;
-            $account_pay->opening_balance = 0;
-            $account_pay->save();
+            $investor_eq = $investor->charOfAccounts()->create([
+                'account_name' => $investor->prefix . '_equipment',
+                'account_type' => 2,
+                'opening_balance' => 0
+            ]);
 
-            $account_rcv = new Account();
-            $account_rcv->account_name = $investor->prefix.'_recievables';
-            $account_rcv->owner= $investor->id;
-            $account_rcv->account_type = 3;
-            $account_rcv->opening_balance = 0;
-            $account_rcv->save();
+            $investor_inv = $investor->charOfAccounts()->create([
+                'account_name' => $investor->prefix . '_inventory',
+                'account_type' => 3,
+                'opening_balance' => 0
+            ]);
 
-            $ledgerEntry = new InvestorLeadger();
-            $ledgerEntry->account_id = $account_cash->id;
-            $ledgerEntry->transaction_type = "opening";
-            $ledgerEntry->transaction_id = $investor->id;
-            $ledgerEntry->value = $account_cash->opening_balance;
-            $ledgerEntry->date = $investor->created_at;
-            $ledgerEntry->save();
-            //supplies account
-            // $account = new Account();
-            // $account->account_name($investor->prefix.'supplies');
-            // $account->owner = $investor->id;
-            // $account->save();
+            $investor_eq = $investor->charOfAccounts()->create([
+                'account_name' => $investor->prefix . '_equity',
+                'account_type' => 5,
+                'opening_balance' => 0
+            ]);
 
-             //account
-            //  $account = new Account();
-            //  $account->account_name($investor->prefix.'payable_account');
-            //  $account->owner = $investor->id;
-            //  $account->save();
+            $investor->leadgerEntries()->create([
+                'account_id' => $investor_cash->id,
+                'value' => 0,
+                'date' => $investor->created_at
 
+            ]);
 
+            $investor->leadgerEntries()->create([
+                'account_id' => $investor_eq->id,
+                'value' => 0,
+                'date' => $investor->created_at
 
+            ]);
         } else {
-
-           
         }
         return redirect()->route('index');
     }
 
-    public function createAccountTypes(){
+    public function createAccountTypes()
+    {
 
 
         $type = new AccountType();
-        $type->name="cash";
-        $type->category="Assets";
+        $type->name = "cash";
+        $type->category = "Assets";
         $type->save();
 
         $type = new AccountType();
-        $type->name="Equipment";
-        $type->category="Assets";
+        $type->name = "Equipment";
+        $type->category = "Assets";
         $type->save();
 
         $type = new AccountType();
-        $type->name="inventory";
-        $type->category="Assets";
+        $type->name = "inventory";
+        $type->category = "Assets";
         $type->save();
 
         $type = new AccountType();
-        $type->name="Account Receivable";
-        $type->category="Assets";
+        $type->name = "Account Receivable";
+        $type->category = "Assets";
         $type->save();
 
         $type = new AccountType();
-        $type->name="equity";
-        $type->category="equity";
+        $type->name = "equity";
+        $type->category = "equity";
         $type->save();
 
         $type = new AccountType();
-        $type->name="Account Payable";
-        $type->category="Liabilty";
+        $type->name = "Account Payable";
+        $type->category = "Liabilty";
         $type->save();
 
         $type = new AccountType();
-        $type->name="Expenses";
-        $type->category="Expenses";
+        $type->name = "Expenses";
+        $type->category = "Expenses";
         $type->save();
 
-        
+
 
         return redirect()->route('index');
-
-
-
     }
 
     public function index()
@@ -150,23 +143,24 @@ class Controller extends BaseController
 
         return view("capital-investments.capital-investment");
     }
-  
-    public function showPurchase(){
+
+    public function showPurchase()
+    {
         return view('purchase.purchase');
     }
 
 
     // unused routes
     public function testSql($id)
-    {    
+    {
         // $num = sprintf('%10d', $id+1);
         return str_pad(22, 10, '0', STR_PAD_LEFT);
         // $purchase->purchase_no = $investor->prefix.'22'.$num;
 
         $investor = Investor::find($id);
         // return $investor->accounts->where('account_type',1)->first();
-        return $investor->accounts->where('account_type',1)->first()->investor;
-        
+        return $investor->accounts->where('account_type', 1)->first()->investor;
+
         // return  $investor->leadgerEntries()->where('transaction_type','=','App\Models\Investor')->get();
 
         // return \Illuminate\Support\Facades\DB::table('users')->get();
