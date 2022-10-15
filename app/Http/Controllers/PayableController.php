@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\GLeadger;
 use App\Models\Payable;
 use App\Models\Purchase;
+use App\Models\Supplier;
 use Illuminate\Http\Request;
+use Symfony\Component\Finder\Glob;
 
 class PayableController extends Controller
 {
@@ -17,19 +20,42 @@ class PayableController extends Controller
     {
         //
         $payables = Payable::all();
-        return view ('payable.payables',compact('payables'));
-
+        return view('payable.payables', compact('payables'));
     }
 
     public function getPayables($id)
     {
         // dd($id);
-        $purchases = Purchase::where('investor_id','=',$id)->get();
-      
+        $suppliers = Supplier::whereIn('id', Purchase::select('supplier')->distinct()->pluck('supplier'))->get();
+
+
+        foreach ($suppliers as $sup) {
+            $sid = $sup->charOfAccounts->first->get();
+            echo $sup->name . ' ' . $sid->id . '<br>';
+            $purchases = $sup->purchases->where('investor_id','=',$id);
+
+            if($purchases!=NULL){
+                foreach ($purchases as $pur) {
+
+                    echo $pur->purchase_no.' '.$pur->investor_id.'<br>';
+                    
+                }
+                echo $purchases->pluck('id').'<br>';
+                $leadgers = GLeadger::whereIn('transaction_id',$purchases->pluck('id'))->where('account_id','=',$sid)->where('transaction_type','like','Purchase');
+                foreach ($leadgers as $led) {
+
+                    echo '   '.$led->value.'<br>';
+                    
+                }
+            }
+            
+        }
+        dd($suppliers);
+        $purchases = Purchase::where('investor_id', '=', $id)->get();
+
         // $investor_purchases = Purchase::whereIn('id',Payable::all()->pluck('transaction_id'))->where('investor_id','=',$id)->pluck('id');
         // $payables = Payable::whereIn('transaction_id',$investor_purchases)->get();
-        return view ('payable.payables',compact('purchases'));
-
+        return view('payable.payables', compact('purchases'));
     }
     /**
      * Show the form for creating a new resource.
@@ -70,7 +96,7 @@ class PayableController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit(Payable $payable)
-    {   
+    {
         //
         return view('payable.pay');
     }
