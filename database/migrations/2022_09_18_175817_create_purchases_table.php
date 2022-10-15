@@ -19,6 +19,7 @@ return new class extends Migration
             $table->unsignedBigInteger('investor_id');
             $table->unsignedBigInteger('store_id');
             $table->unsignedBigInteger('supplier');
+            $table->double('total');
             $table->date('purchase_date');
             $table->timestamps();
         }); 

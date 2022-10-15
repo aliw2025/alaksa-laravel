@@ -18,7 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('item_id');
             $table->unsignedBigInteger('investor_id');
             $table->unsignedBigInteger('quantity');
-            $table->float('unit_price');
+            $table->double('unit_price');
             $table->unsignedBigInteger('sales_id');
             $table->timestamps();
         });

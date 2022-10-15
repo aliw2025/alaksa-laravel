@@ -28,11 +28,14 @@
                                         $count = 1
                                     @endphp
                                     @foreach ($purchases as $pur)
-                                     $l = eadgerEntries->first
+                                        @php
+                                        $l = $pur->leadgerEntries->first->value
+                                        @endphp
+                                     
                                     <tr>
                                        <td>{{$count}}</td>
                                         <td>{{$pur->purchase_no}}</td>
-                                        <td>{{$pur->leadgerValue}}</td>
+                                        <td>{{$l->value}}</td>
                                         <td></td>
                                         <td>{{$pur->psupplier->name}}</td>
                                         <td> <a href="#">pay</a> </td>

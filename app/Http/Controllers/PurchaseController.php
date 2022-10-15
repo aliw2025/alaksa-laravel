@@ -62,6 +62,7 @@ class PurchaseController extends Controller
         $purchase->investor_id = $request->investor_id;
         $purchase->store_id = 1;
         $purchase->supplier = $request->supplier;
+        $purchase->total =$request->total_amount;
         $purchase->purchase_date = $request->purchase_date;
         $purchase->save();
 
@@ -138,7 +139,7 @@ class PurchaseController extends Controller
 
         $purchase = Purchase::find($id);
         $purchase_items = $purchase->items;
-        return view('purchase.purchase-item-list',compact('purchase_items'));
+        return view('purchase.purchase-item-list',compact('purchase_items','purchase'));
 
     }
 

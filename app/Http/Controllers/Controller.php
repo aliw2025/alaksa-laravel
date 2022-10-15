@@ -133,10 +133,10 @@ class Controller extends BaseController
         return view("template.dashboard-content", compact('investors'));
     }
 
-    public function home($id)
+    public function home()
     {
-        $investor = Investor::find($id);
-        return view("template.dashboard-content", compact('investor'));
+        $investors = Investor::all();
+        return view("template.dashboard-content", compact('investors'));
     }
     public function showInvestments()
     {

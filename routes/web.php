@@ -37,7 +37,7 @@ Route::get('/types', [\App\Http\Controllers\Controller::class,'createAccountType
 
 Route::get('/test/{id}', [\App\Http\Controllers\Controller::class,'testSql'])->name('test');
 
-Route::get('/home/{id}', [\App\Http\Controllers\Controller::class,'home'])->name('home');
+Route::get('/home', [\App\Http\Controllers\Controller::class,'home'])->name('home');
 Route::get('/calender' , [\App\Http\Controllers\Controller::class,'showCalender'])->name('calender');
 
 // temporary routes
