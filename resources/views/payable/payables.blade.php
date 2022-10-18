@@ -10,7 +10,9 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <div class="row ">
+                    @foreach($suppliers as $sup)
+                    <h4 class="mt-1">{{$sup->name}}:</h4>
+                    <div class="row mt-2">
                         <div  class="col-12 table-responsive ">
                             <table id="payables-table" class="table">
                                 <thead class="thead-dark">
@@ -27,7 +29,7 @@
                                     @php
                                         $count = 1
                                     @endphp
-                                    @foreach ($purchases as $pur)
+                                    @foreach ($sup->investor_purchases($id) as $pur)
                                         @php
                                         $l = $pur->leadgerEntries->first->value
                                         @endphp
@@ -45,9 +47,15 @@
                                     @endphp
                                     @endforeach
                                 </tbody>
+                                <h4 class="">Purchases :{{$sup->investor_purchases($id)->sum('total')}}</h4>
+                                
                             </table>
+
+                            
+
                         </div>
                     </div>
+                    @endforeach
                 </div>
             </div>
         </div>
@@ -59,7 +67,7 @@
 
         $(document).ready(function() {
             console.log('i am datatable');
-            $('#payables-table').DataTable();
+            // $('#payables-table').DataTable();
         });
 
     });

@@ -295,7 +295,7 @@
                     @php
                         $inv_sales = \App\Models\Investor::all();
                     @endphp
-                     <li class=" nav-item"><a href="{{ route('purchase.create') }}" class="d-flex align-items-center">
+                     <li class=" nav-item"><a href="{{ route('payable.create') }}" class="d-flex align-items-center">
                         <i data-feather="circle"></i>
                         <span class=" menu-title text-truncate" data-i18n="comision">Pay Bills</span></a>
                 </li>

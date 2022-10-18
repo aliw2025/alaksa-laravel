@@ -14,5 +14,8 @@ class Payable extends Model
             return $this->belongsTo(Purchase::class,'transaction_id');
     }
 
-   
+    public function leadgerEntries(){
+
+        return $this->morphMany(GLeadger::class,'transaction');
+    }
 }

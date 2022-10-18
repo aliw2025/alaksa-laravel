@@ -55,7 +55,7 @@ class PurchaseController extends Controller
         $id = Purchase::max('id');
         // $id = Purchase::where('investor_id','=',$request->investor_id)->max('id');
         if($id ==null){
-            $id = 1;
+            $id = 0;
         }
         $num = str_pad($id+1, 10, '0', STR_PAD_LEFT);
         $purchase->purchase_no = $investor->prefix.'22'.$num;

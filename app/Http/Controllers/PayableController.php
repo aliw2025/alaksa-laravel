@@ -8,6 +8,10 @@ use App\Models\Purchase;
 use App\Models\Supplier;
 use Illuminate\Http\Request;
 use Symfony\Component\Finder\Glob;
+use App\Models\Investor;
+use App\Models\InvestorLeadger;
+use App\Models\Item;
+use App\Models\PurchaseItem;
 
 class PayableController extends Controller
 {
@@ -27,28 +31,37 @@ class PayableController extends Controller
     {
         // dd($id);
         $suppliers = Supplier::whereIn('id', Purchase::select('supplier')->distinct()->pluck('supplier'))->get();
-
-
+        return view('payable.payables', compact('suppliers','id'));
+        echo 'suppliers:<br>';
         foreach ($suppliers as $sup) {
+
             $sid = $sup->charOfAccounts->first->get();
-            echo $sup->name . ' ' . $sid->id . '<br>';
-            $purchases = $sup->purchases->where('investor_id','=',$id);
 
-            if($purchases!=NULL){
+            echo 'supplier name: ' . $sup->name . ' acc_id:' . $sid->id . '<br>';
+            $purchases = $sup->investor_purchases($id);
+            $payments = $sup->investor_payments($id);
+           
+                
+            if ($purchases != NULL) {
                 foreach ($purchases as $pur) {
-
-                    echo $pur->purchase_no.' '.$pur->investor_id.'<br>';
-                    
+                    echo $pur->purchase_no . ' ' . $pur->investor_id . '<br>';
                 }
-                echo $purchases->pluck('id').'<br>';
-                $leadgers = GLeadger::whereIn('transaction_id',$purchases->pluck('id'))->where('account_id','=',$sid)->where('transaction_type','like','Purchase');
+                echo 'purchahse id is: ' . $purchases->pluck('id') . '<br>';
+                // echo 'checking accout: '.$sid->id;
+                $leadgers = GLeadger::where('account_id', '=', $sid->id)->whereIn('transaction_id', $purchases->pluck('id'))->where('transaction_type', 'like', "%purchase%")->get();
+                $leadgers2 = GLeadger::where('account_id', '=', $sid->id)->whereIn('transaction_id', $payments->pluck('id'))->where('transaction_type', 'like', "%payable%")->get();
+                echo 'total rem: '.$leadgers->sum('value').'<br>';
+                echo 'total rem: '.$purchases->sum('total').'<br>';
+                echo 'total paid: '.$leadgers2->sum('value').'<br>';
+                echo 'total paid: '.$payments->sum('amount').'<br>';
+            
+                echo 'leadger entries:<br>';
+                $c = 1;
                 foreach ($leadgers as $led) {
-
-                    echo '   '.$led->value.'<br>';
-                    
+                    echo $c . ':   ' . $led->value . '<br>';
+                    $c++;
                 }
             }
-            
         }
         dd($suppliers);
         $purchases = Purchase::where('investor_id', '=', $id)->get();
@@ -64,7 +77,9 @@ class PayableController extends Controller
      */
     public function create()
     {
-        //
+        $investors = Investor::all();
+        $suppliers = Supplier::all();
+        return view('payable.pay', compact('investors', 'suppliers'));
     }
 
     /**
@@ -76,6 +91,31 @@ class PayableController extends Controller
     public function store(Request $request)
     {
         //
+        $payable = new Payable();
+        $payable->investor_id = $request->investor_id;
+        $payable->store_id = 1;
+        $payable->supplier = $request->supplier;
+        $payable->amount = $request->amount;
+        $payable->payment_date = $request->payment_date;
+        $payable->save();
+
+        $investor = Investor::find($request->investor_id);
+        $inv_acc_id =  $investor->charOfAccounts->where('account_type',1)->first()->id;
+        $supplier = Supplier::find($request->supplier);
+        $sup_acc_id = $supplier->charOfAccounts->where('account_type',6)->first()->id;
+
+        $payable->leadgerEntries()->create([
+            'account_id'=>  $sup_acc_id,
+            'value'=>  $request->amount,
+            'date'=> $request->payment_date
+        ]);
+
+        $payable->leadgerEntries()->create([
+            'account_id'=> $inv_acc_id,
+            'value'=> - $request->amount,
+            'date'=> $request->payment_date
+        ]);    
+        return redirect()->route('payable.create');
     }
 
     /**

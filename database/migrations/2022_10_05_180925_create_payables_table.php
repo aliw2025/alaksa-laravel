@@ -18,10 +18,14 @@ return new class extends Migration
         Schema::create('payables', function (Blueprint $table) {
 
             $table->id();
-            $table->unsignedBigInteger('transaction_id');
-            $table->double('total_value');
-            $table->double('remaining_value');
+            // $table->string('payment_no');
+            $table->unsignedBigInteger('investor_id');
+            $table->unsignedBigInteger('store_id');
+            $table->unsignedBigInteger('supplier');
+            $table->double('amount');
+            $table->date('payment_date');
             $table->timestamps();
+            
 
 
         });
