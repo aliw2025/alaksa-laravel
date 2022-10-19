@@ -140,48 +140,38 @@
             <li class=" nav-item">
                 <a class="d-flex align-items-center" href="#">
                     <i data-feather='trending-up'></i>
-                    <span class="menu-title text-truncate" data-i18n="Dashboards">Sales</span>
+                    <span class="menu-title text-truncate" data-i18n="Dashboards">Sale</span>
                 </a>
                 <ul class="menu-content">
-                    <li class=" nav-item">
-                        <a class="d-flex align-items-center" href="#">
-                            <i data-feather="circle"></i>
-                            <span class="menu-title text-truncate" data-i18n="Dashboards">New Sale</span>
-                        </a>
-                        <ul class="menu-content">
-                            @foreach ($inv_sales as $investor)
-                                <li>
-                                    <a href="{{ route('home', $investor->id) }}" class="d-flex align-items-center ">
-                                        <i data-feather="circle"></i>
-                                        <span class="menu-item text-truncate"
-                                            data-i18n="eCommerce">{{ $investor->prefix }}</span>
-                                    </a>
-                                </li>
-                            @endforeach
-                        </ul>
-                    </li>
-                    <li class=" nav-item">
-                        <a class="d-flex align-items-center" href="#">
-                            <i data-feather="circle"></i>
-                            <span class="menu-title text-truncate" data-i18n="Dashboards">Reports</span>
-                        </a>
-                        <ul class="menu-content">
-                            @php
-                                $inv_sales = \App\Models\Investor::all();
-                            @endphp
-                            @foreach ($inv_sales as $investor)
-                                <li>
-                                    <a href="{{ route('home', $investor->id) }}" class="d-flex align-items-center ">
-                                        <i data-feather="circle"></i>
-                                        <span class="menu-item text-truncate"
-                                            data-i18n="eCommerce">{{ $investor->prefix }}</span>
-                                    </a>
-                                </li>
-                            @endforeach
-                        </ul>
-                    </li>
+                    @php
+                        $inv_sales = \App\Models\Investor::all();
+                    @endphp
+                     <li class=" nav-item"><a href="{{ route('sale.create') }}" class="d-flex align-items-center">
+                        <i data-feather="circle"></i>
+                        <span class=" menu-title text-truncate" data-i18n="comision">New Sale</span></a>
+                </li>
+                <li class=" nav-item">
+                    <a class="d-flex align-items-center" href="#">
+                        <i data-feather="circle"></i>
+                        <span class="menu-title text-truncate" data-i18n="Dashboards">Reports</span>
+                    </a>
+                    <ul class="menu-content">
+
+                        @foreach ($inv_sales as $investor)
+                            <li>
+                                <a href="{{ route('get-purchases', $investor->id) }}"
+                                    class="d-flex align-items-center ">
+                                    <i data-feather="circle"></i>
+                                    <span class="menu-item text-truncate"
+                                        data-i18n="eCommerce">{{ $investor->prefix }}</span>
+                                </a>
+                            </li>
+                        @endforeach
+                    </ul>
+                </li>
                 </ul>
             </li>
+            
             <!------------------------------------------- receivables --------------------------------------------------->
             <li class=" nav-item">
                 <a class="d-flex align-items-center" href="#">

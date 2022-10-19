@@ -18,7 +18,7 @@ return new class extends Migration
         Schema::create('payables', function (Blueprint $table) {
 
             $table->id();
-            // $table->string('payment_no');
+            $table->string('payment_no');
             $table->unsignedBigInteger('investor_id');
             $table->unsignedBigInteger('store_id');
             $table->unsignedBigInteger('supplier');

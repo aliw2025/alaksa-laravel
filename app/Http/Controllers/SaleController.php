@@ -3,6 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\Sale;
+use App\Models\Inventory;
+use App\Models\Investor;
+use App\Models\InvestorLeadger;
+
+use App\Models\Purchase;
+use App\Models\Item;
+use App\Models\PurchaseItem;
+use App\Models\Payable;
+use App\Models\Supplier;
 use Illuminate\Http\Request;
 
 class SaleController extends Controller
@@ -25,6 +34,9 @@ class SaleController extends Controller
     public function create()
     {
         //
+        $investors = Investor::all();
+        $suppliers = Supplier::all();
+        return view('sale.sale', compact('investors', 'suppliers'));
     }
 
     /**

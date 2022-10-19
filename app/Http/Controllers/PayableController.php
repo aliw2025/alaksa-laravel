@@ -32,6 +32,7 @@ class PayableController extends Controller
         // dd($id);
         $suppliers = Supplier::whereIn('id', Purchase::select('supplier')->distinct()->pluck('supplier'))->get();
         return view('payable.payables', compact('suppliers','id'));
+
         echo 'suppliers:<br>';
         foreach ($suppliers as $sup) {
 
@@ -40,7 +41,7 @@ class PayableController extends Controller
             echo 'supplier name: ' . $sup->name . ' acc_id:' . $sid->id . '<br>';
             $purchases = $sup->investor_purchases($id);
             $payments = $sup->investor_payments($id);
-           
+        //    dd($payments);
                 
             if ($purchases != NULL) {
                 foreach ($purchases as $pur) {
@@ -91,7 +92,15 @@ class PayableController extends Controller
     public function store(Request $request)
     {
         //
+        $id = Payable::max('id');
+        // $id = Purchase::where('investor_id','=',$request->investor_id)->max('id');
+        if($id ==null){
+            $id = 0;
+        }
+        $num = str_pad($id+1, 10, '0', STR_PAD_LEFT);
+        $investor = Investor::find($request->investor_id);
         $payable = new Payable();
+        $payable->payment_no = $investor->prefix.'22'.$num;
         $payable->investor_id = $request->investor_id;
         $payable->store_id = 1;
         $payable->supplier = $request->supplier;

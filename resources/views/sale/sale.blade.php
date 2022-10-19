@@ -23,7 +23,7 @@
                                         <div class="invoice-number-date mt-md-0 mt-2">
                                             <div class="d-flex align-items-center justify-content-between mb-1">
                                                 @csrf
-                                                <h4 class="invoice-title">Payment</h4>
+                                                <h4 class="invoice-title">Sale</h4>
                                                 <div class="input-group input-group-merge invoice-edit-input-group">
                                                     <div class="input-group-text">
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="14"
@@ -56,7 +56,7 @@
                                                     readonly="readonly">
                                             </div>
                                             <div class="d-flex align-items-center justify-content-between">
-                                                <span class="title">Account:</span>
+                                                <span class="title">Investor:</span>
                                                 <div style="width: 11.21rem; max-width:11.21rem; "
                                                     class="align-items-center">
                                                     <select name="investor_id"
@@ -72,23 +72,7 @@
                                                 </div>
                                             </div>
 
-                                            <div class="d-flex align-items-center justify-content-between mt-1">
-                                                <span class="title">Supplier</span>
-                                                {{-- <select class="form-control" name="supplier" id=""></select> --}}
-                                                <div style="width: 11.21rem; max-width:11.21rem; "
-                                                    class="align-items-center">
-                                                    <select name="supplier" class="form-select"
-                                                        aria-label="Default select example">
 
-                                                        @foreach ($suppliers as $sup)
-                                                            <option value="{{ $sup->id }}">{{ $sup->name }}</option>
-                                                        @endforeach
-
-
-                                                    </select>
-                                                </div>
-                                                {{-- <input name = "supplier" type="text" class="form-control invoice-edit-input "> --}}
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -103,24 +87,36 @@
                                                 <div class="row">
                                                     <div class="col-12  product-details-border position-relative pe-0">
                                                         <div class="row py-2">
-
-                                                            <div class="col-3 my-lg-0 my-2">
-                                                                <p class="card-text col-title mb-md-2 mb-0">Amount</p>
+                                                            <div class="col-1 my-lg-0 my-2">
+                                                                <p class="card-text col-title mb-md-2 mb-0">id</p>
                                                                 <input id="cost0" name="amount" type="number"
                                                                     class="form-control" value="" placeholder="">
                                                             </div>
-                                                            <div class="col-9 my-lg-0 my-2">
-                                                                
-                                                                <p class="card-text col-title mb-md-2 mb-0">Note</p>
-                                                                <input id="cost0" name="note" type="number"
-                                                                class="form-control" value="" placeholder="">
-                                                                    {{-- <textarea name="note" class="form-control" rows="1" id="note"></textarea> --}}
-                                                                
+                                                            <div class="col-2 my-lg-0 my-2">
+                                                                <p class="card-text col-title mb-md-2 mb-0">Item Name</p>
+                                                                <input id="cost0" name="amount" type="number"
+                                                                    class="form-control" value="" placeholder="">
                                                             </div>
-                                                           
+                                                            <div class="col-2 my-lg-0 my-2">
+                                                                <p class="card-text col-title mb-md-2 mb-0">Selling Price</p>
+                                                                <input id="cost0" name="amount" type="number"
+                                                                    class="form-control" value="" placeholder="">
+                                                            </div>
+                                                            <div class="col-2 my-lg-0 my-2">
+                                                                <p class="card-text col-title mb-md-2 mb-0">Plan</p>
+                                                                <input id="cost0" name="amount" type="number"
+                                                                    class="form-control" value="" placeholder="">
+                                                            </div>
+                                                            <div class="col-2 my-lg-0 my-2">
+                                                                <p class="card-text col-title mb-md-2 mb-0">MarkUp</p>
+                                                                <input id="cost0" name="amount" type="number"
+                                                                    class="form-control" value="" placeholder="">
+                                                            </div>
+
+
 
                                                         </div><s></s>
-                                                     
+
                                                     </div>
                                                 </div>
                                             </div>
@@ -171,7 +167,5 @@
 
             $('.select2-selection__arrow').hide();
         });
-    
-        
     </script>
 @endsection

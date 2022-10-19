@@ -15,23 +15,28 @@ class Supplier extends Model
 
     }
    
-    public function purchases(){
-        return $this->hasMany(Purchase::class,'supplier');
-    }
+   
 
     public function payments(){
         return $this->hasMany(Payable::class,'supplier');
     }
 
 
-    public function investor_purchases($id){
-       return $this->purchases->where('investor_id', '=', $id);
-    }
-
     public function investor_payments($id){
-        return $this->payments()->where('investor_id', '=', $id);
+        // dd($id);
+        return $this->payments()->where('investor_id', '=', $id)->get();
     }
 
+    public function purchases(){
+        return $this->hasMany(Purchase::class,'supplier');
+    }
+    
+    public function investor_purchases($id){
+       
+       return $this->purchases()->where('investor_id', '=', $id)->get();
+    }
+
+   
 
     public function leadgerEntries(){
 

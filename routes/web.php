@@ -8,6 +8,7 @@ use App\Http\Controllers\ItemController;
 use App\Http\Controllers\StoreController;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\PurchaseController;
+use App\Http\Controllers\SaleController;
 use App\Http\Controllers\PayableController;
 use App\Http\Controllers\SupplierController;
 
@@ -63,6 +64,7 @@ Route::resource('item', ItemController::class);
 Route::resource('store', StoreController::class);
 Route::resource('inventory', InventoryController::class);
 Route::resource('purchase', PurchaseController::class);
+Route::resource('sale', SaleController::class);
 Route::resource('payable',PayableController::class);
 Route::resource('supplier',SupplierController::class);
 
