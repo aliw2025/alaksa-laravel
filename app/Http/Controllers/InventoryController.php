@@ -83,9 +83,12 @@ class InventoryController extends Controller
     {
         //
     }
+
     public function getInvestorInventory(Request $request){
         // dd($request->investor_id);
-        $items = Inventory::with('item')->where('investor_id','=',$request->investor_id)->get();
+        $items = Inventory::where('investor_id','=',$request->investor_id)->whereHas('item', function ($query)  use ($request) {
+            $query->where('name','like','%'.$request->key.'%');
+        })->with('item')->get();
         return $items;
     }
 

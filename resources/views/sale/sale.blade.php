@@ -179,6 +179,8 @@
         });
 
         function getItems() {
+          
+            console.log('function callled');
             
             var letters = $('#item_name').val();
             if (letters.length < 2) {
