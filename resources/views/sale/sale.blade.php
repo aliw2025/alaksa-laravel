@@ -6,7 +6,7 @@
                 <div class="row invoice-add">
                     <!-- Invoice Add Left starts -->
                     <div class="col-xl-12 col-md-12 col-12">
-                        <form class="" method="POST" autocomplete="on" action="{{ route('payable.store') }}">
+                        <form class="" method="POST" autocomplete="on" action="{{ route('sale.store') }}">
                             <div class="card invoice-preview-card">
                                 <!-- Header starts -->
                                 <div class="card-body invoice-padding pb-0">
@@ -91,14 +91,14 @@
                                                         <div class="row py-2">
                                                             <div class="col-1 my-lg-0 my-2">
                                                                 <p class="card-text col-title mb-md-2 mb-0">id</p>
-                                                                <input id="item_id" name="amount" type="number"
-                                                                    class="form-control" value="" placeholder="">
+                                                                <input disabled id="item_id" name="amount" type="number"
+                                                                    class="form-control" value="" placeholder="id">
                                                             </div>
                                                             <div class="col-2 my-lg-0 my-2">
                                                                 <p class="card-text col-title mb-md-2 mb-0">Item Name</p>
                                                                 <input onkeyup="getItems()" id="item_name" name="amount"
                                                                     type="text" class="form-control" 
-                                                                    placeholder="">
+                                                                    placeholder="Item Name">
                                                                 <div class="list-type" id="list"
                                                                     style="position: absolute; z-index: 1;"
                                                                     class="card mb-4">
@@ -111,17 +111,17 @@
                                                                 <p class="card-text col-title mb-md-2 mb-0">Selling Price
                                                                 </p>
                                                                 <input id="selling_price" name="amount" type="number"
-                                                                    class="form-control" value="" placeholder="">
+                                                                    class="form-control" value="" placeholder="Selling Price">
                                                             </div>
                                                             <div class="col-2 my-lg-0 my-2">
                                                                 <p class="card-text col-title mb-md-2 mb-0">Plan</p>
                                                                 <input id="plan" name="amount" type="number"
-                                                                    class="form-control" value="" placeholder="">
+                                                                    class="form-control" value="" placeholder="Months">
                                                             </div>
                                                             <div class="col-2 my-lg-0 my-2">
                                                                 <p class="card-text col-title mb-md-2 mb-0">MarkUp</p>
                                                                 <input id="markup" name="amount" type="number"
-                                                                    class="form-control" value="" placeholder="">
+                                                                    class="form-control" value="" placeholder="%">
                                                             </div>
 
 
@@ -202,12 +202,12 @@
                     console.log(dataResult);
                     var i;
                     for (i = 0; i < dataResult.length; i++) {
-                        var item = dataResult[i];
+                        var item = dataResult[i].item;
                         console.log(item);
-                        // markup = `<button id = "btnItem` + item.id +
-                        //     `" type="button" class="list-group-item list-group-item-action" onclick="setText(` +
-                        //     item.id + `,${id})">` + item.name + `</button>`;
-                        // $("#listBody").append(markup);
+                        markup = `<button id = "btnItem` + item.id +
+                            `" type="button" class="list-group-item list-group-item-action" onclick="setText(` +
+                            item.id + `)">` + item.name + `</button>`;
+                        $("#listBody").append(markup);
                     }
                 },
                 error: function(xhr, status, error) {
@@ -219,6 +219,27 @@
             });
             $("#list").show();
            
+        }
+        $(".content-wrapper").click(function(event) {
+            console.log('clicked');
+            var myClass = $(event.target).hasClass("list-group-item");
+            if (myClass == true) {
+                console.log("you clicked menu");
+
+            } else {
+                $(".list-type").hide();
+
+            }
+        });
+
+        function setText(item) {
+           
+            console.log($('#item_name' + item).text());
+            $("#item_name").val($('#btnItem' + item).text());
+           
+            $("#item_id").val(item);
+            $("#list").hide();
+
         }
 
       
