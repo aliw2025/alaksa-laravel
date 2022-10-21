@@ -59,12 +59,12 @@
                                                 <span class="title">Investor:</span>
                                                 <div style="width: 11.21rem; max-width:11.21rem; "
                                                     class="align-items-center">
-                                                    
+
                                                     <select name="investor_id"
                                                         class=" select2 select2-hidden-accessible form-control invoice-edit-input"
                                                         id="select2-basic" data-select2-id="select2-basic" tabindex="-1"
                                                         aria-hidden="true">
-                                                       
+
                                                         @foreach ($investors as $investor)
                                                             <option value="{{ $investor->id }}">
                                                                 {{ $investor->investor_name }}
@@ -94,10 +94,10 @@
                                                                 <input disabled id="item_id" name="amount" type="number"
                                                                     class="form-control" value="" placeholder="id">
                                                             </div>
-                                                            <div class="col-2 my-lg-0 my-2">
+                                                            <div class="col-3 my-lg-0 my-2">
                                                                 <p class="card-text col-title mb-md-2 mb-0">Item Name</p>
                                                                 <input onkeyup="getItems()" id="item_name" name="amount"
-                                                                    type="text" class="form-control" 
+                                                                    type="text" class="form-control"
                                                                     placeholder="Item Name">
                                                                 <div class="list-type" id="list"
                                                                     style="position: absolute; z-index: 1;"
@@ -110,25 +110,77 @@
                                                             <div class="col-2 my-lg-0 my-2">
                                                                 <p class="card-text col-title mb-md-2 mb-0">Selling Price
                                                                 </p>
-                                                                <input id="selling_price" name="amount" type="number"
-                                                                    class="form-control" value="" placeholder="Selling Price">
+                                                                <input onkeyup="calculateInstallments()" id="selling_price" name="amount" type="number"
+                                                                    class="form-control" value=""
+                                                                    placeholder="Selling Price">
                                                             </div>
                                                             <div class="col-2 my-lg-0 my-2">
                                                                 <p class="card-text col-title mb-md-2 mb-0">Plan</p>
-                                                                <input id="plan" name="amount" type="number"
-                                                                    class="form-control" value="" placeholder="Months">
+                                                                <input onkeyup="calculateInstallments()" id="plan" name="amount" type="number"
+                                                                    class="form-control" value=""
+                                                                    placeholder="Months">
                                                             </div>
                                                             <div class="col-2 my-lg-0 my-2">
                                                                 <p class="card-text col-title mb-md-2 mb-0">MarkUp</p>
-                                                                <input id="markup" name="amount" type="number"
+                                                                <input onkeyup="calculateInstallments()" id="markup" name="amount" type="number"
                                                                     class="form-control" value="" placeholder="%">
                                                             </div>
 
-
+                                                            {{-- <div class="col-lg-2 col-12 mt-lg-0 mt-2">
+                                                                <p class="card-text col-title mb-md-50 mb-0">Total</p>
+                                                                <input
+                                                                    style=" border: none;background-color: transparent;resize: none;outline: none;"
+                                                                    id="rowTotal0" name="rowTotal" class="form-control"
+                                                                    value="0 PKR" disabled>
+                                                            </div> --}}
 
                                                         </div><s></s>
 
                                                     </div>
+                                                </div>
+                                                <div class="row mt-1">
+                                                    <div class="col-lg-5 col-12 mt-lg-0 mt-2">
+                                                        <div class="row ">
+                                                            <div class="col-6">
+                                                                <p >Down Payment :</p>
+                                                            </div>
+                                                            <div class="col-6">
+                                                                <p> 4</p>
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                   
+
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-lg-5 col-12 mt-lg-0 mt-2">
+                                                        <div class="row ">
+                                                            <div class="col-6">
+                                                                <p >Instalments :</p>
+                                                            </div>
+                                                            <div class="col-6">
+                                                                <p> 4</p>
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                   
+                                                </div>
+                                                <div class="row">
+                                 
+                                                    <div class="col-lg-5 col-12 mt-lg-0 mt-2">
+                                                        <div class="row ">
+                                                            <div class="col-6">
+                                                                <p >Instalments per Month :</p>
+                                                            </div>
+                                                            <div class="col-6">
+                                                                <p> 4000</p>
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
                                                 </div>
                                             </div>
                                         </div>
@@ -173,15 +225,15 @@
     <script src="{{ url('/resources/js/scripts/forms/form-select2.min.js') }}"></script>
     <script src="{{ url('/resources/js/scripts/pages/app-invoice.min.js') }}"></script>
     <script>
-      
         $(document).ready(function() {
             $('.select2-selection__arrow').hide();
+            $('#instal').text('name is khan');
         });
 
         function getItems() {
-          
+
             console.log('function callled');
-            
+
             var letters = $('#item_name').val();
             if (letters.length < 2) {
                 return;
@@ -194,7 +246,7 @@
                 type: "GET",
                 data: {
                     key: letters,
-                    investor_id:investor_id
+                    investor_id: investor_id
                 },
                 success: function(dataResult) {
                     $("#listBody").empty();
@@ -218,10 +270,10 @@
                 },
             });
             $("#list").show();
-           
+
         }
         $(".content-wrapper").click(function(event) {
-            console.log('clicked');
+
             var myClass = $(event.target).hasClass("list-group-item");
             if (myClass == true) {
                 console.log("you clicked menu");
@@ -231,17 +283,45 @@
 
             }
         });
+        function calculateInstallments() {
+
+
+            console.log('ddfdfdf');
+            var sellingPrice = $('#selling_price').val();
+            var plan = $('#plan').val();
+            var markup = $('#markup').val();
+            var finalPrice = ( parseFloat(sellingPrice) * (parseFloat(markup) /100))+parseFloat(sellingPrice);  
+            var temp = finalPrice/plan;
+            var len = temp.toString().length;
+            var factor = Math.pow(10, len-1);
+            var newtemp = Math.floor(temp/factor)*factor;
+            console.log('un normalizedd');
+            console.log(temp);
+            console.log('normalizedd');
+            console.log(newtemp);
+
+            console.log('final selling price: ');
+            console.log(finalPrice);
+            
+        }
 
         function setText(item) {
-           
+
             console.log($('#item_name' + item).text());
             $("#item_name").val($('#btnItem' + item).text());
-           
             $("#item_id").val(item);
             $("#list").hide();
 
-        }
 
-      
+
+
+        }
+        $('#select2-basic').change(function() {
+            
+            $("#item_id").val("");
+            $("#item_name").val("");
+
+
+        });
     </script>
 @endsection
