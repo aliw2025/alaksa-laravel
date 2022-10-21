@@ -83,6 +83,11 @@ class InventoryController extends Controller
     {
         //
     }
+    public function getInvestorInventory(Request $request){
+        // dd($request->investor_id);
+        $items = Inventory::with('item')->where('investor_id','=',$request->investor_id)->get();
+        return $items;
+    }
 
     public function showInventory($investor_id){
 

@@ -16,9 +16,13 @@ class Inventory extends Model
         return $this->belongsTo(Item::class,'item_id');
         
     }
+    
     public function investor(){
 
         return $this->belongsTo(Investor::class,'investor_id');
         
     }
+    // public static function investor_inventory($id){
+    //     return Inventory::where('investor_id','=',$id)->get();
+    // }
 }

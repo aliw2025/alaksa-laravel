@@ -59,10 +59,12 @@
                                                 <span class="title">Investor:</span>
                                                 <div style="width: 11.21rem; max-width:11.21rem; "
                                                     class="align-items-center">
+                                                    
                                                     <select name="investor_id"
                                                         class=" select2 select2-hidden-accessible form-control invoice-edit-input"
                                                         id="select2-basic" data-select2-id="select2-basic" tabindex="-1"
                                                         aria-hidden="true">
+                                                       
                                                         @foreach ($investors as $investor)
                                                             <option value="{{ $investor->id }}">
                                                                 {{ $investor->investor_name }}
@@ -89,27 +91,36 @@
                                                         <div class="row py-2">
                                                             <div class="col-1 my-lg-0 my-2">
                                                                 <p class="card-text col-title mb-md-2 mb-0">id</p>
-                                                                <input id="cost0" name="amount" type="number"
+                                                                <input id="item_id" name="amount" type="number"
                                                                     class="form-control" value="" placeholder="">
                                                             </div>
                                                             <div class="col-2 my-lg-0 my-2">
                                                                 <p class="card-text col-title mb-md-2 mb-0">Item Name</p>
-                                                                <input id="cost0" name="amount" type="number"
-                                                                    class="form-control" value="" placeholder="">
+                                                                <input onkeyup="getItems()" id="item_name" name="amount"
+                                                                    type="text" class="form-control" 
+                                                                    placeholder="">
+                                                                <div class="list-type" id="list"
+                                                                    style="position: absolute; z-index: 1;"
+                                                                    class="card mb-4">
+                                                                    <div id="listBody" class="list-group">
+
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                             <div class="col-2 my-lg-0 my-2">
-                                                                <p class="card-text col-title mb-md-2 mb-0">Selling Price</p>
-                                                                <input id="cost0" name="amount" type="number"
+                                                                <p class="card-text col-title mb-md-2 mb-0">Selling Price
+                                                                </p>
+                                                                <input id="selling_price" name="amount" type="number"
                                                                     class="form-control" value="" placeholder="">
                                                             </div>
                                                             <div class="col-2 my-lg-0 my-2">
                                                                 <p class="card-text col-title mb-md-2 mb-0">Plan</p>
-                                                                <input id="cost0" name="amount" type="number"
+                                                                <input id="plan" name="amount" type="number"
                                                                     class="form-control" value="" placeholder="">
                                                             </div>
                                                             <div class="col-2 my-lg-0 my-2">
                                                                 <p class="card-text col-title mb-md-2 mb-0">MarkUp</p>
-                                                                <input id="cost0" name="amount" type="number"
+                                                                <input id="markup" name="amount" type="number"
                                                                     class="form-control" value="" placeholder="">
                                                             </div>
 
@@ -162,10 +173,52 @@
     <script src="{{ url('/resources/js/scripts/forms/form-select2.min.js') }}"></script>
     <script src="{{ url('/resources/js/scripts/pages/app-invoice.min.js') }}"></script>
     <script>
-        var rowId = 0;
+      
         $(document).ready(function() {
-
             $('.select2-selection__arrow').hide();
         });
+
+        function getItems() {
+            
+            var letters = $('#item_name').val();
+            if (letters.length < 2) {
+                return;
+            }
+            console.log(letters);
+            var investor_id = $("#select2-basic").val();
+            console.log(investor_id);
+            $.ajax({
+                url: "{{ route('get-investor-items') }}",
+                type: "GET",
+                data: {
+                    key: letters,
+                    investor_id:investor_id
+                },
+                success: function(dataResult) {
+                    $("#listBody").empty();
+                    console.log('recv');
+                    console.log(dataResult);
+                    var i;
+                    for (i = 0; i < dataResult.length; i++) {
+                        var item = dataResult[i];
+                        console.log(item);
+                        // markup = `<button id = "btnItem` + item.id +
+                        //     `" type="button" class="list-group-item list-group-item-action" onclick="setText(` +
+                        //     item.id + `,${id})">` + item.name + `</button>`;
+                        // $("#listBody").append(markup);
+                    }
+                },
+                error: function(xhr, status, error) {
+
+                    var err = eval("(" + xhr.responseText + ")");
+                    console.log(err);
+                    alert(err);
+                },
+            });
+            $("#list").show();
+           
+        }
+
+      
     </script>
 @endsection
