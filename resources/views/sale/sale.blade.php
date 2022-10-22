@@ -113,13 +113,13 @@
                                                         <div class="row py-2">
                                                             <div class="col-1 my-lg-0 my-2">
                                                                 <p class="card-text col-title mb-md-2 mb-0">id</p>
-                                                                <input name="item_id" disabled id="item_id" name="amount"
+                                                                <input name="item_id" disabled id="item_id" 
                                                                     type="number" class="form-control" value=""
                                                                     placeholder="id">
                                                             </div>
                                                             <div class="col-3 my-lg-0 my-2">
                                                                 <p class="card-text col-title mb-md-2 mb-0">Item Name</p>
-                                                                <input onkeyup="getItems()" id="item_name" name="amount"
+                                                                <input onkeyup="getItems()" id="item_name" name="item_name"
                                                                     type="text" class="form-control"
                                                                     placeholder="Item Name">
                                                                 <div class="list-type" id="list"
@@ -134,7 +134,7 @@
                                                                 <p class="card-text col-title mb-md-2 mb-0">Selling Price
                                                                 </p>
                                                                 <input name="selling_price" onkeyup="calculateInstallments()"
-                                                                    id="selling_price" name="amount" type="number"
+                                                                    id="selling_price"  type="number"
                                                                     class="form-control" value=""
                                                                     placeholder="Selling Price">
                                                             </div>
@@ -142,13 +142,13 @@
                                                                 <p class="card-text col-title mb-md-2 mb-0">Plan (Months)
                                                                 </p>
                                                                 <input name="plan" onkeyup="calculateInstallments()" id="plan"
-                                                                    name="amount" type="number" class="form-control"
+                                                                     type="number" class="form-control"
                                                                     value="" placeholder="Months">
                                                             </div>
                                                             <div class="col-2 my-lg-0 my-2">
                                                                 <p class="card-text col-title mb-md-2 mb-0">MarkUp</p>
                                                                 <input name="mark_up" onkeyup="calculateInstallments()" id="markup"
-                                                                    name="amount" type="number" class="form-control"
+                                                                    type="number" class="form-control"
                                                                     value="" placeholder="%">
                                                             </div>
                                                         </div><s></s>
@@ -196,7 +196,7 @@
                                                             <div class="col-6">
                                                                 <input type="hidden" id="instalments"
                                                                     style=" border: none;background-color: transparent;resize: none;outline: none;"
-                                                                    name="instalmentss" class="form-control"
+                                                                    name="instalments" class="form-control"
                                                                     value="0 PKR" disabled>
                                                                 <p id="instalments_label"> 0</p>
 
