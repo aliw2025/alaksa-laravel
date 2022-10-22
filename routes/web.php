@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\InvestorController;
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\StoreController;
@@ -57,9 +58,10 @@ Route::get('/list-inventory/{id}' , [\App\Http\Controllers\InventoryController::
 Route::get('/get-payables/{id}' , [\App\Http\Controllers\PayableController::class,'getPayables'])->name('get-payables');
 Route::get('/get-investor-items' , [\App\Http\Controllers\InventoryController::class,'getInvestorInventory'])->name('get-investor-items');
 
-
+Route::get('/customer-by-name' , [\App\Http\Controllers\CustomerController::class,'customerByName'])->name('customer-by-name');
 Auth::routes();
 Route::resource('investor', InvestorController::class);
+Route::resource('customer', CustomerController::class);
 Route::resource('account', AccountController::class);
 Route::resource('item', ItemController::class);
 Route::resource('store', StoreController::class);
