@@ -88,6 +88,9 @@ class CustomerController extends Controller
     public function edit(Customer $customer)
     {
         //
+        $customers = Customer::all();
+
+        return view('customer.customer', compact('customers', 'customer'));
         
     }
 
@@ -101,6 +104,29 @@ class CustomerController extends Controller
     public function update(Request $request, Customer $customer)
     {
         //
+        $validated = $request->validate(
+            [
+                'customer_name' => 'required',
+                'email' => 'required|email|unique:customers,email,'.$customer->id,
+                'phone' => 'required|min:8|max:11|unique:customers,phone,'.$customer->id,
+                'CNIC' => 'required|max:13|unique:customers,CNIC,'.$customer->id,
+            ],
+            [
+                'email.unique' => ' Email already exists',
+                'phone.unique' => ' Number already exists',
+                'CNIC.unique' => ' CNIC already exists',
+            ]
+        );
+
+        
+       
+        $customer->customer_name = $request->customer_name;
+        $customer->email = $request->email;
+        $customer->phone = $request->phone;
+        $customer->CNIC = $request->CNIC;
+        $customer->save();
+
+        return redirect()->route('customer.create');
     }
 
     /**

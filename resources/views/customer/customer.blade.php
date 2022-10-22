@@ -173,7 +173,7 @@
     $(document).ready(function() {
 
         $(document).ready(function() {
-            $('#investor-table').DataTable();
+            $('#customer-table').DataTable();
         });
 
     });
