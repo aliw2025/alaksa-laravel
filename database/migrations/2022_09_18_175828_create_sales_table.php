@@ -14,11 +14,17 @@ return new class extends Migration
     public function up()
     {
         Schema::create('sales', function (Blueprint $table) {
+
             $table->id();
             $table->string('invoice_no');
+            $table->unsignedBigInteger('customer_id');
+            $table->unsignedBigInteger('item_id');
             $table->unsignedBigInteger('store_id');
-            $table->timestamps();
-            
+            $table->unsignedBigInteger('investor_id');
+            // $table->double('markup')
+            $table->double('total');
+            $table->date('sale_date');
+
         });
     }
 

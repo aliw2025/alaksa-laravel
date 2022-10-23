@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Instalment;
 use App\Models\Sale;
 use App\Models\Inventory;
 use App\Models\Investor;
@@ -13,6 +14,7 @@ use App\Models\PurchaseItem;
 use App\Models\Payable;
 use App\Models\Supplier;
 use Illuminate\Http\Request;
+use PDF;
 
 class SaleController extends Controller
 {
@@ -47,8 +49,59 @@ class SaleController extends Controller
      */
     public function store(Request $request)
     {
-        //
-       dd($request->all());
+        // finding the investor to get investor name
+        $investor = Investor::find($request->investor_id);
+        // creatin the sale 
+        $sale = new Sale();
+        // getting sale id for sale invoice
+        $id = Sale::max('id');
+        if ($id == null) {
+            $id = 0;
+        }
+        // create a 14 digit sale invoice
+        $num = str_pad($id + 1, 10, '0', STR_PAD_LEFT);
+        $sale->invoice_no = $investor->prefix . '22' . $num;
+        $sale->customer_id = $request->customer_id;
+        $sale->item_id = $request->item_id;
+        $sale->store_id = 1;
+        $sale->investor_id = $request->investor_id;
+        $sale->total = $request->total_sum;
+        $sale->sale_date = $request->sale_date;
+        $sale->save();
+
+        // creating down payment
+        $instalment = new Instalment();
+        $instalment->sale_id = $sale->id;
+        $instalment->amount = $request->down_payment;
+        $instalment->instalment_paid = true;
+        $instalment->save();
+
+        // creatting the instalments for the sale
+        for ($i = 0; $i < $request->plan; $i++) {
+
+            $instalment = new Instalment();
+            $instalment->sale_id = $sale->id;
+            $instalment->amount = 0;
+            $instalment->instalment_paid = false;
+            $instalment->save();
+        }
+      
+
+
+
+        // dd($request->all());
+    }
+    
+    public function testPdf(){
+        
+        $data = [
+            'title' => 'Welcome to ItSolutionStuff.com',
+            'date' => date('m/d/Y')
+        ];
+          
+        $pdf = PDF::loadView('sale.sale_invoice_pdf', $data);
+    
+        return $pdf->stream('my.pdf',array('Attachment'=>0));
     }
 
     /**

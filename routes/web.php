@@ -59,6 +59,8 @@ Route::get('/get-payables/{id}' , [\App\Http\Controllers\PayableController::clas
 Route::get('/get-investor-items' , [\App\Http\Controllers\InventoryController::class,'getInvestorInventory'])->name('get-investor-items');
 
 Route::get('/customer-by-name' , [\App\Http\Controllers\CustomerController::class,'customerByName'])->name('customer-by-name');
+Route::get('/test-pdf' , [\App\Http\Controllers\SaleController::class,'testPdf'])->name('test-pdf');
+
 Auth::routes();
 Route::resource('investor', InvestorController::class);
 Route::resource('customer', CustomerController::class);

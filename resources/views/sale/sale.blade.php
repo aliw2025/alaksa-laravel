@@ -113,7 +113,7 @@
                                                         <div class="row py-2">
                                                             <div class="col-1 my-lg-0 my-2">
                                                                 <p class="card-text col-title mb-md-2 mb-0">id</p>
-                                                                <input name="item_id" disabled id="item_id" 
+                                                                <input name="item_id"  id="item_id" 
                                                                     type="number" class="form-control" value=""
                                                                     placeholder="id">
                                                             </div>
@@ -164,8 +164,8 @@
                                                             <div class="col-6">
                                                                 <input type="hidden" id="total_sum"
                                                                     style=" border: none;background-color: transparent;resize: none;outline: none;"
-                                                                    name="total_sum" class="form-control" value="0 PKR"
-                                                                    disabled>
+                                                                    name="total_sum" class="form-control" 
+                                                                    >
                                                                 <p id="total_sum_label"> 0</p>
                                                             </div>
                                                         </div>
@@ -181,7 +181,7 @@
                                                                 <input type="hidden" id="down_payment"
                                                                     style=" border: none;background-color: transparent;resize: none;outline: none;"
                                                                     name="down_payment" class="form-control"
-                                                                    value="0 PKR" disabled>
+                                                                    value="0 PKR" >
                                                                 <p id="down_payment_label"> 0</p>
                                                             </div>
                                                         </div>
@@ -197,7 +197,7 @@
                                                                 <input type="hidden" id="instalments"
                                                                     style=" border: none;background-color: transparent;resize: none;outline: none;"
                                                                     name="instalments" class="form-control"
-                                                                    value="0 PKR" disabled>
+                                                                    value="0 PKR" >
                                                                 <p id="instalments_label"> 0</p>
 
                                                             </div>
@@ -216,7 +216,7 @@
                                                                 <input type="hidden" id="per_month"
                                                                     style=" border: none;background-color: transparent;resize: none;outline: none;"
                                                                     name="instalment_per_month" class="form-control"
-                                                                    value="0 PKR" disabled>
+                                                                    value="0 PKR" >
                                                                 <p id="per_month_label"> 0</p>
                                                             </div>
                                                         </div>
@@ -412,7 +412,7 @@
             $('#instalments_label').text(plan);
             $('#per_month_label').text(normValue);
 
-            $('#total_sum').text(finalPrice);
+            $('#total_sum').val(finalPrice);
             $('#down_payment').val(downPayment);
             $('#instalments').val(plan);
             $('#per_month').val(normValue);
