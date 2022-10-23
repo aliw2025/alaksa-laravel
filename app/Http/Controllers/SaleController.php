@@ -146,6 +146,33 @@ class SaleController extends Controller
      */
     public function destroy(Sale $sale)
     {
-        //
+
+        
     }
+
+    public function showSales($id){
+        // dd('i am hit');
+        $investor = Investor::find($id);
+        $sales= $investor->sales;
+        // return $sales;
+        return view('sale.sale-list',compact('sales','investor'));
+    }
+
+    public function showInstalments(Sale $sale){
+        // dd('i am hit');
+        // dd($sale);
+        $instalments = $sale->instalments;
+        // dd($instalments);
+        // return $sales;
+        return view('sale.sale-instalments',compact('sale','instalments'));
+    }
+    public function  getInvoices(Request $request){
+
+        $sales = Sale::where('invoice_no','like','%'.$request->key.'%')->get();
+        
+        return $sales;
+    }
+
+
+   
 }

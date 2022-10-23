@@ -151,7 +151,7 @@
 
                         @foreach ($inv_sales as $investor)
                         <li>
-                            <a href="{{ route('get-purchases', $investor->id) }}" class="d-flex align-items-center ">
+                            <a href="{{ route('get-sales', $investor->id) }}" class="d-flex align-items-center ">
                                 <i data-feather="circle"></i>
                                 <span class="menu-item text-truncate" data-i18n="eCommerce">{{ $investor->prefix }}</span>
                             </a>
