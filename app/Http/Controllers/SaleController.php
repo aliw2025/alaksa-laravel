@@ -49,7 +49,6 @@ class SaleController extends Controller
      */
     public function store(Request $request)
     {
-        
         // finding the investor to get investor name
         $investor = Investor::find($request->investor_id);
         // creatin the sale 
@@ -66,43 +65,53 @@ class SaleController extends Controller
         $sale->item_id = $request->item_id;
         $sale->store_id = 1;
         $sale->investor_id = $request->investor_id;
-        $sale->total = $request->total_sum;
+        if ($request->sale_type == 2) {
+            $sale->total = $request->selling_price;
+        }else{
+            $sale->total = $request->total_sum;
+        }
+        
         $sale->sale_date = $request->sale_date;
         $sale->save();
 
-        // creating down payment
-        $instalment = new Instalment();
-        $instalment->sale_id = $sale->id;
-        $instalment->amount = $request->down_payment;
-        $instalment->instalment_paid = true;
-        $instalment->save();
+        if ($request->sale_type == 1) {
 
-        // creatting the instalments for the sale
-        for ($i = 0; $i < $request->plan; $i++) {
-
+            // creating down payment
             $instalment = new Instalment();
             $instalment->sale_id = $sale->id;
-            $instalment->amount = $request->instalment_per_month;
-            $instalment->instalment_paid = false;
+            $instalment->amount = $request->down_payment;
+            $instalment->instalment_paid = true;
             $instalment->save();
+
+            // creatting the instalments for the sale
+            for ($i = 0; $i < $request->plan; $i++) {
+
+                $instalment = new Instalment();
+                $instalment->sale_id = $sale->id;
+                $instalment->amount = $request->instalment_per_month;
+                $instalment->instalment_paid = false;
+                $instalment->save();
+            }
         }
-      
 
 
-        return redirect()->route('get-sales',$request->investor_id);
+
+
+        return redirect()->route('get-sales', $request->investor_id);
         // dd($request->all());
     }
-    
-    public function testPdf(){
-        
+
+    public function testPdf()
+    {
+
         $data = [
             'title' => 'Welcome to ItSolutionStuff.com',
             'date' => date('m/d/Y')
         ];
-          
+
         $pdf = PDF::loadView('sale.sale_invoice_pdf', $data);
-    
-        return $pdf->stream('my.pdf',array('Attachment'=>0));
+
+        return $pdf->stream('my.pdf', array('Attachment' => 0));
     }
 
     /**
@@ -147,33 +156,31 @@ class SaleController extends Controller
      */
     public function destroy(Sale $sale)
     {
-
-        
     }
 
-    public function showSales($id){
+    public function showSales($id)
+    {
         // dd('i am hit');
         $investor = Investor::find($id);
-        $sales= $investor->sales;
+        $sales = $investor->sales;
         // return $sales;
-        return view('sale.sale-list',compact('sales','investor'));
+        return view('sale.sale-list', compact('sales', 'investor'));
     }
 
-    public function showInstalments(Sale $sale){
+    public function showInstalments(Sale $sale)
+    {
         // dd('i am hit');
         // dd($sale);
         $instalments = $sale->instalments;
         // dd($instalments);
         // return $sales;
-        return view('sale.sale-instalments',compact('sale','instalments'));
+        return view('sale.sale-instalments', compact('sale', 'instalments'));
     }
-    public function  getInvoices(Request $request){
+    public function  getInvoices(Request $request)
+    {
 
-        $sales = Sale::where('invoice_no','like','%'.$request->key.'%')->get();
-        
+        $sales = Sale::where('invoice_no', 'like', '%' . $request->key . '%')->get();
+
         return $sales;
     }
-
-
-   
 }

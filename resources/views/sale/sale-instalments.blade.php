@@ -66,12 +66,12 @@
                                                     <div class="badge-wrapper me-1">
                                                         <span class="p-1 px-2 badge rounded-pill badge-light-success">Paid</span>
                                                       </div>
-                                                        {{-- <p style="color: green">Paid</p> --}}
+                                                     
                                                     @else
                                                     <div class="badge-wrapper me-1">
                                                         <span  class="p-1 badge rounded-pill badge-light-danger">Pending</span>
                                                       </div>
-                                                        {{-- <p style="color: red">Pending</p> --}}
+                                            
                                                     @endif
                                                 </td>
                                             </tr>
