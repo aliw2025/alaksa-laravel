@@ -43,7 +43,7 @@
                                             <th scope="col">Amount</th>
                                             <th scope="col">Due Date</th>
                                             <th scope="col">Status</th>
-                                            {{-- <th scope="col">Action</th> --}}
+                                            <th scope="col">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody class="inventory-iems-body" id="inventory-iems-body">
@@ -73,6 +73,9 @@
                                                       </div>
                                             
                                                     @endif
+                                                </td>
+                                                <td>
+                                                    <a href="">pay</a>
                                                 </td>
                                             </tr>
                                             @php

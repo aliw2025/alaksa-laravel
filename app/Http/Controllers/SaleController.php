@@ -15,6 +15,8 @@ use App\Models\Payable;
 use App\Models\Supplier;
 use Illuminate\Http\Request;
 use PDF;
+use Carbon\Carbon;
+
 
 class SaleController extends Controller
 {
@@ -49,6 +51,7 @@ class SaleController extends Controller
      */
     public function store(Request $request)
     {
+
         // finding the investor to get investor name
         $investor = Investor::find($request->investor_id);
         // creatin the sale 
@@ -66,8 +69,10 @@ class SaleController extends Controller
         $sale->store_id = 1;
         $sale->investor_id = $request->investor_id;
         if ($request->sale_type == 2) {
+            $payment_type = "Cash";
             $sale->total = $request->selling_price;
         }else{
+            $payment_type = "Instalments";
             $sale->total = $request->total_sum;
         }
         
@@ -75,39 +80,68 @@ class SaleController extends Controller
         $sale->save();
 
         if ($request->sale_type == 1) {
-
+            
             // creating down payment
             $instalment = new Instalment();
             $instalment->sale_id = $sale->id;
             $instalment->amount = $request->down_payment;
             $instalment->instalment_paid = true;
+            $instalment->due_date = $request->sale_date;
             $instalment->save();
+
+            $temp =  new Carbon($request->sale_date);
 
             // creatting the instalments for the sale
             for ($i = 0; $i < $request->plan; $i++) {
 
+                $next = $temp->addMonth();
                 $instalment = new Instalment();
                 $instalment->sale_id = $sale->id;
                 $instalment->amount = $request->instalment_per_month;
                 $instalment->instalment_paid = false;
+                $instalment->due_date = $next;
                 $instalment->save();
+                $temp = $next;
             }
         }
+       
+       
+      $sale_detail = null;
+        $data = [
+            'title' => 'Welcome to ItSolutionStuff.com',
+            'date' => date('m/d/Y'),
+            'sale'=> $sale,
+            'sale_detail'=> $sale_detail,
+            'payment_type' => $payment_type,
+            'selling_price' => $request->selling_price,
+            'markup' =>$request->mark_up,
+            'plan'=> $request->plan
 
+        ];
+        
 
+        $pdf = PDF::loadView('sale.sale_invoice_pdf', $data);
 
+        return $pdf->stream('my.pdf', array('Attachment' => 0));
 
-        return redirect()->route('get-sales', $request->investor_id);
+        
+
+        
+        // return redirect()->route('get-sales', $request->investor_id);
         // dd($request->all());
     }
 
     public function testPdf()
     {
-
+        $sale = null;
+        $sale_detail = null;
         $data = [
             'title' => 'Welcome to ItSolutionStuff.com',
-            'date' => date('m/d/Y')
+            'date' => date('m/d/Y'),
+            'sale'=> $sale,
+            'sale_detail'=> $sale_detail,
         ];
+        
 
         $pdf = PDF::loadView('sale.sale_invoice_pdf', $data);
 

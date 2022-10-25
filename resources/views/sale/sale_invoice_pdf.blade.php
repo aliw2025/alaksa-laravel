@@ -1,157 +1,176 @@
 <!doctype html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
-    <title>Invoice - #123</title>
+    <title>Sale Invoice</title>
 
     <style type="text/css">
-        @page {
-            margin: 0px;
-        }
-
-        body {
-            margin: 0px;
-        }
-
-        * {
-            font-family: Verdana, Arial, sans-serif;
-        }
-
-        a {
-            color: #fff;
-            text-decoration: none;
-        }
 
         table {
-            font-size: x-small;
+            border-collapse: collapse;
+            width: 100%;
         }
 
-        tfoot tr td {
-            font-weight: bold;
-            font-size: x-small;
-        }
-
-        .invoice table {
-            margin: 15px;
-        }
-
-        .invoice h3 {
-            margin-left: 15px;
-        }
-
-        .information {
-            background-color: #60A7A6;
-            color: #FFF;
-        }
-
-        .information .logo {
-            margin: 5px;
-        }
-
-        .information table {
-            padding: 10px;
+        th, td {
+            padding: 8px;
+            /text-align: center;/
+            border-bottom: 1px solid #ddd;
+            font-size: 12px;
         }
     </style>
 
 </head>
+<body style="margin-bottom: 0;margin-top: 0">
 
-<body>
+<table style="margin-bottom: 0;margin-top: 0" >
+    <tr>
+        <td align="left" style="font-size: 20px">
+            <h4>Sale Invoice</h4>
+        </td>
+        <td align="right" style="font-size: 20px">
+            <h4 style="margin-top: 0; margin-bottom: 0;">Alpha Digital</h4>
+        </td>
+    </tr>
 
-    <div class="information">
-        <table width="100%">
-            <tr>
-                <td align="left" style="width: 40%;">
-                    <h3>John Doe</h3>
-                    <pre>
-Street 15
-123456 City
-United Kingdom
-<br /><br />
-Date: 2018-01-01
-Identifier: #uniquehash
-Status: Paid
-</pre>
+</table>
+<h4 style="text-align: center;margin-top: 0;margin-bottom: 0">{{ !is_null($sale) ? $sale->inv_status : '' }}</h4>
+<table  width="100%">
+    <tr>
+        <td style="border-bottom:0"><strong>Invoice #:</strong> {{ !is_null($sale) ? $sale->invoice_no : '' }}</td>
+        <td style="border-bottom:0"><strong>Invoice Date :</strong> {{ !is_null($sale) ? $sale->sale_date : '' }}</td>
+        
+
+    </tr>
+    <tr style="border-bottom:0">
+        <td style="border-bottom:0"><strong>Customer Name:</strong> {{ !is_null($sale) ? $sale->customer->customer_name : '' }}</td>
+       <td style="border-bottom:0"><strong>Investor :</strong> {{$sale->investor->investor_name}}</td>
+    </tr>
+    <tr>
+        <td style="border-bottom:0"><strong>Payment Type :</strong> {{ $payment_type}}</td>
+    </tr>
 
 
-                </td>
-                <td align="center">
-                    <img src="/path/to/logo.png" alt="Logo" width="64" class="logo" />
-                </td>
-                <td align="right" style="width: 40%;">
+</table>
 
-                    <h3>CompanyName</h3>
-                    <pre>
-                    https://company.com
+<br/>
 
-                    Street 26
-                    123456 City
-                    United Kingdom
-                </pre>
-                </td>
-            </tr>
-
-        </table>
+<table>
+    <thead>
+    <tr style="background-color:#e4e6eb;">
+        <th >#</th>
+        <th>Item</th>
+        <th>Quantity</th>
+        <th>Price</th>
+        <th>Plan</th>
+        <th>Mark Up</th>
+    </tr>
+    </thead>
+    <tbody>
+    @php
+        $counter = 1;
+    @endphp
+    <tr>
+        <td>1</td>
+        <td> {{$sale->item->name}}</td>
+        <td> 1</td>
+        <td> {{$selling_price}}</td>
+        <td> {{$plan}}</td>
+        <td> {{$markup}}%</td>
+       
+    </tr>
+    {{-- @foreach ($sale_detail as $item)
+        <tr>
+            <td>{{ $counter }}</td>
+            <td>{{ $item->item }}</td>
+            <td>{{ $item->batch->batch_no }}</td>
+            <td style="text-align: center">{{ date('d-m-Y', strtotime($item->batch->date)) }}</td>
+            <td style="text-align: center">{{ $item->qty }}</td>
+            <td style="text-align: center">{{ $item->price }}</td>
+            <td style="text-align: center">{{ $item->qty * $item->price  }}</td>
+            <td style="text-align: center">{{ $item->discount }}</td>
+            <td style="text-align: center">{{ $item->after_discount }}</td>
+            <td style="text-align: center">{{ $item->sales_tax }}</td>
+            <td style="text-align: center">{{ $item->adv_tax }}</td>
+            <td style="text-align: right">{{ $item->line_total }}</td>
+        </tr>
+        @php $counter++ @endphp
+    @endforeach --}}
+    {{-- @php
+        $subTotal = 0;
+        $totalDiscount = 0;
+        $get_order_details = DB::table('sale_invoice_details')
+            ->where('sale_invoice_detail_id', $sale->id)
+            ->get();
+    @endphp
+    @foreach ($get_order_details as $row)
+        @php
+            $subTotal = $subTotal + $row->line_total;
+        @endphp
+    @endforeach --}}
+    <tr style="margin-bottom:0;margin-top:0">
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>
+            <h4>Total: {{$sale->total}}</h4>
+        </td>
+        {{-- <td style="text-align: center">
+            <h4>...</h4>
+        </td>
+        <td style="text-align: center">
+            <h4>...</h4>
+        </td>
+        <td></td>
+        <td style="text-align: center">
+            <h4>...</h4>
+        </td>
+        <td style="text-align: center">
+            <h4>...</h4>
+        </td>
+        <td style="text-align: center">
+            <h4>...</h4>
+        </td>
+        <td style="text-align: center">
+            <h4>...</h4>
+        </td>
+        <td class="border-0 text-end">
+            <h4 style="text-align: right">...</h4>
+        </td> --}}
+    </tr>
+    {{-- <tr style="margin-top: 0;margin-bottom: 0">
+        <td colspan="11" style="border-bottom:none">
+            <h4 style="text-align: right">Freight</h4>
+        </td>
+        <td colspan="12" style="border-bottom:none">
+            <h4 style="text-align: right">...</h4>
+        </td>
+    </tr>
+    <tr style="margin-top: 0;margin-bottom: 0ho">
+        <td colspan="11" style="border-bottom:none">
+            <h4 style="text-align: right">Gross Total</h4>
+        </td>
+        <td colspan="12" style="border-bottom:none">
+            <h4 style="text-align: right">...</h4>
+        </td>
+    </tr> --}}
+    </tbody>
+</table>
+{{-- <div style="display:flex;flex-direction:row;margin-top: 2%">
+    <div style="float:left" >
+        <div style="text-align: right;margin-bottom:0;margin-top:0;width: 50%">...</div>
+        <div style="text-align: center">_______</div>
+        <div style="text-align: center">Created By</div>
     </div>
+    <div style="float:right">
+        <div style="text-align: right;margin-bottom:0;margin-top:0;width: 50%">...</div>
+        <div style="text-align: center;margin-bottom:0;margin-top:0;">_______</div>
+        <div style="text-align: center;margin-bottom:0;margin-top:0;">Post By</div>
+    </div> --}}
+</div>
 
+</div>
 
-    <br />
-
-    <div class="invoice">
-        <h3>Invoice  #123</h3>
-        <table width="100%">
-            <thead>
-                <tr>
-                    <th>Description</th>
-                    <th>Quantity</th>
-                    <th>Total</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Item 1</td>
-                    <td>1</td>
-                    <td align="left">€15,-</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-            </tbody>
-
-            <tfoot>
-                <tr>
-                    <td colspan="1"></td>
-                    <td align="left">Total</td>
-                    <td align="left" class="gray">€15,-</td>
-                </tr>
-            </tfoot>
-        </table>
-    </div>
-
-    <div class="information" style="position: absolute; bottom: 0;">
-        <table width="100%">
-            <tr>
-                <td align="left" style="width: 50%;">
-                    &copy; {{ date('Y') }} {{ config('app.url') }} - All rights reserved.
-                </td>
-                <td align="right" style="width: 50%;">
-                    Company Slogan
-                </td>
-            </tr>
-
-        </table>
-    </div>
 </body>
-
 </html>
