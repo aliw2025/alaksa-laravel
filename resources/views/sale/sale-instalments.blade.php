@@ -49,27 +49,48 @@
                                     <tbody class="inventory-iems-body" id="inventory-iems-body">
                                         @php
                                             $count = 1;
+                                            $total = 0;
+                                            $paid = 0;
+                                            $rem = 0;
                                         @endphp
                                         @foreach ($instalments as $pur)
                                             <tr>
                                                 <td>{{ $count }}</td>
-
                                                 <td>{{ $pur->amount }}</td>
                                                 <td>{{ $pur->due_date }}</td>
                                                 <td>
                                                     @if ($pur->instalment_paid)
-                                                        <p style="color: green">Paid</p>
+                                                    @php
+                                                         $paid = $paid+$pur->amount;
+                                                    @endphp
+                                                    <div class="badge-wrapper me-1">
+                                                        <span class="p-1 px-2 badge rounded-pill badge-light-success">Paid</span>
+                                                      </div>
+                                                        {{-- <p style="color: green">Paid</p> --}}
                                                     @else
-                                                        <p style="color: red">Pending</p>
+                                                    <div class="badge-wrapper me-1">
+                                                        <span  class="p-1 badge rounded-pill badge-light-danger">Pending</span>
+                                                      </div>
+                                                        {{-- <p style="color: red">Pending</p> --}}
                                                     @endif
                                                 </td>
                                             </tr>
                                             @php
+                                                $total = $total+$pur->amount;
                                                 $count = $count + 1;
                                             @endphp
                                         @endforeach
                                     </tbody>
                                 </table>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 d-flex justify-content-end">
+                                <div class="me-2">
+                                    <p>Total : {{$total}}</p>
+                                    <p>Paid : {{$paid}}</p>
+                                    <p>Remaining : {{$total-$paid}}</p>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -83,7 +104,7 @@
 
             $(document).ready(function() {
                 console.log('i am datatable');
-                $('#investor-table').DataTable();
+                // $('#investor-table').DataTable();
             });
 
         });

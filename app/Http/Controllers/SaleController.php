@@ -49,6 +49,7 @@ class SaleController extends Controller
      */
     public function store(Request $request)
     {
+        
         // finding the investor to get investor name
         $investor = Investor::find($request->investor_id);
         // creatin the sale 
@@ -81,14 +82,14 @@ class SaleController extends Controller
 
             $instalment = new Instalment();
             $instalment->sale_id = $sale->id;
-            $instalment->amount = 0;
+            $instalment->amount = $request->instalment_per_month;
             $instalment->instalment_paid = false;
             $instalment->save();
         }
       
 
 
-
+        return redirect()->route('get-sales',$request->investor_id);
         // dd($request->all());
     }
     
