@@ -66,12 +66,10 @@
                                                     <div class="badge-wrapper me-1">
                                                         <span class="p-1 px-2 badge rounded-pill badge-light-success">Paid</span>
                                                       </div>
-                                                     
                                                     @else
                                                     <div class="badge-wrapper me-1">
                                                         <span  class="p-1 badge rounded-pill badge-light-danger">Pending</span>
                                                       </div>
-                                            
                                                     @endif
                                                 </td>
                                                 <td>
@@ -101,10 +99,9 @@
             </div>
         </div>
     </div>
-
     <script type="text/javascript">
         $(document).ready(function() {
-
+            
             $(document).ready(function() {
                 console.log('i am datatable');
                 // $('#investor-table').DataTable();
