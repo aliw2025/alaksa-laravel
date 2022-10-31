@@ -36,7 +36,10 @@ class PurchaseController extends Controller
         $investors = Investor::all();
         $suppliers = Supplier::all();
         return view('purchase.purchase',compact('items','investors','suppliers'));
+
     }
+
+
 
     /**
      * Store a newly created resource in storage.
@@ -45,6 +48,7 @@ class PurchaseController extends Controller
      * @return \Illuminate\Http\Response
      */
     
+
     public function store(Request $request)
     {
         
@@ -106,12 +110,15 @@ class PurchaseController extends Controller
         ]);  
         //  getting supplier payable account of the supplier
         $supplier = Supplier::find($request->supplier);
+
         $sup_acc_id = $supplier->charOfAccounts->where('account_type',6)->first()->id;
         $purchase->leadgerEntries()->create([
             'account_id'=>  $sup_acc_id,
             'value'=> -$request->total_amount,
             'date'=>$purchase->purchase_date       
-        ]);  
+        ]);
+        
+        
         
 
         // $payable = new Payable();
@@ -129,8 +136,6 @@ class PurchaseController extends Controller
         // $ledgerEntry->date = $investor->created_at;
         // $ledgerEntry->save();
         
-
-
         return redirect()->route('get-purchases',$investor->id);
        
     }
@@ -160,6 +165,10 @@ class PurchaseController extends Controller
     public function show(Purchase $purchase)
     {
         //
+         //
+        $investors = Investor::all();
+        $suppliers = Supplier::all();
+        return view('purchase.purchase',compact('purchase','investors','suppliers'));
     }
 
     /**

@@ -36,7 +36,7 @@
                                         <td>{{$pur->purchase_no}}</td>
                                         <td>{{$pur->supplier}}</td>
                                         <td>{{$pur->purchase_date}}</td>
-                                        <td><a style="text-decoration: none;color:black" href="{{route('get-purchase-items',$pur->id)}}"><i data-feather='eye'></i></a></td>
+                                        <td><a style="text-decoration: none;color:black" href="{{route('purchase.show',$pur->id)}}"><i data-feather='eye'></i></a></td>
                                        
                                       
                                     </tr>

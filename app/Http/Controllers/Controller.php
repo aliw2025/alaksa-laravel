@@ -39,7 +39,7 @@ class Controller extends BaseController
             $investor->save();
             // cash account
 
-            
+
             //  creating the chart of accounts
             $investor_cash = $investor->charOfAccounts()->create([
                 'account_name' => $investor->prefix . '_cash',
@@ -59,9 +59,14 @@ class Controller extends BaseController
                 'opening_balance' => 0
             ]);
 
-            $investor_eq = $investor->charOfAccounts()->create([
+            $investor_eqt = $investor->charOfAccounts()->create([
                 'account_name' => $investor->prefix . '_equity',
                 'account_type' => 5,
+                'opening_balance' => 0
+            ]);
+            $investor_bnk = $investor->charOfAccounts()->create([
+                'account_name' => $investor->prefix . '_bank',
+                'account_type' => 8,
                 'opening_balance' => 0
             ]);
 
@@ -73,11 +78,25 @@ class Controller extends BaseController
             ]);
 
             $investor->leadgerEntries()->create([
-                'account_id' => $investor_eq->id,
+                'account_id' => $investor_eqt->id,
                 'value' => 0,
                 'date' => $investor->created_at
 
             ]);
+
+            $investor->leadgerEntries()->create([
+                'account_id' => $investor_bnk->id,
+                'value' => 0,
+                'date' => $investor->created_at
+            ]);
+
+            $investor->leadgerEntries()->create([
+                'account_id' => $investor_eqt->id,
+                'value' => 0,
+                'date' => $investor->created_at
+
+            ]);
+
         } else {
         }
         return redirect()->route('index');
@@ -92,6 +111,9 @@ class Controller extends BaseController
         $type->category = "Assets";
         $type->save();
 
+       
+
+        
         $type = new AccountType();
         $type->name = "Equipment";
         $type->category = "Assets";
@@ -122,6 +144,10 @@ class Controller extends BaseController
         $type->category = "Expenses";
         $type->save();
 
+        $type = new AccountType();
+        $type->name = "Bank";
+        $type->category = "Assets";
+        $type->save();
 
 
         return redirect()->route('index');

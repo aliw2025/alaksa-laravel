@@ -23,6 +23,7 @@ return new class extends Migration
             $table->unsignedBigInteger('store_id');
             $table->unsignedBigInteger('supplier');
             $table->double('amount');
+            $table->integer('account_type');
             $table->date('payment_date');
             $table->timestamps();
             

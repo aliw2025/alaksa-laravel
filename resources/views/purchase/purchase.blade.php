@@ -6,11 +6,12 @@
                 <div class="row invoice-add">
                     <!-- Invoice Add Left starts -->
                     <div class="col-xl-12 col-md-12 col-12">
-                        <form class="" method="POST" autocomplete="on" action="{{ route('purchase.store')}}">
+                        <form class="" method="POST" autocomplete="on" action="{{ route('purchase.store') }}">
                             <div class="card invoice-preview-card">
                                 <!-- Header starts -->
                                 <div class="card-body invoice-padding pb-0">
-                                    <div class="d-flex justify-content-between flex-md-row flex-column invoice-spacing mt-0">
+                                    <div
+                                        class="d-flex justify-content-between flex-md-row flex-column invoice-spacing mt-0">
                                         <div>
                                             <div class="logo-wrapper">
                                                 <h3 class="ms-0 text-primary invoice-logo">Alpha Digital</h3>
@@ -23,9 +24,9 @@
                                         <div class="invoice-number-date mt-md-0 mt-2">
                                             <div class="d-flex align-items-center justify-content-between mb-1">
                                                 @csrf
-                                                <h4 class="invoice-title">Purchase</h4>
+                                                <h4 class="invoice-title">Purchase #</h4>
                                                 <div class="input-group input-group-merge invoice-edit-input-group">
-                                                    <div class="input-group-text">
+                                                    {{-- <div class="input-group-text">
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="14"
                                                             height="14" viewBox="0 0 24 24" fill="none"
                                                             stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -43,50 +44,93 @@
                                                                 y2="21">
                                                             </line>
                                                         </svg>
-                                                    </div>
-                                                    <input name ="purchaseId" type="text" class="form-control invoice-edit-input"
-                                                        placeholder="">
+                                                    </div> --}}
+                                                    <input style="font-size: 12px"
+                                                        @if (isset($purchase)) disabled
+                                                        value="{{ $purchase->purchase_no }}" @endif
+                                                        name="purchaseId" type="text"
+                                                        class="form-control invoice-edit-input" placeholder="">
                                                 </div>
                                             </div>
 
                                             <div class="d-flex align-items-center justify-content-between mb-1">
                                                 <span class="title">Date:</span>
-                                                <input name="purchase_date" type="text"
-                                                    class="form-control invoice-edit-input date-picker flatpickr-input"
-                                                    readonly="readonly">
+                                                @if (isset($purchase))
+                                                    <input value="{{ $purchase->purchase_date }}" disabled name="payment_date"
+                                                        type="text" class="form-control invoice-edit-input ">
+                                                @else
+                                                    <input name="purchase_date" type="text"
+                                                        class="form-control invoice-edit-input date-picker flatpickr-input"
+                                                        readonly="readonly">
+                                                @endif
+
                                             </div>
                                             <div class="d-flex align-items-center justify-content-between">
-                                                <span class="title">Account:</span>
+                                                <span class="title">Investor:</span>
                                                 <div style="width: 11.21rem; max-width:11.21rem; "
                                                     class="align-items-center">
-                                                    <select name = "investor_id"
-                                                        class=" select2 select2-hidden-accessible form-control invoice-edit-input"
-                                                        id="select2-basic" data-select2-id="select2-basic" tabindex="-1"
-                                                        aria-hidden="true">
-                                                        @foreach ($investors as $investor)
-                                                            <option value="{{ $investor->id }}">{{ $investor->investor_name }}
-                                                            </option>
-                                                        @endforeach
-                                                    </select>
+                                                    @if (isset($purchase))
+                                                        <input disabled value="{{ $purchase->investor->investor_name }}"
+                                                            name="payment_date" type="text"
+                                                            class="form-control invoice-edit-input ">
+                                                    @else
+                                                        <select name="investor_id"
+                                                            class=" select2 select2-hidden-accessible form-control invoice-edit-input"
+                                                            id="select2-basic" data-select2-id="select2-basic"
+                                                            tabindex="-1" aria-hidden="true">
+                                                            @foreach ($investors as $investor)
+                                                                <option value="{{ $investor->id }}">
+                                                                    {{ $investor->investor_name }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+                                                    @endif
+
                                                 </div>
                                             </div>
 
+                                            {{-- <div class="d-flex align-items-center justify-content-between mt-1">
+                                                <span class="title">Account</span> --}}
+                                            {{-- <select class="form-control" name="supplier" id=""></select> --}}
+                                            {{-- <div style="width: 11.21rem; max-width:11.21rem; "
+                                                class="align-items-center">
+                                                <select name="acc_type" class="form-select" aria-label="Default select example">
+
+                                                    <option value="1"> Cash</option>
+                                                    <option value="8"> Bank Account</option>
+                                                   
+                                                  </select>
+                                                </div>
+                                              
+                                            </div> --}}
+                                            
                                             <div class="d-flex align-items-center justify-content-between mt-1">
                                                 <span class="title">Supplier</span>
                                                 {{-- <select class="form-control" name="supplier" id=""></select> --}}
                                                 <div style="width: 11.21rem; max-width:11.21rem; "
-                                                class="align-items-center">
-                                                <select name="supplier" class="form-select" aria-label="Default select example">
+                                                    class="align-items-center">
+                                                    @if (isset($purchase))
+                                                        <input  value="{{ $purchase->supplier_val->name}}"
+                                                        disabled
+                                                            name="payment_date" type="text"
+                                                            class="form-control invoice-edit-input ">
+                                                    @else
+                                                        <select name="supplier" class="form-select"
+                                                            aria-label="Default select example">
 
-                                                   @foreach ($suppliers as $sup)
-                                                   <option value="{{$sup->id}}">{{$sup->name}}</option>
-                                                   @endforeach
-                                                   
-                                                   
-                                                  </select>
+                                                            @foreach ($suppliers as $sup)
+                                                                <option value="{{ $sup->id }}">{{ $sup->name }}
+                                                                </option>
+                                                            @endforeach
+
+
+                                                        </select>
+                                                    @endif
+
                                                 </div>
                                                 {{-- <input name = "supplier" type="text" class="form-control invoice-edit-input "> --}}
                                             </div>
+
                                         </div>
                                     </div>
                                 </div>
@@ -96,123 +140,192 @@
                                 <!-- Product Details starts -->
                                 <div class="card-body invoice-padding invoice-product-details">
                                     <form class="source-item">
-                                        <div data-repeater-list="group-a">
-                                            <div class="repeater-wrapper" data-repeater-item="">
-                                                <div class="row">
-                                                    <div
-                                                        class="col-12 d-flex product-details-border position-relative pe-0">
-                                                        <div class="row py-2">
-                                                            <div class="col-lg-2 col-12 my-lg-0 my-2">
-                                                                <p class="card-text col-title mb-md-2 mb-0">Item Id</p>
-                                                                <input  id="passId0" type="number" class="form-control"
-                                                                    value="" placeholder="" disabled>
-                                                                    <input name="item_id[]" id="item_id0" type="hidden" class="form-control"
-                                                                    value="" placeholder="" >
-                                                            </div>
-                                                            <div class="col-3">
-                                                                <p class="card-text col-title mb-md-2 mb-0">Item Name</p>
-                                                                <input autocomplete="off" id="itemBox0"
-                                                                    class=" form-control" autocomplete="off"
-                                                                    placeholder="Enter Item" onkeyup="getItems(0)">
-                                                                <div class="list-type" id="list0"
-                                                                    style="position: absolute; z-index: 1;"
-                                                                    class="card mb-4">
-                                                                    <div id="listBody0" class="list-group">
+                                        @if (!isset($purchase))
+                                            <div data-repeater-list="group-a">
 
+                                                <div class="repeater-wrapper" data-repeater-item="">
+                                                    <div class="row">
+                                                        <div
+                                                            class="col-12 d-flex product-details-border position-relative pe-0">
+                                                            <div class="row py-2">
+                                                                <div class="col-lg-2 col-12 my-lg-0 my-2">
+                                                                    <p class="card-text col-title mb-md-2 mb-0">Item Id</p>
+                                                                    <input id="passId0" type="number"
+                                                                        class="form-control" value="" placeholder=""
+                                                                        disabled>
+                                                                    <input name="item_id[]" id="item_id0" type="hidden"
+                                                                        class="form-control" value="" placeholder="">
+                                                                </div>
+                                                                <div class="col-3">
+                                                                    <p class="card-text col-title mb-md-2 mb-0">Item Name
+                                                                    </p>
+                                                                    <input autocomplete="off" id="itemBox0"
+                                                                        class=" form-control" autocomplete="off"
+                                                                        placeholder="Enter Item" onkeyup="getItems(0)">
+                                                                    <div class="list-type" id="list0"
+                                                                        style="position: absolute; z-index: 1;"
+                                                                        class="card mb-4">
+                                                                        <div id="listBody0" class="list-group">
+
+                                                                        </div>
                                                                     </div>
                                                                 </div>
+                                                                <div class="col-lg-2 col-12 my-lg-0 my-2">
+                                                                    <p class="card-text col-title mb-md-2 mb-0">cost</p>
+                                                                    <input onkeyup="calRowTotal(0)" id="cost0"
+                                                                        name="cost[]" type="number" class="form-control"
+                                                                        value="" placeholder="">
+                                                                </div>
+                                                                <div class="col-lg-2 col-12 my-lg-0 my-2">
+                                                                    <p class="card-text col-title mb-md-2 mb-0">Qty</p>
+                                                                    <input pattern="[0-9]{10}" onkeyup="calRowTotal(0)"
+                                                                        id="qty0" name="qty[]" type="number"
+                                                                        onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57"
+                                                                        class="form-control" value=""
+                                                                        placeholder="">
+                                                                </div>
+                                                                <div class="col-lg-2 col-12 mt-lg-0 mt-2">
+                                                                    <p class="card-text col-title mb-md-50 mb-0">Total</p>
+                                                                    <input
+                                                                        style=" border: none;background-color: transparent;resize: none;outline: none;"
+                                                                        id="rowTotal0" name="rowTotal[]"
+                                                                        class="form-control" value="0 PKR" disabled>
+                                                                </div>
                                                             </div>
-                                                            <div class="col-lg-2 col-12 my-lg-0 my-2">
-                                                                <p class="card-text col-title mb-md-2 mb-0">cost</p>
-                                                                <input onkeyup="calRowTotal(0)" id="cost0"
-                                                                    name="cost[]" type="number" class="form-control"
-                                                                    value="" placeholder="">
-                                                            </div>
-                                                            <div class="col-lg-2 col-12 my-lg-0 my-2">
-                                                                <p class="card-text col-title mb-md-2 mb-0">Qty</p>
-                                                                <input pattern="[0-9]{10}" onkeyup="calRowTotal(0)"
-                                                                    id="qty0" name="qty[]" type="number"
-                                                                    onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57"
-                                                                    class="form-control" value="" placeholder="">
-                                                            </div>
-                                                            <div class="col-lg-2 col-12 mt-lg-0 mt-2">
-                                                                <p class="card-text col-title mb-md-50 mb-0">Total</p>
-                                                                <input 
-                                                                    style=" border: none;background-color: transparent;resize: none;outline: none;"
-                                                                    id="rowTotal0" name="rowTotal[]" class="form-control"
-                                                                    value="0 PKR" disabled>
-                                                            </div>
-                                                        </div>
-                                                        <div
-                                                            class="d-flex flex-column align-items-center justify-content-between border-start invoice-product-actions py-50 px-25">
-                                                            <svg onclick="deleteItem(0)"
-                                                                xmlns="http://www.w3.org/2000/svg" width="14"
-                                                                height="14" viewBox="0 0 24 24" fill="none"
-                                                                stroke="currentColor" stroke-width="2"
-                                                                stroke-linecap="round" stroke-linejoin="round"
-                                                                class="feather feather-x cursor-pointer font-medium-3">
-                                                                <line x1="18" y1="6" x2="6"
-                                                                    y2="18"></line>
-                                                                <line x1="6" y1="6" x2="18"
-                                                                    y2="18"></line>
-                                                            </svg>
-                                                            <div class="dropdown">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="14"
+                                                            <div
+                                                                class="d-flex flex-column align-items-center justify-content-between border-start invoice-product-actions py-50 px-25">
+                                                                <svg onclick="deleteItem(0)"
+                                                                    xmlns="http://www.w3.org/2000/svg" width="14"
                                                                     height="14" viewBox="0 0 24 24" fill="none"
                                                                     stroke="currentColor" stroke-width="2"
                                                                     stroke-linecap="round" stroke-linejoin="round"
-                                                                    class="feather feather-settings cursor-pointer more-options-dropdown me-0"
-                                                                    id="dropdownMenuButton" role="button"
-                                                                    data-bs-toggle="dropdown" aria-haspopup="true"
-                                                                    aria-expanded="false">
-                                                                    <circle cx="12" cy="12" r="3">
-                                                                    </circle>
-                                                                    <path
-                                                                        d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
-                                                                    </path>
+                                                                    class="feather feather-x cursor-pointer font-medium-3">
+                                                                    <line x1="18" y1="6" x2="6"
+                                                                        y2="18"></line>
+                                                                    <line x1="6" y1="6" x2="18"
+                                                                        y2="18"></line>
                                                                 </svg>
-                                                                <div class="dropdown-menu dropdown-menu-end item-options-menu p-50"
-                                                                    aria-labelledby="dropdownMenuButton">
-                                                                    <div class="mb-1">
-                                                                        <label  for="discount-input"
-                                                                            class="form-label">Discount</label>
-                                                                        <input name = "trade_dicount" type="number" class="form-control"
-                                                                            id="discount-input">
-                                                                    </div>
-                                                                    <div class="form-row mt-50"></div>
-                                                                    <div class="dropdown-divider my-1"></div>
-                                                                    <div class="d-flex justify-content-between">
-                                                                        <button type="button"
-                                                                            class="btn btn-outline-primary btn-apply-changes waves-effect">Apply</button>
-                                                                        <button type="button"
-                                                                            class="btn btn-outline-secondary waves-effect">Cancel</button>
+                                                                <div class="dropdown">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="14"
+                                                                        height="14" viewBox="0 0 24 24" fill="none"
+                                                                        stroke="currentColor" stroke-width="2"
+                                                                        stroke-linecap="round" stroke-linejoin="round"
+                                                                        class="feather feather-settings cursor-pointer more-options-dropdown me-0"
+                                                                        id="dropdownMenuButton" role="button"
+                                                                        data-bs-toggle="dropdown" aria-haspopup="true"
+                                                                        aria-expanded="false">
+                                                                        <circle cx="12" cy="12"
+                                                                            r="3">
+                                                                        </circle>
+                                                                        <path
+                                                                            d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
+                                                                        </path>
+                                                                    </svg>
+                                                                    <div class="dropdown-menu dropdown-menu-end item-options-menu p-50"
+                                                                        aria-labelledby="dropdownMenuButton">
+                                                                        <div class="mb-1">
+                                                                            <label for="discount-input"
+                                                                                class="form-label">Discount</label>
+                                                                            <input name="trade_dicount" type="number"
+                                                                                class="form-control" id="discount-input">
+                                                                        </div>
+                                                                        <div class="form-row mt-50"></div>
+                                                                        <div class="dropdown-divider my-1"></div>
+                                                                        <div class="d-flex justify-content-between">
+                                                                            <button type="button"
+                                                                                class="btn btn-outline-primary btn-apply-changes waves-effect">Apply</button>
+                                                                            <button type="button"
+                                                                                class="btn btn-outline-secondary waves-effect">Cancel</button>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
+
                                             </div>
-                                        </div>
-                                        <div id="itemRows" class="row mt-1">
-                                            <div class="col-12 px-0">
-                                                <button id="addNewBtn" type="button"
-                                                    class="btn btn-primary btn-sm btn-add-new waves-effect waves-float waves-light">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
-                                                        viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                        class="feather feather-plus me-25">
-                                                        <line x1="12" y1="5" x2="12"
-                                                            y2="19">
-                                                        </line>
-                                                        <line x1="5" y1="12" x2="19"
-                                                            y2="12">
-                                                        </line>
-                                                    </svg>
-                                                    <span class="align-middle">Add Item</span>
-                                                </button>
+                                            <div id="itemRows" class="row mt-1">
+                                                <div class="col-12 px-0">
+                                                    <button id="addNewBtn" type="button"
+                                                        class="btn btn-primary btn-sm btn-add-new waves-effect waves-float waves-light">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="14"
+                                                            height="14" viewBox="0 0 24 24" fill="none"
+                                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                                            stroke-linejoin="round" class="feather feather-plus me-25">
+                                                            <line x1="12" y1="5" x2="12"
+                                                                y2="19">
+                                                            </line>
+                                                            <line x1="5" y1="12" x2="19"
+                                                                y2="12">
+                                                            </line>
+                                                        </svg>
+                                                        <span class="align-middle">Add Item</span>
+                                                    </button>
+                                                </div>
                                             </div>
-                                        </div>
+                                        @else
+                                            <table id="investor-table" class="table">
+                                                <thead class="thead-dark">
+                                                    <tr style="background-color:red !important;">
+                                                        <th style="width: 2px !important">#</th>
+
+                                                        <th scope="col">name</th>
+                                                        <th scope="col">unit cost</th>
+                                                        <th scope="col">quantity</th>
+                                                        <th scope="col">total</th>
+                                                        <th scope="col">Action</th>
+
+
+
+                                                        {{-- <th scope="col">Action</th> --}}
+                                                    </tr>
+                                                </thead>
+                                                <tbody class="inventory-iems-body" id="nventory-iems-body">
+
+                                                    @php
+                                                        $count = 1;
+                                                    @endphp
+                                                    @foreach ($purchase->items as $item)
+                                                        <tr>
+                                                            <td>{{ $count }}</td>
+                                                            <td>{{ $item->name }}</td>
+                                                            <td>{{ $item->pivot->unit_cost }}</td>
+                                                            <td>{{ $item->pivot->quantity }}</td>
+                                                            <td>{{ $item->pivot->quantity * $item->pivot->unit_cost }}</td>
+                                                            <td>Return</td>
+
+
+                                                        </tr>
+                                                        @php
+                                                            $count = $count + 1;
+                                                        @endphp
+                                                    @endforeach
+
+                                                </tbody>
+                                            </table>
+                                            {{-- <div class="row">
+                                            <div class="col-2">
+                                                {{$pitem->name}}
+                                                
+                                            </div>
+                                            <div class="col-2">
+                                                {{$pitem->pivot->unit_cost}}
+                                                
+                                            </div>
+                                            <div class="col-2">
+                                                {{$pitem->pivot->quantity}}
+                                                
+                                            </div>
+                                           
+                                            <div class="col-2">
+                                                {{$pitem->pivot->quantity * $pitem->pivot->unit_cost}}
+
+                                            </div>
+                                           
+                                        </div> --}}
+                                        @endif
+
                                     </form>
                                 </div>
                                 <!-- Product Details ends -->
@@ -227,9 +340,14 @@
                                             <div class="invoice-total-wrapper">
                                                 <hr class="my-50">
                                                 <div class="invoice-total-item">
-                                                    <input type="hidden" name="total_amount" id="amount_feild" >
+                                                    <input type="hidden" name="total_amount" id="amount_feild">
                                                     <p class="invoice-total-title">Total:</p>
-                                                    <p id="totalAmount" class="invoice-total-amount">0 PKR</p>
+                                                    @if(isset($purchase))
+                                                    <p  class="invoice-total-amount">{{$purchase->total}}</p>
+                                                    @else
+                                                    <p id="totalAmount" class="invosice-total-amount">0 PKR</p>
+                                                    @endif
+                                                   
                                                 </div>
                                             </div>
                                         </div>
@@ -252,10 +370,19 @@
                                 </div>
                                 <div class="row p-2">
                                     <div class="col-12">
+                                        @if(isset($purchase))
+                                        <div class="d-flex justify-content-end">
+                                           
+                                            <button type="reset" class="btn btn-primary">Reprint Invoice</button>
+                                        </div>
+                                        @else
                                         <div class="d-flex justify-content-end">
                                             <button type="submit" class="btn btn-primary me-2">Save</button>
-                                            <button type = "reset" class="btn btn-danger">Reset</button>
+                                            <button type="reset" class="btn btn-danger">Reset</button>
                                         </div>
+
+                                        @endif
+                                        
                                     </div>
                                 </div>
 
@@ -437,7 +564,7 @@
                 console.log("you clicked menu");
 
             } else {
-                $(".list-type   ").hide();
+                $(".list-type").hide();
 
             }
         });

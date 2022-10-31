@@ -16,10 +16,9 @@
                                 <p class="mt-1">Purchases</p>
                                 <div class="row mt-2">
                                     <div class="col-12 table-responsive ">
-
                                         <table id="payables-table" class="table">
                                             <thead class="thead-dark">
-                                                <tr style="background-color:red !important;">
+                                                <tr style="background-colosr:red !important;">
                                                     <th style="width: 2px !important">#</th>
                                                     <th scope="col">Purchase No</th>
                                                     <th scope="col">Amount</th>
@@ -41,7 +40,7 @@
                                                         <td>{{ $pur->total }}</td>
                                                         <td>{{ $pur->purchase_date }}</td>
                                                         <td><a style="text-decoration: none;color:black"
-                                                                href="{{ route('get-purchase-items', $pur->id) }}"><i
+                                                                href="{{ route('purchase.show', $pur->id) }}"><i
                                                                     data-feather='eye'></i></a></td>
                                                     </tr>
                                                     @php
@@ -86,7 +85,7 @@
                                                             <td>{{ $pay->amount }}</td>
                                                             <td>{{ $pay->payment_date }}</td>
                                                             <td><a style="text-decoration: none;color:black"
-                                                                    href="{{ route('get-purchase-items', $pur->id) }}"><i
+                                                                    href="{{ route('payable.show', $pay->id) }}"><i
                                                                         data-feather='eye'></i></a></td>
                                                         </tr>
                                                         @php

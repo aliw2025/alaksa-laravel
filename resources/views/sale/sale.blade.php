@@ -149,6 +149,7 @@
                                                                     type="number" class="form-control" value=""
                                                                     placeholder="Selling Price">
                                                             </div>
+                                                            
                                                             <div id="plan_div" class="col-2 my-lg-0 my-2">
                                                                 <p class="card-text col-title mb-md-2 mb-0">Plan (Months)
                                                                 </p>
@@ -156,11 +157,19 @@
                                                                     id="plan" type="number" class="form-control"
                                                                     value="" placeholder="Months">
                                                             </div>
+                                                            
                                                             <div id="markup_div" class="col-2 my-lg-0 my-2">
                                                                 <p class="card-text col-title mb-md-2 mb-0">MarkUp</p>
                                                                 <input name="mark_up" onkeyup="calculateInstallments()"
                                                                     id="markup" type="number" class="form-control"
                                                                     value="" placeholder="%">
+                                                            </div>
+                                                            <div id="discount_div" class="col-2 my-lg-0 my-2">
+                                                                <p class="card-text col-title mb-md-2 mb-0">Trade Discount
+                                                                </p>
+                                                                <input name="trade_discount"
+                                                                    id="trade_discount" type="number" class="form-control"
+                                                                    value="" placeholder="Discount">
                                                             </div>
                                                         </div><s></s>
 
@@ -277,11 +286,13 @@
     <script src="{{ url('/resources/js/scripts/pages/app-invoice.min.js') }}"></script>
 
     <script>
+
         $(document).ready(function() {
             $('.select2-selection__arrow').hide();
             $('#instal').text('name is khan');
             var type = $('#sale_type').val();
             console.log("type: " + type);
+            $('#discount_div').hide();
         });
 
         $('#sale_type').change(function() {
@@ -292,10 +303,13 @@
                 $('#markup_div').hide();
                 $('#plan_div').hide();
                 $('#instalment_sec').hide();
+                $('#discount_div').show();
+                
             }else{
                 $('#markup_div').show();
                 $('#plan_div').show();
                 $('#instalment_sec').show();
+                $('#discount_div').hide();
 
             }
             // console.log(this.value);

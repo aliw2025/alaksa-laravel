@@ -89,9 +89,14 @@ class InvestorController extends Controller
             'opening_balance' => 0
         ]);
 
-        $investor_eq= $investor->charOfAccounts()->create([
+        $investor_eqt= $investor->charOfAccounts()->create([
             'account_name' => $investor->prefix . '_equity',
             'account_type' => 5,
+            'opening_balance' => -$request->opening_balance
+        ]);
+        $investor_bnk= $investor->charOfAccounts()->create([
+            'account_name' => $investor->prefix . '_bank',
+            'account_type' => 8,
             'opening_balance' => -$request->opening_balance
         ]);
 
@@ -102,9 +107,24 @@ class InvestorController extends Controller
 
         ]); 
 
+
         $investor->leadgerEntries()->create([
-            'account_id'=> $investor_eq->id ,
+            'account_id'=> $investor_eqt->id ,
             'value'=> - $request->opening_balance,
+            'date'=>$investor->created_at
+            
+        ]);
+
+        $investor->leadgerEntries()->create([
+            'account_id'=> $investor_bnk->id,
+            'value'=> $request->opening_balance_bnk,
+            'date'=>$investor->created_at
+
+        ]); 
+
+        $investor->leadgerEntries()->create([
+            'account_id'=> $investor_eqt->id ,
+            'value'=> - $request->opening_balance_bnk,
             'date'=>$investor->created_at
             
         ]);

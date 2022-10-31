@@ -106,18 +106,22 @@ class PayableController extends Controller
         $payable->supplier = $request->supplier;
         $payable->amount = $request->amount;
         $payable->payment_date = $request->payment_date;
+        // $payable->account=$request->acc_type;
         $payable->save();
 
         $investor = Investor::find($request->investor_id);
-        $inv_acc_id =  $investor->charOfAccounts->where('account_type',1)->first()->id;
+        $inv_acc_id =  $investor->charOfAccounts->where('account_type',$request->acc_type)->first()->id;
+
         $supplier = Supplier::find($request->supplier);
         $sup_acc_id = $supplier->charOfAccounts->where('account_type',6)->first()->id;
 
+        
         $payable->leadgerEntries()->create([
             'account_id'=>  $sup_acc_id,
             'value'=>  $request->amount,
             'date'=> $request->payment_date
         ]);
+
 
         $payable->leadgerEntries()->create([
             'account_id'=> $inv_acc_id,
@@ -136,6 +140,10 @@ class PayableController extends Controller
     public function show(Payable $payable)
     {
         //
+        // $investors = Investor::all();
+        // $suppliers = Supplier::all();
+        // 'investors','suppliers'
+        return view('payable.pay',compact('payable'));
     }
 
     /**
