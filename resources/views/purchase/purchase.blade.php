@@ -180,7 +180,7 @@
                                                                     <p class="card-text col-title mb-md-2 mb-0">Qty</p>
                                                                     <input pattern="[0-9]{10}" onkeyup="calRowTotal(0)"
                                                                         id="qty0" name="qty[]" type="number"
-                                                                        onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57"
+                                                                        onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13 || event.charCode == 45) ? null : event.charCode >= 48 && event.charCode <= 57"
                                                                         class="form-control" value=""
                                                                         placeholder="">
                                                                 </div>
@@ -493,7 +493,7 @@
         function calRowTotal(rowId) {
 
             var qty = $('#qty' + rowId).val();
-            var cost = $('#cost' + rowId).val();
+            var cost = parseFloat($('#cost' + rowId).val());
             var old = $("#rowTotal" + rowId).val();
             var total = qty * cost;
             $("#rowTotal" + rowId).val(total.toFixed(2).toString() + " PKR");
@@ -508,9 +508,10 @@
         function rePrint(){
 
             console.log('what is to be reprinted');
-            window.open({{url('/test-pdf')}});
+            // window.open({{url('/test-pdf')}});
 
         }
+
         function getItems(id) {
 
             console.log("arg");

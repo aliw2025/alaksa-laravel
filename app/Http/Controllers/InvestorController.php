@@ -129,16 +129,6 @@ class InvestorController extends Controller
             
         ]);
 
-        //  this transaction id create transaction_id and transaction_type
-       
-        // value of the transaction
-        // $ledgerEntry = new InvestorLeadger();
-        // $ledgerEntry->account_id = $investor->accounts->where('account_type', 1)->first()->id;
-        // $ledgerEntry->transaction_type = "opening";
-        // $ledgerEntry->transaction_id = $investor->id;
-        // $ledgerEntry->value =  $request->opening_balance;
-        // $ledgerEntry->date = $investor->created_at;
-        // $ledgerEntry->save();
 
         return redirect()->route('investor.index');
     }

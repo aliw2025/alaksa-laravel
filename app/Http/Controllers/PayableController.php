@@ -106,7 +106,7 @@ class PayableController extends Controller
         $payable->supplier = $request->supplier;
         $payable->amount = $request->amount;
         $payable->payment_date = $request->payment_date;
-        // $payable->account=$request->acc_type;
+        $payable->account_type=$request->acc_type;
         $payable->save();
 
         $investor = Investor::find($request->investor_id);
@@ -122,12 +122,12 @@ class PayableController extends Controller
             'date'=> $request->payment_date
         ]);
 
-
         $payable->leadgerEntries()->create([
             'account_id'=> $inv_acc_id,
             'value'=> - $request->amount,
             'date'=> $request->payment_date
         ]);    
+
         return redirect()->route('payable.create');
     }
 
@@ -143,6 +143,7 @@ class PayableController extends Controller
         // $investors = Investor::all();
         // $suppliers = Supplier::all();
         // 'investors','suppliers'
+        
         return view('payable.pay',compact('payable'));
     }
 
