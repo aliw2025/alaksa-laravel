@@ -269,15 +269,11 @@
                                                 <thead class="thead-dark">
                                                     <tr style="background-color:red !important;">
                                                         <th style="width: 2px !important">#</th>
-
                                                         <th scope="col">name</th>
                                                         <th scope="col">unit cost</th>
                                                         <th scope="col">quantity</th>
                                                         <th scope="col">total</th>
                                                         <th scope="col">Action</th>
-
-
-
                                                         {{-- <th scope="col">Action</th> --}}
                                                     </tr>
                                                 </thead>
@@ -294,7 +290,6 @@
                                                             <td>{{ $item->pivot->quantity }}</td>
                                                             <td>{{ $item->pivot->quantity * $item->pivot->unit_cost }}</td>
                                                             <td>Return</td>
-
 
                                                         </tr>
                                                         @php
@@ -372,8 +367,7 @@
                                     <div class="col-12">
                                         @if(isset($purchase))
                                         <div class="d-flex justify-content-end">
-                                           
-                                            <button type="reset" class="btn btn-primary">Reprint Invoice</button>
+                                            <button onclick="rePrint()" type="reset" class="btn btn-primary">Reprint Invoice</button>
                                         </div>
                                         @else
                                         <div class="d-flex justify-content-end">
@@ -511,7 +505,12 @@
 
 
         }
+        function rePrint(){
 
+            console.log('what is to be reprinted');
+            window.open({{url('/test-pdf')}});
+
+        }
         function getItems(id) {
 
             console.log("arg");
