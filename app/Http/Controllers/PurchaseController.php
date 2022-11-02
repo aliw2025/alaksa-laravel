@@ -35,11 +35,21 @@ class PurchaseController extends Controller
     {   $items = Item::all();
         $investors = Investor::all();
         $suppliers = Supplier::all();
-        return view('purchase.purchase',compact('items','investors','suppliers'));
+        // for purchase
+        $type = 1;
+        return view('purchase.purchase',compact('items','investors','suppliers','type'));
 
     }
 
+    public function purchaseReturn(){
 
+        $items = Item::all();
+        $investors = Investor::all();
+        $suppliers = Supplier::all();
+        // for purchase return
+        $type = 2;
+        return view('purchase.purchase',compact('items','investors','suppliers','type'));
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -61,12 +71,16 @@ class PurchaseController extends Controller
         if($id ==null){
             $id = 0;
         }
+        if($request->purchase_type==2){
+            $request->total_amount = $request->total_amount * -1;
+        }
         $num = str_pad($id+1, 10, '0', STR_PAD_LEFT);
         $purchase->purchase_no = $investor->prefix.'22'.$num;
         $purchase->investor_id = $request->investor_id;
         $purchase->store_id = 1;
         $purchase->supplier = $request->supplier;
         $purchase->total =$request->total_amount;
+        $purchase->type = $request->purchase_type;
         $purchase->purchase_date = $request->purchase_date;
         $purchase->save();
 
@@ -169,7 +183,8 @@ class PurchaseController extends Controller
          //
         $investors = Investor::all();
         $suppliers = Supplier::all();
-        return view('purchase.purchase',compact('purchase','investors','suppliers'));
+        $type = $purchase->type;
+        return view('purchase.purchase',compact('purchase','investors','suppliers','type'));
     }
 
     /**

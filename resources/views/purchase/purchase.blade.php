@@ -24,7 +24,8 @@
                                         <div class="invoice-number-date mt-md-0 mt-2">
                                             <div class="d-flex align-items-center justify-content-between mb-1">
                                                 @csrf
-                                                <h4 class="invoice-title">Purchase #</h4>
+                                                <input type="hidden" name="purchase_type" id="purchase_type" value="{{$type}}">
+                                                <h4 class="invoice-title"> {{ $type==1?'Purchase #':'Purchase Return #'}} </h4>
                                                 <div class="input-group input-group-merge invoice-edit-input-group">
                                                     {{-- <div class="input-group-text">
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="14"

@@ -448,7 +448,7 @@
             var perMonth = finalPrice / plan;
             var len = parseInt(perMonth).toString().length;
             var factor = Math.pow(10, len - 1);
-            var normValue = Math.floor(perMonth / factor) * factor;
+            var normValue = Math.round(perMonth / 500) * 500;
             var normTotal = normValue * plan;
             var downPayment = finalPrice - normTotal;
 
@@ -462,14 +462,14 @@
             $('#instalments').val(plan);
             $('#per_month').val(normValue);
 
-            // console.log('un normalizedd');
-            // console.log(perMonth);
-            // console.log('normalizedd');
-            // console.log(normValue);
-            // console.log('final selling price: ');
-            // console.log(finalPrice);
-            // console.log('down Payment: ');
-            // console.log(downPayment);
+            console.log('un normalizedd');
+            console.log(perMonth);
+            console.log('normalizedd');
+            console.log(normValue);
+            console.log('final selling price: ');
+            console.log(finalPrice);
+            console.log('down Payment: ');
+            console.log(downPayment);
         }
 
         function setText(item) {

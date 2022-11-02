@@ -98,12 +98,17 @@
                                         <div class="row mt-2">
                                             <div class="col-12 d-flex justify-content-end">
                                                 @php
-                                                    $total_pur = $sup->investor_purchases($id)->sum('total');
+                                                    $total_pur = $sup->investor_purchases($id)->where('type','=',1)->sum('total');
+                                                    $total_ret = $sup->investor_purchases($id)->where('type','=',2)->sum('total');
                                                     $paid = $sup->investor_payments($id)->sum('amount');
-                                                    $rem = $total_pur - $paid;
+                                                    $rem = $total_pur+$total_ret - $paid;
                                                 @endphp
                                                 <p class="">Total Purchases : {{ $total_pur}}
                                                 {{-- <p> Payment paid : {{ $sup->investor_payments($id)->sum('amount') }}</p> --}}
+                                            </div>
+                                            <div class="col-12 d-flex justify-content-end">
+                                                {{-- <p class="">Total Returns : {{ $sup->investor_purchases($id)->sum('total') }} --}}
+                                                <p> Total Returns : {{$total_ret *-1 }}</p>
                                             </div>
                                             <div class="col-12 d-flex justify-content-end">
                                                 {{-- <p class="">Total Due payments : {{ $sup->investor_purchases($id)->sum('total') }} --}}
