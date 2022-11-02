@@ -97,6 +97,7 @@ class PurchaseController extends Controller
             }else{
                 // dd($inventory);
                 $inventory->quantity = $inventory->quantity +$purchase_item->quantity;
+                $inventory->unit_cost =  ($inventory->unit_cost+$purchase_item->unit_cost)/2;
                 $inventory->save();
             }
         

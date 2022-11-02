@@ -273,8 +273,7 @@
                                                         <th scope="col">unit cost</th>
                                                         <th scope="col">quantity</th>
                                                         <th scope="col">total</th>
-                                                        <th scope="col">Action</th>
-                                                        {{-- <th scope="col">Action</th> --}}
+                                                       
                                                     </tr>
                                                 </thead>
                                                 <tbody class="inventory-iems-body" id="nventory-iems-body">
@@ -289,7 +288,7 @@
                                                             <td>{{ $item->pivot->unit_cost }}</td>
                                                             <td>{{ $item->pivot->quantity }}</td>
                                                             <td>{{ $item->pivot->quantity * $item->pivot->unit_cost }}</td>
-                                                            <td>Return</td>
+                                                            
 
                                                         </tr>
                                                         @php
@@ -299,26 +298,7 @@
 
                                                 </tbody>
                                             </table>
-                                            {{-- <div class="row">
-                                            <div class="col-2">
-                                                {{$pitem->name}}
-                                                
-                                            </div>
-                                            <div class="col-2">
-                                                {{$pitem->pivot->unit_cost}}
-                                                
-                                            </div>
-                                            <div class="col-2">
-                                                {{$pitem->pivot->quantity}}
-                                                
-                                            </div>
-                                           
-                                            <div class="col-2">
-                                                {{$pitem->pivot->quantity * $pitem->pivot->unit_cost}}
-
-                                            </div>
-                                           
-                                        </div> --}}
+                                            
                                         @endif
 
                                     </form>

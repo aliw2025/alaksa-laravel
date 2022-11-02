@@ -90,7 +90,6 @@ class SaleController extends Controller
             $instalment->save();
 
             $temp =  new Carbon($request->sale_date);
-
             // creatting the instalments for the sale
             for ($i = 0; $i < $request->plan; $i++) {
 
@@ -104,8 +103,28 @@ class SaleController extends Controller
                 $temp = $next;
             }
         }
+
+        // updating inventory 
+        $inventory = Inventory::where('investor_id','=',$sale->investor_id)->where('item_id','=',$sale->item_id)->first();
+        $inventory->quantity =  $inventory->quantity-1;
+
+        // getting investory inventory account 
+        // $inv_acc_id =  $investor->charOfAccounts->where('account_type',3)->first()->id;
+        // $sale->leadgerEntries()->create([
+        //     'account_id'=>  $inv_acc_id,
+        //     'value'= -,
+        //     'date'=>$sale->sale_date        
+        // ]);  
+
+        //  getting investor recievable 
+        // $inv_rcv_acc = $investor->charOfAccounts->where('account_type',3)->first()->id;
+        // $purchase->leadgerEntries()->create([
+        //     'account_id'=>  $inv_rcv_acc,
+        //     'value'=> $sale->total,
+        //     'date'=>$purchase->purchase_date       
+        // ]);
        
-       
+        //  printing invoice
       $sale_detail = null;
         $data = [
             'title' => 'Welcome to ItSolutionStuff.com',
@@ -118,17 +137,12 @@ class SaleController extends Controller
             'plan'=> $request->plan
 
         ];
-        
-
         $pdf = PDF::loadView('sale.sale_invoice_pdf', $data);
 
         return $pdf->stream('my.pdf', array('Attachment' => 0));
 
-        
 
-        
         // return redirect()->route('get-sales', $request->investor_id);
-        // dd($request->all());
     }
 
     public function testPdf()
