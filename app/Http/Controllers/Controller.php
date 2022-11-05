@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\investor as ControllersInvestor;
 use App\Models\Investor;
 use App\Models\InvestorLeadger;
 use App\Models\Account;
@@ -26,10 +27,11 @@ class Controller extends BaseController
 
     public function setup()
     {
-
         // company investor has always type 1
         $investor = Investor::where('investor_type', '=', 1)->first();
+        // if invesotor alreay exists skip creting
         if ($investor === null) {
+
             $investor = new Investor();
             $investor->investor_name = "Alpha digital";
             $investor->email = "support@alphaDigital.com";
@@ -37,116 +39,163 @@ class Controller extends BaseController
             $investor->prefix = "AD";
             $investor->investor_type = 1;
             $investor->save();
-            // cash account
-
-
-            //  creating the chart of accounts
+            
+            /********************** creating accounts ****************************/
+            // 1- cash
             $investor_cash = $investor->charOfAccounts()->create([
                 'account_name' => $investor->prefix . '_cash',
                 'account_type' => 1,
                 'opening_balance' => 0
             ]);
-
+            // 2- equipment
             $investor_eq = $investor->charOfAccounts()->create([
                 'account_name' => $investor->prefix . '_equipment',
                 'account_type' => 2,
                 'opening_balance' => 0
             ]);
-
+            // 3- inventory
             $investor_inv = $investor->charOfAccounts()->create([
                 'account_name' => $investor->prefix . '_inventory',
                 'account_type' => 3,
                 'opening_balance' => 0
             ]);
-
-            $investor_eqt = $investor->charOfAccounts()->create([
-                'account_name' => $investor->prefix . '_equity',
+            // 4 - bank
+            $investor_bnk = $investor->charOfAccounts()->create([
+                'account_name' => $investor->prefix . '_bank',
+                'account_type' => 4,
+                'opening_balance' => 0
+            ]);
+            // 5- account receivable
+            $investor_rcv = $investor->charOfAccounts()->create([
+                'account_name' => $investor->prefix . '_receivable',
                 'account_type' => 5,
                 'opening_balance' => 0
             ]);
-            $investor_bnk = $investor->charOfAccounts()->create([
-                'account_name' => $investor->prefix . '_bank',
-                'account_type' => 8,
+            // 6- equity 
+            $investor_eqt = $investor->charOfAccounts()->create([
+                'account_name' => $investor->prefix . '_equity',
+                'account_type' => 6,
+                'opening_balance' => 0
+            ]);
+            // 7- payable
+            $investor_pyb = $investor->charOfAccounts()->create([
+                'account_name' => $investor->prefix . '_payable',
+                'account_type' => 7,
                 'opening_balance' => 0
             ]);
 
+            //8- expense
+            $investor_pyb = $investor->charOfAccounts()->create([
+                'account_name' => $investor->prefix . '_expense',
+                'account_type' => 8,
+                'opening_balance' => 0
+            ]);
+            // 9 - unrealized profit
+            $investor_un_pft = $investor->charOfAccounts()->create([
+                'account_name' => $investor->prefix . 'un_profit',
+                'account_type' => 9,
+                'opening_balance' => 0
+            ]);
+            // 10 - trade discount profit
+            $investor_td_pft = $investor->charOfAccounts()->create([
+                'account_name' => $investor->prefix . '_trade_profit',
+                'account_type' => 10,
+                'opening_balance' => 0
+            ]);
+            
+            /********************** Leadger Entries  ****************************/
+
+            // adding entries to leadger of opening bakance of cash
             $investor->leadgerEntries()->create([
                 'account_id' => $investor_cash->id,
                 'value' => 0,
+                'investor_id',$investor->id,
                 'date' => $investor->created_at
 
             ]);
-
+            // adding entries to leadger of opening bakance of equity
             $investor->leadgerEntries()->create([
                 'account_id' => $investor_eqt->id,
                 'value' => 0,
+                'investor_id',$investor->id,
                 'date' => $investor->created_at
 
             ]);
-
+             // adding entries to leadger of opening bakance of bank
             $investor->leadgerEntries()->create([
                 'account_id' => $investor_bnk->id,
                 'value' => 0,
+                'investor_id',$investor->id,
                 'date' => $investor->created_at
             ]);
-
+             // adding entries to leadger of opening bakance of equity
             $investor->leadgerEntries()->create([
                 'account_id' => $investor_eqt->id,
                 'value' => 0,
+                'investor_id',$investor->id,
                 'date' => $investor->created_at
 
             ]);
 
+
         } else {
+
         }
         return redirect()->route('index');
     }
 
     public function createAccountTypes()
     {
-
-
+       /********************** Leadger Entries  ****************************/
+        // 1- cash
         $type = new AccountType();
         $type->name = "cash";
         $type->category = "Assets";
         $type->save();
-
-       
-
-        
+        //2- equipment  
         $type = new AccountType();
         $type->name = "Equipment";
         $type->category = "Assets";
         $type->save();
-
+        //3- inventory
         $type = new AccountType();
         $type->name = "inventory";
         $type->category = "Assets";
         $type->save();
-
+        //4- bank
+        $type = new AccountType();
+        $type->name = "Bank";
+        $type->category = "Assets";
+        $type->save();
+        //5- account receivable
         $type = new AccountType();
         $type->name = "Account Receivable";
         $type->category = "Assets";
         $type->save();
-
+        //6- equity
         $type = new AccountType();
         $type->name = "equity";
         $type->category = "equity";
         $type->save();
-
+        //7- account payable
         $type = new AccountType();
         $type->name = "Account Payable";
         $type->category = "Liabilty";
         $type->save();
-
+        //8- expenses
         $type = new AccountType();
         $type->name = "Expenses";
         $type->category = "Expenses";
         $type->save();
-
+        //9-sale revenue
         $type = new AccountType();
-        $type->name = "Bank";
-        $type->category = "Assets";
+        $type->name = "Sale Revenue";
+        $type->category = "Revenue";
+        $type->save();
+        //10-trade discount revenue
+        $type = new AccountType();
+        $type->name = "Trade Discount Revenue";
+        $type->category = "Revenue";
         $type->save();
 
 
@@ -182,13 +231,10 @@ class Controller extends BaseController
         // $num = sprintf('%10d', $id+1);
         return str_pad(22, 10, '0', STR_PAD_LEFT);
         // $purchase->purchase_no = $investor->prefix.'22'.$num;
-
         $investor = Investor::find($id);
         // return $investor->accounts->where('account_type',1)->first();
         return $investor->accounts->where('account_type', 1)->first()->investor;
-
         // return  $investor->leadgerEntries()->where('transaction_type','=','App\Models\Investor')->get();
-
         // return \Illuminate\Support\Facades\DB::table('users')->get();
     }
 

@@ -38,7 +38,6 @@ class PurchaseController extends Controller
         // for purchase
         $type = 1;
         return view('purchase.purchase',compact('items','investors','suppliers','type'));
-
     }
 
     public function purchaseReturn(){
@@ -61,13 +60,10 @@ class PurchaseController extends Controller
 
     public function store(Request $request)
     {
-        
-        
         $investor = Investor::find($request->investor_id);
         // creating purchase transactions
         $purchase = new Purchase();
         $id = Purchase::max('id');
-        // $id = Purchase::where('investor_id','=',$request->investor_id)->max('id');
         if($id ==null){
             $id = 0;
         }
@@ -95,12 +91,11 @@ class PurchaseController extends Controller
             $purchase_item->trade_discount = 0;
             $purchase_item->purchase_id = $purchase->id;
             $purchase_item->save();
-            
             // updating inventory
-            // $investor =Investor::Find($purchase->investor_id);
             $inventory = Inventory::where('investor_id','=',$purchase->investor_id)->where('item_id','=',$purchase_item->item_id)->first();
           
             if($inventory==null){
+
                 $inventory = new Inventory();
                 $inventory->store_id = $purchase->store_id;
                 $inventory->item_id = $purchase_item->item_id;
@@ -108,51 +103,36 @@ class PurchaseController extends Controller
                 $inventory->unit_cost = $purchase_item->unit_cost;
                 $inventory->quantity = $purchase_item->quantity;
                 $inventory->save();
+
             }else{
-                // dd($inventory);
+    
                 $inventory->quantity = $inventory->quantity +$purchase_item->quantity;
                 $inventory->unit_cost =  ($inventory->unit_cost+$purchase_item->unit_cost)/2;
                 $inventory->save();
             }
         
         }
+
+        /******************** Leadger Entries ******************/
         // getting inventory account of the investor
         $inv_acc_id =  $investor->charOfAccounts->where('account_type',3)->first()->id;
         $purchase->leadgerEntries()->create([
             'account_id'=>  $inv_acc_id,
             'value'=> $request->total_amount,
+            'investor_id',$investor->id,
             'date'=>$purchase->purchase_date        
         ]);  
         //  getting supplier payable account of the supplier
         $supplier = Supplier::find($request->supplier);
-
-        $sup_acc_id = $supplier->charOfAccounts->where('account_type',6)->first()->id;
+        $sup_acc_id = $supplier->charOfAccounts->where('account_type',7)->first()->id;
         $purchase->leadgerEntries()->create([
             'account_id'=>  $sup_acc_id,
             'value'=> -$request->total_amount,
+            'investor_id',$investor->id,
             'date'=>$purchase->purchase_date       
         ]);
-        
-        
-        
-
-        // $payable = new Payable();
-        // $payable->transaction_id =  $purchase->id;
-        // $payable->remaining_value = $request->total_amount;
-        // $payable->total_value=$request->total_amount;
-        // $payable->save();
-       
-        // // adding entry in leadger
-        // $ledgerEntry = new InvestorLeadger();
-        // $ledgerEntry->account_id = $investor->accounts->where('account_type',2)->first()->id;
-        // $ledgerEntry->transaction_type = "purchase";
-        // $ledgerEntry->transaction_id = $purchase->id;
-        // $ledgerEntry->value =  $request->total_amount*-1;
-        // $ledgerEntry->date = $investor->created_at;
-        // $ledgerEntry->save();
-        
-        return redirect()->route('get-purchases',$investor->id);
-       
+     
+        return redirect()->route('get-purchases',$investor->id);   
     }
 
     public function showPurchaseItems($id){

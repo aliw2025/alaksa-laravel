@@ -18,6 +18,9 @@ return new class extends Migration
             $table->id();
             // account id of the transaction
             $table->unsignedBigInteger('account_id');
+
+             // id of the investor
+             $table->unsignedBigInteger('investor_id')->nullable();
             //  this transaction id create transaction_id and transaction_type
             $table->morphs('transaction');
             // value of the transaction

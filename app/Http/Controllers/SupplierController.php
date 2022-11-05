@@ -26,7 +26,7 @@ class SupplierController extends Controller
      */
     public function create()
     {
-        //
+
         $suppliers = Supplier::all();  
         return view('supplier.supplier',compact('suppliers'));
     }
@@ -39,7 +39,7 @@ class SupplierController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        
         $validated = $request->validate(
             [
                 'name' => 'required',
@@ -64,8 +64,8 @@ class SupplierController extends Controller
 
         $supplier_pay= $supplier->charOfAccounts()->create([
             'account_name' => $supplier->name . '_payable',
-            'account_type' => 6,
-            'opening_balance' => 0
+            'account_type' => 7,
+            'opening_balance' => $request->opening_balance,
         ]);
 
         $supplier->leadgerEntries()->create([

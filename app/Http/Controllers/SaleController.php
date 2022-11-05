@@ -71,16 +71,16 @@ class SaleController extends Controller
         if ($request->sale_type == 2) {
             $payment_type = "Cash";
             $sale->total = $request->selling_price;
-        }else{
+        } else {
             $payment_type = "Instalments";
             $sale->total = $request->total_sum;
         }
-        
+
         $sale->sale_date = $request->sale_date;
         $sale->save();
 
         if ($request->sale_type == 1) {
-            
+
             // creating down payment
             $instalment = new Instalment();
             $instalment->sale_id = $sale->id;
@@ -105,43 +105,109 @@ class SaleController extends Controller
         }
 
         // updating inventory 
-        $inventory = Inventory::where('investor_id','=',$sale->investor_id)->where('item_id','=',$sale->item_id)->first();
-        $inventory->quantity =  $inventory->quantity-1;
+        $inventory = Inventory::where('investor_id', '=', $sale->investor_id)->where('item_id', '=', $sale->item_id)->first();
+        $inventory->quantity =  $inventory->quantity - 1;
 
         // getting investory inventory account 
-        // $inv_acc_id =  $investor->charOfAccounts->where('account_type',3)->first()->id;
-        // $sale->leadgerEntries()->create([
-        //     'account_id'=>  $inv_acc_id,
-        //     'value'= -,
-        //     'date'=>$sale->sale_date        
-        // ]);  
+        $inv_acc_id =  $investor->charOfAccounts->where('account_type', 3)->first()->id;
+        //  getting investor recievable account
+        $inv_rcv_acc = $investor->charOfAccounts->where('account_type', 5)->first()->id;
+        // getting investor unrealized profit account
+        $inv_un_pft_acc = $investor->charOfAccounts->where('account_type', 9)->first()->id;
+        //  getting company
+        $cmp = Investor::where('type', '=', 1)->first();
+        //  getting company cash account
+        $cmp_cash_acc =  $cmp->charOfAccounts->where('account_type', 1)->first()->id;
+        //  getting company recibable account
+        $cmp_rcv_acc =  $cmp->charOfAccounts->where('account_type', 5)->first()->id;
+        //  getting company unrealized profit account
+        $cmp_un_pft_acc =  $cmp->charOfAccounts->where('account_type', 9)->first()->id;
+        // getting company trade discount profit account
+        $cmp_td_pft_acc =  $cmp->charOfAccounts->where('account_type', 10)->first()->id;
 
-        //  getting investor recievable 
-        // $inv_rcv_acc = $investor->charOfAccounts->where('account_type',3)->first()->id;
-        // $purchase->leadgerEntries()->create([
-        //     'account_id'=>  $inv_rcv_acc,
-        //     'value'=> $sale->total,
-        //     'date'=>$purchase->purchase_date       
-        // ]);
-       
+        // leadger entry for credit inventory
+        $sale->leadgerEntries()->create([
+            'account_id' =>  $inv_acc_id,
+            'value' => -$request->selling_price,
+            'investor_id', $investor->id,
+            'date' => $sale->sale_date
+        ]);
+
+        //  leadger entry for debit recievable of inventory
+        $sale->leadgerEntries()->create([
+            'account_id' =>  $inv_rcv_acc,
+            'value' => $request->selling_price,
+            'investor_id', $investor->id,
+            'date' => $sale->purchase_date
+        ]);
+
+        // calculating profit share of investor and company
+        $inv_mark_pft = ($request->total_sum - $request->selling_price) * 0.50;
+        $cmp_mark_pft =  $inv_mark_pft;
+
+        // leadger entry for debit recievable of markup
+        $sale->leadgerEntries()->create([
+            'account_id' =>  $inv_rcv_acc,
+            'value' => $inv_mark_pft,
+            'investor_id', $investor->id,
+            'date' => $sale->purchase_date
+        ]);
+        // leadger entry for credit markup profit
+        $sale->leadgerEntries()->create([
+            'account_id' =>  $inv_un_pft_acc,
+            'value' => -$inv_mark_pft,
+            'investor_id', $investor->id,
+            'date' => $sale->purchase_date
+        ]);
+
+        // leadger entry for company debit recievable of markup
+        $sale->leadgerEntries()->create([
+            'account_id' =>  $cmp_rcv_acc,
+            'value' => $inv_mark_pft,
+            'investor_id', $investor->id,
+            'date' => $sale->purchase_date
+        ]);
+        // leadger entry for credit markup profit
+        $sale->leadgerEntries()->create([
+            'account_id' =>  $cmp_un_pft_acc,
+            'value' => -$inv_mark_pft,
+            'investor_id', $investor->id,
+            'date' => $sale->purchase_date
+        ]);
+
+        $item_price = $investor->inventories()->where('item_id', '=', $request->item_id)->first()->unit_cost;
+        $trade_discount = $request->selling_price - $item_price;
+
+        // leadger entry for company debit cash of trade profit
+        $sale->leadgerEntries()->create([
+            'account_id' => $cmp_cash_acc,
+            'value' => $trade_discount,
+            'investor_id', $investor->id,
+            'date' => $sale->purchase_date
+        ]);
+        // leadger entry for credit trade discount profit
+        $sale->leadgerEntries()->create([
+            'account_id' => $cmp_td_pft_acc,
+            'value' => -$trade_discount,
+            'investor_id', $investor->id,
+            'date' => $sale->purchase_date
+        ]);
+
         //  printing invoice
-      $sale_detail = null;
+        $sale_detail = null;
         $data = [
             'title' => 'Welcome to ItSolutionStuff.com',
             'date' => date('m/d/Y'),
-            'sale'=> $sale,
-            'sale_detail'=> $sale_detail,
+            'sale' => $sale,
+            'sale_detail' => $sale_detail,
             'payment_type' => $payment_type,
             'selling_price' => $request->selling_price,
-            'markup' =>$request->mark_up,
-            'plan'=> $request->plan
+            'markup' => $request->mark_up,
+            'plan' => $request->plan
 
         ];
         $pdf = PDF::loadView('sale.sale_invoice_pdf', $data);
-
         return $pdf->stream('my.pdf', array('Attachment' => 0));
-
-
         // return redirect()->route('get-sales', $request->investor_id);
     }
 
@@ -152,10 +218,10 @@ class SaleController extends Controller
         $data = [
             'title' => 'Welcome to ItSolutionStuff.com',
             'date' => date('m/d/Y'),
-            'sale'=> $sale,
-            'sale_detail'=> $sale_detail,
+            'sale' => $sale,
+            'sale_detail' => $sale_detail,
         ];
-        
+
 
         $pdf = PDF::loadView('sale.sale_invoice_pdf', $data);
 
