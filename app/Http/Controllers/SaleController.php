@@ -107,6 +107,7 @@ class SaleController extends Controller
         // updating inventory 
         $inventory = Inventory::where('investor_id', '=', $sale->investor_id)->where('item_id', '=', $sale->item_id)->first();
         $inventory->quantity =  $inventory->quantity - 1;
+        $inventory->save();
 
         // getting investory inventory account 
         $inv_acc_id =  $investor->charOfAccounts->where('account_type', 3)->first()->id;
@@ -115,7 +116,7 @@ class SaleController extends Controller
         // getting investor unrealized profit account
         $inv_un_pft_acc = $investor->charOfAccounts->where('account_type', 9)->first()->id;
         //  getting company
-        $cmp = Investor::where('type', '=', 1)->first();
+        $cmp = Investor::where('investor_type', '=', 1)->first();
         //  getting company cash account
         $cmp_cash_acc =  $cmp->charOfAccounts->where('account_type', 1)->first()->id;
         //  getting company recibable account
@@ -129,7 +130,7 @@ class SaleController extends Controller
         $sale->leadgerEntries()->create([
             'account_id' =>  $inv_acc_id,
             'value' => -$request->selling_price,
-            'investor_id', $investor->id,
+            'investor_id'=>$investor->id,
             'date' => $sale->sale_date
         ]);
 
@@ -137,8 +138,8 @@ class SaleController extends Controller
         $sale->leadgerEntries()->create([
             'account_id' =>  $inv_rcv_acc,
             'value' => $request->selling_price,
-            'investor_id', $investor->id,
-            'date' => $sale->purchase_date
+            'investor_id'=>$investor->id,
+            'date' => $sale->sale_date
         ]);
 
         // calculating profit share of investor and company
@@ -149,30 +150,30 @@ class SaleController extends Controller
         $sale->leadgerEntries()->create([
             'account_id' =>  $inv_rcv_acc,
             'value' => $inv_mark_pft,
-            'investor_id', $investor->id,
-            'date' => $sale->purchase_date
+            'investor_id'=>$investor->id,
+            'date' => $sale->sale_date
         ]);
         // leadger entry for credit markup profit
         $sale->leadgerEntries()->create([
             'account_id' =>  $inv_un_pft_acc,
             'value' => -$inv_mark_pft,
-            'investor_id', $investor->id,
-            'date' => $sale->purchase_date
+            'investor_id'=>$investor->id,
+            'date' => $sale->sale_date
         ]);
 
         // leadger entry for company debit recievable of markup
         $sale->leadgerEntries()->create([
             'account_id' =>  $cmp_rcv_acc,
             'value' => $inv_mark_pft,
-            'investor_id', $investor->id,
-            'date' => $sale->purchase_date
+             'investor_id'=>$investor->id,
+            'date' => $sale->sale_date
         ]);
         // leadger entry for credit markup profit
         $sale->leadgerEntries()->create([
             'account_id' =>  $cmp_un_pft_acc,
             'value' => -$inv_mark_pft,
-            'investor_id', $investor->id,
-            'date' => $sale->purchase_date
+             'investor_id'=>$investor->id,
+            'date' => $sale->sale_date
         ]);
 
         $item_price = $investor->inventories()->where('item_id', '=', $request->item_id)->first()->unit_cost;
@@ -182,15 +183,15 @@ class SaleController extends Controller
         $sale->leadgerEntries()->create([
             'account_id' => $cmp_cash_acc,
             'value' => $trade_discount,
-            'investor_id', $investor->id,
-            'date' => $sale->purchase_date
+             'investor_id'=>$investor->id,
+            'date' => $sale->sale_date
         ]);
         // leadger entry for credit trade discount profit
         $sale->leadgerEntries()->create([
             'account_id' => $cmp_td_pft_acc,
             'value' => -$trade_discount,
-            'investor_id', $investor->id,
-            'date' => $sale->purchase_date
+             'investor_id'=>$investor->id,
+            'date' => $sale->sale_date
         ]);
 
         //  printing invoice
@@ -213,18 +214,43 @@ class SaleController extends Controller
 
     public function testPdf()
     {
-        $sale = null;
+        //  printing invoice
+        $sale = new Sale();
+        // getting sale id for sale invoice
+        $id = Sale::max('id');
+        if ($id == null) {
+            $id = 0;
+        }
+        // create a 14 digit sale invoice
+        $num = str_pad($id + 1, 10, '0', STR_PAD_LEFT);
+        $sale->invoice_no = 'AD' . '22' . $num;
+        $sale->customer_id = 1;
+        $sale->item_id = 1;
+        $sale->store_id = 1;
+        $sale->investor_id =1;
+        if ( 0) {
+            $payment_type = "Cash";
+            $sale->total =12000;
+        } else {
+            $payment_type = "Instalments";
+            $sale->total =14400;
+        }
+
+        $sale->sale_date = date('m/d/Y');
+       
         $sale_detail = null;
         $data = [
             'title' => 'Welcome to ItSolutionStuff.com',
             'date' => date('m/d/Y'),
             'sale' => $sale,
             'sale_detail' => $sale_detail,
+            'payment_type' => $payment_type,
+            'selling_price' =>12000,
+            'markup' =>20,
+            'plan' =>6
+
         ];
-
-
         $pdf = PDF::loadView('sale.sale_invoice_pdf', $data);
-
         return $pdf->stream('my.pdf', array('Attachment' => 0));
     }
 

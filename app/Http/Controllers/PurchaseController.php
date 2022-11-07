@@ -119,7 +119,7 @@ class PurchaseController extends Controller
         $purchase->leadgerEntries()->create([
             'account_id'=>  $inv_acc_id,
             'value'=> $request->total_amount,
-            'investor_id',$investor->id,
+            'investor_id'=>$investor->id,
             'date'=>$purchase->purchase_date        
         ]);  
         //  getting supplier payable account of the supplier
@@ -128,7 +128,7 @@ class PurchaseController extends Controller
         $purchase->leadgerEntries()->create([
             'account_id'=>  $sup_acc_id,
             'value'=> -$request->total_amount,
-            'investor_id',$investor->id,
+            'investor_id'=>$investor->id,
             'date'=>$purchase->purchase_date       
         ]);
      

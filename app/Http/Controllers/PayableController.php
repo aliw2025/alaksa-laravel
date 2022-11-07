@@ -119,14 +119,14 @@ class PayableController extends Controller
         $payable->leadgerEntries()->create([
             'account_id' =>  $sup_acc_id,
             'value' =>  $request->amount,
-            'investor_id', $investor->id,
+            'investor_id'=>$investor->id,
             'date' => $request->payment_date
         ]);
 
         $payable->leadgerEntries()->create([
             'account_id' => $inv_acc_id,
             'value' => -$request->amount,
-            'investor_id', $investor->id,
+            'investor_id'=>$investor->id,
             'date' => $request->payment_date
         ]);
 

@@ -7,6 +7,7 @@ use App\Models\Investor;
 use App\Models\InvestorLeadger;
 use App\Models\Account;
 use App\Models\AccountType;
+use App\Models\GLeadger;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -92,7 +93,7 @@ class Controller extends BaseController
             ]);
             // 9 - unrealized profit
             $investor_un_pft = $investor->charOfAccounts()->create([
-                'account_name' => $investor->prefix . 'un_profit',
+                'account_name' => $investor->prefix . '_un_profit',
                 'account_type' => 9,
                 'opening_balance' => 0
             ]);
@@ -108,31 +109,30 @@ class Controller extends BaseController
             // adding entries to leadger of opening bakance of cash
             $investor->leadgerEntries()->create([
                 'account_id' => $investor_cash->id,
+                'investor_id'=>$investor->id,
                 'value' => 0,
-                'investor_id',$investor->id,
                 'date' => $investor->created_at
-
             ]);
             // adding entries to leadger of opening bakance of equity
             $investor->leadgerEntries()->create([
                 'account_id' => $investor_eqt->id,
+                'investor_id'=>$investor->id,
                 'value' => 0,
-                'investor_id',$investor->id,
                 'date' => $investor->created_at
 
             ]);
              // adding entries to leadger of opening bakance of bank
             $investor->leadgerEntries()->create([
                 'account_id' => $investor_bnk->id,
+                'investor_id'=>$investor->id,
                 'value' => 0,
-                'investor_id',$investor->id,
                 'date' => $investor->created_at
             ]);
              // adding entries to leadger of opening bakance of equity
             $investor->leadgerEntries()->create([
                 'account_id' => $investor_eqt->id,
+                'investor_id'=>$investor->id,
                 'value' => 0,
-                'investor_id',$investor->id,
                 'date' => $investor->created_at
 
             ]);
@@ -205,13 +205,28 @@ class Controller extends BaseController
     public function index()
     {
         $investors = Investor::all();
+        $investor = Investor::find(1);
+        $invCashAcc= $investor->charOfAccounts->where('account_type','=',1)->first()->id;
+        $invRcvAcc= $investor->charOfAccounts->where('account_type','=',5)->first()->id;
+
+        $available_cash = GLeadger:: where('account_id','=',$invCashAcc)->sum('value');
+        $rcv_cash = GLeadger:: where('account_id','=',$invRcvAcc)->sum('value');
+        return view("template.dashboard-content", compact('investors','investor','available_cash','rcv_cash'));
+        $investors = Investor::all();
         return view("template.dashboard-content", compact('investors'));
     }
 
-    public function home()
-    {
+    public function home($id)
+    {   
+       
         $investors = Investor::all();
-        return view("template.dashboard-content", compact('investors'));
+        $investor = Investor::find($id);
+        $invCashAcc= $investor->charOfAccounts->where('account_type','=',1)->first()->id;
+        $invRcvAcc= $investor->charOfAccounts->where('account_type','=',5)->first()->id;
+
+        $available_cash = GLeadger:: where('account_id','=',$invCashAcc)->sum('value');
+        $rcv_cash = GLeadger:: where('account_id','=',$invRcvAcc)->sum('value');
+        return view("template.dashboard-content", compact('investors','investor','available_cash','rcv_cash'));
     }
     public function showInvestments()
     {

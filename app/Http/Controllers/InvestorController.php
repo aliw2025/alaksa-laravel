@@ -120,7 +120,7 @@ class InvestorController extends Controller
         ]);
         // 9 - unrealized profit
         $investor_un_pft = $investor->charOfAccounts()->create([
-            'account_name' => $investor->prefix . 'un_profit',
+            'account_name' => $investor->prefix . '_un_profit',
             'account_type' => 9,
             'opening_balance' => 0
         ]);
@@ -135,28 +135,28 @@ class InvestorController extends Controller
         $investor->leadgerEntries()->create([
             'account_id' => $investor_cash->id,
             'value' => $request->opening_balance,
-            'investor_id',$investor->id,
+            'investor_id'=>$investor->id,
             'date' => $investor->created_at
 
         ]);
         $investor->leadgerEntries()->create([
             'account_id' => $investor_eqt->id,
             'value' => -$request->opening_balance,
-            'investor_id',$investor->id,
+            'investor_id'=>$investor->id,
             'date' => $investor->created_at
 
         ]);
         $investor->leadgerEntries()->create([
             'account_id' => $investor_bnk->id,
             'value' => $request->opening_balance_bnk,
-            'investor_id',$investor->id,
+            'investor_id'=>$investor->id,
             'date' => $investor->created_at
 
         ]);
         $investor->leadgerEntries()->create([
             'account_id' => $investor_eqt->id,
             'value' => -$request->opening_balance_bnk,
-            'investor_id',$investor->id,
+            'investor_id'=>$investor->id,
             'date' => $investor->created_at
 
         ]);

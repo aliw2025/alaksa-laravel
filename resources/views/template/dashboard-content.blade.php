@@ -47,7 +47,7 @@
                                         </div>
                                     </div>
                                     <div class="my-auto">
-                                        <h4 class="fw-bolder mb-0">230k</h4>
+                                        <h4 class="fw-bolder mb-0">{{$available_cash}}</h4>
                                         <p class="card-text font-small-3 mb-0">Available Cash</p>
                                     </div>
                                 </div>
@@ -66,7 +66,7 @@
                                         </div>
                                     </div>
                                     <div class="my-auto">
-                                        <h4 class="fw-bolder mb-0">230k</h4>
+                                        <h4 class="fw-bolder mb-0">{{$rcv_cash}}</h4>
                                         <p class="card-text font-small-3 mb-0">Recievables</p>
                                     </div>
                                 </div>
