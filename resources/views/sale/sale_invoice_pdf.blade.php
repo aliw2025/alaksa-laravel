@@ -26,14 +26,14 @@
 </head>
 
 <body style="margin-bottom: 0;margin-top: 0">
+    <h2 style="margin-top: 0; margin-bottom: 0;text-align:center">Alpha Digital</h2>
+    <p style="margin-top: 2; margin-bottom: 0;text-align:center">Contact: 03477844223, Email: info@alpha.edu.com</p>
+    <p style="margin-top: 2; margin-bottom: 0;text-align:center">Address: Mustafa Plaza , Ring Road Peshawar</p>
     <table style="margin-bottom: 0;margin-top: 0">
         <tr>
-            <td align="left" style="font-size: 20px">
-                <h4>Sale Invoice</h4>
-            </td>
-            <td align="right" style="font-size: 20px">
-                <h4 style="margin-top: 0; margin-bottom: 0;">Alpha Digital</h4>
-            </td>
+            <td align="left" style="border-top:1px solid;border-bottom:1px solid;background-color:pink">
+                <p>Sale Invoice</p>
+            </td>  
         </tr>
 
     </table>
