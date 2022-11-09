@@ -26,9 +26,18 @@ class Sale extends Model
     public function customer(){
        return $this->belongsTo(Customer::class,'customer_id');
     }
+    
+    public function recoveryOfficer(){
+        return $this->belongsTo(User::class,'rec_of_id');
+     }
+
+     public function marketingOfficer(){
+        return $this->belongsTo(User::class,'mars_of_id');
+     }
+
     public function leadgerEntries(){
 
         return $this->morphMany(GLeadger::class,'transaction');
-    }
+    }   
 }
 

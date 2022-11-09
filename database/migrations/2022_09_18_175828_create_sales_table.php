@@ -18,6 +18,8 @@ return new class extends Migration
             $table->id();
             $table->string('invoice_no');
             $table->unsignedBigInteger('customer_id');
+            $table->unsignedBigInteger('rec_of_id')->nullable();
+            $table->unsignedBigInteger('mar_of_id')->nullable();
             $table->unsignedBigInteger('item_id');
             $table->unsignedBigInteger('store_id');
             $table->unsignedBigInteger('investor_id');

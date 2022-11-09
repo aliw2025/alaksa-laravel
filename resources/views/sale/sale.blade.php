@@ -19,8 +19,43 @@
                                             <p class="card-text mb-25">Office 149,Mustafa plaza</p>
                                             <p class="card-text mb-25">Ring Road Peshawar, PK</p>
                                             <p class="card-text mb-0">+1 (123) 456 7891, +44 (876) 543 2198</p>
-                                            <div class="d-flex align-items-center justify-content-between mt-3">
-                                                <span class="title">Sale Type</span>
+                                           
+                                            <div class="mt-2 d-flex align-items-center justify-content-between">
+                                                <span class="title me-1">Marketing Officer: </span>
+                                                <div style="width: 11.21rem; max-width:11.21rem;"
+                                                    class="align-items-center">
+                                                    <input name="mar_of_id"  id="mar_of_id"s
+                                                    class="form-control" placeholder="Name" type="hidden">
+                                                    <input name="mar_of_name" onkeyup="getMUserByName()"
+                                                        id="mar_of_name" class="form-control" placeholder="Name"
+                                                        type="text">
+                                                    <div class="list-type" id="mar_list"
+                                                        style="position: absolute; z-index: 1;" class="card mb-4">
+                                                        <div id="mar_list_body" class="list-group">
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="mt-1 d-flex align-items-center justify-content-between">
+                                                <span class="title">Recovery Officer: </span>
+                                                <div style="width: 11.21rem; max-width:11.21rem;"
+                                                    class="align-items-center">
+                                                    <input name="rec_of_id"  id="rec_of_id"s
+                                                    class="form-control" placeholder="Name" type="hidden">
+                                                    <input name="rec_of_name" onkeyup="getRUserByName()" id="rec_of_name"s
+                                                        class="form-control" placeholder="Name" type="text">
+                                                    <div class="list-type" id="rec_list"
+                                                        style="position: absolute; z-index: 1;" class="card mb-4">
+                                                        <div id="rec_list_body" class="list-group">
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="d-flex align-items-center justify-content-between mt-1">
+                                                <span class="title">Sale Type:</span>
                                                 <div style="width: 11.21rem; max-width:11.21rem; "
                                                     class="align-items-center">
                                                     <select id="sale_type" name="sale_type" class="form-select"
@@ -31,6 +66,7 @@
 
                                                     </select>
                                                 </div>
+
                                             </div>
                                         </div>
                                         <div class="invoice-number-date mt-md-0 mt-2">
@@ -75,8 +111,8 @@
 
                                                     <select name="investor_id"
                                                         class=" select2 select2-hidden-accessible form-control invoice-edit-input"
-                                                        id="select2-basic" datas-select2-id="select2-basic" tabindex="-1"
-                                                        aria-hidden="true">
+                                                        id="select2-basic" datas-select2-id="select2-basic"
+                                                        tabindex="-1" aria-hidden="true">
 
                                                         @foreach ($investors as $investor)
                                                             <option value="{{ $investor->id }}">
@@ -90,8 +126,9 @@
                                                 <span class="title">Customer ID:</span>
                                                 <div style="width: 11.21rem; max-width:11.21rem; "
                                                     class="align-items-center">
-                                                    <input name="customer_id" onkeyup="getCustomerById()" id="customer_id"
-                                                        class="form-control" placeholder="ID" type="text">
+                                                    <input name="customer_id" onkeyup="getCustomerById()"
+                                                        id="customer_id" class="form-control" placeholder="ID"
+                                                        type="text">
                                                 </div>
                                             </div>
                                             <div class="mt-1 d-flex align-items-center justify-content-between">
@@ -149,7 +186,7 @@
                                                                     type="number" class="form-control" value=""
                                                                     placeholder="Selling Price">
                                                             </div>
-                                                            
+
                                                             <div id="plan_div" class="col-2 my-lg-0 my-2">
                                                                 <p class="card-text col-title mb-md-2 mb-0">Plan (Months)
                                                                 </p>
@@ -157,7 +194,7 @@
                                                                     id="plan" type="number" class="form-control"
                                                                     value="" placeholder="Months">
                                                             </div>
-                                                            
+
                                                             <div id="markup_div" class="col-2 my-lg-0 my-2">
                                                                 <p class="card-text col-title mb-md-2 mb-0">MarkUp</p>
                                                                 <input name="mark_up" onkeyup="calculateInstallments()"
@@ -167,15 +204,15 @@
                                                             <div id="discount_div" class="col-2 my-lg-0 my-2">
                                                                 <p class="card-text col-title mb-md-2 mb-0">Trade Discount
                                                                 </p>
-                                                                <input name="trade_discount"
-                                                                    id="trade_discount" type="number" class="form-control"
-                                                                    value="" placeholder="Discount">
+                                                                <input name="trade_discount" id="trade_discount"
+                                                                    type="number" class="form-control" value=""
+                                                                    placeholder="Discount">
                                                             </div>
                                                         </div><s></s>
 
                                                     </div>
                                                 </div>
-                                                <div id="instalment_sec" >
+                                                <div id="instalment_sec">
                                                     <div class="row mt-1">
                                                         <div class="col-lg-5 col-12 mt-lg-0 mt-2">
                                                             <div class="row ">
@@ -219,13 +256,13 @@
                                                                         name="instalments" class="form-control"
                                                                         value="0 PKR">
                                                                     <p id="instalments_label"> 0</p>
-    
+
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <div class="row">
-    
+
                                                         <div class="col-lg-5 col-12 mt-lg-0 mt-2">
                                                             <div class="row ">
                                                                 <div class="col-6">
@@ -242,7 +279,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                              
+
                                             </div>
                                         </div>
 
@@ -286,7 +323,6 @@
     <script src="{{ url('/resources/js/scripts/pages/app-invoice.min.js') }}"></script>
 
     <script>
-
         $(document).ready(function() {
             $('.select2-selection__arrow').hide();
             $('#instal').text('name is khan');
@@ -297,15 +333,15 @@
 
         $('#sale_type').change(function() {
             var type = $('#sale_type').val()
-            console.log('sale type : '+type);
-            if(type==2){
+            console.log('sale type : ' + type);
+            if (type == 2) {
 
                 $('#markup_div').hide();
                 $('#plan_div').hide();
                 $('#instalment_sec').hide();
                 $('#discount_div').show();
-                
-            }else{
+
+            } else {
                 $('#markup_div').show();
                 $('#plan_div').show();
                 $('#instalment_sec').show();
@@ -385,6 +421,91 @@
 
 
         }
+
+
+        function getMUserByName() {
+            var key = $('#mar_of_name').val();
+            console.log(key);
+            if (key.toString().length < 3) {
+
+                return;
+            }
+            $.ajax({
+                url: "{{ url('get-marketing-off') }}/",
+                type: "GET",
+                data: {
+                    key: key,
+                },
+                success: function(dataResult) {
+                    $("#mar_list_body").empty();
+                    console.log('recv');
+                    console.log(dataResult);
+                    var i;
+                    for (i = 0; i < dataResult.length; i++) {
+                        var item = dataResult[i];
+                        console.log(item);
+                        markup = `<button id = "marItem` + item.id +
+                            `" type="button" class="list-group-item list-group-item-action" onclick="setMarUser(` +
+                            item.id + `)">` + item.name + `</button>`;
+                        $("#mar_list_body").append(markup);
+                    }
+                },
+                error: function(xhr, status, error) {
+                },
+            });
+            $("#mar_list").show();
+        }
+
+
+
+        function getRUserByName() {
+
+            var key = $('#rec_of_name').val();
+            console.log(key);
+            if (key.toString().length < 3) {
+
+                return;
+            }
+            $.ajax({
+                url: "{{ url('get-recovery-off') }}/",
+                type: "GET",
+                data: {
+                    key: key,
+                },
+                success: function(dataResult) {
+                    $("#rec_list_body").empty();
+                    console.log('recv');
+                    console.log(dataResult);
+                    var i;
+                    for (i = 0; i < dataResult.length; i++) {
+                        var item = dataResult[i];
+                        console.log(item);
+                        markup = `<button id = "recItem` + item.id +
+                            `" type="button" class="list-group-item list-group-item-action" onclick="setRecUser(` +
+                            item.id + `)">` + item.name + `</button>`;
+                        $("#rec_list_body").append(markup);
+                    }
+                },
+                error: function(xhr, status, error) {
+                },
+            });
+            $("#rec_list").show();
+        }
+
+
+        function setMarUser(user){
+            console.log('fuck pic');
+            $("#mar_of_name").val($('#marItem' + user).text());
+            $("#mar_of_id").val(user);
+            $("#mar_list").hide();
+
+        }
+        function setRecUser(user){
+            $("#rec_of_name").val($('#recItem' + user).text());
+            $("#rec_of_id").val(user);
+            $("#rec_list").hide();
+        }
+
 
         function getByName() {
 

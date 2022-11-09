@@ -50,8 +50,7 @@ class SaleController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
-
+    {   
         // finding the investor to get investor name
         $investor = Investor::find($request->investor_id);
         // creatin the sale 
@@ -67,6 +66,9 @@ class SaleController extends Controller
         $sale->customer_id = $request->customer_id;
         $sale->item_id = $request->item_id;
         $sale->store_id = 1;
+        $sale->mar_of_id = $request->mar_of_id;
+        $sale->rec_of_id = $request->rec_of_id;
+
         $sale->investor_id = $request->investor_id;
         if ($request->sale_type == 2) {
             $payment_type = "Cash";
@@ -92,7 +94,6 @@ class SaleController extends Controller
             $temp =  new Carbon($request->sale_date);
             // creatting the instalments for the sale
             for ($i = 0; $i < $request->plan; $i++) {
-
                 $next = $temp->addMonth();
                 $instalment = new Instalment();
                 $instalment->sale_id = $sale->id;
@@ -225,7 +226,7 @@ class SaleController extends Controller
         $num = str_pad($id + 1, 10, '0', STR_PAD_LEFT);
         $sale->invoice_no = 'AD' . '22' . $num;
         $sale->customer_id = 1;
-        $sale->item_id = 1;
+        $sale->item_id = 2;
         $sale->store_id = 1;
         $sale->investor_id =1;
         if ( 0) {

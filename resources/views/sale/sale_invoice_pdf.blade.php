@@ -29,10 +29,10 @@
     <h2 style="margin-top: 0; margin-bottom: 0;text-align:center">Alpha Digital</h2>
     <p style="margin-top: 2; margin-bottom: 0;text-align:center">Contact: 03477844223, Email: info@alpha.edu.com</p>
     <p style="margin-top: 2; margin-bottom: 0;text-align:center">Address: Mustafa Plaza , Ring Road Peshawar</p>
-    <table style="margin-bottom: 0;margin-top: 0">
+    <table style="margin-bottom: 0;margin-top: 10px">
         <tr>
-            <td align="left" style="border-top:1px solid;border-bottom:1px solid;background-color:pink">
-                <p>Sale Invoice</p>
+            <td align="left" style="border-top:1px solid;border-bottom:1px solid;">
+                <p style = "text-align:center;margin-top:0;margin-bottom:0">Sale Invoice</p>
             </td>  
         </tr>
 
@@ -60,6 +60,7 @@
         <thead>
             <tr style="background-color:#e4e6eb;">
                 <th>#</th>
+                <th>Item Id</th>
                 <th>Item</th>
                 <th>Quantity</th>
                 <th>Price</th>
@@ -73,6 +74,7 @@
             @endphp
             <tr>
                 <td >1</td>
+                <td> {{ $sale->item->id }}</td>
                 <td> {{ $sale->item->name }}</td>
                 <td> 1</td>
                 <td> {{ $selling_price }}</td>
@@ -86,7 +88,7 @@
                 <td></td>
                 <td></td>
                 <td>
-                    <h4>Total: {{ $sale->total }}</h4>
+                    <p> <span style="font-weight: bold"> Total Amount: </span>  {{ $sale->total }}</p>
                 </td>
             </tr>
         </tbody>

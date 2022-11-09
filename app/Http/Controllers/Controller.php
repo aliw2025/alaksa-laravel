@@ -8,6 +8,8 @@ use App\Models\InvestorLeadger;
 use App\Models\Account;
 use App\Models\AccountType;
 use App\Models\GLeadger;
+use App\Models\User;
+
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -214,6 +216,17 @@ class Controller extends BaseController
         return view("template.dashboard-content", compact('investors','investor','available_cash','rcv_cash'));
         $investors = Investor::all();
         return view("template.dashboard-content", compact('investors'));
+    }
+
+    public function getRecoveryOff(){
+
+        $users = User::all();
+        return $users;
+    }
+    public function getMarketingOff(){
+
+        $users = User::all();
+        return $users;
     }
 
     public function home($id)
