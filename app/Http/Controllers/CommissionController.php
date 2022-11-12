@@ -4,15 +4,27 @@ namespace App\Http\Controllers;
 
 use App\Models\Commission;
 use Illuminate\Http\Request;
-
+use PDF;
 class CommissionController extends Controller
 {
 
    public function getCommisions(){
-        
+
         $commissions = Commission::all();
         return $commissions;
     
+   }
+   public function commissionReport(Request $request){
+
+        // dd($request->all());
+        $commissions = Commission::all();
+
+        $data = [
+            'commissions'=>$commissions,
+        ];
+        $pdf = PDF::loadView('commissions.commission-report', $data);
+        return $pdf->stream('my.pdf', array('Attachment' => 0));
+
    }
     /**
      * Display a listing of the resource.

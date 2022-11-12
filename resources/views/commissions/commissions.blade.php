@@ -10,37 +10,45 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <div class="row">
-                            <div class="col-2 ">
-                                <span class="title">Commission Type:</span>
-                                <select id="sale_type" name="sale_type" class="form-select"
-                                    aria-label="Default select example">
-                                    <option value="1">Sale</option>
-                                    <option value="2">Recovery</option>
-                                    <option value="3">All</option>
-
-                                </select>
-
-                            </div>
-                            <div class="col-2">
-                                <div class="">
-                                    <span class="title">Date:</span>
-                                    <input name="sale_date" type="text"
-                                        class="form-control invoice-edit-input date-picker flatpickr-input"
-                                        readonly="readonly">
+                        <form class="" method="POST" autocomplete="on" action="{{ route('commission-report')}}">
+                            @csrf
+                            <div class="row d-flex align-items-center">
+                                <div class="col-2 ">
+                                    <span class="title">Commission Type:</span>
+                                    <select id="commission_type" name="commission_type" class="form-select"
+                                        aria-label="Default select example">
+                                        <option value="1">Sale</option>
+                                        <option value="2">Recovery</option>
+                                        <option value="3">All</option>
+                                    </select>
+                                </div>
+                                <div class="col-2">
+                                    <div class="">
+                                        <span class="title">From Date:</span>
+                                        <input name="from_date" type="text"
+                                            class="form-control invoice-edit-input date-picker flatpickr-input"
+                                            readonly="readonly">
+                                    </div>
+                                </div>
+                                <div class="col-2">
+                                    <div class="">
+                                        <span class="title">To Date:</span>
+                                        <input name="to_date" type="text"
+                                            class="form-control invoice-edit-input date-picker flatpickr-input"
+                                            readonly="readonly">
+                                    </div>
+                                </div>
+                                <div class="col-2 ">
+                                    <span class="title">User:</span>
+                                    <input name="user" type="text" class="form-control">
+                                </div>
+                                <div class="col-2 ">
+                                    <Button type="submit" class="mt-1 btn btn-relief-primary">Report</Button>
                                 </div>
                             </div>
-                            <div class="col-2">
-                                <div class="">
-                                    <label for="startDate">Start</label>
-                                    <input id="startDate" class="form-control " type="time" />
-                                </div>
-                            </div>
-                           
-
-                        </div>
 
 
+                        </form>
                         {{-- 
                     <div class="row ">
                         <div  class="col-12 table-responsive ">
