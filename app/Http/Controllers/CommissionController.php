@@ -15,14 +15,12 @@ class CommissionController extends Controller
     
    }
    public function commissionReport(Request $request){
+        
+       
+        $commissions = Commission::ReportData($request->from_date,$request->to_date,$request->user_id,$request->commission_type)->get();
+       
 
-        // dd($request->all());
-        $commissions = Commission::all();
-
-        $data = [
-            'commissions'=>$commissions,
-        ];
-        $pdf = PDF::loadView('commissions.commission-report', $data);
+        $pdf = PDF::loadView('commissions.commission-report',compact('commissions'));
         return $pdf->stream('my.pdf', array('Attachment' => 0));
 
    }

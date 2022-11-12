@@ -46,6 +46,8 @@
                 <th>#</th>
                 <th>Employee</th>
                 <th>Amount</th>
+                <TD>Commiion Type</TD>
+                <td>Status</td>
                 <th>date</th>
 
             </tr>
@@ -59,6 +61,8 @@
                     <td>{{$counter}}</td>
                     <td>{{$com->user->name}}</td>
                     <td>{{$com->amount}}</td>
+                    <td></td>
+                    <td></td>
                     <td>{{$com->earned_date}}</td>
                    
                 </tr>

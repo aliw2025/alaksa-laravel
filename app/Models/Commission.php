@@ -10,8 +10,22 @@ class Commission extends Model
     use HasFactory;
 
 
-     public function user()
+    public function user()
     {
         return $this->belongsTo(User::class);
     }
+    
+    public function scopeReportData($query,$from_date,$to_date,$user,$commission)
+    {   
+        // dd($commission);
+        
+       if($user==NULL){
+            // dd('null');
+            return $query->whereBetween('earned_date',[$from_date,$to_date])->where('commission_type',$commission);
+       }else{
+            // dd('not null');
+            return $query->whereBetween('earned_date',[$from_date,$to_date])->where('commission_type',$commission)->where('user_id',$commission);
+       }
+    }
+
 }
