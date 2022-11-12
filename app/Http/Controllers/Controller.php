@@ -17,6 +17,8 @@ use Illuminate\Routing\Controller as BaseController;
 
 use Carbon\Cli\Invoker;
 use finfo;
+use Illuminate\Http\Request;
+// use GuzzleHttp\Psr7\Request;
 
 class Controller extends BaseController
 {
@@ -204,33 +206,42 @@ class Controller extends BaseController
         return redirect()->route('index');
     }
 
+
+    
     public function index()
     {
+        // queries for dashboard  calculations
         $investors = Investor::all();
+        // finding the company investor
         $investor = Investor::find(1);
+        // find cash account of the company
         $invCashAcc= $investor->charOfAccounts->where('account_type','=',1)->first()->id;
+        // find reciving accoung of the company
         $invRcvAcc= $investor->charOfAccounts->where('account_type','=',5)->first()->id;
-
+        //find available cash in the account
         $available_cash = GLeadger:: where('account_id','=',$invCashAcc)->sum('value');
+        
         $rcv_cash = GLeadger:: where('account_id','=',$invRcvAcc)->sum('value');
         return view("template.dashboard-content", compact('investors','investor','available_cash','rcv_cash'));
         $investors = Investor::all();
         return view("template.dashboard-content", compact('investors'));
     }
 
-    public function getRecoveryOff(){
-
-        $users = User::all();
+    public function getRecoveryOff(Request $request){
+        // get user matching the key
+        $users = User::where('name','like','%'.$request->key.'%')->get();
         return $users;
     }
-    public function getMarketingOff(){
-
-        $users = User::all();
+    public function getMarketingOff(Request $request){
+       
+        // get user matching the key
+        $users = User::where('name','like','%'.$request->key.'%')->get();
         return $users;
     }
 
     public function home($id)
     {   
+
        
         $investors = Investor::all();
         $investor = Investor::find($id);

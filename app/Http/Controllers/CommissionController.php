@@ -2,11 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Commision;
+use App\Models\Commission;
 use Illuminate\Http\Request;
 
-class CommisionController extends Controller
+class CommissionController extends Controller
 {
+
+   public function getCommisions(){
+        
+        $commissions = Commission::all();
+        return $commissions;
+    
+   }
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +21,7 @@ class CommisionController extends Controller
      */
     public function index()
     {
-        //
+        return view('commissions.commissions');
     }
 
     /**
@@ -41,10 +48,10 @@ class CommisionController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Commision  $commision
+     * @param  \App\Models\Commission  $commission
      * @return \Illuminate\Http\Response
      */
-    public function show(Commision $commision)
+    public function show(Commission $commission)
     {
         //
     }
@@ -52,10 +59,10 @@ class CommisionController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Commision  $commision
+     * @param  \App\Models\Commission  $commission
      * @return \Illuminate\Http\Response
      */
-    public function edit(Commision $commision)
+    public function edit(Commission $commission)
     {
         //
     }
@@ -64,10 +71,10 @@ class CommisionController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Commision  $commision
+     * @param  \App\Models\Commission  $commission
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Commision $commision)
+    public function update(Request $request, Commission $commission)
     {
         //
     }
@@ -75,10 +82,10 @@ class CommisionController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Commision  $commision
+     * @param  \App\Models\Commission  $commission
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Commision $commision)
+    public function destroy(Commission $commission)
     {
         //
     }

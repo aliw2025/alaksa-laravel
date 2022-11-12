@@ -38,6 +38,9 @@ class Sale extends Model
     public function leadgerEntries(){
 
         return $this->morphMany(GLeadger::class,'transaction');
+    }
+    public function saleCommision(){
+        return $this->morphMany(Commission::class,'transaction');
     }   
 }
 

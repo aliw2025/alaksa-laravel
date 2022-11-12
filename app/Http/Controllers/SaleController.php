@@ -13,6 +13,7 @@ use App\Models\Item;
 use App\Models\PurchaseItem;
 use App\Models\Payable;
 use App\Models\Supplier;
+use App\Models\Commission;
 use Illuminate\Http\Request;
 use PDF;
 use Carbon\Carbon;
@@ -50,7 +51,7 @@ class SaleController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {   
+    {
         // finding the investor to get investor name
         $investor = Investor::find($request->investor_id);
         // creatin the sale 
@@ -68,12 +69,14 @@ class SaleController extends Controller
         $sale->store_id = 1;
         $sale->mar_of_id = $request->mar_of_id;
         $sale->rec_of_id = $request->rec_of_id;
-
         $sale->investor_id = $request->investor_id;
+
         if ($request->sale_type == 2) {
+
             $payment_type = "Cash";
             $sale->total = $request->selling_price;
         } else {
+
             $payment_type = "Instalments";
             $sale->total = $request->total_sum;
         }
@@ -110,6 +113,26 @@ class SaleController extends Controller
         $inventory->quantity =  $inventory->quantity - 1;
         $inventory->save();
 
+        // calculating commission for maretinggg officer
+        $commision = new Commission();
+        $commision->commission_type = 1;
+        $commision->user_id = $sale->mar_of_id;
+        
+        $sale->saleCommision()->create(
+            [
+                'commission_type' => 1,
+                'user_id' => $sale->mar_of_id,
+                'amount' => $sale->total * 0.01,
+                'status' => 0,
+                'earned_date' => $sale->sale_date
+            ]
+        );
+       
+
+
+
+
+
         // getting investory inventory account 
         $inv_acc_id =  $investor->charOfAccounts->where('account_type', 3)->first()->id;
         //  getting investor recievable account
@@ -131,7 +154,7 @@ class SaleController extends Controller
         $sale->leadgerEntries()->create([
             'account_id' =>  $inv_acc_id,
             'value' => -$request->selling_price,
-            'investor_id'=>$investor->id,
+            'investor_id' => $investor->id,
             'date' => $sale->sale_date
         ]);
 
@@ -139,7 +162,7 @@ class SaleController extends Controller
         $sale->leadgerEntries()->create([
             'account_id' =>  $inv_rcv_acc,
             'value' => $request->selling_price,
-            'investor_id'=>$investor->id,
+            'investor_id' => $investor->id,
             'date' => $sale->sale_date
         ]);
 
@@ -151,14 +174,14 @@ class SaleController extends Controller
         $sale->leadgerEntries()->create([
             'account_id' =>  $inv_rcv_acc,
             'value' => $inv_mark_pft,
-            'investor_id'=>$investor->id,
+            'investor_id' => $investor->id,
             'date' => $sale->sale_date
         ]);
         // leadger entry for credit markup profit
         $sale->leadgerEntries()->create([
             'account_id' =>  $inv_un_pft_acc,
             'value' => -$inv_mark_pft,
-            'investor_id'=>$investor->id,
+            'investor_id' => $investor->id,
             'date' => $sale->sale_date
         ]);
 
@@ -166,14 +189,14 @@ class SaleController extends Controller
         $sale->leadgerEntries()->create([
             'account_id' =>  $cmp_rcv_acc,
             'value' => $inv_mark_pft,
-             'investor_id'=>$investor->id,
+            'investor_id' => $investor->id,
             'date' => $sale->sale_date
         ]);
         // leadger entry for credit markup profit
         $sale->leadgerEntries()->create([
             'account_id' =>  $cmp_un_pft_acc,
             'value' => -$inv_mark_pft,
-             'investor_id'=>$investor->id,
+            'investor_id' => $investor->id,
             'date' => $sale->sale_date
         ]);
 
@@ -184,16 +207,19 @@ class SaleController extends Controller
         $sale->leadgerEntries()->create([
             'account_id' => $cmp_cash_acc,
             'value' => $trade_discount,
-             'investor_id'=>$investor->id,
+            'investor_id' => $investor->id,
             'date' => $sale->sale_date
         ]);
+
         // leadger entry for credit trade discount profit
         $sale->leadgerEntries()->create([
             'account_id' => $cmp_td_pft_acc,
             'value' => -$trade_discount,
-             'investor_id'=>$investor->id,
+            'investor_id' => $investor->id,
             'date' => $sale->sale_date
         ]);
+
+
 
         //  printing invoice
         $sale_detail = null;
@@ -228,17 +254,17 @@ class SaleController extends Controller
         $sale->customer_id = 1;
         $sale->item_id = 2;
         $sale->store_id = 1;
-        $sale->investor_id =1;
-        if ( 0) {
+        $sale->investor_id = 1;
+        if (0) {
             $payment_type = "Cash";
-            $sale->total =12000;
+            $sale->total = 12000;
         } else {
             $payment_type = "Instalments";
-            $sale->total =14400;
+            $sale->total = 14400;
         }
 
         $sale->sale_date = date('m/d/Y');
-       
+
         $sale_detail = null;
         $data = [
             'title' => 'Welcome to ItSolutionStuff.com',
@@ -246,9 +272,9 @@ class SaleController extends Controller
             'sale' => $sale,
             'sale_detail' => $sale_detail,
             'payment_type' => $payment_type,
-            'selling_price' =>12000,
-            'markup' =>20,
-            'plan' =>6
+            'selling_price' => 12000,
+            'markup' => 20,
+            'plan' => 6
 
         ];
         $pdf = PDF::loadView('sale.sale_invoice_pdf', $data);

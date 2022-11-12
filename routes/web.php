@@ -12,7 +12,7 @@ use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\SaleController;
 use App\Http\Controllers\PayableController;
 use App\Http\Controllers\SupplierController;
-
+use App\Http\Controllers\CommissionController;
 
 
 
@@ -64,6 +64,7 @@ Route::get('/test-pdf' , [\App\Http\Controllers\SaleController::class,'testPdf']
 Route::get('/get-invoices' , [\App\Http\Controllers\SaleController::class,'getInvoices'])->name('get-invoices');
 Route::get('/get-recovery-off' , [\App\Http\Controllers\Controller::class,'getRecoveryOff'])->name('get-recovery-off');
 Route::get('/get-marketing-off' , [\App\Http\Controllers\Controller::class,'getMarketingOff'])->name('get-marketing-off');
+Route::get('/get-commissions' , [\App\Http\Controllers\CommissionController::class,'getCommisions'])->name('get-commissions');
 
 
 
@@ -79,6 +80,8 @@ Route::resource('purchase', PurchaseController::class);
 Route::resource('sale', SaleController::class);
 Route::resource('payable',PayableController::class);
 Route::resource('supplier',SupplierController::class);
+Route::resource('commission', CommissionController::class);
+
 
 
 

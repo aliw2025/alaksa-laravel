@@ -13,13 +13,19 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('commisions', function (Blueprint $table) {
+        Schema::create('commissions', function (Blueprint $table) {
+
             $table->id();
-            $table->string('transaction_type');
-            $table->unsignedBigInteger('transaction_id');
-            $table->unsignedBigInteger('mar_of_id');
+            $table->unsignedBigInteger('commission_type');
+            $table->morphs('transaction');
+            $table->unsignedBigInteger('user_id');
             $table->double('amount');
+            $table->boolean('status');
+            $table->date('earned_date')->nullable();
+            $table->date('payment_date')->nullable();
             $table->timestamps();
+
+
         });
     }
 
@@ -30,6 +36,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('commisions');
+        Schema::dropIfExists('commissions');
     }
 };

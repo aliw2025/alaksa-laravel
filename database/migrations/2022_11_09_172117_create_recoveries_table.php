@@ -16,7 +16,8 @@ return new class extends Migration
         Schema::create('recoveries', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('sale_id');
-            $table->unsignedBigInteger('rec_of_id');
+            $table->unsignedBigInteger('rec_id');
+            $table->unsignedBigInteger('user_id');
             $table->double('amount');
             $table->timestamps();
         });
