@@ -32,7 +32,7 @@ class Sale extends Model
      }
 
      public function marketingOfficer(){
-        return $this->belongsTo(User::class,'mars_of_id');
+        return $this->belongsTo(User::class,'mar_of_id');
      }
 
     public function leadgerEntries(){

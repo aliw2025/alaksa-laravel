@@ -41,7 +41,17 @@ class SaleController extends Controller
         //
         $investors = Investor::all();
         $suppliers = Supplier::all();
-        return view('sale.sale', compact('investors', 'suppliers'));
+        $type = 1;
+        return view('sale.sale', compact('investors', 'suppliers','type'));
+    }
+
+    public function saleReturns(){
+
+        $investors = Investor::all();
+        $suppliers = Supplier::all();
+        // for purchase return
+        $type = 2;
+        return view('sale.sale', compact('investors', 'suppliers','type'));
     }
 
     /**
@@ -347,7 +357,16 @@ class SaleController extends Controller
     {
 
         $sales = Sale::where('invoice_no', 'like', '%' . $request->key . '%')->get();
-
         return $sales;
+    }
+    public function getSaleNo(Request $request){
+
+        $sale = Sale::where('invoice_no', '=',  $request->key)->with('item')->with('marketingOfficer')->with('recoveryOfficer')->with('customer')->with('investor')->get();
+        return $sale;
+    }
+
+    public function saleReturn(Request $request){
+
+        return view('sale.sale_ret_temp');
     }
 }

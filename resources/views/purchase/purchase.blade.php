@@ -50,7 +50,7 @@
                                                         @if (isset($purchase)) disabled
                                                         value="{{ $purchase->purchase_no }}" @endif
                                                         name="purchaseId" type="text"
-                                                        class="form-control invoice-edit-input" placeholder="">
+                                                        class="form-control invoice-edit-input" placeholder="" disabled>
                                                 </div>
                                             </div>
 

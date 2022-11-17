@@ -19,62 +19,81 @@
                                             <p class="card-text mb-25">Office 149,Mustafa plaza</p>
                                             <p class="card-text mb-25">Ring Road Peshawar, PK</p>
                                             <p class="card-text mb-0">+1 (123) 456 7891, +44 (876) 543 2198</p>
-                                           
+
                                             <div class="mt-2 d-flex align-items-center justify-content-between">
                                                 <span class="title me-1">Marketing Officer: </span>
-                                                <div style="width: 11.21rem; max-width:11.21rem;"
-                                                    class="align-items-center">
-                                                    <input name="mar_of_id"  id="mar_of_id"s
-                                                    class="form-control" placeholder="Name" type="hidden">
-                                                    <input name="mar_of_name" onkeyup="getMUserByName()"
-                                                        id="mar_of_name" class="form-control" placeholder="Name"
-                                                        type="text">
-                                                    <div class="list-type" id="mar_list"
-                                                        style="position: absolute; z-index: 1;" class="card mb-4">
-                                                        <div id="mar_list_body" class="list-group">
+                                                @if ($type == 1)
+                                                    <div style="width: 11.21rem; max-width:11.21rem;"
+                                                        class="align-items-center">
+                                                        <input name="mar_of_id" id="mar_of_id"s class="form-control"
+                                                            placeholder="Name" type="hidden">
+                                                        <input name="mar_of_name" onkeyup="getMUserByName()"
+                                                            id="mar_of_name" class="form-control" placeholder="Name"
+                                                            type="text">
+                                                        <div class="list-type" id="mar_list"
+                                                            style="position: absolute; z-index: 1;" class="card mb-4">
+                                                            <div id="mar_list_body" class="list-group">
 
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
+                                                @else
+                                                    <input id="mar_of_name" name="purchase_date" type="text"
+                                                        class="form-control invoice-edit-input" readonly="readonly">
+                                                @endif
+
                                             </div>
                                             <div class="mt-1 d-flex align-items-center justify-content-between">
                                                 <span class="title">Recovery Officer: </span>
-                                                <div style="width: 11.21rem; max-width:11.21rem;"
-                                                    class="align-items-center">
-                                                    <input name="rec_of_id"  id="rec_of_id"s
-                                                    class="form-control" placeholder="Name" type="hidden">
-                                                    <input name="rec_of_name" onkeyup="getRUserByName()" id="rec_of_name"s
-                                                        class="form-control" placeholder="Name" type="text">
-                                                    <div class="list-type" id="rec_list"
-                                                        style="position: absolute; z-index: 1;" class="card mb-4">
-                                                        <div id="rec_list_body" class="list-group">
+                                                @if ($type == 1)
+                                                    <div style="width: 11.21rem; max-width:11.21rem;"
+                                                        class="align-items-center">
+                                                        <input name="rec_of_id" id="rec_of_id"s class="form-control"
+                                                            placeholder="Name" type="hidden">
+                                                        <input name="rec_of_name" onkeyup="getRUserByName()"
+                                                            id="rec_of_name" class="form-control" placeholder="Name"
+                                                            type="text">
+                                                        <div class="list-type" id="rec_list"
+                                                            style="position: absolute; z-index: 1;" class="card mb-4">
+                                                            <div id="rec_list_body" class="list-group">
 
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
+                                                @else
+                                                    <input  id="rec_of_name" name="purchase_date" type="text"
+                                                        class="form-control invoice-edit-input" readonly="readonly">
+                                                @endif
+
                                             </div>
-                                            
+
                                             <div class="d-flex align-items-center justify-content-between mt-1">
                                                 <span class="title">Sale Type:</span>
-                                                <div style="width: 11.21rem; max-width:11.21rem; "
-                                                    class="align-items-center">
-                                                    <select id="sale_type" name="sale_type" class="form-select"
-                                                        aria-label="Default select example">
+                                                @if ($type == 1)
+                                                    <div style="width: 11.21rem; max-width:11.21rem; "
+                                                        class="align-items-center">
+                                                        <select id="sale_type" name="sale_type" class="form-select"
+                                                            aria-label="Default select example">
 
-                                                        <option value="1">Instalments</option>
-                                                        <option value="2">Cash</option>
+                                                            <option value="1">Instalments</option>
+                                                            <option value="2">Cash</option>
 
-                                                    </select>
-                                                </div>
+                                                        </select>
+                                                    </div>
+                                                @else
+                                                    <input name="purchase_date" type="text"
+                                                        class="form-control invoice-edit-input" readonly="readonly">
+                                                @endif
+
 
                                             </div>
                                         </div>
                                         <div class="invoice-number-date mt-md-0 mt-2">
                                             <div class="d-flex align-items-center justify-content-between mb-1">
                                                 @csrf
-                                                <h4 class="invoice-title">Sale</h4>
+                                                <h4 class="invoice-title"> {{ $type == 1 ? 'sale#' : 'Search sale' }}</h4>
                                                 <div class="input-group input-group-merge invoice-edit-input-group">
-                                                    <div class="input-group-text">
+                                                    {{-- <div class="input-group-text">
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="14"
                                                             height="14" viewBox="0 0 24 24" fill="none"
                                                             stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -92,58 +111,86 @@
                                                                 y2="21">
                                                             </line>
                                                         </svg>
-                                                    </div>
-                                                    <input name="purchaseId" type="text"
+                                                    </div> --}}
+                                                    <input id="search_inv" @if ($type == 1) disabled @endif
+                                                        name="purchaseId" type="text"
                                                         class="form-control invoice-edit-input" placeholder="">
                                                 </div>
                                             </div>
 
                                             <div class="d-flex align-items-center justify-content-between mb-1">
                                                 <span class="title">Date:</span>
-                                                <input name="sale_date" type="text"
+                                                @if ($type == 1)
+                                                    <input name="sale_date" type="text"
+                                                        class="form-control invoice-edit-input date-picker flatpickr-input"
+                                                        readonly="readonly">
+                                                @else
+                                                    <input id = "sale_date" name="purchase_date" type="text"
+                                                        class="form-control invoice-edit-input" readonly="readonly">
+                                                @endif
+                                                {{-- <input name="sale_date" type="text"
                                                     class="form-control invoice-edit-input date-picker flatpickr-input"
-                                                    readonly="readonly">
+                                                    readonly="readonly"> --}}
                                             </div>
                                             <div class="d-flex align-items-center justify-content-between">
                                                 <span class="title">Investor:</span>
                                                 <div style="width: 11.21rem; max-width:11.21rem; "
                                                     class="align-items-center">
+                                                    @if ($type == 1)
+                                                        <select name="investor_id"
+                                                            class=" select2 select2-hidden-accessible form-control invoice-edit-input"
+                                                            id="select2-basic" datas-select2-id="select2-basic"
+                                                            tabindex="-1" aria-hidden="true">
 
-                                                    <select name="investor_id"
-                                                        class=" select2 select2-hidden-accessible form-control invoice-edit-input"
-                                                        id="select2-basic" datas-select2-id="select2-basic"
-                                                        tabindex="-1" aria-hidden="true">
+                                                            @foreach ($investors as $investor)
+                                                                <option value="{{ $investor->id }}">
+                                                                    {{ $investor->investor_name }}
+                                                                </option>
+                                                            @endforeach
 
-                                                        @foreach ($investors as $investor)
-                                                            <option value="{{ $investor->id }}">
-                                                                {{ $investor->investor_name }}
-                                                            </option>
-                                                        @endforeach
-                                                    </select>
+                                                        </select>
+                                                    @else
+                                                        <input id="investor_name" name="purchase_date" type="text"
+                                                            class="form-control invoice-edit-input" readonly="readonly">
+                                                    @endif
+
+
                                                 </div>
                                             </div>
                                             <div class=" mt-1 d-flex align-items-center justify-content-between">
                                                 <span class="title">Customer ID:</span>
                                                 <div style="width: 11.21rem; max-width:11.21rem; "
                                                     class="align-items-center">
-                                                    <input name="customer_id" onkeyup="getCustomerById()"
-                                                        id="customer_id" class="form-control" placeholder="ID"
-                                                        type="text">
+                                                    @if ($type == 1)
+                                                        <input name="customer_id" onkeyup="getCustomerById()"
+                                                            id="customer_id" class="form-control" placeholder="ID"
+                                                            type="text">
+                                                    @else
+                                                        <input id="customer_id" name="purchase_date" type="text"
+                                                            class="form-control invoice-edit-input" readonly="readonly">
+                                                    @endif
+
                                                 </div>
                                             </div>
                                             <div class="mt-1 d-flex align-items-center justify-content-between">
                                                 <span class="title">Customer Name:</span>
-                                                <div style="width: 11.21rem; max-width:11.21rem; "
-                                                    class="align-items-center">
-                                                    <input name="customer_name" onkeyup="getByName()" id="customer_name"
-                                                        class="form-control" placeholder="Customer Name" type="text">
-                                                    <div class="list-type" id="customer_list"
-                                                        style="position: absolute; z-index: 1;" class="card mb-4">
-                                                        <div id="customer_list_body" class="list-group">
+                                                @if ($type == 1)
+                                                    <div style="width: 11.21rem; max-width:11.21rem; "
+                                                        class="align-items-center">
+                                                        <input name="customer_name" onkeyup="getByName()"
+                                                            id="customer_name" class="form-control"
+                                                            placeholder="Customer Name" type="text">
+                                                        <div class="list-type" id="customer_list"
+                                                            style="position: absolute; z-index: 1;" class="card mb-4">
+                                                            <div id="customer_list_body" class="list-group">
 
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
+                                                @else
+                                                    <input id="customer_name" name="purchase_date" type="text"
+                                                        class="form-control invoice-edit-input" readonly="readonly">
+                                                @endif
                                             </div>
                                         </div>
                                     </div>
@@ -154,134 +201,168 @@
                                 <!-- Product Details starts -->
                                 <div class="card-body invoice-padding invoice-product-details">
                                     <form class="source-item">
-                                        <div data-repeater-list="group-a">
-                                            <div class="repeater-wrapper" data-repeater-item="">
-                                                <div class="row">
+                                        @if ($type == 1)
+                                            )
+                                            <div data-repeater-list="group-a">
+                                                <div class="repeater-wrapper" data-repeater-item="">
+                                                    <div class="row">
 
-                                                    <div class="col-12  product-details-border position-relative pe-0">
-                                                        <div class="row py-2">
-                                                            <div class="col-1 my-lg-0 my-2">
-                                                                <p class="card-text col-title mb-md-2 mb-0">id</p>
-                                                                <input name="item_id" id="item_id" type="number"
-                                                                    class="form-control" value="" placeholder="id">
+                                                        <div class="col-12  product-details-border position-relative pe-0">
+                                                            <div class="row py-2">
+                                                                <div class="col-1 my-lg-0 my-2">
+                                                                    <p class="card-text col-title mb-md-2 mb-0">id</p>
+                                                                    <input name="item_id" id="item_id" type="number"
+                                                                        class="form-control" value=""
+                                                                        placeholder="id">
+                                                                </div>
+                                                                <div class="col-3 my-lg-0 my-2">
+                                                                    <p class="card-text col-title mb-md-2 mb-0">Item Name
+                                                                    </p>
+                                                                    <input onkeyup="getItems()" id="item_name"
+                                                                        name="item_name" type="text"
+                                                                        class="form-control" placeholder="Item Name">
+                                                                    <div class="list-type" id="list"
+                                                                        style="position: absolute; z-index: 1;"
+                                                                        class="card mb-4">
+                                                                        <div id="listBody" class="list-group">
+
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-2 my-lg-0 my-2">
+                                                                    <p class="card-text col-title mb-md-2 mb-0">Selling
+                                                                        Price
+                                                                    </p>
+                                                                    <input name="selling_price"
+                                                                        onkeyup="calculateInstallments()"
+                                                                        id="selling_price" type="number"
+                                                                        class="form-control" value=""
+                                                                        placeholder="Selling Price">
+                                                                </div>
+
+                                                                <div id="plan_div" class="col-2 my-lg-0 my-2">
+                                                                    <p class="card-text col-title mb-md-2 mb-0">Plan
+                                                                        (Months)
+                                                                    </p>
+                                                                    <input name="plan"
+                                                                        onkeyup="calculateInstallments()" id="plan"
+                                                                        type="number" class="form-control"
+                                                                        value="" placeholder="Months">
+                                                                </div>
+
+                                                                <div id="markup_div" class="col-2 my-lg-0 my-2">
+                                                                    <p class="card-text col-title mb-md-2 mb-0">MarkUp</p>
+                                                                    <input name="mark_up"
+                                                                        onkeyup="calculateInstallments()" id="markup"
+                                                                        type="number" class="form-control"
+                                                                        value="" placeholder="%">
+                                                                </div>
+                                                                <div id="discount_div" class="col-2 my-lg-0 my-2">
+                                                                    <p class="card-text col-title mb-md-2 mb-0">Trade
+                                                                        Discount
+                                                                    </p>
+                                                                    <input name="trade_discount" id="trade_discount"
+                                                                        type="number" class="form-control"
+                                                                        value="" placeholder="Discount">
+                                                                </div>
+                                                            </div><s></s>
+
+                                                        </div>
+                                                    </div>
+                                                    <div id="instalment_sec">
+                                                        <div class="row mt-1">
+                                                            <div class="col-lg-5 col-12 mt-lg-0 mt-2">
+                                                                <div class="row d-flex align-items-center">
+                                                                    <div class="col-6  mt-1">
+                                                                        <p>Total Sum :</p>
+                                                                    </div>
+                                                                    <div class="col-6">
+                                                                        <input id="total_sum"
+                                                                            style=" border: none;background-color: transparent;resize: none;outline: none;"
+                                                                            name="total_sum" class="form-control"
+                                                                            value="0 PKR">
+                                                                        {{-- <p id="total_sum_label"> 0</p> --}}
+                                                                    </div>
+                                                                </div>
                                                             </div>
-                                                            <div class="col-3 my-lg-0 my-2">
-                                                                <p class="card-text col-title mb-md-2 mb-0">Item Name</p>
-                                                                <input onkeyup="getItems()" id="item_name"
-                                                                    name="item_name" type="text" class="form-control"
-                                                                    placeholder="Item Name">
-                                                                <div class="list-type" id="list"
-                                                                    style="position: absolute; z-index: 1;"
-                                                                    class="card mb-4">
-                                                                    <div id="listBody" class="list-group">
+                                                        </div>
+                                                        {{-- type="hidden"
+                                                    type="hidden"
+                                                    type="hidden" --}}
+                                                        <div class="row ">
+                                                            <div class="col-lg-5 col-12 mt-lg-0 mt-2">
+                                                                <div class="row d-flex align-items-center">
+                                                                    <div class="col-6  mt-1">
+                                                                        <p>Down Payment :</p>
+                                                                    </div>
+                                                                    <div class="col-6">
+                                                                        <input id="down_payment"
+                                                                            style=" border: none;background-color: transparent;resize: none;outline: none;"
+                                                                            name="down_payment" class="form-control"
+                                                                            value="0 PKR">
+                                                                        {{-- <p id="down_payment_label"> 0</p> --}}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-lg-5 col-12 mt-lg-0 mt-2">
+                                                                <div class="row d-flex align-items-center ">
+                                                                    <div class="col-6 mt-1">
+                                                                        <p>instalments :</p>
+                                                                    </div>
+                                                                    <div class="col-6">
+                                                                        <input id="instalments"
+                                                                            style=" border: none;background-color: transparent;resize: none;outline: none;"
+                                                                            name="instalments" class="form-control"
+                                                                            value="0 PKR">
+                                                                        {{-- <p id="instalments_label"> 0</p> --}}
 
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <div class="col-2 my-lg-0 my-2">
-                                                                <p class="card-text col-title mb-md-2 mb-0">Selling Price
-                                                                </p>
-                                                                <input name="selling_price"
-                                                                    onkeyup="calculateInstallments()" id="selling_price"
-                                                                    type="number" class="form-control" value=""
-                                                                    placeholder="Selling Price">
-                                                            </div>
+                                                        </div>
+                                                        <div class="row">
 
-                                                            <div id="plan_div" class="col-2 my-lg-0 my-2">
-                                                                <p class="card-text col-title mb-md-2 mb-0">Plan (Months)
-                                                                </p>
-                                                                <input name="plan" onkeyup="calculateInstallments()"
-                                                                    id="plan" type="number" class="form-control"
-                                                                    value="" placeholder="Months">
+                                                            <div class="col-lg-5 col-12 mt-lg-0 mt-2">
+                                                                <div class="row d-flex align-items-center">
+                                                                    <div class="col-6 mt-1">
+                                                                        <p>instalments per Month :</p>
+                                                                    </div>
+                                                                    <div class="col-6  ">
+                                                                        <input id="per_month"
+                                                                            style=" border: none;background-color: transparent;resize: none;outline: none;"
+                                                                            name="instalment_per_month"
+                                                                            class="form-control" value="0 PKR">
+                                                                        {{-- <p id="per_month_label"> 0</p> --}}
+                                                                    </div>
+                                                                </div>
                                                             </div>
-
-                                                            <div id="markup_div" class="col-2 my-lg-0 my-2">
-                                                                <p class="card-text col-title mb-md-2 mb-0">MarkUp</p>
-                                                                <input name="mark_up" onkeyup="calculateInstallments()"
-                                                                    id="markup" type="number" class="form-control"
-                                                                    value="" placeholder="%">
-                                                            </div>
-                                                            <div id="discount_div" class="col-2 my-lg-0 my-2">
-                                                                <p class="card-text col-title mb-md-2 mb-0">Trade Discount
-                                                                </p>
-                                                                <input name="trade_discount" id="trade_discount"
-                                                                    type="number" class="form-control" value=""
-                                                                    placeholder="Discount">
-                                                            </div>
-                                                        </div><s></s>
-
+                                                        </div>
                                                     </div>
+
                                                 </div>
-                                                <div id="instalment_sec">
-                                                    <div class="row mt-1">
-                                                        <div class="col-lg-5 col-12 mt-lg-0 mt-2">
-                                                            <div class="row ">
-                                                                <div class="col-6">
-                                                                    <p>Total Sum :</p>
-                                                                </div>
-                                                                <div class="col-6">
-                                                                    <input type="hidden" id="total_sum"
-                                                                        style=" border: none;background-color: transparent;resize: none;outline: none;"
-                                                                        name="total_sum" class="form-control">
-                                                                    <p id="total_sum_label"> 0</p>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row ">
-                                                        <div class="col-lg-5 col-12 mt-lg-0 mt-2">
-                                                            <div class="row ">
-                                                                <div class="col-6">
-                                                                    <p>Down Payment :</p>
-                                                                </div>
-                                                                <div class="col-6">
-                                                                    <input type="hidden" id="down_payment"
-                                                                        style=" border: none;background-color: transparent;resize: none;outline: none;"
-                                                                        name="down_payment" class="form-control"
-                                                                        value="0 PKR">
-                                                                    <p id="down_payment_label"> 0</p>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-lg-5 col-12 mt-lg-0 mt-2">
-                                                            <div class="row ">
-                                                                <div class="col-6">
-                                                                    <p>instalments :</p>
-                                                                </div>
-                                                                <div class="col-6">
-                                                                    <input type="hidden" id="instalments"
-                                                                        style=" border: none;background-color: transparent;resize: none;outline: none;"
-                                                                        name="instalments" class="form-control"
-                                                                        value="0 PKR">
-                                                                    <p id="instalments_label"> 0</p>
-
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-
-                                                        <div class="col-lg-5 col-12 mt-lg-0 mt-2">
-                                                            <div class="row ">
-                                                                <div class="col-6">
-                                                                    <p>instalments per Month :</p>
-                                                                </div>
-                                                                <div class="col-6">
-                                                                    <input type="hidden" id="per_month"
-                                                                        style=" border: none;background-color: transparent;resize: none;outline: none;"
-                                                                        name="instalment_per_month" class="form-control"
-                                                                        value="0 PKR">
-                                                                    <p id="per_month_label"> 0</p>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
                                             </div>
-                                        </div>
+                                        @else
+                                            <table id="investor-table" class="table">
+                                                <thead class="thead-dark">
+                                                    <tr style="background-color:red !important;">
+                                                        <th style="width: 2px !important">#</th>
+                                                        <th scope="col">id</th>
+                                                        <th scope="col">Item Name</th>
+                                                        <th scope="col">Selling Price</th>
+                                                        <th scope="col">Plan</th>
+                                                        <th scope="col">Marup</th>
+
+                                                    </tr>
+                                                </thead>
+                                                <tbody class="sale_body" id="sale_body">
+
+
+
+                                                </tbody>
+                                            </table>
+                                        @endif
 
                                     </form>
                                 </div>
@@ -421,6 +502,62 @@
 
 
         }
+        $("#search_inv").keypress(function(e) {
+            console.log('dfdfdfdfdfdfd');
+
+
+            if (e.which == 13) {
+                event.preventDefault();
+                var inv = $('#search_inv').val();
+
+                $.ajax({
+                    url: "{{ url('get-sale-no') }}/",
+                    type: "GET",
+                    data: {
+                        key: inv,
+                    },
+                    success: function(dataResult) {
+                        $("#rec_of_name").val("");
+                            $("#mar_of_name").val("");
+                            $("#customer_name").val("");
+                            $("#customer_id").val("");
+                            $("#investor_name").val("");
+                            $("#sale_date").val("");
+                        $("#sale_body").empty();
+                        console.log('recv');
+                        console.log(dataResult);
+                        if(dataResult.length==0){
+                            alert('serch result not found')
+                        }
+                        var i;
+                        for (i = 0; i < dataResult.length; i++) {
+                            var item = dataResult[i];
+                            console.log(item);
+                            markup = `<tr> 
+                            <td>1</td>
+                            <td>` + item.item.id + `</td>
+                             <td>` + item.item.name + `</td>
+                             <td>` + item.total+`</td>
+                             <td> <a href={{ route('sale.create') }}>return</a></td>
+                            </tr>`;
+                            $("#sale_body").append(markup);
+                            $("#rec_of_name").val(item.recovery_officer.name);
+                            $("#mar_of_name").val(item.marketing_officer.name);
+                            $("#customer_name").val(item.customer.customer_name);
+                            $("#customer_id").val(item.customer.id);
+                            $("#investor_name").val(item.investor.investor_name);
+                            $("#sale_date").val(item.sale_date);
+
+
+                        }
+                    },
+                    error: function(xhr, status, error) {},
+                });
+                $("#rec_list").show();
+
+                console.log(inv);
+            }
+        });
 
 
         function getMUserByName() {
@@ -450,8 +587,7 @@
                         $("#mar_list_body").append(markup);
                     }
                 },
-                error: function(xhr, status, error) {
-                },
+                error: function(xhr, status, error) {},
             });
             $("#mar_list").show();
         }
@@ -486,21 +622,21 @@
                         $("#rec_list_body").append(markup);
                     }
                 },
-                error: function(xhr, status, error) {
-                },
+                error: function(xhr, status, error) {},
             });
             $("#rec_list").show();
         }
 
 
-        function setMarUser(user){
+        function setMarUser(user) {
             console.log('fuck pic');
             $("#mar_of_name").val($('#marItem' + user).text());
             $("#mar_of_id").val(user);
             $("#mar_list").hide();
 
         }
-        function setRecUser(user){
+
+        function setRecUser(user) {
             $("#rec_of_name").val($('#recItem' + user).text());
             $("#rec_of_id").val(user);
             $("#rec_list").hide();
@@ -561,6 +697,7 @@
         });
 
         function calculateInstallments() {
+
             console.log('ddfdfdf');
             var sellingPrice = $('#selling_price').val();
             var plan = $('#plan').val();
@@ -569,7 +706,7 @@
             var perMonth = finalPrice / plan;
             var len = parseInt(perMonth).toString().length;
             var factor = Math.pow(10, len - 1);
-            var normValue = Math.round(perMonth / 500) * 500;
+            var normValue = Math.floor(perMonth / 500) * 500;
             var normTotal = normValue * plan;
             var downPayment = finalPrice - normTotal;
 
