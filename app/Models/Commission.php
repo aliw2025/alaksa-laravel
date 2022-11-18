@@ -23,8 +23,8 @@ class Commission extends Model
             // dd('null');
             return $query->whereBetween('earned_date',[$from_date,$to_date])->where('commission_type',$commission);
        }else{
-            // dd('not null');
-            return $query->whereBetween('earned_date',[$from_date,$to_date])->where('commission_type',$commission)->where('user_id',$commission);
+            // dd($commission);
+            return $query->whereBetween('earned_date',[$from_date,$to_date])->where('commission_type',$commission)->where('user_id',$user);
        }
     }
 

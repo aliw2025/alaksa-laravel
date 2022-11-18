@@ -45,14 +45,7 @@ class SaleController extends Controller
         return view('sale.sale', compact('investors', 'suppliers','type'));
     }
 
-    public function saleReturns(){
-
-        $investors = Investor::all();
-        $suppliers = Supplier::all();
-        // for purchase return
-        $type = 2;
-        return view('sale.sale', compact('investors', 'suppliers','type'));
-    }
+   
 
     /**
      * Store a newly created resource in storage.
@@ -61,7 +54,16 @@ class SaleController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
+    {   
+       
+      
+
+        
+        $down_payment = false;
+        if($request->input('down_payment_paid')!=NULL){
+            $down_payment = true;
+        }
+        
         // finding the investor to get investor name
         $investor = Investor::find($request->investor_id);
         // creatin the sale 
@@ -80,11 +82,19 @@ class SaleController extends Controller
         $sale->mar_of_id = $request->mar_of_id;
         $sale->rec_of_id = $request->rec_of_id;
         $sale->investor_id = $request->investor_id;
+        $sale->status = 1;
+        $sale->plan = $request->plan;
+        $sale->markup = $request->markup;
+        $sale->selling_price = $request->selling_price;
+        $sale->sale_type = $request->sale_type;
+
+
 
         if ($request->sale_type == 2) {
 
             $payment_type = "Cash";
             $sale->total = $request->selling_price;
+
         } else {
 
             $payment_type = "Instalments";
@@ -100,7 +110,8 @@ class SaleController extends Controller
             $instalment = new Instalment();
             $instalment->sale_id = $sale->id;
             $instalment->amount = $request->down_payment;
-            $instalment->instalment_paid = true;
+            // if down payment is paid $down_payment is true
+            $instalment->instalment_paid = $down_payment;
             $instalment->due_date = $request->sale_date;
             $instalment->save();
 
@@ -123,7 +134,7 @@ class SaleController extends Controller
         $inventory->quantity =  $inventory->quantity - 1;
         $inventory->save();
 
-        // calculating commission for maretinggg officer
+        // calculating commission for marketing officer
         $commision = new Commission();
         $commision->commission_type = 1;
         $commision->user_id = $sale->mar_of_id;
@@ -138,11 +149,6 @@ class SaleController extends Controller
             ]
         );
        
-
-
-
-
-
         // getting investory inventory account 
         $inv_acc_id =  $investor->charOfAccounts->where('account_type', 3)->first()->id;
         //  getting investor recievable account
@@ -180,7 +186,7 @@ class SaleController extends Controller
         $inv_mark_pft = ($request->total_sum - $request->selling_price) * 0.50;
         $cmp_mark_pft =  $inv_mark_pft;
 
-        // leadger entry for debit recievable of markup
+        // leadger entry for company debit recievable of markup 
         $sale->leadgerEntries()->create([
             'account_id' =>  $inv_rcv_acc,
             'value' => $inv_mark_pft,
@@ -229,6 +235,32 @@ class SaleController extends Controller
             'date' => $sale->sale_date
         ]);
 
+        $inv_per = $request->selling_price  /$request->total_sum;
+        $markup_per = 1 - $inv_per;
+
+        $ins_mon = $request->down_payment * $inv_per;
+        $share = ($request->down_payment - $ins_mon)*0.50;
+
+        // dd($request->down_payment);
+
+        
+        //********** leadger entry for down payments *********//
+
+        //  debit cash
+        // 1 - 833 debit investor_cash
+        //  credit entry of rec of inventory
+        // 2-  833  credit recivable
+
+        //  credit rec of markup of company
+        // 3 - 83.33 credit company recivable 
+        // debit cash of markup of company
+        // 4 - 83 debit company cash
+
+        //  credit rec of markup of investor
+         // 5 - 83.33 credit inv recivable 
+        // debit cash of markup of company
+        // 6 - 83 debit inv cash
+
 
 
         //  printing invoice
@@ -248,10 +280,20 @@ class SaleController extends Controller
         return $pdf->stream('my.pdf', array('Attachment' => 0));
         // return redirect()->route('get-sales', $request->investor_id);
     }
+    // function to return sale invoice
+    public function postReturn(Request $request){
+        echo $request->sale_id;
+        $sale = Sale::find($request->sale_id);
+        // change sale status to returned
+        $sale->status = 3;
+
+
+        
+    }
 
     public function testPdf()
     {
-        //  printing invoice
+        //  printing invoices
         $sale = new Sale();
         // getting sale id for sale invoice
         $id = Sale::max('id');
@@ -322,7 +364,7 @@ class SaleController extends Controller
      */
     public function update(Request $request, Sale $sale)
     {
-        //
+        
     }
 
     /**
@@ -333,24 +375,21 @@ class SaleController extends Controller
      */
     public function destroy(Sale $sale)
     {
+
     }
 
     public function showSales($id)
     {
-        // dd('i am hit');
+       
         $investor = Investor::find($id);
         $sales = $investor->sales;
-        // return $sales;
         return view('sale.sale-list', compact('sales', 'investor'));
     }
 
     public function showInstalments(Sale $sale)
     {
-        // dd('i am hit');
-        // dd($sale);
+       
         $instalments = $sale->instalments;
-        // dd($instalments);
-        // return $sales;
         return view('sale.sale-instalments', compact('sale', 'instalments'));
     }
     public function  getInvoices(Request $request)
@@ -368,5 +407,19 @@ class SaleController extends Controller
     public function saleReturn(Request $request){
 
         return view('sale.sale_ret_temp');
+    }
+
+   
+    // function to spof get requests of post request
+    public function redirectPost(){}
+
+
+    public function saleReturns(){
+
+        $investors = Investor::all();
+        $suppliers = Supplier::all();
+        // for purchase return
+        $type = 2;
+        return view('sale.sale', compact('investors', 'suppliers','type'));
     }
 }

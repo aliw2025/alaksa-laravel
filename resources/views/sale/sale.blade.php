@@ -6,7 +6,7 @@
                 <div class="row invoice-add">
                     <!-- Invoice Add Left starts -->
                     <div class="col-xl-12 col-md-12 col-12">
-                        <form class="" method="POST" autocomplete="on" action="{{ route('sale.store') }}">
+                        <form class="" method="POST" target="_blank" autocomplete="on" action="{{ $type==1?route('sale.store'):route('post-return') }}">
                             <div class="card invoice-preview-card">
                                 <!-- Header starts -->
                                 <div class="card-body invoice-padding pb-0">
@@ -91,27 +91,15 @@
                                         <div class="invoice-number-date mt-md-0 mt-2">
                                             <div class="d-flex align-items-center justify-content-between mb-1">
                                                 @csrf
-                                                <h4 class="invoice-title"> {{ $type == 1 ? 'sale#' : 'Search sale' }}</h4>
+                                                
+                                                @if($type == 2)
+                                               
+                                                <input id="sale_id"  name="sale_id" type="hidden"
+                                                    class="form-control " placeholder="">
+                                                @endif
+                                                <h4 class="invoice-title"> {{ $type == 1 ? 'Sale #' : 'Search Sale #' }}</h4>
                                                 <div class="input-group input-group-merge invoice-edit-input-group">
-                                                    {{-- <div class="input-group-text">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="14"
-                                                            height="14" viewBox="0 0 24 24" fill="none"
-                                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                                            stroke-linejoin="round" class="feather feather-hash">
-                                                            <line x1="4" y1="9" x2="20"
-                                                                y2="9">
-                                                            </line>
-                                                            <line x1="4" y1="15" x2="20"
-                                                                y2="15">
-                                                            </line>
-                                                            <line x1="10" y1="3" x2="8"
-                                                                y2="21">
-                                                            </line>
-                                                            <line x1="16" y1="3" x2="14"
-                                                                y2="21">
-                                                            </line>
-                                                        </svg>
-                                                    </div> --}}
+                                                    
                                                     <input id="search_inv" @if ($type == 1) disabled @endif
                                                         name="purchaseId" type="text"
                                                         class="form-control invoice-edit-input" placeholder="">
@@ -128,9 +116,7 @@
                                                     <input id = "sale_date" name="purchase_date" type="text"
                                                         class="form-control invoice-edit-input" readonly="readonly">
                                                 @endif
-                                                {{-- <input name="sale_date" type="text"
-                                                    class="form-control invoice-edit-input date-picker flatpickr-input"
-                                                    readonly="readonly"> --}}
+                                               
                                             </div>
                                             <div class="d-flex align-items-center justify-content-between">
                                                 <span class="title">Investor:</span>
@@ -252,7 +238,7 @@
 
                                                                 <div id="markup_div" class="col-2 my-lg-0 my-2">
                                                                     <p class="card-text col-title mb-md-2 mb-0">MarkUp</p>
-                                                                    <input name="mark_up"
+                                                                    <input name="markup"
                                                                         onkeyup="calculateInstallments()" id="markup"
                                                                         type="number" class="form-control"
                                                                         value="" placeholder="%">
@@ -280,15 +266,13 @@
                                                                         <input id="total_sum"
                                                                             style=" border: none;background-color: transparent;resize: none;outline: none;"
                                                                             name="total_sum" class="form-control"
-                                                                            value="0 PKR">
+                                                                            value="0">
                                                                         {{-- <p id="total_sum_label"> 0</p> --}}
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        {{-- type="hidden"
-                                                    type="hidden"
-                                                    type="hidden" --}}
+                                                      
                                                         <div class="row ">
                                                             <div class="col-lg-5 col-12 mt-lg-0 mt-2">
                                                                 <div class="row d-flex align-items-center">
@@ -296,11 +280,22 @@
                                                                         <p>Down Payment :</p>
                                                                     </div>
                                                                     <div class="col-6">
-                                                                        <input id="down_payment"
+                                                                        <input  onkeyup="reAdjust()" id="down_payment"
                                                                             style=" border: none;background-color: transparent;resize: none;outline: none;"
                                                                             name="down_payment" class="form-control"
-                                                                            value="0 PKR">
+                                                                            value="0">
                                                                         {{-- <p id="down_payment_label"> 0</p> --}}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-5">
+                                                                <div class="row d-flex align-items-center">
+                                                                    <div class="col-6  mt-1">
+                                                                        <p>Down Payment Paid :</p>
+                                                                    </div>
+                                                                    <div class="col-6">
+                                                                        <input name="down_payment_paid" class="form-check-input" type="checkbox" value="1" id="flexCheckDefault">
+                                                                        
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -312,10 +307,10 @@
                                                                         <p>instalments :</p>
                                                                     </div>
                                                                     <div class="col-6">
-                                                                        <input id="instalments"
+                                                                        <input disabled id="instalments"
                                                                             style=" border: none;background-color: transparent;resize: none;outline: none;"
                                                                             name="instalments" class="form-control"
-                                                                            value="0 PKR">
+                                                                            value="0">
                                                                         {{-- <p id="instalments_label"> 0</p> --}}
 
                                                                     </div>
@@ -326,14 +321,14 @@
 
                                                             <div class="col-lg-5 col-12 mt-lg-0 mt-2">
                                                                 <div class="row d-flex align-items-center">
-                                                                    <div class="col-6 mt-1">
+                                                                    <div  class="col-6 mt-1">
                                                                         <p>instalments per Month :</p>
                                                                     </div>
                                                                     <div class="col-6  ">
-                                                                        <input id="per_month"
+                                                                        <input onkeyup="reAdjust2()"id="per_month"
                                                                             style=" border: none;background-color: transparent;resize: none;outline: none;"
                                                                             name="instalment_per_month"
-                                                                            class="form-control" value="0 PKR">
+                                                                            class="form-control" value="0">
                                                                         {{-- <p id="per_month_label"> 0</p> --}}
                                                                     </div>
                                                                 </div>
@@ -375,14 +370,11 @@
                                     <!-- Invoice Note starts -->
                                     <div class="row">
                                         <div class="col-12">
-                                            {{-- <div class="mb-2">
-                                                <label for="note" class="form-label fw-bold">Note:</label>
-                                                <textarea name="note" class="form-control" rows="2" id="note"></textarea>
-                                            </div> --}}
                                         </div>
                                     </div>
                                     <!-- Invoice Note ends -->
                                 </div>
+                                @if($type==1)
                                 <div class="row p-2">
                                     <div class="col-12">
                                         <div class="d-flex justify-content-end">
@@ -391,6 +383,17 @@
                                         </div>
                                     </div>
                                 </div>
+                                @else
+                                <div class="row p-2">
+                                    <div class="col-12">
+                                        <div class="d-flex justify-content-end">
+                                            {{-- onclick="returnSale()" --}}
+                                            <button id="retBtn" disabled  class="btn btn-primary me-2">Return</button>
+                                           
+                                        </div>
+                                    </div>
+                                </div>
+                                @endif
 
                             </div>
                         </form>
@@ -412,6 +415,7 @@
             $('#discount_div').hide();
         });
 
+
         $('#sale_type').change(function() {
             var type = $('#sale_type').val()
             console.log('sale type : ' + type);
@@ -429,7 +433,7 @@
                 $('#discount_div').hide();
 
             }
-            // console.log(this.value);
+           
 
         });
 
@@ -472,6 +476,15 @@
                 },
             });
             $("#list").show();
+
+        }
+
+        function returnSale() {
+          
+            // event.preventDefault();
+            // var id = $("#sale_id").val()
+            // console.log(id);
+
 
         }
 
@@ -523,11 +536,13 @@
                             $("#customer_id").val("");
                             $("#investor_name").val("");
                             $("#sale_date").val("");
+                            $("#sale_id").val("");
                         $("#sale_body").empty();
-                        console.log('recv');
-                        console.log(dataResult);
+                       
                         if(dataResult.length==0){
                             alert('serch result not found')
+                            $('#retBtn').prop('disabled',true);
+                            
                         }
                         var i;
                         for (i = 0; i < dataResult.length; i++) {
@@ -540,6 +555,8 @@
                              <td>` + item.total+`</td>
                              <td> <a href={{ route('sale.create') }}>return</a></td>
                             </tr>`;
+                            console.log(item.id);
+                            $("#sale_id").val(item.id);
                             $("#sale_body").append(markup);
                             $("#rec_of_name").val(item.recovery_officer.name);
                             $("#mar_of_name").val(item.marketing_officer.name);
@@ -547,11 +564,14 @@
                             $("#customer_id").val(item.customer.id);
                             $("#investor_name").val(item.investor.investor_name);
                             $("#sale_date").val(item.sale_date);
+                            $('#retBtn').prop('disabled',false);
 
 
                         }
                     },
-                    error: function(xhr, status, error) {},
+                    error: function(xhr, status, error) {
+                        $('#retBtn').prop('disabled',true);
+                    },
                 });
                 $("#rec_list").show();
 
@@ -720,14 +740,42 @@
             $('#instalments').val(plan);
             $('#per_month').val(normValue);
 
-            console.log('un normalizedd');
-            console.log(perMonth);
-            console.log('normalizedd');
-            console.log(normValue);
-            console.log('final selling price: ');
-            console.log(finalPrice);
-            console.log('down Payment: ');
-            console.log(downPayment);
+            // console.log('un normalizedd');
+            // console.log(perMonth);
+            // console.log('normalizedd');
+            // console.log(normValue);
+            // console.log('final selling price: ');
+            // console.log(finalPrice);
+            // console.log('down Payment: ');
+            // console.log(downPayment);
+        }
+        function reAdjust() {
+            console.log('re adjusting');
+            var  finalPrice =  $('#total_sum').val();
+            var  downPayment = $('#down_payment').val();
+            var plan = $('#plan').val();
+
+            var rem = finalPrice - downPayment;
+            var inst = rem/ plan;
+            $('#per_month').val(inst);
+
+
+
+        }
+        function reAdjust2() {
+            console.log('re adjusting2');
+            var perMonth = $('#per_month').val();
+            var  finalPrice =  $('#total_sum').val();
+            var  downPayment = $('#down_payment').val();
+            var plan = $('#plan').val();
+
+            var total = perMonth * plan;
+            var rem = finalPrice - total;
+
+            $('#down_payment').val(rem);
+
+
+
         }
 
         function setText(item) {

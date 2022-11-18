@@ -15,8 +15,8 @@ class CommissionController extends Controller
     
    }
    public function commissionReport(Request $request){
-        
-       
+
+        // dd($request->user_id);
         $commissions = Commission::ReportData($request->from_date,$request->to_date,$request->user_id,$request->commission_type)->get();
        
 

@@ -41,6 +41,11 @@ class Sale extends Model
     }
     public function saleCommision(){
         return $this->morphMany(Commission::class,'transaction');
-    }   
+    }
+    public function saleStatus( ){
+
+        return $this->belongsTo(SaleStatus::class,'stauts');
+    }
+   
 }
 

@@ -23,14 +23,14 @@ return new class extends Migration
             $table->unsignedBigInteger('item_id');
             $table->unsignedBigInteger('store_id');
             $table->unsignedBigInteger('investor_id');
+            $table->unsignedBigInteger('status')->nullable();
             $table->integer('plan')->nullable();
             $table->double('markup')->nullable();
             $table->double('selling_price')->nullable();
             $table->integer('sale_type')->nullable();
-            // $table->double('markup')
             $table->double('total');
             $table->date('sale_date');
-
+            
 
         });
     }

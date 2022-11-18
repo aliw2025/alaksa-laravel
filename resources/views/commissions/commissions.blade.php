@@ -10,7 +10,7 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <form class="" method="POST" autocomplete="on" action="{{ route('commission-report') }}">
+                        <form class="" target="_blank" method="POST" autocomplete="on" action="{{ route('commission-report') }}">
                             @csrf
                             <div class="row d-flex align-items-center">
                                 <div class="col-2 ">
@@ -114,8 +114,9 @@
         });
 
         function getRUserByName() {
-
+            
             var key = $('#rec_of_name').val();
+            $("#rec_of_id").val("");
             console.log(key);
             if (key.toString().length < 3) {
 
@@ -146,6 +147,7 @@
             $("#rec_list").show();
         }
         function setRecUser(user){
+
             $("#rec_of_name").val($('#recItem' + user).text());
             $("#rec_of_id").val(user);
             $("#rec_list").hide();

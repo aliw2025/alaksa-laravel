@@ -62,9 +62,7 @@
                 console.log('i am datatable');
                 $('#investor-table').DataTable();
             });
-
-
-
+            
         });
 
         function getSale(){
