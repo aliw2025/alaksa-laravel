@@ -42,10 +42,10 @@ class SaleController extends Controller
         $investors = Investor::all();
         $suppliers = Supplier::all();
         $type = 1;
-        return view('sale.sale', compact('investors', 'suppliers','type'));
+        return view('sale.sale', compact('investors', 'suppliers', 'type'));
     }
 
-   
+
 
     /**
      * Store a newly created resource in storage.
@@ -54,18 +54,36 @@ class SaleController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {   
-       
-      
+    {
 
-        
-        $down_payment = false;
-        if($request->input('down_payment_paid')!=NULL){
-            $down_payment = true;
-        }
-        
         // finding the investor to get investor name
         $investor = Investor::find($request->investor_id);
+
+        // getting investory inventory account 
+        $inv_acc_id =  $investor->charOfAccounts->where('account_type', 3)->first()->id;
+        //  getting investor recievable account
+        $inv_rcv_acc = $investor->charOfAccounts->where('account_type', 5)->first()->id;
+        // getting investor unrealized profit account
+        $inv_un_pft_acc = $investor->charOfAccounts->where('account_type', 9)->first()->id;
+        //  getting company
+        $cmp = Investor::where('investor_type', '=', 1)->first();
+        //  getting company cash account
+        $cmp_cash_acc =  $cmp->charOfAccounts->where('account_type', 1)->first()->id;
+         //  getting investor cash account
+         $inv_cash_acc =  $investor->charOfAccounts->where('account_type', 1)->first()->id;
+        //  getting company recibable account
+        $cmp_rcv_acc =  $cmp->charOfAccounts->where('account_type', 5)->first()->id;
+        //  getting company unrealized profit account
+        $cmp_un_pft_acc =  $cmp->charOfAccounts->where('account_type', 9)->first()->id;
+        // getting company trade discount profit account
+        $cmp_td_pft_acc =  $cmp->charOfAccounts->where('account_type', 10)->first()->id;
+
+
+        $down_payment = false;
+        if ($request->input('down_payment_paid') != NULL) {
+            $down_payment = true;
+        }
+
         // creatin the sale 
         $sale = new Sale();
         // getting sale id for sale invoice
@@ -94,7 +112,6 @@ class SaleController extends Controller
 
             $payment_type = "Cash";
             $sale->total = $request->selling_price;
-
         } else {
 
             $payment_type = "Instalments";
@@ -103,6 +120,14 @@ class SaleController extends Controller
 
         $sale->sale_date = $request->sale_date;
         $sale->save();
+
+        $inv_per = $request->selling_price  / $request->total_sum;
+        $markup_per = 1 - $inv_per;
+        // item price recovry
+        $ins_mon = $request->down_payment * $inv_per;
+        // each investor share in markup profit
+        $share = ($request->down_payment - $ins_mon) * 0.50;
+
 
         if ($request->sale_type == 1) {
 
@@ -113,7 +138,59 @@ class SaleController extends Controller
             // if down payment is paid $down_payment is true
             $instalment->instalment_paid = $down_payment;
             $instalment->due_date = $request->sale_date;
+            $instalment->amount_paid = $down_payment?$request->down_payment:0;
             $instalment->save();
+            if ($down_payment) {
+                
+                // debit cash of investor for inventory recovery
+                $instalment->leadgerEntries()->create([
+                    'account_id' =>  $inv_cash_acc,
+                    'value' => $ins_mon,
+                    'investor_id' => $investor->id,
+                    'date' => $sale->sale_date
+                ]);
+                //  credit recievable of inventory recovery
+                $instalment->leadgerEntries()->create([
+                    'account_id' =>  $inv_rcv_acc,
+                    'value' => -$ins_mon,
+                    'investor_id' => $investor->id,
+                    'date' => $sale->sale_date
+                ]);
+
+                 // debit company cash of markup
+                 $instalment->leadgerEntries()->create([
+                    'account_id' => $cmp_cash_acc,
+                    'value' => $share,
+                    'investor_id' => $investor->id,
+                    'date' => $sale->sale_date
+                ]);
+
+                //  credit company  recievable of markup
+                $instalment->leadgerEntries()->create([
+                    'account_id' =>  $cmp_rcv_acc,
+                    'value' => -$share,
+                    'investor_id' => $investor->id,
+                    'date' => $sale->sale_date
+                ]);
+                
+                 // debit investor cash  of markup
+                 $instalment->leadgerEntries()->create([
+                    'account_id' => $inv_cash_acc,
+                    'value' => $share,
+                    'investor_id' => $investor->id,
+                    'date' => $sale->sale_date
+                ]);
+
+                 // credit investor  recievable of markup
+                 $instalment->leadgerEntries()->create([
+                    'account_id' =>  $inv_rcv_acc,
+                    'value' => -$share,
+                    'investor_id' => $investor->id,
+                    'date' => $sale->sale_date
+                ]);
+                
+                
+            }
 
             $temp =  new Carbon($request->sale_date);
             // creatting the instalments for the sale
@@ -138,7 +215,7 @@ class SaleController extends Controller
         $commision = new Commission();
         $commision->commission_type = 1;
         $commision->user_id = $sale->mar_of_id;
-        
+
         $sale->saleCommision()->create(
             [
                 'commission_type' => 1,
@@ -148,23 +225,8 @@ class SaleController extends Controller
                 'earned_date' => $sale->sale_date
             ]
         );
-       
-        // getting investory inventory account 
-        $inv_acc_id =  $investor->charOfAccounts->where('account_type', 3)->first()->id;
-        //  getting investor recievable account
-        $inv_rcv_acc = $investor->charOfAccounts->where('account_type', 5)->first()->id;
-        // getting investor unrealized profit account
-        $inv_un_pft_acc = $investor->charOfAccounts->where('account_type', 9)->first()->id;
-        //  getting company
-        $cmp = Investor::where('investor_type', '=', 1)->first();
-        //  getting company cash account
-        $cmp_cash_acc =  $cmp->charOfAccounts->where('account_type', 1)->first()->id;
-        //  getting company recibable account
-        $cmp_rcv_acc =  $cmp->charOfAccounts->where('account_type', 5)->first()->id;
-        //  getting company unrealized profit account
-        $cmp_un_pft_acc =  $cmp->charOfAccounts->where('account_type', 9)->first()->id;
-        // getting company trade discount profit account
-        $cmp_td_pft_acc =  $cmp->charOfAccounts->where('account_type', 10)->first()->id;
+
+
 
         // leadger entry for credit inventory
         $sale->leadgerEntries()->create([
@@ -235,34 +297,6 @@ class SaleController extends Controller
             'date' => $sale->sale_date
         ]);
 
-        $inv_per = $request->selling_price  /$request->total_sum;
-        $markup_per = 1 - $inv_per;
-
-        $ins_mon = $request->down_payment * $inv_per;
-        $share = ($request->down_payment - $ins_mon)*0.50;
-
-        // dd($request->down_payment);
-
-        
-        //********** leadger entry for down payments *********//
-
-        //  debit cash
-        // 1 - 833 debit investor_cash
-        //  credit entry of rec of inventory
-        // 2-  833  credit recivable
-
-        //  credit rec of markup of company
-        // 3 - 83.33 credit company recivable 
-        // debit cash of markup of company
-        // 4 - 83 debit company cash
-
-        //  credit rec of markup of investor
-         // 5 - 83.33 credit inv recivable 
-        // debit cash of markup of company
-        // 6 - 83 debit inv cash
-
-
-
         //  printing invoice
         $sale_detail = null;
         $data = [
@@ -281,14 +315,138 @@ class SaleController extends Controller
         // return redirect()->route('get-sales', $request->investor_id);
     }
     // function to return sale invoice
-    public function postReturn(Request $request){
-        echo $request->sale_id;
+    public function postReturn(Request $request)
+    {
+
+        echo $request->sale_id."<br>";
         $sale = Sale::find($request->sale_id);
-        // change sale status to returned
-        $sale->status = 3;
+        // finding the investor to get investor name
+        $investor = Investor::find($sale->investor_id);
+        // getting investory inventory account 
+        $inv_acc_id =  $investor->charOfAccounts->where('account_type', 3)->first()->id;
+        //  getting investor recievable account
+        $inv_rcv_acc = $investor->charOfAccounts->where('account_type', 5)->first()->id;
+        // getting investor unrealized profit account
+        $inv_un_pft_acc = $investor->charOfAccounts->where('account_type', 9)->first()->id;
+        //  getting company
+        $cmp = Investor::where('investor_type', '=', 1)->first();
+        //  getting company cash account
+        $cmp_cash_acc =  $cmp->charOfAccounts->where('account_type', 1)->first()->id;
+         //  getting investor cash account
+         $inv_cash_acc =  $investor->charOfAccounts->where('account_type', 1)->first()->id;
+        //  getting company recibable account
+        $cmp_rcv_acc =  $cmp->charOfAccounts->where('account_type', 5)->first()->id;
+        //  getting company unrealized profit account
+        $cmp_un_pft_acc =  $cmp->charOfAccounts->where('account_type', 9)->first()->id;
+        // getting company trade discount profit account
+        $cmp_td_pft_acc =  $cmp->charOfAccounts->where('account_type', 10)->first()->id;
+        if($sale->status==2){
+            return "already Returned";
+        }
+
+        $instalment = $sale->instalments->first();
+        $sale->status = 2;
+        echo $instalment->amount;
+
+        $inv_per = $sale->selling_price  / $sale->total;
+        $markup_per = 1 - $inv_per;
+        // item price recovry
+        $ins_mon = $instalment->amount * $inv_per;
+        // each investor share in markup profit
+        $share = ($instalment->amount - $ins_mon) * 0.50;
+
+        // inventroy
+
+        // leadger entry for debit inventory
+        $sale->leadgerEntries()->create([
+            'account_id' =>  $inv_acc_id,
+            'value' => $sale->selling_price,
+            'investor_id' => $investor->id,
+            'date' => $sale->sale_date
+        ]);
+
+        //  leadger entry for credit recievable of inventory
+        $sale->leadgerEntries()->create([
+            'account_id' =>  $inv_rcv_acc,
+            'value' => -$sale->selling_price,
+            'investor_id' => $investor->id,
+            'date' => $sale->sale_date
+        ]);
+
+        // calculating profit share of investor and company
+        $inv_mark_pft = ($sale->total - $sale->selling_price) * 0.50;
+        $cmp_mark_pft =  $inv_mark_pft;
+
+        echo "inv_mark : ".$inv_mark_pft.'<br>';
+
+        // leadger entry for company debit recievable of markup 
+        $sale->leadgerEntries()->create([
+            'account_id' =>  $inv_rcv_acc,
+            'value' => -$inv_mark_pft,
+            'investor_id' => $investor->id,
+            'date' => $sale->sale_date
+        ]);
+        // leadger entry for credit markup profit
+        $sale->leadgerEntries()->create([
+            'account_id' =>  $inv_un_pft_acc,
+            'value' => $inv_mark_pft,
+            'investor_id' => $investor->id,
+            'date' => $sale->sale_date
+        ]);
+
+        // leadger entry for company debit recievable of markup
+        $sale->leadgerEntries()->create([
+            'account_id' =>  $cmp_rcv_acc,
+            'value' => -$inv_mark_pft,
+            'investor_id' => $investor->id,
+            'date' => $sale->sale_date
+        ]);
+        // leadger entry for credit markup profit
+        $sale->leadgerEntries()->create([
+            'account_id' =>  $cmp_un_pft_acc,
+            'value' => $inv_mark_pft,
+            'investor_id' => $investor->id,
+            'date' => $sale->sale_date
+        ]);
+
+        $item_price = $investor->inventories()->where('item_id', '=', $sale->item_id)->first()->unit_cost;
+        $trade_discount = $sale->selling_price - $item_price;
+
+        // leadger entry for company debit cash of trade profit
+        $sale->leadgerEntries()->create([
+            'account_id' => $cmp_cash_acc,
+            'value' => -$trade_discount,
+            'investor_id' => $investor->id,
+            'date' => $sale->sale_date
+        ]);
+
+        // leadger entry for credit trade discount profit
+        $sale->leadgerEntries()->create([
+            'account_id' => $cmp_td_pft_acc,
+            'value' => $trade_discount,
+            'investor_id' => $investor->id,
+            'date' => $sale->sale_date
+        ]);
+
+        // credit cash of investor for inventory recovery
+        $instalment->leadgerEntries()->create([
+            'account_id' =>  $inv_cash_acc,
+            'value' => -$ins_mon,
+            'investor_id' => $investor->id,
+            'date' => $sale->sale_date
+        ]);
+        //  debit recievable of inventory recovery
+        $instalment->leadgerEntries()->create([
+            'account_id' =>  $inv_rcv_acc,
+            'value' => $ins_mon,
+            'investor_id' => $investor->id,
+            'date' => $sale->sale_date
+        ]);
 
 
-        
+         $sale->save();
+
+
     }
 
     public function testPdf()
@@ -364,7 +522,6 @@ class SaleController extends Controller
      */
     public function update(Request $request, Sale $sale)
     {
-        
     }
 
     /**
@@ -375,22 +532,27 @@ class SaleController extends Controller
      */
     public function destroy(Sale $sale)
     {
-
     }
 
     public function showSales($id)
     {
-       
+
         $investor = Investor::find($id);
         $sales = $investor->sales;
         return view('sale.sale-list', compact('sales', 'investor'));
     }
 
-    public function showInstalments(Sale $sale)
+    public function showInstalments(Request $request)
     {
+        
+        if(isset($request->id)){
+
+            $sale = Sale::find($request->id);
+            $instalments = $sale->instalments;
+            return view('sale.sale-instalments',compact('sale','instalments'));
+        }
        
-        $instalments = $sale->instalments;
-        return view('sale.sale-instalments', compact('sale', 'instalments'));
+        return view('sale.sale-instalments');
     }
     public function  getInvoices(Request $request)
     {
@@ -398,28 +560,33 @@ class SaleController extends Controller
         $sales = Sale::where('invoice_no', 'like', '%' . $request->key . '%')->get();
         return $sales;
     }
-    public function getSaleNo(Request $request){
+    public function getSaleNo(Request $request)
+    {
 
         $sale = Sale::where('invoice_no', '=',  $request->key)->with('item')->with('marketingOfficer')->with('recoveryOfficer')->with('customer')->with('investor')->get();
         return $sale;
     }
 
-    public function saleReturn(Request $request){
+    public function saleReturn(Request $request)
+    {
 
         return view('sale.sale_ret_temp');
     }
 
-   
+
     // function to spof get requests of post request
-    public function redirectPost(){}
+    public function redirectPost()
+    {
+    }
 
 
-    public function saleReturns(){
+    public function saleReturns()
+    {
 
         $investors = Investor::all();
         $suppliers = Supplier::all();
         // for purchase return
         $type = 2;
-        return view('sale.sale', compact('investors', 'suppliers','type'));
+        return view('sale.sale', compact('investors', 'suppliers', 'type'));
     }
 }

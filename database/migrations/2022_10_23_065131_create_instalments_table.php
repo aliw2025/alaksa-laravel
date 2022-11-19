@@ -19,8 +19,8 @@ return new class extends Migration
             $table->id();
             $table->unsignedInteger('sale_id');
             $table->double('amount');
+            $table->double('amount_paid')->nullable();
             $table->boolean('instalment_paid');
-            $table->unsignedInteger('agent_id')->nullable();
             $table->date('due_date')->nullable();
             $table->timestamps();
 

@@ -552,8 +552,9 @@
                             <td>1</td>
                             <td>` + item.item.id + `</td>
                              <td>` + item.item.name + `</td>
-                             <td>` + item.total+`</td>
-                             <td> <a href={{ route('sale.create') }}>return</a></td>
+                             <td>` + item.selling_price+`</td>
+                             <td>` + item.plan+`</td>
+                             <td>` + item.markup+`</td>
                             </tr>`;
                             console.log(item.id);
                             $("#sale_id").val(item.id);

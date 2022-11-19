@@ -13,6 +13,9 @@ use App\Http\Controllers\SaleController;
 use App\Http\Controllers\PayableController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\CommissionController;
+use App\Http\Controllers\InstalmentController;
+
+
 
 
 
@@ -59,7 +62,7 @@ Route::get('/sale-return' , [\App\Http\Controllers\SaleController::class,'saleRe
 Route::get('/get-sale-no' , [\App\Http\Controllers\SaleController::class,'getSaleNo'])->name('get-sale-no');
 Route::post('/post-return' , [\App\Http\Controllers\SaleController::class,'postReturn'])->name('post-return');
 Route::get('/post-return' , [\App\Http\Controllers\SaleController::class,'redirectPost'])->name('post-return');
-Route::get('/get-sale-instalments/{sale}' , [\App\Http\Controllers\SaleController::class,'showInstalments'])->name('get-sale-instalments');
+Route::get('/get-sale-instalments' , [\App\Http\Controllers\SaleController::class,'showInstalments'])->name('get-sale-instalments');
 Route::get('/list-inventory/{id}' , [\App\Http\Controllers\InventoryController::class,'showInventory'])->name('list-inventory');
 Route::get('/get-payables/{id}' , [\App\Http\Controllers\PayableController::class,'getPayables'])->name('get-payables');
 Route::get('/get-investor-items' , [\App\Http\Controllers\InventoryController::class,'getInvestorInventory'])->name('get-investor-items');
@@ -71,6 +74,8 @@ Route::get('/get-marketing-off' , [\App\Http\Controllers\Controller::class,'getM
 Route::get('/get-commissions' , [\App\Http\Controllers\CommissionController::class,'getCommisions'])->name('get-commissions');
 Route::post('/commission-report' , [\App\Http\Controllers\CommissionController::class,'commissionReport'])->name('commission-report');
 Route::get('/commission-report' , [\App\Http\Controllers\CommissionController::class,'commissionReport'])->name('commission-report');
+Route::get('/recieve-instalment/{instalment}' , [\App\Http\Controllers\InstalmentController::class,'recieveInstalment'])->name('recieve-instalment');
+Route::get('/pay-instalment' , [\App\Http\Controllers\InstalmentController::class,'payInstalment'])->name('pay-instalment');
 
 
 
