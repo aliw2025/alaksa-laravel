@@ -215,7 +215,7 @@ class SaleController extends Controller
         $commision = new Commission();
         $commision->commission_type = 1;
         $commision->user_id = $sale->mar_of_id;
-
+        
         $sale->saleCommision()->create(
             [
                 'commission_type' => 1,
@@ -356,6 +356,9 @@ class SaleController extends Controller
         $share = ($instalment->amount - $ins_mon) * 0.50;
 
         // inventroy
+        $inventory = Inventory::where('investor_id', '=', $sale->investor_id)->where('item_id', '=', $sale->item_id)->first();
+        $inventory->quantity =  $inventory->quantity + 1;
+        $inventory->save();
 
         // leadger entry for debit inventory
         $sale->leadgerEntries()->create([

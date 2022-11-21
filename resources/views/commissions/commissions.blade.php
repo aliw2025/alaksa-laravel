@@ -19,7 +19,7 @@
                                         aria-label="Default select example">
                                         <option value="1">Sale</option>
                                         <option value="2">Recovery</option>
-                                        <option value="">All</option>
+                                        <option value="3">All</option>
                                     </select>
                                 </div>
                                 <div class="col-2">

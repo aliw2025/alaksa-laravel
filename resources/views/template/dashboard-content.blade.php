@@ -29,7 +29,7 @@
                                         </div>
                                     </div>
                                     <div class="my-auto">
-                                        <h4 class="fw-bolder mb-0">230,0000</h4>
+                                        <h4 class="fw-bolder mb-0">{{$sale}}</h4>
                                         <p class="card-text font-small-3 mb-0">Sales</p>
                                     </div>
                                 </div>
@@ -123,7 +123,7 @@
                                         </div>
                                     </div>
                                     <div class="my-auto">
-                                        <h4 class="fw-bolder mb-0">230k</h4>
+                                        <h4 class="fw-bolder mb-0">{{$asset}}</h4>
                                         <p class="card-text font-small-3 mb-0">Assets</p>
                                     </div>
                                 </div>
@@ -142,7 +142,7 @@
                                         </div>
                                     </div>
                                     <div class="my-auto">
-                                        <h4 class="fw-bolder mb-0">230k</h4>
+                                        <h4 class="fw-bolder mb-0">{{$pft}}</h4>
                                         <p class="card-text font-small-3 mb-0">Unrealized Profit</p>
                                     </div>
                                 </div>

@@ -9,6 +9,7 @@ use App\Models\Account;
 use App\Models\AccountType;
 use App\Models\GLeadger;
 use App\Models\User;
+use App\Models\Sale;
 
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
@@ -50,7 +51,7 @@ class Controller extends BaseController
             $investor_cash = $investor->charOfAccounts()->create([
                 'account_name' => $investor->prefix . '_cash',
                 'account_type' => 1,
-                'opening_balance' => 0
+                'opening_balance' => 120000
             ]);
             // 2- equipment
             $investor_eq = $investor->charOfAccounts()->create([
@@ -80,7 +81,7 @@ class Controller extends BaseController
             $investor_eqt = $investor->charOfAccounts()->create([
                 'account_name' => $investor->prefix . '_equity',
                 'account_type' => 6,
-                'opening_balance' => 0
+                'opening_balance' => -120000
             ]);
             // 7- payable
             $investor_pyb = $investor->charOfAccounts()->create([
@@ -114,14 +115,14 @@ class Controller extends BaseController
             $investor->leadgerEntries()->create([
                 'account_id' => $investor_cash->id,
                 'investor_id'=>$investor->id,
-                'value' => 0,
+                'value' => 120000,
                 'date' => $investor->created_at
             ]);
             // adding entries to leadger of opening bakance of equity
             $investor->leadgerEntries()->create([
                 'account_id' => $investor_eqt->id,
                 'investor_id'=>$investor->id,
-                'value' => 0,
+                'value' => -120000,
                 'date' => $investor->created_at
 
             ]);
@@ -247,10 +248,19 @@ class Controller extends BaseController
         $investor = Investor::find($id);
         $invCashAcc= $investor->charOfAccounts->where('account_type','=',1)->first()->id;
         $invRcvAcc= $investor->charOfAccounts->where('account_type','=',5)->first()->id;
+        $invProAcc = $investor->charOfAccounts->where('account_type','=',9)->first()->id;
+
+        $invinvAcc = $investor->charOfAccounts->where('account_type','=',3)->first()->id;
 
         $available_cash = GLeadger:: where('account_id','=',$invCashAcc)->sum('value');
         $rcv_cash = GLeadger:: where('account_id','=',$invRcvAcc)->sum('value');
-        return view("template.dashboard-content", compact('investors','investor','available_cash','rcv_cash'));
+        $pft = GLeadger:: where('account_id','=',$invProAcc)->sum('value');
+        $pft = $pft * -1;
+        $asset = GLeadger:: where('account_id','=',$invinvAcc)->sum('value');
+        $sale = Sale::where('investor_id',$id)->sum('total');
+        
+        
+        return view("template.dashboard-content", compact('investors','investor','available_cash','rcv_cash','pft','sale','asset'));
     }
     public function showInvestments()
     {
