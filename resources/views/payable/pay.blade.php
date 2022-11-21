@@ -149,11 +149,11 @@
 
                                                             <div class="col-3 my-lg-0 my-2">
                                                                 <p class="card-text col-title mb-md-2 mb-0">Amount</p>
-                                                                <input
+                                                                <input 
                                                                     @if (isset($payable)) disabled
                                                                 value="{{ $payable->amount }}" @endif
-                                                                    id="cost0" name="amount" type="number"
-                                                                    class="form-control" placeholder="">
+                                                                    id="cost0" name="amount" 
+                                                                    class="number-separator form-control" placeholder="">
                                                             </div>
                                                             <div class="col-9 my-lg-0 my-2">
 

@@ -62,9 +62,9 @@
                                                 <tr>
                                                     <td>{{ $count }}</td>
                                                     <td>{{ $pur->due_date }}</td>
-                                                    <td>{{ $pur->amount }}</td>
-                                                    <td> {{ $pur->amount_paid }}</td>
-                                                    <td> {{ $pur->amount - $pur->amount_paid }}</td>
+                                                    <td>{{ number_format($pur->amount) }}</td>
+                                                    <td> {{ number_format($pur->amount_paid )}}</td>
+                                                    <td> {{ number_format($pur->amount - $pur->amount_paid) }}</td>
 
                                                     <td>
                                                         @if ($pur->instalment_paid)
@@ -104,9 +104,9 @@
                         <div class="row">
                             <div class="col-12 d-flex justify-content-end">
                                 <div class="me-2">
-                                    <p>Total : {{ $total }}</p>
-                                    <p>Paid : {{ $paid }}</p>
-                                    <p>Remaining : {{ $total - $paid }}</p>
+                                    <p>Total : {{number_format( $total) }}</p>
+                                    <p>Paid : {{ number_format($paid )}}</p>
+                                    <p>Remaining : {{ number_format($total - $paid) }}</p>
                                 </div>
                             </div>
                         </div>

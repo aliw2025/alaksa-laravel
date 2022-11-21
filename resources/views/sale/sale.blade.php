@@ -221,8 +221,8 @@
                                                                     </p>
                                                                     <input name="selling_price"
                                                                         onkeyup="calculateInstallments()"
-                                                                        id="selling_price" type="number"
-                                                                        class="form-control" value=""
+                                                                        id="selling_price" 
+                                                                        class="number-separator form-control" value=""
                                                                         placeholder="Selling Price">
                                                                 </div>
 
@@ -263,7 +263,7 @@
                                                                         <p>Total Sum :</p>
                                                                     </div>
                                                                     <div class="col-6">
-                                                                        <input id="total_sum"
+                                                                        <input  id="total_sum"
                                                                             style=" border: none;background-color: transparent;resize: none;outline: none;"
                                                                             name="total_sum" class="form-control"
                                                                             value="0">
@@ -281,8 +281,8 @@
                                                                     </div>
                                                                     <div class="col-6">
                                                                         <input  onkeyup="reAdjust()" id="down_payment"
-                                                                            style=" border: none;background-color: transparent;resize: none;outline: none;"
-                                                                            name="down_payment" class="form-control"
+                                                                            style="border: none;background-color: transparent;resize: none;outline: none;"
+                                                                            name="down_payment" class="number-separator form-control"
                                                                             value="0">
                                                                         {{-- <p id="down_payment_label"> 0</p> --}}
                                                                     </div>
@@ -309,7 +309,7 @@
                                                                     <div class="col-6">
                                                                         <input disabled id="instalments"
                                                                             style=" border: none;background-color: transparent;resize: none;outline: none;"
-                                                                            name="instalments" class="form-control"
+                                                                            name="instalments" class=" form-control"
                                                                             value="0">
                                                                         {{-- <p id="instalments_label"> 0</p> --}}
 
@@ -325,10 +325,10 @@
                                                                         <p>instalments per Month :</p>
                                                                     </div>
                                                                     <div class="col-6  ">
-                                                                        <input onkeyup="reAdjust2()"id="per_month"
+                                                                        <input onkeyup="reAdjust2()" id="per_month"
                                                                             style=" border: none;background-color: transparent;resize: none;outline: none;"
                                                                             name="instalment_per_month"
-                                                                            class="form-control" value="0">
+                                                                            class=" number-separator form-control" value="0">
                                                                         {{-- <p id="per_month_label"> 0</p> --}}
                                                                     </div>
                                                                 </div>
@@ -721,6 +721,7 @@
 
             console.log('ddfdfdf');
             var sellingPrice = $('#selling_price').val();
+            var sellingPrice = Number(sellingPrice.replace(/[^0-9.-]+/g,""));
             var plan = $('#plan').val();
             var markup = $('#markup').val();
             var finalPrice = (parseFloat(sellingPrice) * (parseFloat(markup) / 100)) + parseFloat(sellingPrice);
@@ -731,15 +732,15 @@
             var normTotal = normValue * plan;
             var downPayment = finalPrice - normTotal;
 
-            $('#total_sum_label').text(finalPrice);
+            $('#total_sum_label').text(finalPrice.toLocaleString('en-US'));
             $('#down_payment_label').text(downPayment);
             $('#instalments_label').text(plan);
             $('#per_month_label').text(normValue);
 
-            $('#total_sum').val(finalPrice);
-            $('#down_payment').val(downPayment);
+            $('#total_sum').val(finalPrice.toLocaleString('en-US'));
+            $('#down_payment').val(downPayment.toLocaleString('en-US'));
             $('#instalments').val(plan);
-            $('#per_month').val(normValue);
+            $('#per_month').val(normValue.toLocaleString('en-US'));
 
             // console.log('un normalizedd');
             // console.log(perMonth);
@@ -753,12 +754,14 @@
         function reAdjust() {
             console.log('re adjusting');
             var  finalPrice =  $('#total_sum').val();
+            finalPrice= Number(finalPrice.replace(/[^0-9.-]+/g,""));
             var  downPayment = $('#down_payment').val();
+            downPayment =  Number(downPayment.replace(/[^0-9.-]+/g,""));
             var plan = $('#plan').val();
 
             var rem = finalPrice - downPayment;
             var inst = rem/ plan;
-            $('#per_month').val(inst);
+            $('#per_month').val(inst.toLocaleString('en-US'));
 
 
 
@@ -766,14 +769,17 @@
         function reAdjust2() {
             console.log('re adjusting2');
             var perMonth = $('#per_month').val();
+            perMonth =  Number(perMonth.replace(/[^0-9.-]+/g,""));
             var  finalPrice =  $('#total_sum').val();
+            finalPrice =  Number(finalPrice.replace(/[^0-9.-]+/g,""));
             var  downPayment = $('#down_payment').val();
+            downPayment =  Number(downPayment.replace(/[^0-9.-]+/g,""));
             var plan = $('#plan').val();
 
             var total = perMonth * plan;
             var rem = finalPrice - total;
 
-            $('#down_payment').val(rem);
+            $('#down_payment').val(rem.toLocaleString('en-US'));
 
 
 

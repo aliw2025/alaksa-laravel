@@ -37,7 +37,7 @@
                                                     <tr>
                                                         <td>{{ $count }}</td>
                                                         <td>{{ $pur->purchase_no }}</td>
-                                                        <td>{{ $pur->total }}</td>
+                                                        <td>{{ number_format($pur->total )}}</td>
                                                         <td>{{ $pur->purchase_date }}</td>
                                                         <td><a style="text-decoration: none;color:black"
                                                                 href="{{ route('purchase.show', $pur->id) }}"><i
@@ -82,7 +82,7 @@
                                                         <tr>
                                                             <td>{{ $count }}</td>
                                                             <td>{{ $pay->payment_no }}</td>
-                                                            <td>{{ $pay->amount }}</td>
+                                                            <td>{{ number_format($pay->amount) }}</td>
                                                             <td>{{ $pay->payment_date }}</td>
                                                             <td><a style="text-decoration: none;color:black"
                                                                     href="{{ route('payable.show', $pay->id) }}"><i
@@ -103,20 +103,20 @@
                                                     $paid = $sup->investor_payments($id)->sum('amount');
                                                     $rem = $total_pur+$total_ret - $paid;
                                                 @endphp
-                                                <p class="">Total Purchases : {{ $total_pur}}
+                                                <p class="">Total Purchases : {{number_format( $total_pur)}}
                                                 {{-- <p> Payment paid : {{ $sup->investor_payments($id)->sum('amount') }}</p> --}}
                                             </div>
                                             <div class="col-12 d-flex justify-content-end">
                                                 {{-- <p class="">Total Returns : {{ $sup->investor_purchases($id)->sum('total') }} --}}
-                                                <p> Total Returns : {{$total_ret *-1 }}</p>
+                                                <p> Total Returns : {{ number_format($total_ret *-1 )}}</p>
                                             </div>
                                             <div class="col-12 d-flex justify-content-end">
                                                 {{-- <p class="">Total Due payments : {{ $sup->investor_purchases($id)->sum('total') }} --}}
-                                                <p> Payment paid : {{$paid }}</p>
+                                                <p> Payment paid : {{number_format($paid) }}</p>
                                             </div>
                                             <div class="col-12 d-flex justify-content-end">
                                                 {{-- <p class="">Total Due payments : {{ $sup->investor_purchases($id)->sum('total') }} --}}
-                                                <p> Due  : {{$rem }}</p>
+                                                <p> Due  : {{number_format($rem) }}</p>
                                             </div>
                                         </div>
                                     </div>

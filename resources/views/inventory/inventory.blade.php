@@ -36,9 +36,9 @@
                                         <td>{{$item->item->category}}</td>
                                         <td>{{$item->item->make}}</td>
                                         <td>{{$item->item->model}}</td>
-                                        <td>{{$item->unit_cost}}</td>
+                                        <td>{{number_format($item->unit_cost)}}</td>
                                         <td>{{$item->quantity}}</td>
-                                        <td>{{$item->quantity * $item->unit_cost}}</td>
+                                        <td>{{number_format($item->quantity * $item->unit_cost)}}</td>
                                     </tr>
                                     @php
                                         $count = $count+1

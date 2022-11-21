@@ -102,7 +102,7 @@ class PayableController extends Controller
         $payable->investor_id = $request->investor_id;
         $payable->store_id = 1;
         $payable->supplier = $request->supplier;
-        $payable->amount = $request->amount;
+        $payable->amount = str_replace(',','',$request->amount); 
         $payable->payment_date = $request->payment_date;
         $payable->account_type = $request->acc_type;
         $payable->save();
@@ -118,14 +118,14 @@ class PayableController extends Controller
         /************** Leadger Entries **********/
         $payable->leadgerEntries()->create([
             'account_id' =>  $sup_acc_id,
-            'value' =>  $request->amount,
+            'value' =>  str_replace(',','',$request->amount),
             'investor_id'=>$investor->id,
             'date' => $request->payment_date
         ]);
 
         $payable->leadgerEntries()->create([
             'account_id' => $inv_acc_id,
-            'value' => -$request->amount,
+            'value' => -str_replace(',','',$request->amount),
             'investor_id'=>$investor->id,
             'date' => $request->payment_date
         ]);

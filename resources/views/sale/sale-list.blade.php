@@ -34,7 +34,7 @@
                                     <tr>
                                         <td>{{$count}}</td>
                                         <td>{{$pur->invoice_no}}</td>
-                                        <td>{{$pur->total}}</td>
+                                        <td> {{ number_format($pur->total) }}</td>
                                         <td>{{$pur->sale_date}}</td>
                                         <td><a style="text-decoration: none;color:black" href="{{route('get-sale-instalments',$pur->id)}}"><i data-feather='eye'></i></a></td>
                                        

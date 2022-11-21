@@ -75,7 +75,7 @@ class PurchaseController extends Controller
         $purchase->investor_id = $request->investor_id;
         $purchase->store_id = 1;
         $purchase->supplier = $request->supplier;
-        $purchase->total =$request->total_amount;
+        $purchase->total =str_replace(',','', $request->total_amount);
         $purchase->type = $request->purchase_type;
         $purchase->purchase_date = $request->purchase_date;
         $purchase->save();
@@ -87,7 +87,7 @@ class PurchaseController extends Controller
             $purchase_item = new PurchaseItem();
             $purchase_item->item_id = $request->item_id[$a];
             $purchase_item->quantity = $request->qty[$a];
-            $purchase_item->unit_cost = $request->cost[$a];
+            $purchase_item->unit_cost =  str_replace(',','',$request->cost[$a]); 
             $purchase_item->trade_discount = 0;
             $purchase_item->purchase_id = $purchase->id;
             $purchase_item->save();

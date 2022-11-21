@@ -22,6 +22,7 @@
                                         <th scope="col">Supplier</th>
                                         <th scope="col">Date</th>
                                         <th scope="col">Action</th>
+                                        
                                         {{-- <th scope="col">Action</th> --}}
                                     </tr>
                                 </thead>

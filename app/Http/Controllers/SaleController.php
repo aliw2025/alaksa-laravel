@@ -103,7 +103,7 @@ class SaleController extends Controller
         $sale->status = 1;
         $sale->plan = $request->plan;
         $sale->markup = $request->markup;
-        $sale->selling_price = $request->selling_price;
+        $sale->selling_price = str_replace(',','',$request->selling_price);
         $sale->sale_type = $request->sale_type;
 
 
@@ -111,22 +111,22 @@ class SaleController extends Controller
         if ($request->sale_type == 2) {
 
             $payment_type = "Cash";
-            $sale->total = $request->selling_price;
+            $sale->total = str_replace(',','',$request->selling_price);
         } else {
 
             $payment_type = "Instalments";
-            $sale->total = $request->total_sum;
+            $sale->total = str_replace(',','',$request->total_sum);
         }
 
         $sale->sale_date = $request->sale_date;
         $sale->save();
 
-        $inv_per = $request->selling_price  / $request->total_sum;
+        $inv_per = floatval(str_replace(',','',$request->selling_price))   / floatval(str_replace(',','',$request->total_sum)); 
         $markup_per = 1 - $inv_per;
         // item price recovry
-        $ins_mon = $request->down_payment * $inv_per;
+        $ins_mon = str_replace(',','',$request->down_payment) * $inv_per;
         // each investor share in markup profit
-        $share = ($request->down_payment - $ins_mon) * 0.50;
+        $share = (str_replace(',','',$request->down_payment) - $ins_mon) * 0.50;
 
 
         if ($request->sale_type == 1) {
@@ -134,11 +134,11 @@ class SaleController extends Controller
             // creating down payment
             $instalment = new Instalment();
             $instalment->sale_id = $sale->id;
-            $instalment->amount = $request->down_payment;
+            $instalment->amount = str_replace(',','',$request->down_payment); 
             // if down payment is paid $down_payment is true
             $instalment->instalment_paid = $down_payment;
             $instalment->due_date = $request->sale_date;
-            $instalment->amount_paid = $down_payment?$request->down_payment:0;
+            $instalment->amount_paid = $down_payment?str_replace(',','',$request->down_payment):0;
             $instalment->save();
             if ($down_payment) {
                 
@@ -198,7 +198,7 @@ class SaleController extends Controller
                 $next = $temp->addMonth();
                 $instalment = new Instalment();
                 $instalment->sale_id = $sale->id;
-                $instalment->amount = $request->instalment_per_month;
+                $instalment->amount = str_replace(',','',$request->instalment_per_month);
                 $instalment->instalment_paid = false;
                 $instalment->due_date = $next;
                 $instalment->save();
@@ -220,7 +220,7 @@ class SaleController extends Controller
             [
                 'commission_type' => 1,
                 'user_id' => $sale->mar_of_id,
-                'amount' => $sale->total * 0.01,
+                'amount' => str_replace(',','',$sale->total) * 0.01,
                 'status' => 0,
                 'earned_date' => $sale->sale_date
             ]
@@ -231,7 +231,7 @@ class SaleController extends Controller
         // leadger entry for credit inventory
         $sale->leadgerEntries()->create([
             'account_id' =>  $inv_acc_id,
-            'value' => -$request->selling_price,
+            'value' => -str_replace(',','',$request->selling_price),
             'investor_id' => $investor->id,
             'date' => $sale->sale_date
         ]);
@@ -239,13 +239,13 @@ class SaleController extends Controller
         //  leadger entry for debit recievable of inventory
         $sale->leadgerEntries()->create([
             'account_id' =>  $inv_rcv_acc,
-            'value' => $request->selling_price,
+            'value' => str_replace(',','',$request->selling_price),
             'investor_id' => $investor->id,
             'date' => $sale->sale_date
         ]);
 
         // calculating profit share of investor and company
-        $inv_mark_pft = ($request->total_sum - $request->selling_price) * 0.50;
+        $inv_mark_pft = (str_replace(',','',$request->total_sum )- str_replace(',','',$request->selling_price)) * 0.50;
         $cmp_mark_pft =  $inv_mark_pft;
 
         // leadger entry for company debit recievable of markup 
@@ -279,7 +279,7 @@ class SaleController extends Controller
         ]);
 
         $item_price = $investor->inventories()->where('item_id', '=', $request->item_id)->first()->unit_cost;
-        $trade_discount = $request->selling_price - $item_price;
+        $trade_discount = str_replace(',','',$request->selling_price )- $item_price;
 
         // leadger entry for company debit cash of trade profit
         $sale->leadgerEntries()->create([
@@ -305,7 +305,7 @@ class SaleController extends Controller
             'sale' => $sale,
             'sale_detail' => $sale_detail,
             'payment_type' => $payment_type,
-            'selling_price' => $request->selling_price,
+            'selling_price' => str_replace(',','',$request->selling_price),
             'markup' => $request->mark_up,
             'plan' => $request->plan
 

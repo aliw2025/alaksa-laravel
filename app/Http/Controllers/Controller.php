@@ -215,17 +215,21 @@ class Controller extends BaseController
         $investors = Investor::all();
         // finding the company investor
         $investor = Investor::find(1);
-        // find cash account of the company
         $invCashAcc= $investor->charOfAccounts->where('account_type','=',1)->first()->id;
-        // find reciving accoung of the company
         $invRcvAcc= $investor->charOfAccounts->where('account_type','=',5)->first()->id;
-        //find available cash in the account
+        $invProAcc = $investor->charOfAccounts->where('account_type','=',9)->first()->id;
+
+        $invinvAcc = $investor->charOfAccounts->where('account_type','=',3)->first()->id;
+
         $available_cash = GLeadger:: where('account_id','=',$invCashAcc)->sum('value');
-        
         $rcv_cash = GLeadger:: where('account_id','=',$invRcvAcc)->sum('value');
-        return view("template.dashboard-content", compact('investors','investor','available_cash','rcv_cash'));
-        $investors = Investor::all();
-        return view("template.dashboard-content", compact('investors'));
+        $pft = GLeadger:: where('account_id','=',$invProAcc)->sum('value');
+        $pft = $pft * -1;
+        $asset = GLeadger:: where('account_id','=',$invinvAcc)->sum('value');
+        $sale = Sale::where('investor_id',1)->sum('total');
+        
+
+        return view("template.dashboard-content", compact('investors','investor','available_cash','rcv_cash','pft','sale','asset'));
     }
 
     public function getRecoveryOff(Request $request){
@@ -259,7 +263,7 @@ class Controller extends BaseController
         $asset = GLeadger:: where('account_id','=',$invinvAcc)->sum('value');
         $sale = Sale::where('investor_id',$id)->sum('total');
         
-        
+
         return view("template.dashboard-content", compact('investors','investor','available_cash','rcv_cash','pft','sale','asset'));
     }
     public function showInvestments()

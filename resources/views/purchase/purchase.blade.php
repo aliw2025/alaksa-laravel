@@ -24,8 +24,10 @@
                                         <div class="invoice-number-date mt-md-0 mt-2">
                                             <div class="d-flex align-items-center justify-content-between mb-1">
                                                 @csrf
-                                                <input type="hidden" name="purchase_type" id="purchase_type" value="{{$type}}">
-                                                <h4 class="invoice-title"> {{ $type==1?'Purchase #':'Purchase Return #'}} </h4>
+                                                <input type="hidden" name="purchase_type" id="purchase_type"
+                                                    value="{{ $type }}">
+                                                <h4 class="invoice-title"> {{ $type == 1 ? 'Purchase #' : 'Purchase Return #' }}
+                                                </h4>
                                                 <div class="input-group input-group-merge invoice-edit-input-group">
                                                     {{-- <div class="input-group-text">
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="14"
@@ -57,8 +59,9 @@
                                             <div class="d-flex align-items-center justify-content-between mb-1">
                                                 <span class="title">Date:</span>
                                                 @if (isset($purchase))
-                                                    <input value="{{ $purchase->purchase_date }}" disabled name="payment_date"
-                                                        type="text" class="form-control invoice-edit-input ">
+                                                    <input value="{{ $purchase->purchase_date }}" disabled
+                                                        name="payment_date" type="text"
+                                                        class="form-control invoice-edit-input ">
                                                 @else
                                                     <input name="purchase_date" type="text"
                                                         class="form-control invoice-edit-input date-picker flatpickr-input"
@@ -104,15 +107,14 @@
                                                 </div>
                                               
                                             </div> --}}
-                                            
+
                                             <div class="d-flex align-items-center justify-content-between mt-1">
                                                 <span class="title">Supplier</span>
                                                 {{-- <select class="form-control" name="supplier" id=""></select> --}}
                                                 <div style="width: 11.21rem; max-width:11.21rem; "
                                                     class="align-items-center">
                                                     @if (isset($purchase))
-                                                        <input  value="{{ $purchase->supplier_val->name}}"
-                                                        disabled
+                                                        <input value="{{ $purchase->supplier_val->name }}" disabled
                                                             name="payment_date" type="text"
                                                             class="form-control invoice-edit-input ">
                                                     @else
@@ -173,9 +175,10 @@
                                                                 </div>
                                                                 <div class="col-lg-2 col-12 my-lg-0 my-2">
                                                                     <p class="card-text col-title mb-md-2 mb-0">cost</p>
-                                                                    <input onkeyup="calRowTotal(0)" id="cost0"
-                                                                        name="cost[]" type="number" class="form-control"
-                                                                        value="" placeholder="">
+                                                                    <input  onkeyup="calRowTotal(0)" id="cost0"
+                                                                        name="cost[]" 
+                                                                        class="number-separator form-control" value=""
+                                                                        placeholder="">
                                                                 </div>
                                                                 <div class="col-lg-2 col-12 my-lg-0 my-2">
                                                                     <p class="card-text col-title mb-md-2 mb-0">Qty</p>
@@ -187,10 +190,10 @@
                                                                 </div>
                                                                 <div class="col-lg-2 col-12 mt-lg-0 mt-2">
                                                                     <p class="card-text col-title mb-md-50 mb-0">Total</p>
-                                                                    <input
+                                                                    <input 
                                                                         style=" border: none;background-color: transparent;resize: none;outline: none;"
                                                                         id="rowTotal0" name="rowTotal[]"
-                                                                        class="form-control" value="0 PKR" disabled>
+                                                                        class=" form-control" value="0 PKR" disabled>
                                                                 </div>
                                                             </div>
                                                             <div
@@ -274,7 +277,7 @@
                                                         <th scope="col">unit cost</th>
                                                         <th scope="col">quantity</th>
                                                         <th scope="col">total</th>
-                                                       
+
                                                     </tr>
                                                 </thead>
                                                 <tbody class="inventory-iems-body" id="nventory-iems-body">
@@ -286,11 +289,11 @@
                                                         <tr>
                                                             <td>{{ $count }}</td>
                                                             <td>{{ $item->name }}</td>
-                                                            <td>{{ $item->pivot->unit_cost }}</td>
+                                                            <td>{{ number_format($item->pivot->unit_cost)  }}</td>
                                                             <td>{{ $item->pivot->quantity }}</td>
-                                                            <td>{{ $item->pivot->quantity * $item->pivot->unit_cost }}</td>
-                                                            
+                                                            <td>{{ number_format($item->pivot->quantity * $item->pivot->unit_cost )}}</td>
 
+                                                                
                                                         </tr>
                                                         @php
                                                             $count = $count + 1;
@@ -299,7 +302,6 @@
 
                                                 </tbody>
                                             </table>
-                                            
                                         @endif
 
                                     </form>
@@ -318,12 +320,12 @@
                                                 <div class="invoice-total-item">
                                                     <input type="hidden" name="total_amount" id="amount_feild">
                                                     <p class="invoice-total-title">Total:</p>
-                                                    @if(isset($purchase))
-                                                    <p  class="invoice-total-amount">{{$purchase->total}}</p>
+                                                    @if (isset($purchase))
+                                                        <p class="invoice-total-amount">{{number_format( $purchase->total )}}</p>
                                                     @else
-                                                    <p id="totalAmount" class="invosice-total-amount">0 PKR</p>
+                                                        <p id="totalAmount" class="invosice-total-amount">0 PKR</p>
                                                     @endif
-                                                   
+                                                        
                                                 </div>
                                             </div>
                                         </div>
@@ -346,18 +348,18 @@
                                 </div>
                                 <div class="row p-2">
                                     <div class="col-12">
-                                        @if(isset($purchase))
-                                        <div class="d-flex justify-content-end">
-                                            <button onclick="rePrint()" type="reset" class="btn btn-primary">Reprint Invoice</button>
-                                        </div>
+                                        @if (isset($purchase))
+                                            <div class="d-flex justify-content-end">
+                                                <button onclick="rePrint()" type="reset"
+                                                    class="btn btn-primary">Reprint Invoice</button>
+                                            </div>
                                         @else
-                                        <div class="d-flex justify-content-end">
-                                            <button type="submit" class="btn btn-primary me-2">Save</button>
-                                            <button type="reset" class="btn btn-danger">Reset</button>
-                                        </div>
-
+                                            <div class="d-flex justify-content-end">
+                                                <button type="submit" class="btn btn-primary me-2">Save</button>
+                                                <button type="reset" class="btn btn-danger">Reset</button>
+                                            </div>
                                         @endif
-                                        
+
                                     </div>
                                 </div>
 
@@ -374,9 +376,10 @@
     <script>
         var rowId = 0;
         $(document).ready(function() {
-
+            // $("span.numbers").digits();
             $('.select2-selection__arrow').hide();
         });
+
 
         $('#addNewBtn').click(function() {
             console.log('ad-new item');
@@ -405,7 +408,7 @@
                                 </div>
                                 <div class="col-lg-2 col-12 my-lg-0 my-2">
                                     <p class="card-text col-title mb-md-2 mb-0">Cost</p>
-                                    <input onkeyup="calRowTotal(${rowId})" id="cost${rowId}" name="cost[]" type="number" class="form-control" value=""
+                                    <input onkeyup="calRowTotal(${rowId})" id="cost${rowId}" name="cost[]"  class="number-separator form-control" value=""
                                         placeholder="">
                                 </div>
                                 <div class="col-lg-2 col-12 my-lg-0 my-2">
@@ -474,22 +477,29 @@
         function calRowTotal(rowId) {
 
             var qty = $('#qty' + rowId).val();
-            var cost = parseFloat($('#cost' + rowId).val());
+            var cost = ($('#cost' + rowId).val());
+            var cost = Number(cost.replace(/[^0-9.-]+/g,""));
+            var cost = parseFloat(cost);
+
             var old = $("#rowTotal" + rowId).val();
+            old = Number(old.replace(/[^0-9.-]+/g,""));
             var total = qty * cost;
-            $("#rowTotal" + rowId).val(total.toFixed(2).toString() + " PKR");
+            $("#rowTotal" + rowId).val(total.toLocaleString('en-US')+" PKR");
+            
             var subTotal = $("#totalAmount").text();
-            var sum = parseFloat(subTotal) + parseFloat(total) - parseFloat(old);
-            $("#totalAmount").text(sum.toFixed(2).toString() + " PKR");
+            subTotal =  Number(subTotal.replace(/[^0-9.-]+/g,""));
+            var sum = parseFloat(subTotal) + parseFloat(total) - parseFloat(Number(old));
+            $("#totalAmount").text(sum.toLocaleString('en-US')+ " PKR");
             $("#amount_feild").val(sum.toFixed(2));
 
-
-
         }
-        function rePrint(){
+
+
+
+        function rePrint() {
 
             console.log('what is to be reprinted');
-            // window.open({{url('/test-pdf')}});
+            // window.open({{ url('/test-pdf') }});
 
         }
 
@@ -537,6 +547,7 @@
         function deleteItem(id) {
             $('#row' + id).remove();
         }
+        
 
         $(".content-wrapper").click(function(event) {
             console.log('clicked');
@@ -546,7 +557,6 @@
 
             } else {
                 $(".list-type").hide();
-
             }
         });
 
@@ -559,33 +569,11 @@
             $("#list" + rowId).hide();
 
         }
+
+        $.fn.digits = function() {
+            return this.each(function() {
+                $(this).text($(this).text().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"));
+            })
+        }
     </script>
 @endsection
-
-
-{{-- <div style="width: 15.21rem; max-width:15.21rem; " class="col-2 align-items-center">
-         <p class="card-text col-title mb-md-2 mb-0">Item</p>
-        <select name="items[]" class=" select2 select2-hidden-accessible form-control  invoice-edit-input" id="select2-basic" data-select2-id="select2-basic" tabindex="-1" aria-hidden="true">
-            @foreach ($items as $item)
-            <option value="{{$item->id}}">{{$item->name}}</option>
-@endforeach
-</select>
-</div> --}}
-{{-- <button type="button" class="btn btn-primary btn-sm btn-add-new waves-effect waves-float waves-light" >
-        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus me-25">
-            <line x1="12" y1="5" x2="12" y2="19">
-            </line>
-            <line x1="5" y1="12" x2="19" y2="12">
-            </line>
-        </svg>
-        <span class="align-middle">Add Item</span>
-    </button> --}}
-
-{{-- <div class="col-lg-2 col-12 my-lg-0 my-2">
-    <p class="card-text col-title mb-md-2 mb-0">Cost</p>
-    <select class="form-select" aria-label="Default select example">
-        @foreach ($items as $item)
-        <option value="{{$item->id}}">{{$item->name}}</option>
-@endforeach
-</select>
-</div> --}}
