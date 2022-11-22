@@ -84,8 +84,15 @@
                     <div class="">
                         <form method="POST" class="form form-vertical" autocomplete="on" action=" {{isset($customer)? route('customer.update',$customer) :route('customer.store')}}">
                             @csrf
-                            <div class="row ">
-                                
+                            <div class="row">
+                                <div class=" ">
+                                    <div class="mb-1">
+                                        <label class="form-label" for="first-name-vertical">Customer UUID</label>
+                                        <input disabled type="text" id="customerUUID" class="form-control" name="customer_uuid" placeholder="customer UUID">
+                                       
+                                    </div>
+                                </div>
+
                                 <div class=" ">
                                     <div class="mb-1">
                                         <label class="form-label" for="first-name-vertical">customer Name</label>
