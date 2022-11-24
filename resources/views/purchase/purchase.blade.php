@@ -10,8 +10,7 @@
                             <div class="card invoice-preview-card">
                                 <!-- Header starts -->
                                 <div class="card-body invoice-padding pb-0">
-                                    <div
-                                        class="d-flex justify-content-between flex-md-row flex-column invoice-spacing mt-0">
+                                    <div class="d-flex justify-content-between flex-md-row flex-column invoice-spacing mt-0">
                                         <div>
                                             <div class="logo-wrapper">
                                                 <h3 class="ms-0 text-primary invoice-logo">Alpha Digital</h3>
@@ -21,38 +20,21 @@
                                             <p class="card-text mb-0">+1 (123) 456 7891, +44 (876) 543 2198</p>
 
                                         </div>
+                                        <div class="mt-2">
+                                            <h4 style="text-decoration: underline">{{ $type == 1 ? 'Purchase' : 'Purchase Return' }}</h4>
+                                        </div>
                                         <div class="invoice-number-date mt-md-0 mt-2">
                                             <div class="d-flex align-items-center justify-content-between mb-1">
                                                 @csrf
-                                                <input type="hidden" name="purchase_type" id="purchase_type"
-                                                    value="{{ $type }}">
-                                                <h4 class="invoice-title"> {{ $type == 1 ? 'Purchase #' : 'Purchase Return #' }}
-                                                </h4>
+                                                <input id ="tran_type" type="hidden" value="{{$type}}" name="tran_type">
+                                                <input type="hidden" name="purchase_type" id="purchase_type" value="{{ $type }}">
+                                                <h4 class="invoice-title"> {{ $type == 1 ? 'Purchase #' : 'Purchase Return #' }}</h4>
                                                 <div class="input-group input-group-merge invoice-edit-input-group">
-                                                    {{-- <div class="input-group-text">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="14"
-                                                            height="14" viewBox="0 0 24 24" fill="none"
-                                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                                            stroke-linejoin="round" class="feather feather-hash">
-                                                            <line x1="4" y1="9" x2="20"
-                                                                y2="9">
-                                                            </line>
-                                                            <line x1="4" y1="15" x2="20"
-                                                                y2="15">
-                                                            </line>
-                                                            <line x1="10" y1="3" x2="8"
-                                                                y2="21">
-                                                            </line>
-                                                            <line x1="16" y1="3" x2="14"
-                                                                y2="21">
-                                                            </line>
-                                                        </svg>
-                                                    </div> --}}
                                                     <input style="font-size: 12px"
                                                         @if (isset($purchase)) disabled
-                                                        value="{{ $purchase->purchase_no }}" @endif
-                                                        name="purchaseId" type="text"
-                                                        class="form-control invoice-edit-input" placeholder="" disabled>
+                                                        value="{{ $purchase->purchase_no }}" 
+                                                        @endif
+                                                        name="purchaseId" type="text" class="form-control invoice-edit-input" placeholder="" disabled>
                                                 </div>
                                             </div>
 
@@ -67,7 +49,6 @@
                                                         class="form-control invoice-edit-input date-picker flatpickr-input"
                                                         readonly="readonly">
                                                 @endif
-
                                             </div>
                                             <div class="d-flex align-items-center justify-content-between">
                                                 <span class="title">Investor:</span>
@@ -89,28 +70,10 @@
                                                             @endforeach
                                                         </select>
                                                     @endif
-
                                                 </div>
                                             </div>
-
-                                            {{-- <div class="d-flex align-items-center justify-content-between mt-1">
-                                                <span class="title">Account</span> --}}
-                                            {{-- <select class="form-control" name="supplier" id=""></select> --}}
-                                            {{-- <div style="width: 11.21rem; max-width:11.21rem; "
-                                                class="align-items-center">
-                                                <select name="acc_type" class="form-select" aria-label="Default select example">
-
-                                                    <option value="1"> Cash</option>
-                                                    <option value="8"> Bank Account</option>
-                                                   
-                                                  </select>
-                                                </div>
-                                              
-                                            </div> --}}
-
                                             <div class="d-flex align-items-center justify-content-between mt-1">
                                                 <span class="title">Supplier</span>
-                                                {{-- <select class="form-control" name="supplier" id=""></select> --}}
                                                 <div style="width: 11.21rem; max-width:11.21rem; "
                                                     class="align-items-center">
                                                     @if (isset($purchase))
@@ -120,24 +83,17 @@
                                                     @else
                                                         <select name="supplier" class="form-select"
                                                             aria-label="Default select example">
-
                                                             @foreach ($suppliers as $sup)
                                                                 <option value="{{ $sup->id }}">{{ $sup->name }}
                                                                 </option>
                                                             @endforeach
-
-
                                                         </select>
                                                     @endif
-
                                                 </div>
-                                                {{-- <input name = "supplier" type="text" class="form-control invoice-edit-input "> --}}
                                             </div>
-
                                         </div>
                                     </div>
                                 </div>
-
                                 <!-- Header ends -->
                                 <hr class="invoice-spacing">
                                 <!-- Product Details starts -->
@@ -151,7 +107,7 @@
                                                         <div
                                                             class="col-12 d-flex product-details-border position-relative pe-0">
                                                             <div class="row py-2">
-                                                                <div class="col-lg-2 col-12 my-lg-0 my-2">
+                                                                <div class="col-lg-1 col-12 my-lg-0 my-2">
                                                                     <p class="card-text col-title mb-md-2 mb-0">Item Id</p>
                                                                     <input id="passId0" type="number"
                                                                         class="form-control" value="" placeholder=""
@@ -159,12 +115,12 @@
                                                                     <input name="item_id[]" id="item_id0" type="hidden"
                                                                         class="form-control" value="" placeholder="">
                                                                 </div>
-                                                                <div class="col-3">
+                                                                <div class="col-2">
                                                                     <p class="card-text col-title mb-md-2 mb-0">Item Name
                                                                     </p>
                                                                     <input autocomplete="off" id="itemBox0"
                                                                         class=" form-control" autocomplete="off"
-                                                                        placeholder="Enter Item" onkeyup="getItems(0)">
+                                                                        placeholder="Enter Item" @if($type==1) onkeyup="getItems(0)" @else onkeyup="getInvItems(0)" @endif>
                                                                     <div class="list-type" id="list0"
                                                                         style="position: absolute; z-index: 1;"
                                                                         class="card mb-4">
@@ -180,7 +136,19 @@
                                                                         class="number-separator form-control" value=""
                                                                         placeholder="">
                                                                 </div>
-                                                                <div class="col-lg-2 col-12 my-lg-0 my-2">
+                                                                @if($type==2)
+                                                    
+                                                                    <div class="col-lg-2 col-12 my-lg-0 my-2">
+                                                                        <p class="card-text col-title mb-md-2 mb-0">Curr Price</p>
+                                                                        <input onkeyup="calLoss(0)"  id="cur_cost0"
+                                                                            name="cost[]" 
+                                                                            class="number-separator form-control" value=""
+                                                                            placeholder="">
+                                                                    </div>
+                                                                   
+                                                                @endif
+                                                                
+                                                                <div class="col-lg-1 col-12 my-lg-0 my-2">
                                                                     <p class="card-text col-title mb-md-2 mb-0">Qty</p>
                                                                     <input pattern="[0-9]{10}" onkeyup="calRowTotal(0)"
                                                                         id="qty0" name="qty[]" type="number"
@@ -188,6 +156,18 @@
                                                                         class="form-control" value=""
                                                                         placeholder="">
                                                                 </div>
+                                                                @if($type==2)
+                                                    
+                                                                    <div class="col-lg-2 col-12 my-lg-0 my-2">
+                                                                        <p class="card-text col-title mb-md-2 mb-0">Trade Loss</p>
+                                                                        <input  onkeyup="calRowTotal(0)" id="td_loss0"
+                                                                            name="cost[]" 
+                                                                            class="number-separator form-control" value=""
+                                                                            placeholder="">
+                                                                    </div>
+                                                                   
+                                                                @endif
+                                                                
                                                                 <div class="col-lg-2 col-12 mt-lg-0 mt-2">
                                                                     <p class="card-text col-title mb-md-50 mb-0">Total</p>
                                                                     <input 
@@ -387,18 +367,19 @@
             var maarkup = `<div id="row${rowId}" class="row">
                         <div class="mt-3 col-12 d-flex product-details-border position-relative pe-0">
                             <div class="row py-2">
-                                    <div class="col-lg-2 col-12 my-lg-0 my-2">
+                                    <div class="col-lg-1 col-12 my-lg-0 my-2">
                                     <p class="card-text col-title mb-md-2 mb-0">Item Id</p>
                                     <input name="item_id[]" id ="passId${rowId}" type="number" class="form-control" value="" placeholder="" disabled>
                                     <input name="item_id[]" id="item_id${rowId}" type="hidden" class="form-control"
                                                                     value="" placeholder="" >
                                     </div>
-                                <div class="col-3">
+                                <div class="col-2">
                                     <p class="card-text col-title mb-md-2 mb-0">Item Name</p>
                                     
                                     <input autocomplete="off" id="itemBox${rowId}" class=" form-control" autocomplete="off"
                                         placeholder="Enter Item"
-                                        onkeyup="getItems(${rowId})">
+                                        @if($type==1) onkeyup="getItems(${rowId})" @else onkeyup="getInvItems(${rowId})" @endif
+                                        >
                                     <div class="list-type" id="list${rowId}" style="position: absolute; z-index: 1;"
                                         class="card mb-4">
                                         <div id="listBody${rowId}" class="list-group">
@@ -411,12 +392,34 @@
                                     <input onkeyup="calRowTotal(${rowId})" id="cost${rowId}" name="cost[]"  class="number-separator form-control" value=""
                                         placeholder="">
                                 </div>
-                                <div class="col-lg-2 col-12 my-lg-0 my-2">
+                                @if($type==2)
+                                                    
+                                    <div class="col-lg-2 col-12 my-lg-0 my-2">
+                                        <p class="card-text col-title mb-md-2 mb-0">Curr Price</p>
+                                        <input  onkeyup="calLoss(${rowId})"  id="cur_cost${rowId}"
+                                            name="cost[]" 
+                                            class="number-separator form-control" value=""
+                                            placeholder="">
+                                    </div>
+                                                                                   
+                                @endif
+                                <div class="col-lg-1 col-12 my-lg-0 my-2">
                                     <p class="card-text col-title mb-md-2 mb-0">Qty</p>
                                     <input   onkeyup="calRowTotal(${rowId})" id="qty${rowId}" name="qty[]"
                                         type="number" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57"class="form-control" value=""
                                         placeholder="">
                                 </div>
+                                @if($type==2)
+                                                    
+                                    <div class="col-lg-2 col-12 my-lg-0 my-2">
+                                        <p class="card-text col-title mb-md-2 mb-0">Trade Loss</p>
+                                        <input  onkeyup="calRowTotal(${rowId})" id="td_loss${rowId}"
+                                            name="cost[]" 
+                                            class="number-separator form-control" value=""
+                                            placeholder="">
+                                    </div>
+                                                                   
+                                @endif
                                 <div class="col-lg-2 col-12 mt-lg-0 mt-2">
                                     <p class="card-text col-title mb-md-50 mb-0">Total</p>
                                     <input style=" border: none;background-color: transparent;resize: none;outline: none;" id="rowTotal${rowId}"  name="rowTotal[]"  class="form-control" value="0 PKR" disabled>
@@ -480,7 +483,7 @@
             var cost = ($('#cost' + rowId).val());
             var cost = Number(cost.replace(/[^0-9.-]+/g,""));
             var cost = parseFloat(cost);
-
+            
             var old = $("#rowTotal" + rowId).val();
             old = Number(old.replace(/[^0-9.-]+/g,""));
             var total = qty * cost;
@@ -503,6 +506,51 @@
 
         }
 
+        function getInvItems(id) {
+
+                console.log('function callled');
+                var letters = $('#itemBox' + id).val();
+                if (letters.length < 2) {
+                    return;
+                }
+                console.log(letters);
+                var investor_id = $("#select2-basic").val();
+                console.log(investor_id);
+                $.ajax({
+                    url: "{{ route('get-investor-items') }}",
+                    type: "GET",
+                    data: {
+                        key: letters,
+                        investor_id: investor_id
+                    },
+                    success: function(dataResult) {
+                        
+                        $("#listBody"+id).empty();
+                        console.log('recv2');
+                        console.log(dataResult);
+                        var i;
+                        for (i = 0; i < dataResult.length; i++) {
+                            var item = dataResult[i].item;
+                            console.log(item);
+                            markup = `<button id = "btnItem` + item.id +
+                                `"type="button" class="list-group-item list-group-item-action" onclick="setText(` +
+                                item.id + `,${id})">` + item.name + `</button>`;
+                            $("#listBody"+id).append(markup);
+                        }
+
+
+                    },
+                    error: function(xhr, status, error) {
+
+                        var err = eval("(" + xhr.responseText + ")");
+                        console.log(err);
+                        alert(err);
+                    },
+                });
+                $("#list"+id).show();
+
+        }
+
         function getItems(id) {
 
             console.log("arg");
@@ -520,7 +568,7 @@
                 },
                 success: function(dataResult) {
                     $("#listBody" + id).empty();
-                    console.log('recv');
+                    console.log('recv1');
                     console.log(dataResult);
                     var i;
                     for (i = 0; i < dataResult.length; i++) {
@@ -532,6 +580,7 @@
                             item.id + `,${id})">` + item.name + `</button>`;
                         $("#listBody" + id).append(markup);
                     }
+
                 },
                 error: function(xhr, status, error) {
 
@@ -567,13 +616,53 @@
             $("#passId" + rowId).val(item);
             $("#item_id" + rowId).val(item);
             $("#list" + rowId).hide();
+            var investor_id = $("#select2-basic").val();
+            var type = $('#tran_type').val();
+            console.log(type);
+            if(type==2){
+
+                $.ajax({
+                url: "{{ route('get-last-purchase')}}",
+                type: "GET",
+                data: {
+                    item_id: item,
+                    investor_id:investor_id
+                },
+                success: function(dataResult) {
+                   
+                    console.log('recv1');
+                    console.log(dataResult);
+                    
+                    $("#cost"+rowId).val(parseFloat(dataResult).toLocaleString('en-US'));
+                    
+
+                },
+                error: function(xhr, status, error) {
+
+                    var err = eval("(" + xhr.responseText + ")");
+                    console.log(err);
+                    alert(err);
+                },
+            });
+
+            }
 
         }
 
-        $.fn.digits = function() {
-            return this.each(function() {
-                $(this).text($(this).text().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"));
-            })
+        function calLoss(id){
+            console.log('lssigfdf');
+           var orgCost = $("#cost"+id).val();
+           var curCost = $("#cur_cost"+id).val();
+           orgCost = Number(orgCost.replace(/[^0-9.-]+/g,""));
+           curCost = Number(curCost.replace(/[^0-9.-]+/g,""));
+           var loss = orgCost  - curCost ;
+           console.log(loss);
+           $("#td_loss"+id).val(loss.toLocaleString('en-US'));
+
+
+
         }
+
+       
     </script>
 @endsection

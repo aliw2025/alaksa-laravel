@@ -56,6 +56,7 @@ Route::get('/get-purchase-items/{id}' , [\App\Http\Controllers\PurchaseControlle
 
 Route::get('/get-purchases/{id}' , [\App\Http\Controllers\PurchaseController::class,'showPurchases'])->name('get-purchases');
 Route::get('/purchase-return' , [\App\Http\Controllers\PurchaseController::class,'purchaseReturn'])->name('purchase-return');
+Route::get('/get-last-purchase' , [\App\Http\Controllers\PurchaseController::class,'getLastPurchase'])->name('get-last-purchase');
 
 Route::get('/get-sales/{id}' , [\App\Http\Controllers\SaleController::class,'showSales'])->name('get-sales');
 Route::get('/sale-return' , [\App\Http\Controllers\SaleController::class,'saleReturns'])->name('sale-return');

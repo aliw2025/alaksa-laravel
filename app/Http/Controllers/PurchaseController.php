@@ -64,6 +64,7 @@ class PurchaseController extends Controller
         // creating purchase transactions
         $purchase = new Purchase();
         $id = Purchase::max('id');
+
         if($id ==null){
             $id = 0;
         }
@@ -165,6 +166,19 @@ class PurchaseController extends Controller
         $suppliers = Supplier::all();
         $type = $purchase->type;
         return view('purchase.purchase',compact('purchase','investors','suppliers','type'));
+    }
+    public function getLastPurchase(Request $request){
+        // getting all those purchases how have that item
+        $purchase = Purchase::where('investor_id','=',$request->investor_id)->whereHas('items', function ($query)  use ($request) {
+            $query->where('item_id',$request->item_id);
+        })->orderBy('purchase_date', 'DESC')->first();
+        // getting that specific item from purchase entry
+        $item = $purchase->items()->where('item_id',$request->item_id)->first();
+        // getting cost of the item
+        $cost = $item->pivot->unit_cost;
+
+        return ($cost);
+
     }
 
     /**

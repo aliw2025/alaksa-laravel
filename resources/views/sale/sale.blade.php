@@ -88,6 +88,9 @@
 
                                             </div>
                                         </div>
+                                        <div class="mt-2">
+                                            <h4 style="text-decoration: underline">{{ $type == 1 ? 'Sale' : 'Sale Return' }}</h4>
+                                        </div>
                                         <div class="invoice-number-date mt-md-0 mt-2">
                                             <div class="d-flex align-items-center justify-content-between mb-1">
                                                 @csrf
