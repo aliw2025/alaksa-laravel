@@ -160,14 +160,13 @@ class PurchaseController extends Controller
      */
     public function show(Purchase $purchase)
     {
-        //
-         //
         $investors = Investor::all();
         $suppliers = Supplier::all();
         $type = $purchase->type;
         return view('purchase.purchase',compact('purchase','investors','suppliers','type'));
     }
     public function getLastPurchase(Request $request){
+
         // getting all those purchases how have that item
         $purchase = Purchase::where('investor_id','=',$request->investor_id)->whereHas('items', function ($query)  use ($request) {
             $query->where('item_id',$request->item_id);

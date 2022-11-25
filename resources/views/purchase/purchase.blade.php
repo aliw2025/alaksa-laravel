@@ -161,7 +161,7 @@
                                                                     <div class="col-lg-2 col-12 my-lg-0 my-2">
                                                                         <p class="card-text col-title mb-md-2 mb-0">Trade Loss</p>
                                                                         <input  onkeyup="calRowTotal(0)" id="td_loss0"
-                                                                            name="cost[]" 
+                                                                            name="td_loss[]" 
                                                                             class="number-separator form-control" value=""
                                                                             placeholder="">
                                                                     </div>
@@ -414,7 +414,7 @@
                                     <div class="col-lg-2 col-12 my-lg-0 my-2">
                                         <p class="card-text col-title mb-md-2 mb-0">Trade Loss</p>
                                         <input  onkeyup="calRowTotal(${rowId})" id="td_loss${rowId}"
-                                            name="cost[]" 
+                                            name="td_loss[]" 
                                             class="number-separator form-control" value=""
                                             placeholder="">
                                     </div>
@@ -481,6 +481,7 @@
 
             var qty = $('#qty' + rowId).val();
             var cost = ($('#cost' + rowId).val());
+            var type = $('#tran_type').val();
             var cost = Number(cost.replace(/[^0-9.-]+/g,""));
             var cost = parseFloat(cost);
             
@@ -495,6 +496,8 @@
             $("#totalAmount").text(sum.toLocaleString('en-US')+ " PKR");
             $("#amount_feild").val(sum.toFixed(2));
 
+            if(type=2)
+            calLoss(rowId)
         }
 
 
@@ -652,10 +655,11 @@
         function calLoss(id){
             console.log('lssigfdf');
            var orgCost = $("#cost"+id).val();
+           var qty = $("#qty"+id).val();
            var curCost = $("#cur_cost"+id).val();
            orgCost = Number(orgCost.replace(/[^0-9.-]+/g,""));
            curCost = Number(curCost.replace(/[^0-9.-]+/g,""));
-           var loss = orgCost  - curCost ;
+           var loss = (orgCost  - curCost )*qty;
            console.log(loss);
            $("#td_loss"+id).val(loss.toLocaleString('en-US'));
 
