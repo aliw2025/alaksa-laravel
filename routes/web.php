@@ -78,6 +78,8 @@ Route::get('/commission-report' , [\App\Http\Controllers\CommissionController::c
 Route::get('/recieve-instalment/{instalment}' , [\App\Http\Controllers\InstalmentController::class,'recieveInstalment'])->name('recieve-instalment');
 Route::get('/pay-instalment' , [\App\Http\Controllers\InstalmentController::class,'payInstalment'])->name('pay-instalment');
 
+Route::get('/get-payables-temp/{id}' , [\App\Http\Controllers\PayableController::class,'payablesRepTem'])->name('get-payables-temp');
+
 
 
 Auth::routes();

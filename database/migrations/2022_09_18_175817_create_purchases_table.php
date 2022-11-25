@@ -19,7 +19,10 @@ return new class extends Migration
             $table->unsignedBigInteger('investor_id');
             $table->unsignedBigInteger('store_id');
             $table->unsignedBigInteger('supplier');
+            // purchase type cash / instalment
             $table->unsignedBigInteger('type');
+            // transaction type return / purchase
+            $table->unsignedBigInteger('tran_type');
             $table->double('total');
             $table->date('purchase_date');
             $table->timestamps();

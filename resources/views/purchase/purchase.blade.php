@@ -514,6 +514,11 @@
                 console.log('function callled');
                 var letters = $('#itemBox' + id).val();
                 if (letters.length < 2) {
+                    $('#cost' + rowId).val("");
+                    $('#qty' + rowId).val("");
+                    $('#cur_cost' + rowId).val("");
+                    $('#rowTotal' + rowId).val("");
+                    $('#td_loss' + rowId).val("");
                     return;
                 }
                 console.log(letters);
@@ -560,6 +565,11 @@
             // console.log(set.id);
             var letters = $('#itemBox' + id).val();
             if (letters.length < 2) {
+                $('#cost' + rowId).val("");
+                $('#qty' + rowId).val("");
+                $('#cur_cost' + rowId).val("");
+                $('#rowTotal' + rowId).val("");
+                $('#td_loss' + rowId).val("");
                 return;
             }
             $("#passId").val("");
@@ -649,6 +659,10 @@
             });
 
             }
+             $('#qty' + rowId).val("");
+            $('#cur_cost' + rowId).val("");
+            $('#rowTotal' + rowId).val("");
+            $('#td_loss' + rowId).val("");
 
         }
 

@@ -70,6 +70,7 @@ class PurchaseController extends Controller
         }
         if($request->purchase_type==2){
             $request->total_amount = $request->total_amount * -1;
+            
         }
         $num = str_pad($id+1, 10, '0', STR_PAD_LEFT);
         $purchase->purchase_no = $investor->prefix.'22'.$num;
@@ -79,6 +80,7 @@ class PurchaseController extends Controller
         $purchase->total =str_replace(',','', $request->total_amount);
         $purchase->type = $request->purchase_type;
         $purchase->purchase_date = $request->purchase_date;
+        $purchase->tran_type = $request->tran_type;
         $purchase->save();
 
         //  saving each item of the purchase transaction
@@ -106,10 +108,40 @@ class PurchaseController extends Controller
                 $inventory->save();
 
             }else{
-    
-                $inventory->quantity = $inventory->quantity +$purchase_item->quantity;
-                $inventory->unit_cost =  ($inventory->unit_cost+$purchase_item->unit_cost)/2;
+                if($request->tran_type==2){
+
+                    $inventory->quantity = $inventory->quantity -$purchase_item->quantity;
+
+                }else{
+                    $inventory->quantity = $inventory->quantity +$purchase_item->quantity;
+                    // averaging purchase price
+                    $inventory->unit_cost =  ($inventory->unit_cost+$purchase_item->unit_cost)/2;
+                }
                 $inventory->save();
+
+            }
+            $supplier = Supplier::find($request->supplier);
+            $sup_acc_id = $supplier->charOfAccounts->where('account_type',7)->first()->id;
+            $inv_exp_acc =  $investor->charOfAccounts->where('account_type',9)->first()->id;
+
+            if($request->tran_type==2){
+
+                $purchase->leadgerEntries()->create([
+                    'account_id'=>  $inv_exp_acc,
+                    'value'=> str_replace(',','',$request->td_loss[$a]) ,
+                    'investor_id'=>$investor->id,
+                    'date'=>$purchase->purchase_date        
+                ]);  
+
+                //  getting supplier payable account of the supplier
+                $purchase->leadgerEntries()->create([
+                    'account_id'=>$sup_acc_id,
+                    'value'=> - str_replace(',','',$request->td_loss[$a]),
+                    'investor_id'=>$investor->id,
+                    'date'=>$purchase->purchase_date       
+                ]);
+                
+
             }
         
         }
@@ -124,8 +156,7 @@ class PurchaseController extends Controller
             'date'=>$purchase->purchase_date        
         ]);  
         //  getting supplier payable account of the supplier
-        $supplier = Supplier::find($request->supplier);
-        $sup_acc_id = $supplier->charOfAccounts->where('account_type',7)->first()->id;
+       
         $purchase->leadgerEntries()->create([
             'account_id'=>  $sup_acc_id,
             'value'=> -$request->total_amount,
@@ -145,6 +176,7 @@ class PurchaseController extends Controller
     }
 
     public function showPurchases($id){
+
 
         $investor = Investor::find($id);
         $purchases= $investor->purchases;
