@@ -5,16 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ChartOfAccount extends Model
+class Expense extends Model
 {
     use HasFactory;
-    protected $guarded = [];
 
-    
-    public function owner()
-    {
-        return $this->morphTo();
+    public function leadgerEntries(){
+
+        return $this->morphMany(GLeadger::class,'transaction');
     }
-    
-
 }

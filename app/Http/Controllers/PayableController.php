@@ -26,13 +26,16 @@ class PayableController extends Controller
         $payables = Payable::all();
         return view('payable.payables', compact('payables'));
     }
+    
     public function payablesRepTem($id){
         
         $leadger = GLeadger::where('investor_id',$id)->whereHas('account',function ($query)  {
             $query->where('account_type',7);
         })->get();
+        // where('transaction_type','like',"%purchase%")
         return  view('payable.payables2', compact('leadger'));
     }
+
 
     public function getPayables($id)
     {

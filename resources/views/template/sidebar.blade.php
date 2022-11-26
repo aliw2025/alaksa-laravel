@@ -157,10 +157,14 @@
                             <i data-feather="circle"></i>
                             <span class=" menu-title text-truncate" data-i18n="comision">Sale Return</span></a>
                     </li>
+                    <li class=" nav-item"><a href="{{ route('search-sales') }}" class="d-flex align-items-center">
+                        <i data-feather="circle"></i>
+                        <span class=" menu-title text-truncate" data-i18n="comision">Search Sales</span></a>
+                    </li>
                     <li class=" nav-item"><a href="{{ route('get-sale-instalments') }}" class="d-flex align-items-center">
                         <i data-feather="circle"></i>
                         <span class=" menu-title text-truncate" data-i18n="comision">Recieve Installment</span></a>
-                </li>
+                    </li>
                     <li class=" nav-item">
                         <a class="d-flex align-items-center" href="#">
                             <i data-feather="circle"></i>

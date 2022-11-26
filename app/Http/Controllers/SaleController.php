@@ -592,4 +592,20 @@ class SaleController extends Controller
         $type = 2;
         return view('sale.sale', compact('investors', 'suppliers', 'type'));
     }
+
+    public function searchSales(Request $request){
+        
+
+        return view('sale.search_sale');
+        
+
+    }
+
+    public function searchSalesPost(Request $request){
+
+        $sales = Sale::SearchSale($request->from_date,$request->to_date,$request->customer_name,$request->customer_id,$request->invoice_no)->get();
+
+        return view('sale.search_sale',compact('sales'));
+
+    }
 }

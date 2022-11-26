@@ -39,12 +39,50 @@ class Sale extends Model
 
         return $this->morphMany(GLeadger::class,'transaction');
     }
+    
     public function saleCommision(){
         return $this->morphMany(Commission::class,'transaction');
     }
     public function saleStatus( ){
 
         return $this->belongsTo(SaleStatus::class,'stauts');
+    }
+
+    public function scopeSearchSale($query,$from_date,$to_date,$customer_name,$customer_id,$invoice)
+    {   
+        // dd($commission);
+        
+        if($invoice!=NULL){
+            return $query->where('invoice_no','like','%'.$invoice);
+        }else if($customer_id!= NULL){
+            return $query->where('customer_id',$customer_id);
+            
+        }else if($customer_name!= NULL){
+
+            return $query->whereHas('customer', function ($cus)  use ($customer_name) {
+                $cus->where('customer_name','like','%'.$customer_name.'%');
+            });
+            
+        }
+
+
+
+    //    if($user==NULL){
+    //         // dd('null');
+    //         if($commission==3){
+    //             return $query->whereBetween('earned_date',[$from_date,$to_date]);
+
+    //         }
+    //         return $query->whereBetween('earned_date',[$from_date,$to_date])->where('commission_type',$commission);
+    //    }else{
+    //         if($commission==3){
+    //             return $query->whereBetween('earned_date',[$from_date,$to_date])->where('user_id',$user);
+
+    //         }
+    //         // dd($commission);
+    //         return $query->whereBetween('earned_date',[$from_date,$to_date])->where('commission_type',$commission)->where('user_id',$user);
+    //    }
+        return$query->whereBetween('sale_date',[$from_date,$to_date]);
     }
    
 }

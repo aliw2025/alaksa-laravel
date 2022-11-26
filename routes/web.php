@@ -49,11 +49,9 @@ Route::get('/calender' , [\App\Http\Controllers\Controller::class,'showCalender'
 // Route::get('/purchase' , [\App\Http\Controllers\Controller::class,'showPurchase'])->name('purchase');
 
 Route::get('/capital-investments' , [\App\Http\Controllers\Controller::class,'showInvestments'])->name('capital-investments');
-
 Route::get('/get-items' , [\App\Http\Controllers\ItemController::class,'getItems'])->name('get-items');
 
 Route::get('/get-purchase-items/{id}' , [\App\Http\Controllers\PurchaseController::class,'showPurchaseItems'])->name('get-purchase-items');
-
 Route::get('/get-purchases/{id}' , [\App\Http\Controllers\PurchaseController::class,'showPurchases'])->name('get-purchases');
 Route::get('/purchase-return' , [\App\Http\Controllers\PurchaseController::class,'purchaseReturn'])->name('purchase-return');
 Route::get('/get-last-purchase' , [\App\Http\Controllers\PurchaseController::class,'getLastPurchase'])->name('get-last-purchase');
@@ -62,23 +60,31 @@ Route::get('/get-sales/{id}' , [\App\Http\Controllers\SaleController::class,'sho
 Route::get('/sale-return' , [\App\Http\Controllers\SaleController::class,'saleReturns'])->name('sale-return');
 Route::get('/get-sale-no' , [\App\Http\Controllers\SaleController::class,'getSaleNo'])->name('get-sale-no');
 Route::post('/post-return' , [\App\Http\Controllers\SaleController::class,'postReturn'])->name('post-return');
-Route::get('/post-return' , [\App\Http\Controllers\SaleController::class,'redirectPost'])->name('post-return');
+Route::get('/post-return' , [\App\Http\Controllers\SaleController::class,'redirectPost'])->name('post-return2');
 Route::get('/get-sale-instalments' , [\App\Http\Controllers\SaleController::class,'showInstalments'])->name('get-sale-instalments');
-Route::get('/list-inventory/{id}' , [\App\Http\Controllers\InventoryController::class,'showInventory'])->name('list-inventory');
-Route::get('/get-payables/{id}' , [\App\Http\Controllers\PayableController::class,'getPayables'])->name('get-payables');
-Route::get('/get-investor-items' , [\App\Http\Controllers\InventoryController::class,'getInvestorInventory'])->name('get-investor-items');
-Route::get('/customer-by-name' , [\App\Http\Controllers\CustomerController::class,'customerByName'])->name('customer-by-name');
 Route::get('/test-pdf' , [\App\Http\Controllers\SaleController::class,'testPdf'])->name('test-pdf');
 Route::get('/get-invoices' , [\App\Http\Controllers\SaleController::class,'getInvoices'])->name('get-invoices');
+Route::get('/search-sales' , [\App\Http\Controllers\SaleController::class,'searchSales'])->name('search-sales');
+Route::Post('/search-sales' , [\App\Http\Controllers\SaleController::class,'searchSalesPost'])->name('search-sales-post');
+
+
+Route::get('/list-inventory/{id}' , [\App\Http\Controllers\InventoryController::class,'showInventory'])->name('list-inventory');
+Route::get('/get-investor-items' , [\App\Http\Controllers\InventoryController::class,'getInvestorInventory'])->name('get-investor-items');
+
+Route::get('/get-payables/{id}' , [\App\Http\Controllers\PayableController::class,'getPayables'])->name('get-payables');
+Route::get('/get-payables-temp/{id}' , [\App\Http\Controllers\PayableController::class,'payablesRepTem'])->name('get-payables-temp');
+
+Route::get('/customer-by-name' , [\App\Http\Controllers\CustomerController::class,'customerByName'])->name('customer-by-name');
+
 Route::get('/get-recovery-off' , [\App\Http\Controllers\Controller::class,'getRecoveryOff'])->name('get-recovery-off');
 Route::get('/get-marketing-off' , [\App\Http\Controllers\Controller::class,'getMarketingOff'])->name('get-marketing-off');
+
 Route::get('/get-commissions' , [\App\Http\Controllers\CommissionController::class,'getCommisions'])->name('get-commissions');
 Route::post('/commission-report' , [\App\Http\Controllers\CommissionController::class,'commissionReport'])->name('commission-report');
-Route::get('/commission-report' , [\App\Http\Controllers\CommissionController::class,'commissionReport'])->name('commission-report');
+Route::get('/commission-report' , [\App\Http\Controllers\CommissionController::class,'commissionReport'])->name('commission-report2s');
 Route::get('/recieve-instalment/{instalment}' , [\App\Http\Controllers\InstalmentController::class,'recieveInstalment'])->name('recieve-instalment');
 Route::get('/pay-instalment' , [\App\Http\Controllers\InstalmentController::class,'payInstalment'])->name('pay-instalment');
 
-Route::get('/get-payables-temp/{id}' , [\App\Http\Controllers\PayableController::class,'payablesRepTem'])->name('get-payables-temp');
 
 
 

@@ -17,7 +17,8 @@ class Instalment extends Model
 
         return $this->belongsTo(Sale::class,'sale_id');
     }
-    public function saleCommision(){
-        return $this->morphMany(Commission::class,'transaction');
-    }
+    
+    // public function saleCommision(){
+    //     return $this->morphMany(Commission::class,'transaction');
+    // }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Expense;
 use App\Models\Inventory;
 use App\Models\Investor;
 use App\Models\InvestorLeadger;
@@ -118,15 +119,21 @@ class PurchaseController extends Controller
                     $inventory->unit_cost =  ($inventory->unit_cost+$purchase_item->unit_cost)/2;
                 }
                 $inventory->save();
-
+                
             }
             $supplier = Supplier::find($request->supplier);
             $sup_acc_id = $supplier->charOfAccounts->where('account_type',7)->first()->id;
             $inv_exp_acc =  $investor->charOfAccounts->where('account_type',9)->first()->id;
 
             if($request->tran_type==2){
-
-                $purchase->leadgerEntries()->create([
+                // creating expene
+                $expense = new Expense();
+                $expense->description = $inventory->item->name."  return loss";
+                $expense->amount = str_replace(',','',$request->td_loss[$a]);
+                $expense->date = $purchase->purchase_date;
+                $expense->save();
+                // creating impact of expenso on leadger
+                $expense->leadgerEntries()->create([
                     'account_id'=>  $inv_exp_acc,
                     'value'=> str_replace(',','',$request->td_loss[$a]) ,
                     'investor_id'=>$investor->id,
@@ -134,7 +141,7 @@ class PurchaseController extends Controller
                 ]);  
 
                 //  getting supplier payable account of the supplier
-                $purchase->leadgerEntries()->create([
+                $expense->leadgerEntries()->create([
                     'account_id'=>$sup_acc_id,
                     'value'=> - str_replace(',','',$request->td_loss[$a]),
                     'investor_id'=>$investor->id,

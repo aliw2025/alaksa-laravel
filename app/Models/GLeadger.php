@@ -5,24 +5,40 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class GLeadger extends Model
 {
+
+    // sale
+    // purchase
+    // pay
+    // instalment
     use HasFactory;
-    protected $guarded = [];
+    protected $guarded = [];    
     
-    public function transaction ()
+    // anyohter name
+    public function transactionable()
     {
-        // dd("sdsd");
-        return $this->morphTo('transaction');
+        
+        return $this->morphTo(__FUNCTION__, 'transaction_type', 'transaction_id');
+        // return $this->morphTo();
+
+    }
+    
+    public function transaction()
+    {
+        
+        // return $this->morphTo(__FUNCTION__, 'transaction_type', 'transaction_id');
+        return $this->morphTo();
+
     }
     public function account() {
 
         return $this->belongsTo(ChartOfAccount::class,'account_id');
     }
-    // public function purchase() {
-      
-    //     return $this->belongsTo(Purchase::class,'transaction_id');
-    // }
+
+
+    
 
 }

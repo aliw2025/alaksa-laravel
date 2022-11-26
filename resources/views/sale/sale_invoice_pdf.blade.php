@@ -47,7 +47,7 @@
         <tr >
             <td ><strong>Customer Name:</strong>
                 {{ !is_null($sale) ? $sale->customer->customer_name : '' }}</td>
-            <td  style="text-align: right;"><strong>Investor :</strong> {{ $sale->investor->investor_name }}</td>
+            
         </tr>
         <tr>
             <td ><strong>Payment Type :</strong> {{ $payment_type }}</td>
@@ -62,10 +62,11 @@
                 <th>#</th>
                 <th>Item Id</th>
                 <th>Item</th>
-                <th>Quantity</th>
-                <th>Price</th>
-                <th>Plan</th>
+                <th>Plan (Months)</th>
                 <th>Mark Up</th>
+                
+                <th>Selling Price</th>
+               
             </tr>
         </thead>
         <tbody>
@@ -76,10 +77,10 @@
                 <td >1</td>
                 <td> {{ $sale->item->id }}</td>
                 <td> {{ $sale->item->name }}</td>
-                <td> 1</td>
-                <td> {{ $selling_price }}</td>
                 <td> {{ $plan }}</td>
                 <td> {{ $markup }}%</td>
+                <td> {{ number_format($selling_price) }}</td>
+               
             </tr>
             <tr style="margin-bottom:0;margin-top:0">
                 <td></td>
@@ -88,7 +89,7 @@
                 <td></td>
                 <td></td>
                 <td>
-                    <p> <span style="font-weight: bold"> Total Amount: </span>  {{ $sale->total }}</p>
+                    <p> <span style="font-weight: bold"> Total Amount: </span>  {{ number_format( $sale->total)  }}</p>
                 </td>
             </tr>
         </tbody>
