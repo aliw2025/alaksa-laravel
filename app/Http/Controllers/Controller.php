@@ -7,6 +7,7 @@ use App\Models\Investor;
 use App\Models\InvestorLeadger;
 use App\Models\Account;
 use App\Models\AccountType;
+use App\Models\ChartOfAccount;
 use App\Models\GLeadger;
 use App\Models\User;
 use App\Models\Sale;
@@ -302,5 +303,13 @@ class Controller extends BaseController
         $data = curl_exec($curl);
         curl_close($curl);
         print_r($data);
+    }
+    
+    public function getInvestorAccount( $investor_id){
+       
+        $accounts = ChartOfAccount::where('owner_id',$investor_id)->where(function ($query) {
+            $query->where('account_type', '=', 1)->orWhere('account_type', '=', 4);})->get();
+
+            return  $accounts;
     }
 }

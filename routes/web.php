@@ -36,14 +36,12 @@ use App\Http\Controllers\InstalmentController;
 
 Route::get('/', [\App\Http\Controllers\Controller::class,'index'])->name('index');
 Route::get('/setup', [\App\Http\Controllers\Controller::class,'setup'])->name('setup');
-
 Route::get('/types', [\App\Http\Controllers\Controller::class,'createAccountTypes'])->name('types');
-
-
 Route::get('/test/{id}', [\App\Http\Controllers\Controller::class,'testSql'])->name('test');
 
 Route::get('/home/{id}', [\App\Http\Controllers\Controller::class,'home'])->name('home');
 Route::get('/calender' , [\App\Http\Controllers\Controller::class,'showCalender'])->name('calender');
+Route::get('/investor-cash-accounts/{id}' , [\App\Http\Controllers\Controller::class,'getInvestorAccount'])->name('investor-cash-accounts');
 
 // temporary routes
 // Route::get('/purchase' , [\App\Http\Controllers\Controller::class,'showPurchase'])->name('purchase');

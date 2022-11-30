@@ -6,7 +6,8 @@
                 <div class="row invoice-add">
                     <!-- Invoice Add Left starts -->
                     <div class="col-xl-12 col-md-12 col-12">
-                        <form class="" method="POST" target="_blank" autocomplete="on" action="{{ $type==1?route('sale.store'):route('post-return') }}">
+                        <form class="" method="POST" target="_blank" autocomplete="on"
+                            action="{{ $type == 1 ? route('sale.store') : route('post-return') }}">
                             <div class="card invoice-preview-card">
                                 <!-- Header starts -->
                                 <div class="card-body invoice-padding pb-0">
@@ -61,7 +62,30 @@
                                                         </div>
                                                     </div>
                                                 @else
-                                                    <input  id="rec_of_name" name="purchase_date" type="text"
+                                                    <input id="rec_of_name" name="purchase_date" type="text"
+                                                        class="form-control invoice-edit-input" readonly="readonly">
+                                                @endif
+
+                                            </div>
+                                            <div class="mt-1 d-flex align-items-center justify-content-between">
+                                                <span class="title">Inquiry Officer: </span>
+                                                @if ($type == 1)
+                                                    <div style="width: 11.21rem; max-width:11.21rem;"
+                                                        class="align-items-center">
+                                                        <input name="inq_of_id" id="inq_of_id"s class="form-control"
+                                                            placeholder="Name" type="hidden">
+                                                        <input name="inq_of_name" onkeyup="getInUserByName()"
+                                                            id="inq_of_name" class="form-control" placeholder="Name"
+                                                            type="text">
+                                                        <div class="list-type" id="inq_list"
+                                                            style="position: absolute; z-index: 1;" class="card mb-4">
+                                                            <div id="inq_list_body" class="list-group">
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                @else
+                                                    <input id="rec_of_name" name="purchase_date" type="text"
                                                         class="form-control invoice-edit-input" readonly="readonly">
                                                 @endif
 
@@ -89,23 +113,25 @@
                                             </div>
                                         </div>
                                         <div class="mt-2">
-                                            <h4 style="text-decoration: underline">{{ $type == 1 ? 'Sale' : 'Sale Return' }}</h4>
+                                            <h4 style="text-decoration: underline">
+                                                {{ $type == 1 ? 'Sale' : 'Sale Return' }}</h4>
                                         </div>
                                         <div class="invoice-number-date mt-md-0 mt-2">
                                             <div class="d-flex align-items-center justify-content-between mb-1">
                                                 @csrf
-                                                
-                                                @if($type == 2)
-                                               
-                                                <input id="sale_id"  name="sale_id" type="hidden"
-                                                    class="form-control " placeholder="">
+
+                                                @if ($type == 2)
+                                                    <input id="sale_id" name="sale_id" type="hidden"
+                                                        class="form-control " placeholder="">
                                                 @endif
-                                                <h4 class="invoice-title"> {{ $type == 1 ? 'Sale #' : 'Search Sale #' }}</h4>
+                                                <h4 class="invoice-title"> {{ $type == 1 ? 'Sale #' : 'Search Sale #' }}
+                                                </h4>
                                                 <div class="input-group input-group-merge invoice-edit-input-group">
-                                                    
-                                                    <input id="search_inv" @if ($type == 1) disabled @endif
-                                                        name="purchaseId" type="text"
-                                                        class="form-control invoice-edit-input" placeholder="">
+
+                                                    <input id="search_inv"
+                                                        @if ($type == 1) disabled @endif name="purchaseId"
+                                                        type="text" class="form-control invoice-edit-input"
+                                                        placeholder="">
                                                 </div>
                                             </div>
 
@@ -116,10 +142,22 @@
                                                         class="form-control invoice-edit-input date-picker flatpickr-input"
                                                         readonly="readonly">
                                                 @else
-                                                    <input id = "sale_date" name="purchase_date" type="text"
+                                                    <input id="sale_date" name="purchase_date" type="text"
                                                         class="form-control invoice-edit-input" readonly="readonly">
                                                 @endif
-                                               
+
+                                            </div>
+                                            <div class="d-flex align-items-center justify-content-between mb-1">
+                                                <span class="title">Account</span>
+                                                {{-- <select class="form-control" name="supplier" id=""></select> --}}
+                                                <div style="width: 11.21rem; max-width:11.21rem; "
+                                                    class="align-items-center">
+                                                    <select id="acc_type" name="acc_type" class="form-select">
+
+                        
+                                                    </select>
+                                                </div>
+
                                             </div>
                                             <div class="d-flex align-items-center justify-content-between">
                                                 <span class="title">Investor:</span>
@@ -224,9 +262,9 @@
                                                                     </p>
                                                                     <input name="selling_price"
                                                                         onkeyup="calculateInstallments()"
-                                                                        id="selling_price" 
-                                                                        class="number-separator form-control" value=""
-                                                                        placeholder="Selling Price">
+                                                                        id="selling_price"
+                                                                        class="number-separator form-control"
+                                                                        value="" placeholder="Selling Price">
                                                                 </div>
 
                                                                 <div id="plan_div" class="col-2 my-lg-0 my-2">
@@ -266,7 +304,7 @@
                                                                         <p>Total Sum :</p>
                                                                     </div>
                                                                     <div class="col-6">
-                                                                        <input  id="total_sum"
+                                                                        <input id="total_sum"
                                                                             style=" border: none;background-color: transparent;resize: none;outline: none;"
                                                                             name="total_sum" class="form-control"
                                                                             value="0">
@@ -275,7 +313,7 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                      
+
                                                         <div class="row ">
                                                             <div class="col-lg-5 col-12 mt-lg-0 mt-2">
                                                                 <div class="row d-flex align-items-center">
@@ -283,9 +321,10 @@
                                                                         <p>Down Payment :</p>
                                                                     </div>
                                                                     <div class="col-6">
-                                                                        <input  onkeyup="reAdjust()" id="down_payment"
+                                                                        <input onkeyup="reAdjust()" id="down_payment"
                                                                             style="border: none;background-color: transparent;resize: none;outline: none;"
-                                                                            name="down_payment" class="number-separator form-control"
+                                                                            name="down_payment"
+                                                                            class="number-separator form-control"
                                                                             value="0">
                                                                         {{-- <p id="down_payment_label"> 0</p> --}}
                                                                     </div>
@@ -297,8 +336,10 @@
                                                                         <p>Down Payment Paid :</p>
                                                                     </div>
                                                                     <div class="col-6">
-                                                                        <input name="down_payment_paid" class="form-check-input" type="checkbox" value="1" id="flexCheckDefault">
-                                                                        
+                                                                        <input name="down_payment_paid"
+                                                                            class="form-check-input" type="checkbox"
+                                                                            value="1" id="flexCheckDefault">
+
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -324,14 +365,15 @@
 
                                                             <div class="col-lg-5 col-12 mt-lg-0 mt-2">
                                                                 <div class="row d-flex align-items-center">
-                                                                    <div  class="col-6 mt-1">
+                                                                    <div class="col-6 mt-1">
                                                                         <p>instalments per Month :</p>
                                                                     </div>
                                                                     <div class="col-6  ">
                                                                         <input onkeyup="reAdjust2()" id="per_month"
                                                                             style=" border: none;background-color: transparent;resize: none;outline: none;"
                                                                             name="instalment_per_month"
-                                                                            class=" number-separator form-control" value="0">
+                                                                            class=" number-separator form-control"
+                                                                            value="0">
                                                                         {{-- <p id="per_month_label"> 0</p> --}}
                                                                     </div>
                                                                 </div>
@@ -377,25 +419,26 @@
                                     </div>
                                     <!-- Invoice Note ends -->
                                 </div>
-                                @if($type==1)
-                                <div class="row p-2">
-                                    <div class="col-12">
-                                        <div class="d-flex justify-content-end">
-                                            <button type="submit" class="btn btn-primary me-2">Save</button>
-                                            <button type="reset" class="btn btn-danger">Reset</button>
+                                @if ($type == 1)
+                                    <div class="row p-2">
+                                        <div class="col-12">
+                                            <div class="d-flex justify-content-end">
+                                                <button type="submit" class="btn btn-primary me-2">Save</button>
+                                                <button type="reset" class="btn btn-danger">Reset</button>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
                                 @else
-                                <div class="row p-2">
-                                    <div class="col-12">
-                                        <div class="d-flex justify-content-end">
-                                            {{-- onclick="returnSale()" --}}
-                                            <button id="retBtn" disabled  class="btn btn-primary me-2">Return</button>
-                                           
+                                    <div class="row p-2">
+                                        <div class="col-12">
+                                            <div class="d-flex justify-content-end">
+                                                {{-- onclick="returnSale()" --}}
+                                                <button id="retBtn" disabled
+                                                    class="btn btn-primary me-2">Return</button>
+
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
                                 @endif
 
                             </div>
@@ -416,6 +459,7 @@
             var type = $('#sale_type').val();
             console.log("type: " + type);
             $('#discount_div').hide();
+            getinvAccount() 
         });
 
 
@@ -434,9 +478,7 @@
                 $('#plan_div').show();
                 $('#instalment_sec').show();
                 $('#discount_div').hide();
-
             }
-           
 
         });
 
@@ -483,11 +525,6 @@
         }
 
         function returnSale() {
-          
-            // event.preventDefault();
-            // var id = $("#sale_id").val()
-            // console.log(id);
-
 
         }
 
@@ -518,9 +555,8 @@
 
 
         }
-        $("#search_inv").keypress(function(e) {
-            console.log('dfdfdfdfdfdfd');
 
+        $("#search_inv").keypress(function(e) {
 
             if (e.which == 13) {
                 event.preventDefault();
@@ -534,18 +570,18 @@
                     },
                     success: function(dataResult) {
                         $("#rec_of_name").val("");
-                            $("#mar_of_name").val("");
-                            $("#customer_name").val("");
-                            $("#customer_id").val("");
-                            $("#investor_name").val("");
-                            $("#sale_date").val("");
-                            $("#sale_id").val("");
+                        $("#mar_of_name").val("");
+                        $("#customer_name").val("");
+                        $("#customer_id").val("");
+                        $("#investor_name").val("");
+                        $("#sale_date").val("");
+                        $("#sale_id").val("");
                         $("#sale_body").empty();
-                       
-                        if(dataResult.length==0){
+
+                        if (dataResult.length == 0) {
                             alert('serch result not found')
-                            $('#retBtn').prop('disabled',true);
-                            
+                            $('#retBtn').prop('disabled', true);
+
                         }
                         var i;
                         for (i = 0; i < dataResult.length; i++) {
@@ -555,9 +591,9 @@
                             <td>1</td>
                             <td>` + item.item.id + `</td>
                              <td>` + item.item.name + `</td>
-                             <td>` + item.selling_price+`</td>
-                             <td>` + item.plan+`</td>
-                             <td>` + item.markup+`</td>
+                             <td>` + item.selling_price + `</td>
+                             <td>` + item.plan + `</td>
+                             <td>` + item.markup + `</td>
                             </tr>`;
                             console.log(item.id);
                             $("#sale_id").val(item.id);
@@ -568,13 +604,13 @@
                             $("#customer_id").val(item.customer.id);
                             $("#investor_name").val(item.investor.investor_name);
                             $("#sale_date").val(item.sale_date);
-                            $('#retBtn').prop('disabled',false);
-
+                            $('#retBtn').prop('disabled', false);
+                            $('#search_inv').val(item.invoice_no);
 
                         }
                     },
                     error: function(xhr, status, error) {
-                        $('#retBtn').prop('disabled',true);
+                        $('#retBtn').prop('disabled', true);
                     },
                 });
                 $("#rec_list").show();
@@ -616,7 +652,47 @@
             $("#mar_list").show();
         }
 
+        function getInUserByName() {
+            var key = $('#inq_of_name').val();
+            console.log(key);
+            if (key.toString().length < 3) {
 
+                return;
+            }
+            // change the routes later after done with roles
+            $.ajax({
+                url: "{{ url('get-recovery-off') }}/",
+                type: "GET",
+                data: {
+                    key: key,
+                },
+                success: function(dataResult) {
+                    $("#inq_list_body").empty();
+                    console.log('inqv');
+                    console.log(dataResult);
+                    var i;
+                    for (i = 0; i < dataResult.length; i++) {
+                        var item = dataResult[i];
+                        console.log(item);
+                        markup = `<button id = "inItem` + item.id +
+                            `" type="button" class="list-group-item list-group-item-action" onclick="setInUser(` +
+                            item.id + `)">` + item.name + `</button>`;
+                        $("#inq_list_body").append(markup);
+                    }
+                },
+                error: function(xhr, status, error) {},
+            });
+            $("#inq_list").show();
+        }
+
+
+        function setInUser(user) {
+
+            $("#inq_of_name").val($('#inItem' + user).text());
+            $("#inq_of_id").val(user);
+            $("#inq_list").hide();
+
+        }
 
         function getRUserByName() {
 
@@ -724,7 +800,7 @@
 
             console.log('ddfdfdf');
             var sellingPrice = $('#selling_price').val();
-            var sellingPrice = Number(sellingPrice.replace(/[^0-9.-]+/g,""));
+            var sellingPrice = Number(sellingPrice.replace(/[^0-9.-]+/g, ""));
             var plan = $('#plan').val();
             var markup = $('#markup').val();
             var finalPrice = (parseFloat(sellingPrice) * (parseFloat(markup) / 100)) + parseFloat(sellingPrice);
@@ -745,38 +821,29 @@
             $('#instalments').val(plan);
             $('#per_month').val(normValue.toLocaleString('en-US'));
 
-            // console.log('un normalizedd');
-            // console.log(perMonth);
-            // console.log('normalizedd');
-            // console.log(normValue);
-            // console.log('final selling price: ');
-            // console.log(finalPrice);
-            // console.log('down Payment: ');
-            // console.log(downPayment);
         }
+
         function reAdjust() {
             console.log('re adjusting');
-            var  finalPrice =  $('#total_sum').val();
-            finalPrice= Number(finalPrice.replace(/[^0-9.-]+/g,""));
-            var  downPayment = $('#down_payment').val();
-            downPayment =  Number(downPayment.replace(/[^0-9.-]+/g,""));
+            var finalPrice = $('#total_sum').val();
+            finalPrice = Number(finalPrice.replace(/[^0-9.-]+/g, ""));
+            var downPayment = $('#down_payment').val();
+            downPayment = Number(downPayment.replace(/[^0-9.-]+/g, ""));
             var plan = $('#plan').val();
 
             var rem = finalPrice - downPayment;
-            var inst = rem/ plan;
+            var inst = rem / plan;
             $('#per_month').val(inst.toLocaleString('en-US'));
-
-
-
         }
+
         function reAdjust2() {
             console.log('re adjusting2');
             var perMonth = $('#per_month').val();
-            perMonth =  Number(perMonth.replace(/[^0-9.-]+/g,""));
-            var  finalPrice =  $('#total_sum').val();
-            finalPrice =  Number(finalPrice.replace(/[^0-9.-]+/g,""));
-            var  downPayment = $('#down_payment').val();
-            downPayment =  Number(downPayment.replace(/[^0-9.-]+/g,""));
+            perMonth = Number(perMonth.replace(/[^0-9.-]+/g, ""));
+            var finalPrice = $('#total_sum').val();
+            finalPrice = Number(finalPrice.replace(/[^0-9.-]+/g, ""));
+            var downPayment = $('#down_payment').val();
+            downPayment = Number(downPayment.replace(/[^0-9.-]+/g, ""));
             var plan = $('#plan').val();
 
             var total = perMonth * plan;
@@ -784,9 +851,8 @@
 
             $('#down_payment').val(rem.toLocaleString('en-US'));
 
-
-
         }
+
 
         function setText(item) {
 
@@ -802,11 +868,46 @@
             $("#customer_name").val($('#cusItem' + item).text());
             $("#customer_id").val(item);
             $("#customer_list").hide();
+
         }
 
+
         $('#select2-basic').change(function() {
+
             $("#item_id").val("");
             $("#item_name").val("");
+            
+            // get new accounts for investor 
+            getinvAccount() 
+
+
         });
+
+
+        function getinvAccount() {
+
+            var investor_id = $("#select2-basic").val();
+            $.ajax({
+                url: "{{ url('investor-cash-accounts') }}/" + investor_id,
+                type: "GET",
+
+                success: function(dataResult) {
+                    var i;
+                    var acc_sel = $('#acc_type');
+                    acc_sel.empty();
+
+                    for (i = 0; i < dataResult.length; i++) {
+                        var item = dataResult[i];
+                        console.log(item);
+                        acc_sel.append($('<option>', {
+                            text: item.account_name,
+                            value: item.id
+                        }));
+
+                    }
+                },
+                error: function(xhr, status, error) {},
+            });
+        }
     </script>
 @endsection

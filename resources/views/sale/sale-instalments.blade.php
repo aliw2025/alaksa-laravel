@@ -124,16 +124,31 @@
                 </div>
 
                 <div class="row container">
+                    <h4 class="text-center" >Instalment Payment</h4>
                     <form action="{{route('pay-instalment')}}">
 
                         <input id="ins_id" type="hidden" name="id" type="text" class="form-control">
+                        <div class="col-12 my-1 ">
+                            <label> Account: </label>
+                           <select  class="form-control" name="account" id="">
+                                <option value="cash"> Cash</option>
+                                <option value="Bank account">Bank Account</option>
+                           </select>
+                        </div>
                         <div class="col-12 my-1 ">
                             <label> Amount: </label>
                             <input name="amount_paid" type="text" class="form-control">
                         </div>
                         <div class="col-12 my-1">
                             <label> Note: </label>
-                            <input type="text" class="form-control">
+                           <textarea class="form-control" name="" id="" cols="30" rows="3"></textarea>
+                        </div>
+                        <div lass="col-12 my-1">
+                            <label> Date: </label>
+                                <input name="pay_date" type="text"
+                                    class="form-control invoice-edit-input date-picker flatpickr-input"
+                                    readonly="readonly">
+                
                         </div>
                         <div class="col-12 my-1 d-flex justify-content-end">
                             <button data-bs-dismiss="modal" type="submit" class="btn btn-primary">Submit</button>
@@ -144,6 +159,8 @@
             </div>
         </div>
     </div>
+    <script src="{{ url('/resources/js/scripts/pages/app-invoice.min.js') }}"></script>
+
 
     <script type="text/javascript">
 

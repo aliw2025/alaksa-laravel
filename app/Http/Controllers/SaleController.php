@@ -566,9 +566,10 @@ class SaleController extends Controller
     public function getSaleNo(Request $request)
     {
 
-        $sale = Sale::where('invoice_no', '=',  $request->key)->with('item')->with('marketingOfficer')->with('recoveryOfficer')->with('customer')->with('investor')->get();
+        $sale = Sale::where('invoice_no', 'like',  "%".$request->key)->with('item')->with('marketingOfficer')->with('recoveryOfficer')->with('customer')->with('investor')->get();
         return $sale;
     }
+
 
     public function saleReturn(Request $request)
     {

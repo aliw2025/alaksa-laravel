@@ -74,7 +74,7 @@ class AccountController extends Controller
     }
     public function balance(Account $account){
 
-        return $account->$investor_leadgers;
+        // return $account->$investor_leadgers;
     }
     /**
      * Remove the specified resource from storage.
