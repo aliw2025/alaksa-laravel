@@ -17,7 +17,7 @@ use App\Models\Commission;
 use Illuminate\Http\Request;
 use PDF;
 use Carbon\Carbon;
-
+use FontLib\Table\Type\cmap;
 
 class SaleController extends Controller
 {
@@ -502,7 +502,7 @@ class SaleController extends Controller
      */
     public function show(Sale $sale)
     {
-        //
+        return view('sale.sale_show',compact('sale'));
     }
 
     /**
