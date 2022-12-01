@@ -538,8 +538,7 @@ class SaleController extends Controller
     }
 
     public function showSales($id)
-    {
-
+    {   
         $investor = Investor::find($id);
         $sales = $investor->sales;
         return view('sale.sale-list', compact('sales', 'investor'));
@@ -565,7 +564,6 @@ class SaleController extends Controller
     }
     public function getSaleNo(Request $request)
     {
-
         $sale = Sale::where('invoice_no', 'like',  "%".$request->key)->with('item')->with('marketingOfficer')->with('recoveryOfficer')->with('customer')->with('investor')->get();
         return $sale;
     }
@@ -584,13 +582,18 @@ class SaleController extends Controller
     }
 
 
-    public function saleReturns()
-    {
-
+    public function saleReturns( Request $request)
+    {     $type = 2;
         $investors = Investor::all();
         $suppliers = Supplier::all();
+      
+        if(isset($request->id)){
+            $sale = Sale::find($request->id);
+            return view('sale.sale', compact('investors', 'suppliers', 'type','sale'));
+        }
+       
         // for purchase return
-        $type = 2;
+      
         return view('sale.sale', compact('investors', 'suppliers', 'type'));
     }
 
@@ -603,9 +606,16 @@ class SaleController extends Controller
     }
 
     public function searchSalesPost(Request $request){
-
-        $sales = Sale::SearchSale($request->from_date,$request->to_date,$request->customer_name,$request->customer_id,$request->invoice_no)->get();
-
+        // dd($request->all());
+        $sales = Sale::SearchSale($request->from_date,$request->to_date,$request->customer_name,$request->customer_id,$request->invoice_no)->paginate(10);
+        $sales->appends([
+            'from_date'=>$request->from_date,
+            'to_date'=>$request->to_date,
+            'customer_name'=>$request->customer_name,
+            'customer_id'=>$request->customer_id,
+            'invoice_no'=>$request->invoice_no
+        ]);
+        // dd($sales);
         return view('sale.search_sale',compact('sales'));
 
     }

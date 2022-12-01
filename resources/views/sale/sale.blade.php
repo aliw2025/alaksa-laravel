@@ -6,7 +6,7 @@
                 <div class="row invoice-add">
                     <!-- Invoice Add Left starts -->
                     <div class="col-xl-12 col-md-12 col-12">
-                        <form class="" method="POST" target="_blank" autocomplete="on"
+                        <form id="sale_fomr" class="" method="POST" target="_blank" autocomplete="on"
                             action="{{ $type == 1 ? route('sale.store') : route('post-return') }}">
                             <div class="card invoice-preview-card">
                                 <!-- Header starts -->
@@ -98,14 +98,12 @@
                                                         class="align-items-center">
                                                         <select id="sale_type" name="sale_type" class="form-select"
                                                             aria-label="Default select example">
-
                                                             <option value="1">Instalments</option>
                                                             <option value="2">Cash</option>
-
                                                         </select>
                                                     </div>
                                                 @else
-                                                    <input name="purchase_date" type="text"
+                                                    <input id="sale_type" name="sale_type"  type="text"
                                                         class="form-control invoice-edit-input" readonly="readonly">
                                                 @endif
 
@@ -127,8 +125,9 @@
                                                 <h4 class="invoice-title"> {{ $type == 1 ? 'Sale #' : 'Search Sale #' }}
                                                 </h4>
                                                 <div class="input-group input-group-merge invoice-edit-input-group">
-
-                                                    <input id="search_inv"
+                                                 
+                                                
+                                                    <input id="search_inv" @if(isset($sale)) value="{{$sale->invoice_no}}" @endif
                                                         @if ($type == 1) disabled @endif name="purchaseId"
                                                         type="text" class="form-control invoice-edit-input"
                                                         placeholder="">
@@ -180,8 +179,6 @@
                                                         <input id="investor_name" name="purchase_date" type="text"
                                                             class="form-control invoice-edit-input" readonly="readonly">
                                                     @endif
-
-
                                                 </div>
                                             </div>
                                             <div class=" mt-1 d-flex align-items-center justify-content-between">
@@ -453,6 +450,7 @@
     <script src="{{ url('/resources/js/scripts/pages/app-invoice.min.js') }}"></script>
 
     <script>
+
         $(document).ready(function() {
             $('.select2-selection__arrow').hide();
             $('#instal').text('name is khan');
@@ -460,12 +458,16 @@
             console.log("type: " + type);
             $('#discount_div').hide();
             getinvAccount() 
+            var inv = $('#search_inv').val();
+            if(inv.length>5){
+                search_inv();
+            }
         });
 
-
         $('#sale_type').change(function() {
+            // hide and show feilds based on sale type
             var type = $('#sale_type').val()
-            console.log('sale type : ' + type);
+            // console.log('sale type : ' + type);
             if (type == 2) {
 
                 $('#markup_div').hide();
@@ -482,9 +484,11 @@
 
         });
 
+
+        // get items 
         function getItems() {
 
-            console.log('function callled');
+           
             var letters = $('#item_name').val();
             if (letters.length < 2) {
                 return;
@@ -526,6 +530,7 @@
 
         function returnSale() {
 
+
         }
 
         function getCustomerById() {
@@ -555,13 +560,9 @@
 
 
         }
-
-        $("#search_inv").keypress(function(e) {
-
-            if (e.which == 13) {
-                event.preventDefault();
+        function search_inv() {
+            
                 var inv = $('#search_inv').val();
-
                 $.ajax({
                     url: "{{ url('get-sale-no') }}/",
                     type: "GET",
@@ -569,6 +570,7 @@
                         key: inv,
                     },
                     success: function(dataResult) {
+                      
                         $("#rec_of_name").val("");
                         $("#mar_of_name").val("");
                         $("#customer_name").val("");
@@ -576,11 +578,14 @@
                         $("#investor_name").val("");
                         $("#sale_date").val("");
                         $("#sale_id").val("");
+                        $('#sale_type').val("");
                         $("#sale_body").empty();
 
+                       
                         if (dataResult.length == 0) {
                             alert('serch result not found')
                             $('#retBtn').prop('disabled', true);
+
 
                         }
                         var i;
@@ -605,7 +610,9 @@
                             $("#investor_name").val(item.investor.investor_name);
                             $("#sale_date").val(item.sale_date);
                             $('#retBtn').prop('disabled', false);
-                            $('#search_inv').val(item.invoice_no);
+                            $('#search_inv').val(item.invoice_no); 
+                            $('#sale_type').val(item.sale_type==1? "Instalments":"Cash");
+                          
 
                         }
                     },
@@ -613,9 +620,17 @@
                         $('#retBtn').prop('disabled', true);
                     },
                 });
-                $("#rec_list").show();
+              
+            
+        }
+        // funoction for searchhing invoice
+        $("#search_inv").keypress(function(e) {
 
-                console.log(inv);
+            if (e.which == 13) {
+                event.preventDefault();
+                
+                search_inv();
+                
             }
         });
 
@@ -729,7 +744,8 @@
 
 
         function setMarUser(user) {
-            console.log('fuck pic');
+
+           
             $("#mar_of_name").val($('#marItem' + user).text());
             $("#mar_of_id").val(user);
             $("#mar_list").hide();

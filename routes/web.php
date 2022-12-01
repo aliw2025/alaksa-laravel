@@ -62,8 +62,8 @@ Route::get('/post-return' , [\App\Http\Controllers\SaleController::class,'redire
 Route::get('/get-sale-instalments' , [\App\Http\Controllers\SaleController::class,'showInstalments'])->name('get-sale-instalments');
 Route::get('/test-pdf' , [\App\Http\Controllers\SaleController::class,'testPdf'])->name('test-pdf');
 Route::get('/get-invoices' , [\App\Http\Controllers\SaleController::class,'getInvoices'])->name('get-invoices');
-Route::get('/search-sales' , [\App\Http\Controllers\SaleController::class,'searchSales'])->name('search-sales');
-Route::Post('/search-sales' , [\App\Http\Controllers\SaleController::class,'searchSalesPost'])->name('search-sales-post');
+// Route::get('/search-sales' , [\App\Http\Controllers\SaleController::class,'searchSales'])->name('search-sales');
+Route::get('/search-sales' , [\App\Http\Controllers\SaleController::class,'searchSalesPost'])->name('search-sales-post');
 
 
 Route::get('/list-inventory/{id}' , [\App\Http\Controllers\InventoryController::class,'showInventory'])->name('list-inventory');

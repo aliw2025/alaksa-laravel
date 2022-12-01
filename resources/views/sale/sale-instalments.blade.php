@@ -10,13 +10,14 @@
                         </div>
                     </div>
                     <div class="card-body">
+                            
                         <div class="row">
                             <div class="col-6">
                                 <form action="">
                                     <div class="row my-1">
                                         <div class="col-6">
-                                            <label class="mb-1">Type last digits of invoice</label>
-                                            <input id="invoice_no" onkeyup="getInvoices()"
+                                            <label class="mb-1">Invoice no</label>
+                                            <input readonly  id="invoice_no" onkeyup="getInvoices()"
                                                 value="{{ isset($sale) ? $sale->invoice_no : '' }}" class="form-control"
                                                 type="text">
                                             <div class="list-type" id="list" style="position: absolute; z-index: 1;"
@@ -25,7 +26,6 @@
                                                     height:150px;
                                                     overflow-y: scroll;"
                                                     id="listBody" class="list-group ">
-
                                                 </div>
                                             </div>
                                         </div>
@@ -83,11 +83,11 @@
                                                         @endif
                                                     </td>
                                                     <td>
-                                                        <a  data-id="{{ $pur->id }}"
+                                                        <button @if($pur->instalment_paid) disabled @endif data-id="{{ $pur->id }}"
                                                             class=" abc btn btn-primary waves-effect waves-float waves-light"
                                                             data-bs-toggle="modal" data-bs-target="#addNewCard">
                                                             Pay
-                                                        </a>
+                                                        </button>
                                                         {{-- <a href="{{ route('recieve-instalment',$pur->id) }}" >pay</a> --}}
                                                     </td>
                                                 </tr>

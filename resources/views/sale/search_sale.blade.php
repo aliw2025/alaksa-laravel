@@ -10,7 +10,7 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <form class="" method="POST" autocomplete="on" action="{{ route('search-sales-post') }}">
+                    <form class="" method="GET" autocomplete="on" action="{{ route('search-sales-post') }}">
                         @csrf
                         <div class="row d-flex align-items-center">
                             
@@ -42,21 +42,6 @@
                                 <span class="title">Invoice No:</span>
                                 <input name="invoice_no" type="text" class="form-control">
                             </div>
-
-
-                          
-
-                            {{-- <div class="col-2 ">
-                                <span class="title">User:</span>
-                                <input id="rec_of_id"  placeholder="User" name="user_id" type="hidden" class="form-control">
-                                <input id="rec_of_name" onkeyup="getRUserByName()" placeholder="User" name="user" type="text" class="form-control">
-                                <div class="list-type" id="rec_list" style="position: absolute; z-index: 1;"
-                                    class="card mb-4">
-                                    <div id="rec_list_body" class="list-group">
-
-                                    </div>
-                                </div>
-                            </div> --}}
                             <div class="col-2 ">
                                 <Button type="submit" class="mt-1 btn btn-relief-primary">Report</Button>
                             </div>
@@ -68,6 +53,7 @@
                     <div class="row mt-2">
                    
                         <div  class="col-12 table-responsive ">
+                            @if(isset($sales))
                             <table id="investor-table" class="table">
                                 <thead class="thead-dark">
                                     <tr style="background-color:red !important;">
@@ -83,7 +69,7 @@
                                     @php
                                         $count = 1
                                     @endphp
-                                    @if(isset($sales))
+                                    
                                     @foreach ($sales as $pur)
 
                                     <tr>
@@ -93,24 +79,32 @@
                                         <td>{{$pur->sale_date}}</td>
                                         <td>
                                             <a style="text-decoration: none;color:black" href="{{route('sale.show',$pur->id)}}"><i data-feather='eye'></i></a>
-                                            <a style="text-decoration: none;color:black" href="{{route('get-sale-instalments',$pur->id)}}"><i data-feather='rotate-ccw'></i></i></a>
-
-                                            <a style="text-decoration: none;color:black" href="{{route('get-sale-instalments',$pur->id)}}"><i data-feather='dollar-sign'></i></a>
-                                        
+                                            <a style="text-decoration: none;color:black" href="{{url('sale-return')."?id=".$pur->id}}" ><i data-feather='rotate-ccw'></i></i></a>
+                                            <a style="text-decoration: none;color:black" href="{{url('get-sale-instalments')."?id=".$pur->id}}"><i data-feather='dollar-sign'></i></a>
                                         </td>
-                                       
-                                      
                                     </tr>
                                     @php
                                         $count = $count+1
                                     @endphp
 
                                     @endforeach
-                                    @endif
+                                   
                                  
                             
                                 </tbody>
                             </table>
+                            <div class="row my-2">
+                                <div class="col-6">
+
+                                </div>
+                                <div class="col-6 d-flex justify-content-end">
+                                    {{ $sales->links() }}
+                                </div>
+                              
+                            </div>
+                           
+                            @endif
+
                         </div>
                     </div>
                 </div>
@@ -127,7 +121,7 @@
 
         $(document).ready(function() {
             console.log('i am datatable');
-            $('#investor-table').DataTable();
+            // $('#investor-table').DataTable();
         });
 
     });

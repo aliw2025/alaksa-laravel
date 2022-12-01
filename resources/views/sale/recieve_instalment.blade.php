@@ -44,57 +44,9 @@
                                                 </div>
 
                                             </div>
-                                            {{-- <div class="d-flex align-items-center justify-content-between">
-                                                <span class="title">Investor:</span>
-                                                <div style="width: 11.21rem; max-width:11.21rem; "
-                                                    class="align-items-center">
-                                                    @if (isset($payable))
-                                                        <input disabled value="{{ $payable->investor->investor_name }}"
-                                                            name="payment_date" type="text"
-                                                            class="form-control invoice-edit-input ">
-                                                    @else
-                                                        <select name="investor_id"
-                                                            class=" select2 select2-hidden-accessible form-control invoice-edit-input"
-                                                            id="select2-basic" data-select2-id="select2-basic"
-                                                            tabindex="-1" aria-hidden="true">
-                                                            @foreach ($investors as $investor)
-                                                                <option value="{{ $investor->id }}">
-                                                                    {{ $investor->investor_name }}
-                                                                </option>
-                                                            @endforeach
-                                                        </select>
-                                                    @endif
-
-                                                </div>
-                                            </div> --}}
-                                            {{-- <div class="d-flex align-items-center justify-content-between mt-1">
-                                                <span class="title">Account</span>
-                                                
-                                                <div style="width: 11.21rem; max-width:11.21rem; "
-                                                    class="align-items-center">
-                                                    <select
-                                                        @if (isset($payable)) disabled
-                                                value="{{ $payable->investor->investor_name }}" @endif
-                                                        name="acc_type" class="form-select"
-                                                        aria-label="Default select example">
-
-                                                        <option value="1"> Cash</option>
-                                                        <option value="8"> Bank Account</option>
-
-                                                    </select>
-                                                </div>
-
-                                            </div> --}}
-
-                                           
                                         </div>
                                     </div>
                                 </div>
-{{-- 
-                                <div style="top:20%;left:20%;border:1px solid;position: absolute;width:500px;height:500px;z-index:1" class="card">
-
-                                </div> --}}
-
                                 <!-- Header ends -->
                                 <hr class="invoice-spacing">
                                 <!-- Product Details starts -->
@@ -123,10 +75,7 @@
                                                                     id="cost0" name="note" type="number"
                                                                     class="form-control" value="" placeholder="">
                                                                 {{-- <textarea name="note" class="form-control" rows="1" id="note"></textarea> --}}
-
                                                             </div>
-
-
                                                         </div><s></s>
 
                                                     </div>
@@ -137,11 +86,8 @@
                                     </form>
                                 </div>
                                 <!-- Product Details ends -->
-
-
                                 <!-- Invoice Total ends -->
                                 <hr class="invoice-spacing mt-0">
-
                                 <div class="card-body invoice-padding py-0">
                                     <!-- Invoice Note starts -->
                                     <div class="row">
