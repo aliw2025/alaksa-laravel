@@ -138,6 +138,7 @@ class SaleController extends Controller
             // if down payment is paid $down_payment is true
             $instalment->instalment_paid = $down_payment;
             $instalment->due_date = $request->sale_date;
+            $instalment->instalment_no = 0;
             $instalment->amount_paid = $down_payment?str_replace(',','',$request->down_payment):0;
             $instalment->save();
             if ($down_payment) {
@@ -201,6 +202,7 @@ class SaleController extends Controller
                 $instalment->amount = str_replace(',','',$request->instalment_per_month);
                 $instalment->instalment_paid = false;
                 $instalment->due_date = $next;
+                $instalment->instalment_no = $i+1;
                 $instalment->save();
                 $temp = $next;
             }

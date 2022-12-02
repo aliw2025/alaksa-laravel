@@ -21,4 +21,7 @@ class Instalment extends Model
     public function saleCommision(){
         return $this->morphMany(Commission::class,'transaction');
     }
+    public function instalmentPayments(){
+        return $this->hasMany(InstalmentPayment::class,'instalment_id');
+    }
 }

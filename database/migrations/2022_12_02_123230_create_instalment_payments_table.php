@@ -13,18 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        
-        Schema::create('instalments', function (Blueprint $table) {
-
+        Schema::create('instalment_payments', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('sale_id');
-            $table->integer('instalment_no')->nullable();
+            $table->unsignedBigInteger('instalment_id');
             $table->double('amount');
-            $table->double('amount_paid')->nullable();
-            $table->boolean('instalment_paid');
-            $table->date('due_date')->nullable();
+            $table->date('payment_date');
             $table->timestamps();
-
         });
     }
 
@@ -35,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('instalments');
+        Schema::dropIfExists('instalment_payments');
     }
 };

@@ -60,11 +60,15 @@
                                         @if (isset($instalments))
                                             @foreach ($instalments as $pur)
                                                 <tr>
+                                                    
                                                     <td>{{ $count }}</td>
                                                     <td>{{ $pur->due_date }}</td>
                                                     <td>{{ number_format($pur->amount) }}</td>
                                                     <td> {{ number_format($pur->amount_paid )}}</td>
-                                                    <td> {{ number_format($pur->amount - $pur->amount_paid) }}</td>
+                                                    @php
+                                                        $rem = $pur->amount - $pur->amount_paid
+                                                    @endphp
+                                                    <td> {{ number_format($rem) }}</td>
 
                                                     <td>
                                                         @if ($pur->instalment_paid)
@@ -83,7 +87,7 @@
                                                         @endif
                                                     </td>
                                                     <td>
-                                                        <button @if($pur->instalment_paid) disabled @endif data-id="{{ $pur->id }}"
+                                                        <button @if($pur->instalment_paid) disabled @endif data-rem={{$rem}} data-id="{{ $pur->id }}"
                                                             class=" abc btn btn-primary waves-effect waves-float waves-light"
                                                             data-bs-toggle="modal" data-bs-target="#addNewCard">
                                                             Pay
@@ -125,8 +129,8 @@
 
                 <div class="row container">
                     <h4 class="text-center" >Instalment Payment</h4>
-                    <form action="{{route('pay-instalment')}}">
-
+                    <form  method="POST" action="{{route('pay-instalment')}}">
+                        @csrf
                         <input id="ins_id" type="hidden" name="id" type="text" class="form-control">
                         <div class="col-12 my-1 ">
                             <label> Account: </label>
@@ -136,8 +140,12 @@
                            </select>
                         </div>
                         <div class="col-12 my-1 ">
+                            <label> Amount Pending </label>
+                            <input id="rem_amount" name="rem_ammount" type="text" class="form-control">
+                        </div>
+                        <div class="col-12 my-1 ">
                             <label> Amount: </label>
-                            <input name="amount_paid" type="text" class="form-control">
+                            <input id="amount"  name="amount_paid" type="text" class="form-control">
                         </div>
                         <div class="col-12 my-1">
                             <label> Note: </label>
@@ -148,7 +156,6 @@
                                 <input name="pay_date" type="text"
                                     class="form-control invoice-edit-input date-picker flatpickr-input"
                                     readonly="readonly">
-                
                         </div>
                         <div class="col-12 my-1 d-flex justify-content-end">
                             <button data-bs-dismiss="modal" type="submit" class="btn btn-primary">Submit</button>
@@ -166,9 +173,26 @@
 
         $(document).on("click", ".abc", function() {
             var insId = $(this).data('id');
+            var rem_amount = $(this).data('rem');
+
             // alert(insId);
             $("#ins_id").val(insId);
+            $("#rem_amount").val(rem_amount);
+
         });
+        
+        $(document).on('keyup','#amount',function () {
+            var rem_amount = parseFloat( $("#rem_amount").val());
+            var amount = parseFloat($(this).val());
+            if(amount>rem_amount){
+                $(this).val("");
+            }
+            
+        });
+
+        function checkAmountPaid(){
+                
+        }   
         $(document).ready(function() {
 
             $(document).ready(function() {

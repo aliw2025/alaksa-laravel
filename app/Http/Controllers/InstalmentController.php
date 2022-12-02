@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Instalment;
+use App\Models\InstalmentPayment;
 use App\Models\Investor;
 
 use Illuminate\Http\Request;
@@ -36,11 +37,19 @@ class InstalmentController extends Controller
 
     public function payInstalment(Request $request){
       
-
         $instalment = Instalment::find($request->id);
-
         $instalment->amount_paid = $request->amount_paid;
-        $instalment->instalment_paid = 1;
+        // add payment transaction here
+        $payment = new InstalmentPayment();
+        $payment->instalment_id = $instalment->id;
+        $payment->amount = $request->amount_paid;
+        $payment->payment_date = $request->pay_date;
+        $payment->save();
+
+        if($instalment->amount_paid==$instalment->amount){
+            $instalment->instalment_paid = 1;
+        }
+       
         $instalment->save();
         $sale = $instalment->sale;
 
@@ -134,6 +143,8 @@ class InstalmentController extends Controller
 
         return view('sale.sale-instalments',compact('sale','instalments'));
     }
+
+    
 
 
     /**

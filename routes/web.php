@@ -81,7 +81,7 @@ Route::get('/get-commissions' , [\App\Http\Controllers\CommissionController::cla
 Route::post('/commission-report' , [\App\Http\Controllers\CommissionController::class,'commissionReport'])->name('commission-report');
 Route::get('/commission-report' , [\App\Http\Controllers\CommissionController::class,'commissionReport'])->name('commission-report2s');
 Route::get('/recieve-instalment/{instalment}' , [\App\Http\Controllers\InstalmentController::class,'recieveInstalment'])->name('recieve-instalment');
-Route::get('/pay-instalment' , [\App\Http\Controllers\InstalmentController::class,'payInstalment'])->name('pay-instalment');
+Route::post('/pay-instalment' , [\App\Http\Controllers\InstalmentController::class,'payInstalment'])->name('pay-instalment');
 
 
 
