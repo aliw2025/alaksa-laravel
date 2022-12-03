@@ -30,19 +30,26 @@ class InstalmentController extends Controller
         
     }
     public function recieveInstalment(Instalment $instalment) {
-    //    return $instalment;
+
         return view('sale.recieve_instalment',compact('instalment'));
     }
 
 
     public function payInstalment(Request $request){
-      
+       
         $instalment = Instalment::find($request->id);
-        $instalment->amount_paid = $request->amount_paid;
+        $sale = $instalment->sale;
+        $instalments = $sale->instalments;
+        $instalment->amount_paid = $instalment->amount_paid+ str_replace(',','',$request->amount_paid);
+        if($instalment->amount_paid > $instalment->amount){
+            $user_exception = "amount cannot be greater than due amount";
+            return redirect()->route('get-sale-instalments',["id"=>$sale->id,"user_exception"=>$user_exception]);
+            // return view('sale.sale-instalments',compact('sale','instalments','user_exception'));
+        }
         // add payment transaction here
         $payment = new InstalmentPayment();
         $payment->instalment_id = $instalment->id;
-        $payment->amount = $request->amount_paid;
+        $payment->amount =  str_replace(',','',$request->amount_paid);
         $payment->payment_date = $request->pay_date;
         $payment->save();
 
@@ -51,8 +58,7 @@ class InstalmentController extends Controller
         }
        
         $instalment->save();
-        $sale = $instalment->sale;
-
+        
         // calculate commisions 
         $investor = Investor::find($sale->investor_id);
         // getting investory inventory account 
@@ -77,9 +83,9 @@ class InstalmentController extends Controller
         $inv_per = $sale->selling_price  / $sale->total;
         $markup_per = 1 - $inv_per;
         // item price recovry
-        $ins_mon = $request->amount_paid * $inv_per;
+        $ins_mon =  str_replace(',','',$request->amount_paid) * $inv_per;
         // each investor share in markup profit
-        $share = ($request->amount_paid - $ins_mon) * 0.50;
+        $share = ( str_replace(',','',$request->amount_paid) - $ins_mon) * 0.50;
         
         //  make leadger entries
          // debit cash of investor for inventory recovery
@@ -129,20 +135,20 @@ class InstalmentController extends Controller
             'date' => $sale->sale_date
         ]);
 
-        $instalments = $sale->instalments;
-
+    
         $instalment->saleCommision()->create(
             [
                 'commission_type' => 2,
                 'user_id' => $sale->rec_of_id,
-                'amount' => $request->amount_paid * 0.01,
+                'amount' =>  str_replace(',','',$request->amount_paid) * 0.01,
                 'status' => 0,
                 'earned_date' => $sale->sale_date
             ]
         );
 
-        return view('sale.sale-instalments',compact('sale','instalments'));
+        return redirect()->route('get-sale-instalments',['id'=>$sale->id]);
     }
+
 
     
 

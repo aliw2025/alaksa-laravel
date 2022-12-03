@@ -106,8 +106,6 @@ class SaleController extends Controller
         $sale->selling_price = str_replace(',','',$request->selling_price);
         $sale->sale_type = $request->sale_type;
 
-
-
         if ($request->sale_type == 2) {
 
             $payment_type = "Cash";
@@ -548,12 +546,20 @@ class SaleController extends Controller
 
     public function showInstalments(Request $request)
     {
-        
+        // dd($request->all());
         if(isset($request->id)){
 
             $sale = Sale::find($request->id);
             $instalments = $sale->instalments;
-            return view('sale.sale-instalments',compact('sale','instalments'));
+            if(isset($request->user_exception)){
+                // dd("hererserer");
+                $user_exception = $request->user_exception;
+                 return view('sale.sale-instalments',compact('sale','instalments','user_exception'));
+            }else{
+                
+                return view('sale.sale-instalments',compact('sale','instalments'));
+            }
+            
         }
        
         return view('sale.sale-instalments');

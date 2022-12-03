@@ -10,14 +10,14 @@
                         </div>
                     </div>
                     <div class="card-body">
-                            
+
                         <div class="row">
                             <div class="col-6">
                                 <form action="">
                                     <div class="row my-1">
                                         <div class="col-6">
                                             <label class="mb-1">Invoice no</label>
-                                            <input readonly  id="invoice_no" onkeyup="getInvoices()"
+                                            <input readonly id="invoice_no" onkeyup="getInvoices()"
                                                 value="{{ isset($sale) ? $sale->invoice_no : '' }}" class="form-control"
                                                 type="text">
                                             <div class="list-type" id="list" style="position: absolute; z-index: 1;"
@@ -33,7 +33,11 @@
                                 </form>
                             </div>
                         </div>
-
+                      
+                        @if(isset($user_exception))
+                       
+                        <div class="alert alert-danger"> {{ $user_exception}}</div>
+                        @endif
                         <div class="row ">
 
                             <div class="col-12 table-responsive ">
@@ -60,13 +64,13 @@
                                         @if (isset($instalments))
                                             @foreach ($instalments as $pur)
                                                 <tr>
-                                                    
+
                                                     <td>{{ $count }}</td>
                                                     <td>{{ $pur->due_date }}</td>
                                                     <td>{{ number_format($pur->amount) }}</td>
-                                                    <td> {{ number_format($pur->amount_paid )}}</td>
+                                                    <td> {{ number_format($pur->amount_paid) }}</td>
                                                     @php
-                                                        $rem = $pur->amount - $pur->amount_paid
+                                                        $rem = $pur->amount - $pur->amount_paid;
                                                     @endphp
                                                     <td> {{ number_format($rem) }}</td>
 
@@ -87,7 +91,8 @@
                                                         @endif
                                                     </td>
                                                     <td>
-                                                        <button @if($pur->instalment_paid) disabled @endif data-rem={{$rem}} data-id="{{ $pur->id }}"
+                                                        <button @if ($pur->instalment_paid) disabled @endif
+                                                            data-rem={{ $rem }} data-id="{{ $pur->id }}"
                                                             class=" abc btn btn-primary waves-effect waves-float waves-light"
                                                             data-bs-toggle="modal" data-bs-target="#addNewCard">
                                                             Pay
@@ -108,8 +113,8 @@
                         <div class="row">
                             <div class="col-12 d-flex justify-content-end">
                                 <div class="me-2">
-                                    <p>Total : {{number_format( $total) }}</p>
-                                    <p>Paid : {{ number_format($paid )}}</p>
+                                    <p>Total : {{ number_format($total) }}</p>
+                                    <p>Paid : {{ number_format($paid) }}</p>
                                     <p>Remaining : {{ number_format($total - $paid) }}</p>
                                 </div>
                             </div>
@@ -128,34 +133,41 @@
                 </div>
 
                 <div class="row container">
-                    <h4 class="text-center" >Instalment Payment</h4>
-                    <form  method="POST" action="{{route('pay-instalment')}}">
+                    <h4 class="text-center">Instalment Payment</h4>
+                    <form method="POST" action="{{ route('pay-instalment') }}">
                         @csrf
                         <input id="ins_id" type="hidden" name="id" type="text" class="form-control">
                         <div class="col-12 my-1 ">
                             <label> Account: </label>
-                           <select  class="form-control" name="account" id="">
+                            <select class="form-control" name="account" id="">
                                 <option value="cash"> Cash</option>
                                 <option value="Bank account">Bank Account</option>
-                           </select>
+                            </select>
                         </div>
                         <div class="col-12 my-1 ">
                             <label> Amount Pending </label>
-                            <input id="rem_amount" name="rem_ammount" type="text" class="form-control">
+                            <input id="rem_amount" name="rem_ammount" type="text" class="number-separator form-control">
                         </div>
                         <div class="col-12 my-1 ">
                             <label> Amount: </label>
-                            <input id="amount"  name="amount_paid" type="text" class="form-control">
+                            <input id="amount" name=" amount_paid" type="text" class="number-separator form-control">
+                          
+                            
+                        </div>
+                        <div class="col-12 my-1 form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                            <label class="form-check-label" for="flexCheckDefault">
+                                Add Remaining amount to next instalment?
+                            </label>    
                         </div>
                         <div class="col-12 my-1">
                             <label> Note: </label>
-                           <textarea class="form-control" name="" id="" cols="30" rows="3"></textarea>
+                            <textarea class="form-control" name="" id="" cols="30" rows="3"></textarea>
                         </div>
                         <div lass="col-12 my-1">
                             <label> Date: </label>
-                                <input name="pay_date" type="text"
-                                    class="form-control invoice-edit-input date-picker flatpickr-input"
-                                    readonly="readonly">
+                            <input name="pay_date" type="text"
+                                class="form-control invoice-edit-input date-picker flatpickr-input" readonly="readonly">
                         </div>
                         <div class="col-12 my-1 d-flex justify-content-end">
                             <button data-bs-dismiss="modal" type="submit" class="btn btn-primary">Submit</button>
@@ -170,29 +182,31 @@
 
 
     <script type="text/javascript">
-
         $(document).on("click", ".abc", function() {
             var insId = $(this).data('id');
             var rem_amount = $(this).data('rem');
 
             // alert(insId);
             $("#ins_id").val(insId);
-            $("#rem_amount").val(rem_amount);
+            $("#rem_amount").val(rem_amount.toLocaleString('en-US'));
 
         });
+
+        $(document).on('keyup', '#amount', function() {
+            var rem_amount = ($("#rem_amount").val());
+            var rem_amount = Number(rem_amount.replace(/[^0-9.-]+/g, ""));
         
-        $(document).on('keyup','#amount',function () {
-            var rem_amount = parseFloat( $("#rem_amount").val());
-            var amount = parseFloat($(this).val());
-            if(amount>rem_amount){
+            var amount = ($(this).val());
+            amount = Number(amount.replace(/[^0-9.-]+/g, ""));
+            if (amount > rem_amount) {
                 $(this).val("");
             }
-            
+
         });
 
-        function checkAmountPaid(){
-                
-        }   
+        function checkAmountPaid() {
+
+        }
         $(document).ready(function() {
 
             $(document).ready(function() {

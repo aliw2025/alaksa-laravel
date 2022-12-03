@@ -14,11 +14,13 @@ return new class extends Migration
     public function up()
     {
         Schema::create('instalment_payments', function (Blueprint $table) {
+
             $table->id();
             $table->unsignedBigInteger('instalment_id');
             $table->double('amount');
             $table->date('payment_date');
             $table->timestamps();
+            
         });
     }
 
