@@ -27,6 +27,7 @@ class InstalmentController extends Controller
      */
     public function create()
     {
+
         
     }
     public function recieveInstalment(Instalment $instalment) {
@@ -34,13 +35,25 @@ class InstalmentController extends Controller
         return view('sale.recieve_instalment',compact('instalment'));
     }
 
-
     public function payInstalment(Request $request){
        
+
+        // dd($requssest->all());
         $instalment = Instalment::find($request->id);
         $sale = $instalment->sale;
         $instalments = $sale->instalments;
         $instalment->amount_paid = $instalment->amount_paid+ str_replace(',','',$request->amount_paid);
+        if(isset($request->move_to_next)){
+            $next_instalment = Instalment::find($request->id+1);
+            if($next_instalment==NULL || $next_instalment->sale_id !=$sale->id){
+
+                return redirect()->route('get-sale-instalments',["id"=>$sale->id,"user_exception"=>"next instalment not found"]);
+            }
+            $next_instalment->amount = $next_instalment->amount +( $instalment->amount - $instalment->amount_paid);
+            $instalment->amount = $instalment->amount_paid;
+            $next_instalment->save();
+
+        }
         if($instalment->amount_paid > $instalment->amount){
             $user_exception = "amount cannot be greater than due amount";
             return redirect()->route('get-sale-instalments',["id"=>$sale->id,"user_exception"=>$user_exception]);
@@ -56,9 +69,7 @@ class InstalmentController extends Controller
         if($instalment->amount_paid==$instalment->amount){
             $instalment->instalment_paid = 1;
         }
-       
         $instalment->save();
-        
         // calculate commisions 
         $investor = Investor::find($sale->investor_id);
         // getting investory inventory account 
@@ -150,7 +161,6 @@ class InstalmentController extends Controller
     }
 
 
-    
 
 
     /**

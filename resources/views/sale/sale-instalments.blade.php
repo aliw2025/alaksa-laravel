@@ -150,12 +150,12 @@
                         </div>
                         <div class="col-12 my-1 ">
                             <label> Amount: </label>
-                            <input id="amount" name=" amount_paid" type="text" class="number-separator form-control">
+                            <input id="amount" name=" amount_paid" type="text" class="number-separator   form-control">
                           
                             
                         </div>
                         <div class="col-12 my-1 form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                            <input  name="move_to_next" class="form-check-input" type="checkbox" value="1" id="move_to_next">
                             <label class="form-check-label" for="flexCheckDefault">
                                 Add Remaining amount to next instalment?
                             </label>    
@@ -200,6 +200,10 @@
             amount = Number(amount.replace(/[^0-9.-]+/g, ""));
             if (amount > rem_amount) {
                 $(this).val("");
+            }else if (amount < rem_amount) {
+                $('#move_to_next').attr('disabled',false);
+            }else{
+                $('#move_to_next').attr('disabled',true);
             }
 
         });

@@ -55,7 +55,7 @@ class SaleController extends Controller
      */
     public function store(Request $request)
     {
-
+        
         // finding the investor to get investor name
         $investor = Investor::find($request->investor_id);
 
@@ -105,6 +105,7 @@ class SaleController extends Controller
         $sale->markup = $request->markup;
         $sale->selling_price = str_replace(',','',$request->selling_price);
         $sale->sale_type = $request->sale_type;
+
 
         if ($request->sale_type == 2) {
 
