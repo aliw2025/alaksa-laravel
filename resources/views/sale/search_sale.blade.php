@@ -76,7 +76,7 @@
                                         <td>{{$count}}</td>
                                         <td>{{$pur->invoice_no}}</td>
                                         <td> {{ number_format($pur->total) }}</td>
-                                        <td>{{$pur->sale_date}}</td>
+                                        <td>{{date('d-m-Y', strtotime($pur->sale_date))}}</td>
                                         <td>
                                             <a style="text-decoration: none;color:black" href="{{route('sale.show',$pur->id)}}"><i data-feather='eye'></i></a>
                                             <a style="text-decoration: none;color:black" href="{{url('sale-return')."?id=".$pur->id}}" ><i data-feather='rotate-ccw'></i></i></a>

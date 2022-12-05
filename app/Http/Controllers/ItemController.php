@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Item;
+use App\Models\Supplier;
 use Illuminate\Http\Request;
 
 class ItemController extends Controller
@@ -16,7 +17,8 @@ class ItemController extends Controller
     {
         //s
         $items = Item::all();
-        return view('inventory.new-item', compact('items'));
+        $suppliers = Supplier::all();
+        return view('inventory.new-item', compact('items','suppliers'));
     }
     /**
      * Show  return matcing items
@@ -24,7 +26,8 @@ class ItemController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function getItems(Request $request){
-        $items = Item::where('name','like', '%'. $request->key .'%')->get();
+        // dd($request->all());
+        $items = Item::where([['name','like', '%'. $request->key .'%'],['supplier_id',$request->supplier_id]])->whereNotNull('supplier_id')->get();
         return $items;
     }
     /**
@@ -36,7 +39,8 @@ class ItemController extends Controller
     {
         //
         $items = Item::all();
-        return view('inventory.new-item', compact('items'));
+        $suppliers = Supplier::all();
+        return view('inventory.new-item', compact('items','suppliers'));
     }
 
     /**
@@ -53,6 +57,12 @@ class ItemController extends Controller
         $item->category = $request->category;
         $item->make = $request->make;
         $item->model = $request->model;
+
+        $item->supplier_id = $request->supplier;
+        $item-> prop_1 = $request-> prop_1;
+        $item-> prop_2 = $request-> prop_2;
+        $item-> prop_3 = $request-> prop_3;
+        $item-> prop_4 = $request-> prop_4;       
         $item->save();
 
         return redirect()->route('item.create');

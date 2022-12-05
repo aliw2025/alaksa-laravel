@@ -15,6 +15,10 @@ class Supplier extends Model
 
     }
    
+    public function items(){
+
+        return $this->hassMany(Item::class,'supplier_id');
+    }
    
 
     public function payments(){

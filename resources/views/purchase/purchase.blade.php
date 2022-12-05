@@ -81,7 +81,7 @@
                                                             name="payment_date" type="text"
                                                             class="form-control invoice-edit-input ">
                                                     @else
-                                                        <select name="supplier" class="form-select"
+                                                        <select id="supplier_id" name="supplier" class="form-select"
                                                             aria-label="Default select example">
                                                             @foreach ($suppliers as $sup)
                                                                 <option value="{{ $sup->id }}">{{ $sup->name }}
@@ -137,7 +137,7 @@
                                                                         placeholder="">
                                                                 </div>
                                                                 @if($type==2)
-                                                    
+                                                                    @dd("wwwwwww")
                                                                     <div class="col-lg-2 col-12 my-lg-0 my-2">
                                                                         <p class="card-text col-title mb-md-2 mb-0">Curr Price</p>
                                                                         <input onkeyup="calLoss(0)"  id="cur_cost0"
@@ -271,9 +271,7 @@
                                                             <td>{{ $item->name }}</td>
                                                             <td>{{ number_format($item->pivot->unit_cost)  }}</td>
                                                             <td>{{ $item->pivot->quantity }}</td>
-                                                            <td>{{ number_format($item->pivot->quantity * $item->pivot->unit_cost )}}</td>
-
-                                                                
+                                                            <td>{{ number_format($item->pivot->quantity * $item->pivot->unit_cost )}}</td>s   
                                                         </tr>
                                                         @php
                                                             $count = $count + 1;
@@ -360,6 +358,11 @@
             $('.select2-selection__arrow').hide();
         });
 
+        $(document).on('change','#supplier_id',function () {
+
+            console.log("supplier_changed");
+            
+        });
 
         $('#addNewBtn').click(function() {
             console.log('ad-new item');
@@ -496,8 +499,11 @@
             $("#totalAmount").text(sum.toLocaleString('en-US')+ " PKR");
             $("#amount_feild").val(sum.toFixed(2));
 
-            if(type=2)
-            calLoss(rowId)
+            if(type==2){
+                console.log(type);
+                calLoss(rowId)
+            }
+           
         }
 
 
@@ -564,12 +570,14 @@
             console.log("arg");
             // console.log(set.id);
             var letters = $('#itemBox' + id).val();
+            var supplier_id = $('#supplier_id').val();
             if (letters.length < 2) {
-                $('#cost' + rowId).val("");
-                $('#qty' + rowId).val("");
-                $('#cur_cost' + rowId).val("");
-                $('#rowTotal' + rowId).val("");
-                $('#td_loss' + rowId).val("");
+                $('#cost' + id).val("");
+                $('#qty' + id).val("");
+                $('#cur_cost' + id).val("");
+                $('#rowTotal' + id).val("");
+                $('#td_loss' + id).val("");
+                
                 return;
             }
             $("#passId").val("");
@@ -578,6 +586,7 @@
                 type: "GET",
                 data: {
                     key: letters,
+                    supplier_id:supplier_id,
                 },
                 success: function(dataResult) {
                     $("#listBody" + id).empty();
@@ -607,6 +616,7 @@
         }
 
         function deleteItem(id) {
+            console.log("removing");
             $('#row' + id).remove();
         }
         

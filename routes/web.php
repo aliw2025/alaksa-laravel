@@ -82,6 +82,7 @@ Route::post('/commission-report' , [\App\Http\Controllers\CommissionController::
 Route::get('/commission-report' , [\App\Http\Controllers\CommissionController::class,'commissionReport'])->name('commission-report2s');
 Route::get('/recieve-instalment/{instalment}' , [\App\Http\Controllers\InstalmentController::class,'recieveInstalment'])->name('recieve-instalment');
 Route::post('/pay-instalment' , [\App\Http\Controllers\InstalmentController::class,'payInstalment'])->name('pay-instalment');
+Route::get('/show-instalment-payments/{id}' , [\App\Http\Controllers\InstalmentController::class,'showInstalmentDetails'])->name('show-instalment-payments');
 Route::get('/pay-instalment' , function (){});
 
 

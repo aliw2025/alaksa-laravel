@@ -106,7 +106,7 @@ class SaleController extends Controller
         $sale->selling_price = str_replace(',','',$request->selling_price);
         $sale->sale_type = $request->sale_type;
 
-
+        
         if ($request->sale_type == 2) {
 
             $payment_type = "Cash";

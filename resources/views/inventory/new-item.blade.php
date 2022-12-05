@@ -127,6 +127,58 @@
                                         @enderror
                                     </div>
                                 </div>
+                                <div class=" ">
+                                    <div class="mb-1">
+                                        <label   class="form-label" for="first-name-vertical">supplier</label>
+                                        @if(isset($item))
+                                        <input value="{{old('supplier',isset($item)? isset($item->supplier)? $item->supplier->name:""  :'')}}"  type="text" id="cateogoryName" class=" @error('supplier') is-invalid @enderror form-control"  placeholder="supplier">
+                                        
+                                        @else
+                                            <select class="form-control" name="supplier" id="">
+                                                @foreach($suppliers as $supplier)
+                                                <option value="{{$supplier->id}}">{{$supplier->name}}</option>
+                                                @endforeach
+                                            </select>
+                                        @endif
+
+                                        @error('supplier')
+                                        <div class="alert alert-danger">{{ $message }}</div>
+                                        @enderror
+                                       
+                                       
+                                    </div>
+                                </div>
+
+                                <div class=" ">
+                                    <div class="mb-1">
+                                        <label   class="form-label" for="first-name-vertical">Prop 1</label>
+                                        <input value="{{old('prop_1',isset($item)? $item->prop_1  :'')}}"  type="text" id="cateogoryName"  class="form-control" name="prop_1" placeholder="prop">
+                                    </div>
+                                </div>
+                                <div class=" ">
+                                    <div class="mb-1">
+                                        <label   class="form-label" for="first-name-vertical">Prop 2</label>
+                                        <input value="{{old('prop_2',isset($item)? $item->prop_2  :'')}}"  type="text" id="cateogoryName"  class="form-control"   name="prop_2" placeholder="prop">
+                                    </div>
+                                </div>
+                                <div class=" ">
+                                    <div class="mb-1">
+                                        <label   class="form-label" for="first-name-vertical">Prop 3</label>
+                                        <input value="{{old('prop_3',isset($item)? $item->prop_3  :'')}}"  type="text" id="cateogoryName"  class="form-control"  name="prop_3" placeholder="prop">
+                                    </div>
+                                </div>
+
+                                <div class=" ">
+                                    <div class="mb-1">
+                                        <label   class="form-label" for="first-name-vertical">Prop 4</label>
+                                        <input value="{{old('prop_4',isset($item)? $item->prop_4  :'')}}"  type="text" id="cateogoryName"  class="form-control"  name="prop_4" placeholder="prop">
+                                    </div>
+                                </div>
+
+                                
+
+
+                               
                                 
                                
                             

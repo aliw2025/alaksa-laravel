@@ -43,6 +43,7 @@ class InstalmentController extends Controller
         $sale = $instalment->sale;
         $instalments = $sale->instalments;
         $instalment->amount_paid = $instalment->amount_paid+ str_replace(',','',$request->amount_paid);
+        
         if(isset($request->move_to_next)){
             $next_instalment = Instalment::find($request->id+1);
             if($next_instalment==NULL || $next_instalment->sale_id !=$sale->id){
@@ -54,6 +55,7 @@ class InstalmentController extends Controller
             $next_instalment->save();
 
         }
+        
         if($instalment->amount_paid > $instalment->amount){
             $user_exception = "amount cannot be greater than due amount";
             return redirect()->route('get-sale-instalments',["id"=>$sale->id,"user_exception"=>$user_exception]);
@@ -64,6 +66,7 @@ class InstalmentController extends Controller
         $payment->instalment_id = $instalment->id;
         $payment->amount =  str_replace(',','',$request->amount_paid);
         $payment->payment_date = $request->pay_date;
+        $payment->notes = $request->notes;
         $payment->save();
 
         if($instalment->amount_paid==$instalment->amount){
@@ -160,6 +163,13 @@ class InstalmentController extends Controller
         return redirect()->route('get-sale-instalments',['id'=>$sale->id]);
     }
 
+
+    public function showInstalmentDetails($id){
+
+        $instalment_payments = InstalmentPayment::where('instalment_id',$id)->get();
+        return view('sale.instalment_payment_details',compact('instalment_payments'));
+
+    }
 
 
 

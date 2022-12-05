@@ -93,10 +93,17 @@
                                                     <td>
                                                         <button @if ($pur->instalment_paid) disabled @endif
                                                             data-rem={{ $rem }} data-id="{{ $pur->id }}"
-                                                            class=" abc btn btn-primary waves-effect waves-float waves-light"
+                                                            class=" abc btn btn-success waves-effect waves-float waves-light"
                                                             data-bs-toggle="modal" data-bs-target="#addNewCard">
                                                             Pay
                                                         </button>
+                                                        <a 
+                                                            class=" abc btn btn-primary waves-effect waves-float waves-light"
+                                                            href = "{{route('show-instalment-payments',$pur->id)}}"
+                                                            >
+                                                            Details
+                                                        </a>
+
                                                         {{-- <a href="{{ route('recieve-instalment',$pur->id) }}" >pay</a> --}}
                                                     </td>
                                                 </tr>
@@ -162,7 +169,7 @@
                         </div>
                         <div class="col-12 my-1">
                             <label> Note: </label>
-                            <textarea class="form-control" name="" id="" cols="30" rows="3"></textarea>
+                            <textarea class="form-control" name="notes" id="" cols="30" rows="3"></textarea>
                         </div>
                         <div lass="col-12 my-1">
                             <label> Date: </label>
