@@ -78,8 +78,7 @@ class SaleController extends Controller
         // getting company trade discount profit account
         $cmp_td_pft_acc =  $cmp->charOfAccounts->where('account_type', 10)->first()->id;
 
-        // $userId = Auth::id();
-
+        // $userId = Auth::id();    
         $down_payment = false;
         if ($request->input('down_payment_paid') != NULL) {
             $down_payment = true;
@@ -317,6 +316,7 @@ class SaleController extends Controller
         return $pdf->stream('my.pdf', array('Attachment' => 0));
         // return redirect()->route('get-sales', $request->investor_id);
     }
+
     // function to return sale invoice
     public function postReturn(Request $request)
     {

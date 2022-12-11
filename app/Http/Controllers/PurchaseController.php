@@ -14,6 +14,7 @@ use App\Models\Payable;
 use App\Models\Supplier;
 use Illuminate\Http\Request;
 
+
 class PurchaseController extends Controller
 {
     /**
@@ -163,7 +164,6 @@ class PurchaseController extends Controller
             'date'=>$purchase->purchase_date        
         ]);  
         //  getting supplier payable account of the supplier
-       
         $purchase->leadgerEntries()->create([
             'account_id'=>  $sup_acc_id,
             'value'=> -$request->total_amount,

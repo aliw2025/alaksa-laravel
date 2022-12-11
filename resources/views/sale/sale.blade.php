@@ -226,7 +226,7 @@
                                 <div class="card-body invoice-padding invoice-product-details">
                                     <form class="source-item">
                                         @if ($type == 1)
-                                            )
+                                            
                                             <div data-repeater-list="group-a">
                                                 <div class="repeater-wrapper" data-repeater-item="">
                                                     <div class="row">
@@ -399,8 +399,9 @@
 
                                                 </tbody>
                                             </table>
-                                        @endif
 
+                                        @endif
+                                        
                                     </form>
                                 </div>
                                 <!-- Product Details ends -->
@@ -898,8 +899,7 @@
 
 
         });
-
-
+        
         function getinvAccount() {
 
             var investor_id = $("#select2-basic").val();

@@ -291,11 +291,12 @@ class Controller extends BaseController
         // return  $investor->leadgerEntries()->where('transaction_type','=','App\Models\Investor')->get();
         // return \Illuminate\Support\Facades\DB::table('users')->get();
     }
+
+    
     public function Users(){
 
-
         $users = User::all();
-        return $users;
+        return view('auth.users',compact('users'));
     }
 
     public function testOracle()
