@@ -109,7 +109,7 @@ class InstalmentController extends Controller
             'investor_id' => $investor->id,
             'date' => $sale->sale_date
         ]);
-        //  credit recievable of inventory recovery
+        //  * credit recievable of inventory recovery
         $instalment->leadgerEntries()->create([
             'account_id' =>  $inv_rcv_acc,
             'value' => -$ins_mon,
@@ -125,7 +125,7 @@ class InstalmentController extends Controller
             'date' => $sale->sale_date
         ]);
 
-        //  credit company  recievable of markup
+        // * credit  company  recievable of markup
         $instalment->leadgerEntries()->create([
             'account_id' =>  $cmp_rcv_acc,
             'value' => -$share,
@@ -141,7 +141,7 @@ class InstalmentController extends Controller
             'date' => $sale->sale_date
         ]);
 
-         // credit investor  recievable of markup
+         // * credit  investor  recievable of markup
          $instalment->leadgerEntries()->create([
             'account_id' =>  $inv_rcv_acc,
             'value' => -$share,

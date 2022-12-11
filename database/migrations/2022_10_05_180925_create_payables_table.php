@@ -14,7 +14,7 @@ return new class extends Migration
      */
     public function up()
     {
-
+        // payable is actualy payemtns
         Schema::create('payables', function (Blueprint $table) {
 
             $table->id();
@@ -22,12 +22,13 @@ return new class extends Migration
             $table->unsignedBigInteger('investor_id');
             $table->unsignedBigInteger('store_id');
             $table->unsignedBigInteger('supplier');
-            $table->double('amount');
             $table->integer('account_type');
+            $table->double('amount');
+            $table->string('note')->nullable();
+            $table->unsignedBigInteger('user_id')->nullable();
             $table->date('payment_date');
             $table->timestamps();
             
-
 
         });
     }

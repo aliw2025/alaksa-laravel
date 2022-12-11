@@ -58,6 +58,7 @@
                                 <thead class="thead-dark">
                                     <tr style="background-color:red !important;">
                                         <th style="width: 2px !important">#</th>
+                                        <th>Customer  Name</th>
                                         <th scope="col">invoice NO</th>  
                                         <th scope="col">Total</th>
                                         <th scope="col">Date</th>
@@ -74,7 +75,9 @@
 
                                     <tr>
                                         <td>{{$count}}</td>
+                                        <td>{{$pur->customer->customer_name}}</td>
                                         <td>{{$pur->invoice_no}}</td>
+                                        
                                         <td> {{ number_format($pur->total) }}</td>
                                         <td>{{date('d-m-Y', strtotime($pur->sale_date))}}</td>
                                         <td>

@@ -42,7 +42,7 @@ class InvestorController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
+    {   
         // validating the incoming request
         $validated = $request->validate(
             [

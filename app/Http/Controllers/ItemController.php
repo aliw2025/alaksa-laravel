@@ -107,6 +107,10 @@ class ItemController extends Controller
         $item->category = $request->category;
         $item->make = $request->make;
         $item->model = $request->model;
+        $item-> prop_1 = $request-> prop_1;
+        $item-> prop_2 = $request-> prop_2;
+        $item-> prop_3 = $request-> prop_3;
+        $item-> prop_4 = $request-> prop_4;   
         $item->save();
         return redirect()->route('item.create');
     }

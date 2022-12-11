@@ -81,7 +81,7 @@ class InventoryController extends Controller
      */
     public function destroy(Inventory $inventory)
     {
-        //
+        
     }
 
     public function getInvestorInventory(Request $request){
@@ -94,12 +94,9 @@ class InventoryController extends Controller
     }
 
     public function showInventory($investor_id){
-
-
+        
         $investor = Investor::Find($investor_id);
-
         $inventory_items= $investor->inventories;
-
         return view('inventory.inventory',compact('inventory_items','investor'));
         
     }

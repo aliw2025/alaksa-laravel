@@ -137,7 +137,7 @@
                                                                         placeholder="">
                                                                 </div>
                                                                 @if($type==2)
-                                                                    @dd("wwwwwww")
+                                                                    {{-- @dd("wwwwwww") --}}
                                                                     <div class="col-lg-2 col-12 my-lg-0 my-2">
                                                                         <p class="card-text col-title mb-md-2 mb-0">Curr Price</p>
                                                                         <input onkeyup="calLoss(0)"  id="cur_cost0"

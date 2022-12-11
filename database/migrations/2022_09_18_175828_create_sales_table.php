@@ -29,6 +29,7 @@ return new class extends Migration
             $table->double('selling_price')->nullable();
             $table->integer('sale_type')->nullable();
             $table->double('total');
+            $table->unsignedBigInteger('user_id')->nullable();
             $table->date('sale_date');
             
 

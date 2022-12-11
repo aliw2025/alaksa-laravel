@@ -33,6 +33,8 @@ use App\Http\Controllers\InstalmentController;
 |
 */
 
+Route::get('/home', [\App\Http\Controllers\Controller::class,'index'])->name('index');
+Route::get('/users', [\App\Http\Controllers\Controller::class,'Users'])->name('users');
 
 Route::get('/', [\App\Http\Controllers\Controller::class,'index'])->name('index');
 Route::get('/setup', [\App\Http\Controllers\Controller::class,'setup'])->name('setup');
@@ -42,7 +44,6 @@ Route::get('/test/{id}', [\App\Http\Controllers\Controller::class,'testSql'])->n
 Route::get('/home/{id}', [\App\Http\Controllers\Controller::class,'home'])->name('home');
 Route::get('/calender' , [\App\Http\Controllers\Controller::class,'showCalender'])->name('calender');
 Route::get('/investor-cash-accounts/{id}' , [\App\Http\Controllers\Controller::class,'getInvestorAccount'])->name('investor-cash-accounts');
-
 // temporary routes
 // Route::get('/purchase' , [\App\Http\Controllers\Controller::class,'showPurchase'])->name('purchase');
 

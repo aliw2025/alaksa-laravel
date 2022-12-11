@@ -24,6 +24,8 @@ return new class extends Migration
             // transaction type return / purchase
             $table->unsignedBigInteger('tran_type');
             $table->double('total');
+            $table->string('note')->nullable();
+            $table->unsignedBigInteger('user_id')->nullable();
             $table->date('purchase_date');
             $table->timestamps();
         }); 

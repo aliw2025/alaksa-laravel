@@ -78,6 +78,7 @@ class SaleController extends Controller
         // getting company trade discount profit account
         $cmp_td_pft_acc =  $cmp->charOfAccounts->where('account_type', 10)->first()->id;
 
+        // $userId = Auth::id();
 
         $down_payment = false;
         if ($request->input('down_payment_paid') != NULL) {
@@ -229,7 +230,7 @@ class SaleController extends Controller
 
 
 
-        // leadger entry for credit inventory
+        //* leadger entry for credit inventory
         $sale->leadgerEntries()->create([
             'account_id' =>  $inv_acc_id,
             'value' => -str_replace(',','',$request->selling_price),
@@ -249,14 +250,15 @@ class SaleController extends Controller
         $inv_mark_pft = (str_replace(',','',$request->total_sum )- str_replace(',','',$request->selling_price)) * 0.50;
         $cmp_mark_pft =  $inv_mark_pft;
 
-        // leadger entry for company debit recievable of markup 
+        // leadger entry for investor debit recievable of markup 
         $sale->leadgerEntries()->create([
             'account_id' =>  $inv_rcv_acc,
             'value' => $inv_mark_pft,
             'investor_id' => $investor->id,
             'date' => $sale->sale_date
         ]);
-        // leadger entry for credit markup profit
+        
+        //* leadger entry for credit markup profit
         $sale->leadgerEntries()->create([
             'account_id' =>  $inv_un_pft_acc,
             'value' => -$inv_mark_pft,
@@ -271,7 +273,7 @@ class SaleController extends Controller
             'investor_id' => $investor->id,
             'date' => $sale->sale_date
         ]);
-        // leadger entry for credit markup profit
+        // *leadger entry for credit markup profit
         $sale->leadgerEntries()->create([
             'account_id' =>  $cmp_un_pft_acc,
             'value' => -$inv_mark_pft,
