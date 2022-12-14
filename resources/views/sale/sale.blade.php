@@ -6,7 +6,7 @@
                 <div class="row invoice-add">
                     <!-- Invoice Add Left starts -->
                     <div class="col-xl-12 col-md-12 col-12">
-                        <form id="sale_fomr" class="" method="POST" target="_blank" autocomplete="on"
+                        <form id="sale_form" class="" method="POST" target="_blank" autocomplete="on"
                             action="{{ $type == 1 ? route('sale.store') : route('post-return') }}">
                             <div class="card invoice-preview-card">
                                 <!-- Header starts -->
@@ -39,7 +39,8 @@
                                                         </div>
                                                     </div>
                                                 @else
-                                                    <input id="mar_of_name" name="purchase_date" type="text"
+                                                    <input value="{{ $sale->marketingOfficer->name }}" id="mar_of_name"
+                                                        name="purchase_date" type="text"
                                                         class="form-control invoice-edit-input" readonly="readonly">
                                                 @endif
 
@@ -62,7 +63,8 @@
                                                         </div>
                                                     </div>
                                                 @else
-                                                    <input id="rec_of_name" name="purchase_date" type="text"
+                                                    <input value="{{ $sale->recoveryOfficer->name }}" id="rec_of_name"
+                                                        name="purchase_date" type="text"
                                                         class="form-control invoice-edit-input" readonly="readonly">
                                                 @endif
 
@@ -103,7 +105,8 @@
                                                         </select>
                                                     </div>
                                                 @else
-                                                    <input id="sale_type" name="sale_type"  type="text"
+                                                    <input value="{{ $sale->sale_type == 1 ? 'instaments' : 'Cash' }}"
+                                                        id="sale_type" name="sale_type" type="text"
                                                         class="form-control invoice-edit-input" readonly="readonly">
                                                 @endif
 
@@ -125,9 +128,10 @@
                                                 <h4 class="invoice-title"> {{ $type == 1 ? 'Sale #' : 'Search Sale #' }}
                                                 </h4>
                                                 <div class="input-group input-group-merge invoice-edit-input-group">
-                                                 
-                                                
-                                                    <input id="search_inv" @if(isset($sale)) value="{{$sale->invoice_no}}" @endif
+
+
+                                                    <input id="search_inv"
+                                                        @if (isset($sale)) value="{{ $sale->invoice_no }}" @endif
                                                         @if ($type == 1) disabled @endif name="purchaseId"
                                                         type="text" class="form-control invoice-edit-input"
                                                         placeholder="">
@@ -141,23 +145,26 @@
                                                         class="form-control invoice-edit-input date-picker flatpickr-input"
                                                         readonly="readonly">
                                                 @else
-                                                    <input id="sale_date" name="purchase_date" type="text"
+                                                    <input value="{{ $sale->sale_date }}" id="sale_date"
+                                                        name="purchase_date" type="text"
                                                         class="form-control invoice-edit-input" readonly="readonly">
                                                 @endif
-
                                             </div>
-                                            <div class="d-flex align-items-center justify-content-between mb-1">
-                                                <span class="title">Account</span>
-                                                {{-- <select class="form-control" name="supplier" id=""></select> --}}
-                                                <div style="width: 11.21rem; max-width:11.21rem; "
-                                                    class="align-items-center">
-                                                    <select id="acc_type" name="acc_type" class="form-select">
 
-                        
-                                                    </select>
+                                            @if ($type == 1)
+                                                <div class="d-flex align-items-center justify-content-between mb-1">
+                                                    <span class="title">Account</span>
+                                                    {{-- <select class="form-control" name="supplier" id=""></select> --}}
+                                                    <div style="width: 11.21rem; max-width:11.21rem; "
+                                                        class="align-items-center">
+                                                        <select id="acc_type" name="acc_type" class="form-select">
+
+
+                                                        </select>
+                                                    </div>
+
                                                 </div>
-
-                                            </div>
+                                            @endif
                                             <div class="d-flex align-items-center justify-content-between">
                                                 <span class="title">Investor:</span>
                                                 <div style="width: 11.21rem; max-width:11.21rem; "
@@ -176,7 +183,10 @@
 
                                                         </select>
                                                     @else
-                                                        <input id="investor_name" name="purchase_date" type="text"
+                                                        <input type="hidden" name="investor_id"
+                                                            value="{{ $sale->investor_id }}">
+                                                        <input value="{{ $sale->investor->investor_name }}"
+                                                            id="investor_name" name="purchase_date" type="text"
                                                             class="form-control invoice-edit-input" readonly="readonly">
                                                     @endif
                                                 </div>
@@ -190,7 +200,8 @@
                                                             id="customer_id" class="form-control" placeholder="ID"
                                                             type="text">
                                                     @else
-                                                        <input id="customer_id" name="purchase_date" type="text"
+                                                        <input value="{{ $sale->customer_id }}" id="customer_id"
+                                                            name="purchase_date" type="text"
                                                             class="form-control invoice-edit-input" readonly="readonly">
                                                     @endif
 
@@ -212,7 +223,8 @@
                                                         </div>
                                                     </div>
                                                 @else
-                                                    <input id="customer_name" name="purchase_date" type="text"
+                                                    <input value="{{ $sale->customer->customer_name }}"
+                                                        id="customer_name" name="purchase_date" type="text"
                                                         class="form-control invoice-edit-input" readonly="readonly">
                                                 @endif
                                             </div>
@@ -226,7 +238,6 @@
                                 <div class="card-body invoice-padding invoice-product-details">
                                     <form class="source-item">
                                         @if ($type == 1)
-                                            
                                             <div data-repeater-list="group-a">
                                                 <div class="repeater-wrapper" data-repeater-item="">
                                                     <div class="row">
@@ -390,20 +401,99 @@
                                                         <th scope="col">Selling Price</th>
                                                         <th scope="col">Plan</th>
                                                         <th scope="col">Marup</th>
+                                                        <th scope="col">total</th>
 
                                                     </tr>
                                                 </thead>
                                                 <tbody class="sale_body" id="sale_body">
-
-
-
+                                                    <td>1</td>
+                                                    <td>{{ $sale->item->id }}</td>
+                                                    <td>{{ $sale->item->name }}</td>
+                                                    <td>{{ number_format($sale->selling_price)  }}</td>
+                                                    <td>{{ $sale->plan }}</td>
+                                                    <td>{{ $sale->markup }}</td>
+                                                    <td>{{ number_format($sale->total)}}</td>
                                                 </tbody>
                                             </table>
+                                            <div cslass="row">
+                                                <div class="col-3">
+                                                    <div class=" mt-1">
+                                                        <label name="return_customer" class="title me-1">Return to Customer:</label>
+                                                        <input  id="customer_id" name="purchase_date" type="text" class="form-control ">  
+                                                    </div>
+                                                </div>
+                                                <div class="col-3">
+                                                    <div class=" mt-1">
+                                                        <label name="return_investor"  class="title me-1">Returns to Investor:</label>
+                                                        <input  id="customer_id" name="purchase_date" type="text" class="form-control ">  
+                                                    </div>
+                                                </div>
+                                                <div class="col-3">
+                                                    <div class="mt-1">
+                                                        <label name="return_alp"  class="title me-1">Alp Cut:</label>
+                                                        <input  id="customer_id" name="purchase_date" type="text" class="form-control ">  
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                               
+                                            </div>
+                                            <div class="row">
+                                                
+                                            </div>
 
+                                            <div class="row mt-2">
+                                                <div class="col-12 mt-1">
+                                                   Total Amount Recieved: {{number_format($total_amount_paid)}}
+                                                </div>
+                                                <div class="col-12 mt-1">
+                                                    Total Inventory Recovery: {{number_format($inventory_money) }}
+                                                    {{-- Total Inventory Recovery: {{$inventory_money }} --}}
+                                                </div>
+                                                <div class="col-12 mt-1">
+                                                    Total Mark up Recieved: {{number_format($share)}}
+                                                </div>
+                                            </div>
                                         @endif
-                                        
+
                                     </form>
                                 </div>
+                                <div class="row">
+                                    <div class="col-12">
+
+                                        @if ($sale)
+                                       
+                                    
+                                            {{-- <table class="table">
+                                                <thead class="thead-dark">
+                                                    <tr style="background-color:red !important;">
+                                                        <th style="width: 2px !important">#</th>
+                                                        <th scope="col">id</th>
+                                                        <th scope="col">amount</th>
+                                                        <th scope="col">due date</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody class="sale_body" id="sale_body">
+                                                    @php
+                                                        $count = 1;
+                                                    @endphp
+                                                    @foreach ($sale->instalments as $instalment)
+                                                        <tr>
+                                                            <td>{{ $count }}</td>
+                                                            <td>{{ $instalment->id }}</td>
+                                                            <td>{{ $instalment->amount }}</td>
+                                                            <td>{{$instalment->amount_paid}}</td>
+                                                        </tr>
+                                                    @endforeach
+                                                    @php
+                                                        $count += 1;
+                                                    @endphp
+                                                </tbody>
+                                            </table> --}}
+                                        @endif
+                                    </div>
+                                </div>
+
                                 <!-- Product Details ends -->
 
                                 <!-- Invoice Total ends -->
@@ -431,8 +521,7 @@
                                         <div class="col-12">
                                             <div class="d-flex justify-content-end">
                                                 {{-- onclick="returnSale()" --}}
-                                                <button id="retBtn" disabled
-                                                    class="btn btn-primary me-2">Return</button>
+                                                <button id="retBtn" class="btn btn-primary me-2">Return</button>
 
                                             </div>
                                         </div>
@@ -451,18 +540,15 @@
     <script src="{{ url('/resources/js/scripts/pages/app-invoice.min.js') }}"></script>
 
     <script>
-
         $(document).ready(function() {
             $('.select2-selection__arrow').hide();
             $('#instal').text('name is khan');
             var type = $('#sale_type').val();
             console.log("type: " + type);
             $('#discount_div').hide();
-            getinvAccount() 
+            getinvAccount()
             var inv = $('#search_inv').val();
-            if(inv.length>5){
-                search_inv();
-            }
+
         });
 
         $('#sale_type').change(function() {
@@ -485,11 +571,10 @@
 
         });
 
-
         // get items 
         function getItems() {
 
-           
+
             var letters = $('#item_name').val();
             if (letters.length < 2) {
                 return;
@@ -529,11 +614,6 @@
 
         }
 
-        function returnSale() {
-
-
-        }
-
         function getCustomerById() {
 
             var id = $('#customer_id').val();
@@ -561,79 +641,8 @@
 
 
         }
-        function search_inv() {
-            
-                var inv = $('#search_inv').val();
-                $.ajax({
-                    url: "{{ url('get-sale-no') }}/",
-                    type: "GET",
-                    data: {
-                        key: inv,
-                    },
-                    success: function(dataResult) {
-                      
-                        $("#rec_of_name").val("");
-                        $("#mar_of_name").val("");
-                        $("#customer_name").val("");
-                        $("#customer_id").val("");
-                        $("#investor_name").val("");
-                        $("#sale_date").val("");
-                        $("#sale_id").val("");
-                        $('#sale_type').val("");
-                        $("#sale_body").empty();
-
-                       
-                        if (dataResult.length == 0) {
-                            alert('serch result not found')
-                            $('#retBtn').prop('disabled', true);
 
 
-                        }
-                        var i;
-                        for (i = 0; i < dataResult.length; i++) {
-                            var item = dataResult[i];
-                            console.log(item);
-                            markup = `<tr> 
-                            <td>1</td>
-                            <td>` + item.item.id + `</td>
-                             <td>` + item.item.name + `</td>
-                             <td>` + item.selling_price + `</td>
-                             <td>` + item.plan + `</td>
-                             <td>` + item.markup + `</td>
-                            </tr>`;
-                            console.log(item.id);
-                            $("#sale_id").val(item.id);
-                            $("#sale_body").append(markup);
-                            $("#rec_of_name").val(item.recovery_officer.name);
-                            $("#mar_of_name").val(item.marketing_officer.name);
-                            $("#customer_name").val(item.customer.customer_name);
-                            $("#customer_id").val(item.customer.id);
-                            $("#investor_name").val(item.investor.investor_name);
-                            $("#sale_date").val(item.sale_date);
-                            $('#retBtn').prop('disabled', false);
-                            $('#search_inv').val(item.invoice_no); 
-                            $('#sale_type').val(item.sale_type==1? "Instalments":"Cash");
-                          
-
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        $('#retBtn').prop('disabled', true);
-                    },
-                });
-              
-            
-        }
-        // funoction for searchhing invoice
-        $("#search_inv").keypress(function(e) {
-
-            if (e.which == 13) {
-                event.preventDefault();
-                
-                search_inv();
-                
-            }
-        });
 
 
         function getMUserByName() {
@@ -746,7 +755,7 @@
 
         function setMarUser(user) {
 
-           
+
             $("#mar_of_name").val($('#marItem' + user).text());
             $("#mar_of_id").val(user);
             $("#mar_list").hide();
@@ -893,13 +902,13 @@
 
             $("#item_id").val("");
             $("#item_name").val("");
-            
+
             // get new accounts for investor 
-            getinvAccount() 
+            getinvAccount()
 
 
         });
-        
+
         function getinvAccount() {
 
             var investor_id = $("#select2-basic").val();

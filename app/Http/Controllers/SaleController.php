@@ -346,7 +346,7 @@ class SaleController extends Controller
         if($sale->status==2){
             return "already Returned";
         }
-
+        
         $instalment = $sale->instalments->first();
         $sale->status = 2;
         echo $instalment->amount;
@@ -538,6 +538,7 @@ class SaleController extends Controller
      */
     public function destroy(Sale $sale)
     {
+
     }
 
     public function showSales($id)
@@ -546,6 +547,7 @@ class SaleController extends Controller
         $sales = $investor->sales;
         return view('sale.sale-list', compact('sales', 'investor'));
     }
+
 
     public function showInstalments(Request $request)
     {
@@ -567,17 +569,21 @@ class SaleController extends Controller
        
         return view('sale.sale-instalments');
     }
+    
     public function  getInvoices(Request $request)
     {
 
         $sales = Sale::where('invoice_no', 'like', '%' . $request->key . '%')->get();
         return $sales;
     }
+
     public function getSaleNo(Request $request)
-    {
-        $sale = Sale::where('invoice_no', 'like',  "%".$request->key)->with('item')->with('marketingOfficer')->with('recoveryOfficer')->with('customer')->with('investor')->get();
+    {   
+
+        $sale = Sale::where('invoice_no', 'like',  "%".$request->key)->with('item')->with('marketingOfficer')->with('recoveryOfficer')->with('customer')->with('investor')->with('instalments')->get();
         return $sale;
     }
+
 
 
     public function saleReturn(Request $request)
@@ -594,13 +600,24 @@ class SaleController extends Controller
 
 
     public function saleReturns( Request $request)
-    {     $type = 2;
+    {   
+        $type = 2;
         $investors = Investor::all();
         $suppliers = Supplier::all();
-      
+        // dd($request->id);
         if(isset($request->id)){
+
             $sale = Sale::find($request->id);
-            return view('sale.sale', compact('investors', 'suppliers', 'type','sale'));
+            $inv_per = $sale->selling_price  / $sale->total;
+            $markup_per = 1 - $inv_per;
+            // item price recovry 
+            $total_amount_paid = $sale->instalments->sum('amount_paid');
+            // dd($total_amount_paid);
+            $inventory_money = $total_amount_paid * $inv_per;
+            // each investor share in markup profit
+            $share = ($total_amount_paid - $inventory_money);
+                       
+            return view('sale.sale', compact('investors', 'suppliers', 'type','sale','total_amount_paid','inventory_money','share'));
         }
        
         // for purchase return

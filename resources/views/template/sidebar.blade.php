@@ -181,14 +181,16 @@
                             <i data-feather="circle"></i>
                             <span class=" menu-title text-truncate" data-i18n="comision">Add Customer</span></a>
                     </li>
+                    
                     <li class=" nav-item"><a href="{{ route('sale.create') }}" class="d-flex align-items-center">
-                            <i data-feather="circle"></i>
-                            <span class=" menu-title text-truncate" data-i18n="comision">New Sale</span></a>
+                        <i data-feather="circle"></i>
+                        <span class=" menu-title text-truncate" data-i18n="comision">New Sale</span></a>
                     </li>
-                    <li class=" nav-item"><a href="{{ route('sale-return') }}" class="d-flex align-items-center">
+
+                    {{-- <li class=" nav-item"><a href="{{ route('sale-return') }}" class="d-flex align-items-center">
                             <i data-feather="circle"></i>
                             <span class=" menu-title text-truncate" data-i18n="comision">Sale Return</span></a>
-                    </li>
+                    </li> --}}
                     <li class=" nav-item"><a href="{{ route('search-sales-post') }}"
                             class="d-flex align-items-center">
                             <i data-feather="circle"></i>
