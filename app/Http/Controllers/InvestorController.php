@@ -68,94 +68,32 @@ class InvestorController extends Controller
         $investor->prefix = $request->prefix;
         $investor->investor_type = $request->investor_type;
         $investor->save();
-
-        /********************** creating accounts ****************************/
-        // 1- cash
-        $investor_cash = $investor->charOfAccounts()->create([
-            'account_name' => $investor->prefix . '_cash',
-            'account_type' => 1,
-            'opening_balance' => $request->opening_balance,
-        ]);
-        // 2- equipment
-        $investor_eq = $investor->charOfAccounts()->create([
-            'account_name' => $investor->prefix . '_equipment',
-            'account_type' => 2,
-            'opening_balance' => 0
-        ]);
-        // 3- inventory
-        $investor_inv = $investor->charOfAccounts()->create([
-            'account_name' => $investor->prefix . '_inventory',
-            'account_type' => 3,
-            'opening_balance' => 0
-        ]);
-        // 4 - bank
-        $investor_bnk = $investor->charOfAccounts()->create([
-            'account_name' => $investor->prefix . '_bank',
-            'account_type' => 4,
-            'opening_balance' =>  $request->opening_balance_bnk,
-        ]);
-        // 5- account receivable
-        $investor_rcv = $investor->charOfAccounts()->create([
-            'account_name' => $investor->prefix . '_receivable',
-            'account_type' => 5,
-            'opening_balance' => 0
-        ]);
-        // 6- equity 
-        $investor_eqt = $investor->charOfAccounts()->create([
-            'account_name' => $investor->prefix . '_equity',
-            'account_type' => 6,
-            'opening_balance' => - ($request->opening_balance+$request->opening_balance_bnk),
-        ]);
-        // 7- payable
-        $investor_pyb = $investor->charOfAccounts()->create([
-            'account_name' => $investor->prefix . '_payable',
-            'account_type' => 7,
-            'opening_balance' => 0
-        ]);
-        //8- expense
-        $investor_pyb = $investor->charOfAccounts()->create([
-            'account_name' => $investor->prefix . '_expense',
-            'account_type' => 8,
-            'opening_balance' => 0
-        ]);
-        // 9 - unrealized profit
-        $investor_un_pft = $investor->charOfAccounts()->create([
-            'account_name' => $investor->prefix . '_un_profit',
-            'account_type' => 9,
-            'opening_balance' => 0
-        ]);
-        // 10 - trade discount profit
-        $investor_td_pft = $investor->charOfAccounts()->create([
-            'account_name' => $investor->prefix . '_trade_profit',
-            'account_type' => 10,
-            'opening_balance' => 0
-        ]);
-
+        
         /********************** Leadger Entries  ****************************/
         $investor->leadgerEntries()->create([
-            'account_id' => $investor_cash->id,
-            'value' => $request->opening_balance,
+            'account_id' => 1,
+            'value' => str_replace(',','',$request->opening_balance),
             'investor_id'=>$investor->id,
             'date' => $investor->created_at
 
         ]);
         $investor->leadgerEntries()->create([
-            'account_id' => $investor_eqt->id,
-            'value' => -$request->opening_balance,
+            'account_id' =>6,
+            'value' => - str_replace(',','',$request->opening_balance),
             'investor_id'=>$investor->id,
             'date' => $investor->created_at
 
         ]);
         $investor->leadgerEntries()->create([
-            'account_id' => $investor_bnk->id,
-            'value' => $request->opening_balance_bnk,
+            'account_id' => 4,
+            'value' => str_replace(',','',$request->opening_balance_bnk),
             'investor_id'=>$investor->id,
             'date' => $investor->created_at
 
         ]);
         $investor->leadgerEntries()->create([
-            'account_id' => $investor_eqt->id,
-            'value' => -$request->opening_balance_bnk,
+            'account_id' =>6,
+            'value' => - str_replace(',','',$request->opening_balance_bnk),
             'investor_id'=>$investor->id,
             'date' => $investor->created_at
 

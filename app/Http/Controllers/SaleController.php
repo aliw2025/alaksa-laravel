@@ -55,10 +55,10 @@ class SaleController extends Controller
      */
     public function store(Request $request)
     {
+  
         
         // finding the investor to get investor name
         $investor = Investor::find($request->investor_id);
-
         // getting investory inventory account 
         $inv_acc_id =  $investor->charOfAccounts->where('account_type', 3)->first()->id;
         //  getting investor recievable account
@@ -129,7 +129,7 @@ class SaleController extends Controller
 
 
         if ($request->sale_type == 1) {
-
+            
             // creating down payment
             $instalment = new Instalment();
             $instalment->sale_id = $sale->id;
@@ -140,18 +140,19 @@ class SaleController extends Controller
             $instalment->instalment_no = 0;
             $instalment->amount_paid = $down_payment?str_replace(',','',$request->down_payment):0;
             $instalment->save();
+            
             if ($down_payment) {
                 
                 // debit cash of investor for inventory recovery
                 $instalment->leadgerEntries()->create([
-                    'account_id' =>  $inv_cash_acc,
+                    'account_id' =>  $request->acc_type,
                     'value' => $ins_mon,
                     'investor_id' => $investor->id,
                     'date' => $sale->sale_date
                 ]);
-                //  credit recievable of inventory recovery
+                //*  credit recievable of inventory recovery
                 $instalment->leadgerEntries()->create([
-                    'account_id' =>  $inv_rcv_acc,
+                    'account_id' =>  5,
                     'value' => -$ins_mon,
                     'investor_id' => $investor->id,
                     'date' => $sale->sale_date
@@ -159,31 +160,31 @@ class SaleController extends Controller
 
                  // debit company cash of markup
                  $instalment->leadgerEntries()->create([
-                    'account_id' => $cmp_cash_acc,
+                    'account_id' => $request->acc_type,
                     'value' => $share,
-                    'investor_id' => $investor->id,
-                    'date' => $sale->sale_date
+                    'investor_id' => 1,
+                    'date' => $sale->sale_dates
                 ]);
-
-                //  credit company  recievable of markup
+                
+                //*  credit company  recievable of markup
                 $instalment->leadgerEntries()->create([
-                    'account_id' =>  $cmp_rcv_acc,
+                    'account_id' =>  5,
                     'value' => -$share,
-                    'investor_id' => $investor->id,
+                    'investor_id' => 1,
                     'date' => $sale->sale_date
                 ]);
                 
                  // debit investor cash  of markup
                  $instalment->leadgerEntries()->create([
-                    'account_id' => $inv_cash_acc,
+                    'account_id' => $request->acc_type,
                     'value' => $share,
                     'investor_id' => $investor->id,
                     'date' => $sale->sale_date
                 ]);
 
-                 // credit investor  recievable of markup
+                 //* credit investor  recievable of markup
                  $instalment->leadgerEntries()->create([
-                    'account_id' =>  $inv_rcv_acc,
+                    'account_id' =>  5,
                     'value' => -$share,
                     'investor_id' => $investor->id,
                     'date' => $sale->sale_date
@@ -228,10 +229,9 @@ class SaleController extends Controller
         );
 
 
-
         //* leadger entry for credit inventory
         $sale->leadgerEntries()->create([
-            'account_id' =>  $inv_acc_id,
+            'account_id' =>  3,
             'value' => -str_replace(',','',$request->selling_price),
             'investor_id' => $investor->id,
             'date' => $sale->sale_date
@@ -239,7 +239,7 @@ class SaleController extends Controller
 
         //  leadger entry for debit recievable of inventory
         $sale->leadgerEntries()->create([
-            'account_id' =>  $inv_rcv_acc,
+            'account_id' => 5,
             'value' => str_replace(',','',$request->selling_price),
             'investor_id' => $investor->id,
             'date' => $sale->sale_date
@@ -251,15 +251,16 @@ class SaleController extends Controller
 
         // leadger entry for investor debit recievable of markup 
         $sale->leadgerEntries()->create([
-            'account_id' =>  $inv_rcv_acc,
+            'account_id' =>  5,  
             'value' => $inv_mark_pft,
             'investor_id' => $investor->id,
             'date' => $sale->sale_date
         ]);
         
+
         //* leadger entry for credit markup profit
         $sale->leadgerEntries()->create([
-            'account_id' =>  $inv_un_pft_acc,
+            'account_id' => 9,
             'value' => -$inv_mark_pft,
             'investor_id' => $investor->id,
             'date' => $sale->sale_date
@@ -267,16 +268,17 @@ class SaleController extends Controller
 
         // leadger entry for company debit recievable of markup
         $sale->leadgerEntries()->create([
-            'account_id' =>  $cmp_rcv_acc,
+            'account_id' =>  5,
             'value' => $inv_mark_pft,
-            'investor_id' => $investor->id,
+            'investor_id' => 1,
             'date' => $sale->sale_date
         ]);
+
         // *leadger entry for credit markup profit
         $sale->leadgerEntries()->create([
-            'account_id' =>  $cmp_un_pft_acc,
+            'account_id' => 9,
             'value' => -$inv_mark_pft,
-            'investor_id' => $investor->id,
+            'investor_id' => 1,
             'date' => $sale->sale_date
         ]);
 
@@ -285,17 +287,17 @@ class SaleController extends Controller
 
         // leadger entry for company debit cash of trade profit
         $sale->leadgerEntries()->create([
-            'account_id' => $cmp_cash_acc,
+            'account_id' => $request->acc_type,
             'value' => $trade_discount,
-            'investor_id' => $investor->id,
+            'investor_id' => 1,
             'date' => $sale->sale_date
         ]);
 
         // leadger entry for credit trade discount profit
         $sale->leadgerEntries()->create([
-            'account_id' => $cmp_td_pft_acc,
+            'account_id' => 10,
             'value' => -$trade_discount,
-            'investor_id' => $investor->id,
+            'investor_id' => 1,
             'date' => $sale->sale_date
         ]);
 
@@ -528,6 +530,7 @@ class SaleController extends Controller
      */
     public function update(Request $request, Sale $sale)
     {
+
     }
 
     /**
@@ -540,6 +543,7 @@ class SaleController extends Controller
     {
 
     }
+
 
     public function showSales($id)
     {   
@@ -558,6 +562,7 @@ class SaleController extends Controller
             $instalments = $sale->instalments;
             if(isset($request->user_exception)){
                 // dd("hererserer");
+                
                 $user_exception = $request->user_exception;
                  return view('sale.sale-instalments',compact('sale','instalments','user_exception'));
             }else{
@@ -615,7 +620,7 @@ class SaleController extends Controller
             // dd($total_amount_paid);
             $inventory_money = $total_amount_paid * $inv_per;
             // each investor share in markup profit
-            $share = ($total_amount_paid - $inventory_money);
+            $share = ($total_amount_paid - $inventory_money)*0.50;
                        
             return view('sale.sale', compact('investors', 'suppliers', 'type','sale','total_amount_paid','inventory_money','share'));
         }

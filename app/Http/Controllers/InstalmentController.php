@@ -104,14 +104,14 @@ class InstalmentController extends Controller
         //  make leadger entries
          // debit cash of investor for inventory recovery
          $instalment->leadgerEntries()->create([
-            'account_id' =>  $inv_cash_acc,
+            'account_id' => $request->account,
             'value' => $ins_mon,
             'investor_id' => $investor->id,
             'date' => $sale->sale_date
         ]);
         //  * credit recievable of inventory recovery
         $instalment->leadgerEntries()->create([
-            'account_id' =>  $inv_rcv_acc,
+            'account_id' =>  5,
             'value' => -$ins_mon,
             'investor_id' => $investor->id,
             'date' => $sale->sale_date
@@ -119,23 +119,23 @@ class InstalmentController extends Controller
 
          // debit company cash of markup
          $instalment->leadgerEntries()->create([
-            'account_id' => $cmp_cash_acc,
+            'account_id' => $request->account,
             'value' => $share,
-            'investor_id' => $investor->id,
+            'investor_id' => 1,
             'date' => $sale->sale_date
         ]);
 
         // * credit  company  recievable of markup
         $instalment->leadgerEntries()->create([
-            'account_id' =>  $cmp_rcv_acc,
+            'account_id' =>  5,
             'value' => -$share,
-            'investor_id' => $investor->id,
+            'investor_id' => 1,
             'date' => $sale->sale_date
         ]);
         
          // debit investor cash  of markup
          $instalment->leadgerEntries()->create([
-            'account_id' => $inv_cash_acc,
+            'account_id' => $request->accounts,
             'value' => $share,
             'investor_id' => $investor->id,
             'date' => $sale->sale_date
@@ -143,12 +143,12 @@ class InstalmentController extends Controller
 
          // * credit  investor  recievable of markup
          $instalment->leadgerEntries()->create([
-            'account_id' =>  $inv_rcv_acc,
+            'account_id' =>  5,
             'value' => -$share,
             'investor_id' => $investor->id,
             'date' => $sale->sale_date
         ]);
-
+        
     
         $instalment->saleCommision()->create(
             [
@@ -159,7 +159,7 @@ class InstalmentController extends Controller
                 'earned_date' => $sale->sale_date
             ]
         );
-
+        
         return redirect()->route('get-sale-instalments',['id'=>$sale->id]);
     }
 

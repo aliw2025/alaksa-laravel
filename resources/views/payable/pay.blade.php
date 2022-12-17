@@ -99,7 +99,7 @@
                                                         aria-label="Default select example">
 
                                                         <option value="1"> Cash</option>
-                                                        <option value="8"> Bank Account</option>
+                                                        <option value="4"> Bank Account</option>
 
                                                     </select>
                                                 </div>

@@ -129,14 +129,14 @@ class PurchaseController extends Controller
             if($request->tran_type==2){
                 // creating expene
                 $expense = new Expense();
-                $expense->description = $inventory->item->name."  return loss";
+                $expense->description = $inventory->item->name."return loss";
                 $expense->amount = str_replace(',','',$request->td_loss[$a]);
                 $expense->date = $purchase->purchase_date;
                 $expense->save();
                 // creating impact of expenso on leadger
                 $expense->leadgerEntries()->create([
-                    'account_id'=>  $inv_exp_acc,
-                    'value'=> str_replace(',','',$request->td_loss[$a]) ,
+                    'account_id'=> 8,
+                    'value'=> str_replace(',','',$request->td_loss[$a]),
                     'investor_id'=>$investor->id,
                     'date'=>$purchase->purchase_date        
                 ]);  
@@ -148,31 +148,33 @@ class PurchaseController extends Controller
                     'investor_id'=>$investor->id,
                     'date'=>$purchase->purchase_date       
                 ]);
-                
-
+            
             }
-        
         }
 
+        
         /******************** Leadger Entries ******************/
-        // getting inventory account of the investor
-        $inv_acc_id =  $investor->charOfAccounts->where('account_type',3)->first()->id;
+        
         $purchase->leadgerEntries()->create([
-            'account_id'=>  $inv_acc_id,
+            'account_id'=>  3,
             'value'=> $request->total_amount,
             'investor_id'=>$investor->id,
             'date'=>$purchase->purchase_date        
         ]);  
+
         //  getting supplier payable account of the supplier
         $purchase->leadgerEntries()->create([
-            'account_id'=>  $sup_acc_id,
+            'account_id'=>  7,
             'value'=> -$request->total_amount,
             'investor_id'=>$investor->id,
             'date'=>$purchase->purchase_date       
         ]);
-     
+        
         return redirect()->route('get-purchases',$investor->id);   
     }
+
+    
+
 
     public function showPurchaseItems($id){
 

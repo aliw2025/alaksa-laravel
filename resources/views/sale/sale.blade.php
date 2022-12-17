@@ -153,12 +153,17 @@
 
                                             @if ($type == 1)
                                                 <div class="d-flex align-items-center justify-content-between mb-1">
-                                                    <span class="title">Account</span>
+                                                    <span class="title">Recieving Account</span>
                                                     {{-- <select class="form-control" name="supplier" id=""></select> --}}
                                                     <div style="width: 11.21rem; max-width:11.21rem; "
                                                         class="align-items-center">
                                                         <select id="acc_type" name="acc_type" class="form-select">
-
+                                                            <option value="1">
+                                                               cash
+                                                            </option>
+                                                            <option value="4">
+                                                                Bank
+                                                             </option>
 
                                                         </select>
                                                     </div>
@@ -400,7 +405,7 @@
                                                         <th scope="col">Item Name</th>
                                                         <th scope="col">Selling Price</th>
                                                         <th scope="col">Plan</th>
-                                                        <th scope="col">Marup</th>
+                                                        <th scope="col">MarK Up</th>
                                                         <th scope="col">total</th>
 
                                                     </tr>
@@ -451,7 +456,10 @@
                                                     {{-- Total Inventory Recovery: {{$inventory_money }} --}}
                                                 </div>
                                                 <div class="col-12 mt-1">
-                                                    Total Mark up Recieved: {{number_format($share)}}
+                                                    Investor Mark up Recieved: {{number_format($share)}}
+                                                </div>
+                                                <div class="col-12 mt-1">
+                                                    Company Mark up Recieved: {{number_format($share)}}
                                                 </div>
                                             </div>
                                         @endif
@@ -461,9 +469,8 @@
                                 <div class="row">
                                     <div class="col-12">
 
-                                        @if ($sale)
-                                       
-                                    
+                                        @if (isset($sale))
+
                                             {{-- <table class="table">
                                                 <thead class="thead-dark">
                                                     <tr style="background-color:red !important;">
@@ -546,7 +553,7 @@
             var type = $('#sale_type').val();
             console.log("type: " + type);
             $('#discount_div').hide();
-            getinvAccount()
+            // getinvAccount()
             var inv = $('#search_inv').val();
 
         });
@@ -904,7 +911,7 @@
             $("#item_name").val("");
 
             // get new accounts for investor 
-            getinvAccount()
+            // getinvAccount()
 
 
         });

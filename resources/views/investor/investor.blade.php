@@ -131,7 +131,7 @@
                                     <!-- <input id="investorName" name="investor_name" class="@error('investor_name') is-invalid @enderror form-control" autocomplete="off" id="exampleDataList" placeholder="Enter investor Name"> -->
                                     <div class="mb-1">
                                         <label class="form-label" for="first-name-vertical">Opening Balances</label>
-                                        <input type="number" id="opening_balance" class=" @error('opening_balance') is-invalid @enderror form-control" name="opening_balance" value="0" placeholder="Opening Balance">
+                                        <input  id="opening_balance" class=" @error('opening_balance') is-invalid @enderror number-separator form-control" name="opening_balance" value="0" placeholder="Opening Balance">
                                         @error('opening_balance')
                                         <div class="alert alert-danger">{{ $message }}</div>
                                         @enderror
@@ -141,7 +141,7 @@
                                     <!-- <input id="investorName" name="investor_name" class="@error('investor_name') is-invalid @enderror form-control" autocomplete="off" id="exampleDataList" placeholder="Enter investor Name"> -->
                                     <div class="mb-1">
                                         <label class="form-label" for="first-name-vertical">Opening Balances Bank</label>
-                                        <input type="number" id="opening_balance_bnk" class=" @error('opening_balance_bnk') is-invalid @enderror form-control" name="opening_balance_bnk" value="0" placeholder="Opening Balance">
+                                        <input  id="opening_balance_bnk" class=" @error('opening_balance_bnk') is-invalid @enderror number-separator form-control" name="opening_balance_bnk" value="0" placeholder="Opening Balance">
                                         @error('opening_balance_bnk')
                                         <div class="alert alert-danger">{{ $message }}</div>
                                         @enderror

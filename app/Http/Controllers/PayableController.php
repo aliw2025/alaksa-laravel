@@ -134,7 +134,7 @@ class PayableController extends Controller
         ]);
 
         $payable->leadgerEntries()->create([
-            'account_id' => $inv_acc_id,
+            'account_id' => $request->acc_type,
             'value' => -str_replace(',','',$request->amount),
             'investor_id'=>$investor->id,
             'date' => $request->payment_date

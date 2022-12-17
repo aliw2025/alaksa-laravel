@@ -362,6 +362,7 @@
 
             console.log("supplier_changed");
             
+            
         });
 
         $('#addNewBtn').click(function() {

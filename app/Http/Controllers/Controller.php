@@ -209,29 +209,36 @@ class Controller extends BaseController
     }
 
 
-    
     public function index()
     {
         // queries for dashboard  calculations
         $investors = Investor::all();
         // finding the company investor
         $investor = Investor::find(1);
+
         $invCashAcc= $investor->charOfAccounts->where('account_type','=',1)->first()->id;
         $invRcvAcc= $investor->charOfAccounts->where('account_type','=',5)->first()->id;
         $invProAcc = $investor->charOfAccounts->where('account_type','=',9)->first()->id;
-
         $invinvAcc = $investor->charOfAccounts->where('account_type','=',3)->first()->id;
+        //tatal cash
+        $total_cash = GLeadger:: where('account_id','=',1)->sum('value');
+        // total bank
+        $total_bank = GLeadger:: where('account_id','=',4)->sum('value');
+        // company cash
+        $available_cash = GLeadger:: where('account_id','=',1)->where('investor_id',1)->sum('value');
+        // company bank
+        $company_bank = GLeadger:: where('account_id','=',4)->where('investor_id',1)->sum('value');
 
-        $available_cash = GLeadger:: where('account_id','=',$invCashAcc)->sum('value');
-        $rcv_cash = GLeadger:: where('account_id','=',$invRcvAcc)->sum('value');
-        $pft = GLeadger:: where('account_id','=',$invProAcc)->sum('value');
+        $rcv_cash = GLeadger:: where('account_id','=',5)->where('investor_id',1)->sum('value');
+        $pft = GLeadger:: where('account_id','=',9)->where('investor_id',1)->sum('value');
         $pft = $pft * -1;
-        $asset = GLeadger:: where('account_id','=',$invinvAcc)->sum('value');
+        $asset = GLeadger:: where('account_id','=',3)->where('investor_id',1)->sum('value');
         $sale = Sale::where('investor_id',1)->sum('total');
-        
+        $total_balance = $available_cash+$company_bank;
 
-        return view("template.dashboard-content", compact('investors','investor','available_cash','rcv_cash','pft','sale','asset'));
+        return view("template.dashboard-content", compact('investors','investor','available_cash','rcv_cash','pft','sale','asset','total_cash','total_bank','company_bank','total_balance'));
     }
+
 
     public function getRecoveryOff(Request $request){
         // get user matching the key
@@ -248,25 +255,45 @@ class Controller extends BaseController
     public function home($id)
     {   
 
-       
+
+
         $investors = Investor::all();
         $investor = Investor::find($id);
-        $invCashAcc= $investor->charOfAccounts->where('account_type','=',1)->first()->id;
-        $invRcvAcc= $investor->charOfAccounts->where('account_type','=',5)->first()->id;
-        $invProAcc = $investor->charOfAccounts->where('account_type','=',9)->first()->id;
+        
+         //tatal cash
+         $total_cash = GLeadger:: where('account_id','=',1)->sum('value');
+         // total bank
+         $total_bank = GLeadger:: where('account_id','=',4)->sum('value');
 
-        $invinvAcc = $investor->charOfAccounts->where('account_type','=',3)->first()->id;
+         // investor cash
+         $investor_cash = GLeadger:: where('account_id','=',1)->where('investor_id',$id)->sum('value');
+         // investor bank
+         $investor_bank = GLeadger:: where('account_id','=',4)->where('investor_id',$id)->sum('value');
 
-        $available_cash = GLeadger:: where('account_id','=',$invCashAcc)->sum('value');
-        $rcv_cash = GLeadger:: where('account_id','=',$invRcvAcc)->sum('value');
-        $pft = GLeadger:: where('account_id','=',$invProAcc)->sum('value');
+        //others investors cash 
+        $investors_cash = GLeadger:: where('account_id','=',1)->where('investor_id','!=',1)->sum('value');
+        // others investor bank balances
+        $investors_bank = GLeadger:: where('account_id','=',4)->where('investor_id','!=',1)->sum('value');
+        // other investors total
+        $others_total = $investors_cash+ $investors_bank;
+
+        // payables of investor 
+        $payables = GLeadger:: where('investor_id','=',$id)->whereHas('account',function ($query){
+            $query->where('account_type',7);
+        })->sum('value');
+
+
+        $rcv_cash = GLeadger:: where('account_id','=',5)->where('investor_id',$id)->sum('value');
+        $pft = GLeadger:: where('account_id','=',9)->where('investor_id',$id)->sum('value');
         $pft = $pft * -1;
-        $asset = GLeadger:: where('account_id','=',$invinvAcc)->sum('value');
+        $asset = GLeadger:: where('account_id','=',3)->where('investor_id',$id)->sum('value');
         $sale = Sale::where('investor_id',$id)->sum('total');
         
+        $total_balance = $investor_cash+$investor_bank;
 
-        return view("template.dashboard-content", compact('investors','investor','available_cash','rcv_cash','pft','sale','asset'));
+        return view("template.dashboard-content", compact('investors','investor','investor_cash','rcv_cash','pft','sale','asset','total_cash','total_bank','investor_bank','total_balance','others_total','payables'));
     }
+
     public function showInvestments()
     {
 
