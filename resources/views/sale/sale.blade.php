@@ -421,22 +421,23 @@
                                                 </tbody>
                                             </table>
                                             <div cslass="row">
+                                                
                                                 <div class="col-3">
                                                     <div class=" mt-1">
-                                                        <label name="return_customer" class="title me-1">Return to Customer:</label>
-                                                        <input  id="customer_id" name="purchase_date" type="text" class="form-control ">  
+                                                        <label  class="title me-1">Return to Customer:</label>
+                                                        <input  id="customer_id" name="return_customer" type="text" class="form-control ">  
                                                     </div>
                                                 </div>
                                                 <div class="col-3">
                                                     <div class=" mt-1">
-                                                        <label name="return_investor"  class="title me-1">Returns to Investor:</label>
-                                                        <input  id="customer_id" name="purchase_date" type="text" class="form-control ">  
+                                                        <label   class="title me-1">Returns to Investor:</label>
+                                                        <input  id="customer_id" name="return_investor" type="text" class="form-control ">  
                                                     </div>
                                                 </div>
                                                 <div class="col-3">
                                                     <div class="mt-1">
-                                                        <label name="return_alp"  class="title me-1">Alp Cut:</label>
-                                                        <input  id="customer_id" name="purchase_date" type="text" class="form-control ">  
+                                                        <label   class="title me-1">Alp Cut:</label>
+                                                        <input  id="customer_id" name="return_alp" type="text" class="form-control ">  
                                                     </div>
                                                 </div>
                                             </div>
@@ -450,16 +451,19 @@
                                             <div class="row mt-2">
                                                 <div class="col-12 mt-1">
                                                    Total Amount Recieved: {{number_format($total_amount_paid)}}
+                                                   <input type="hidden" name="total_amount_paid" value="{{$total_amount_paid}}">
                                                 </div>
                                                 <div class="col-12 mt-1">
                                                     Total Inventory Recovery: {{number_format($inventory_money) }}
-                                                    {{-- Total Inventory Recovery: {{$inventory_money }} --}}
+                                                    <input type="hidden" name="inventory_money" value="{{$inventory_money}}">
                                                 </div>
                                                 <div class="col-12 mt-1">
                                                     Investor Mark up Recieved: {{number_format($share)}}
+                                                    <input type="hidden" name="investor_share" value="{{$share}}">
                                                 </div>
                                                 <div class="col-12 mt-1">
                                                     Company Mark up Recieved: {{number_format($share)}}
+                                                    <input type="hidden" name="company" value="{{$share}}">
                                                 </div>
                                             </div>
                                         @endif

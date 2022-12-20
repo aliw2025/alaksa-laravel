@@ -13,6 +13,8 @@ use App\Models\PurchaseItem;
 use App\Models\Payable;
 use App\Models\Supplier;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
 
 
 class PurchaseController extends Controller
@@ -62,6 +64,8 @@ class PurchaseController extends Controller
 
     public function store(Request $request)
     {
+
+        $user = Auth::user();
         $investor = Investor::find($request->investor_id);
         // creating purchase transactions
         $purchase = new Purchase();
@@ -79,7 +83,7 @@ class PurchaseController extends Controller
         $purchase->investor_id = $request->investor_id;
         $purchase->store_id = 1;
         $purchase->supplier = $request->supplier;
-        $purchase->total =str_replace(',','', $request->total_amount);
+        $purchase->total = str_replace(',','', $request->total_amount);
         $purchase->type = $request->purchase_type;
         $purchase->purchase_date = $request->purchase_date;
         $purchase->tran_type = $request->tran_type;
@@ -111,9 +115,8 @@ class PurchaseController extends Controller
 
             }else{
                 if($request->tran_type==2){
-
+                    
                     $inventory->quantity = $inventory->quantity -$purchase_item->quantity;
-
                 }else{
                     $inventory->quantity = $inventory->quantity +$purchase_item->quantity;
                     // averaging purchase price
@@ -124,50 +127,52 @@ class PurchaseController extends Controller
             }
             $supplier = Supplier::find($request->supplier);
             $sup_acc_id = $supplier->charOfAccounts->where('account_type',7)->first()->id;
-            $inv_exp_acc =  $investor->charOfAccounts->where('account_type',9)->first()->id;
 
             if($request->tran_type==2){
                 // creating expene
                 $expense = new Expense();
-                $expense->description = $inventory->item->name."return loss";
+                $expense->description = $investor->investor_name." ".$inventory->item->name." return to".$supplier->supplier_name."loss";
                 $expense->amount = str_replace(',','',$request->td_loss[$a]);
                 $expense->date = $purchase->purchase_date;
                 $expense->save();
-                // creating impact of expenso on leadger
+                // creating impact of expense on leadger
                 $expense->leadgerEntries()->create([
                     'account_id'=> 8,
                     'value'=> str_replace(',','',$request->td_loss[$a]),
                     'investor_id'=>$investor->id,
-                    'date'=>$purchase->purchase_date        
+                    'date'=>$purchase->purchase_date,
+                    'user_id'=>$user->id       
                 ]);  
 
                 //  getting supplier payable account of the supplier
                 $expense->leadgerEntries()->create([
-                    'account_id'=>$sup_acc_id,
+                    'account_id'=> $sup_acc_id,
                     'value'=> - str_replace(',','',$request->td_loss[$a]),
                     'investor_id'=>$investor->id,
-                    'date'=>$purchase->purchase_date       
+                    'date'=>$purchase->purchase_date ,
+                    'user_id'=>$user->id             
                 ]);
             
             }
-        }
+        }   
 
         
         /******************** Leadger Entries ******************/
-        
         $purchase->leadgerEntries()->create([
             'account_id'=>  3,
             'value'=> $request->total_amount,
             'investor_id'=>$investor->id,
-            'date'=>$purchase->purchase_date        
+            'date'=>$purchase->purchase_date,
+            'user_id'=>$user->id               
         ]);  
 
         //  getting supplier payable account of the supplier
         $purchase->leadgerEntries()->create([
-            'account_id'=>  7,
+            'account_id'=>  $sup_acc_id ,
             'value'=> -$request->total_amount,
             'investor_id'=>$investor->id,
-            'date'=>$purchase->purchase_date       
+            'date'=>$purchase->purchase_date,
+            'user_id'=>$user->id              
         ]);
         
         return redirect()->route('get-purchases',$investor->id);   
@@ -206,6 +211,7 @@ class PurchaseController extends Controller
         $type = $purchase->type;
         return view('purchase.purchase',compact('purchase','investors','suppliers','type'));
     }
+
     public function getLastPurchase(Request $request){
 
         // getting all those purchases how have that item

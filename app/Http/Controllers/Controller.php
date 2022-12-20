@@ -11,7 +11,7 @@ use App\Models\ChartOfAccount;
 use App\Models\GLeadger;
 use App\Models\User;
 use App\Models\Sale;
-
+use App\Models\TransactionStatus;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -19,6 +19,7 @@ use Illuminate\Routing\Controller as BaseController;
 
 use Carbon\Cli\Invoker;
 use finfo;
+use GuzzleHttp\TransferStats;
 use Illuminate\Http\Request;
 // use GuzzleHttp\Psr7\Request;
 
@@ -154,97 +155,94 @@ class Controller extends BaseController
     {
        /********************** Leadger Entries  ****************************/
         // 1- cash
-        $type = new AccountType();
-        $type->name = "cash";
-        $type->category = "Assets";
-        $type->save();
-        //2- equipment  
-        $type = new AccountType();
-        $type->name = "Equipment";
-        $type->category = "Assets";
-        $type->save();
-        //3- inventory
-        $type = new AccountType();
-        $type->name = "inventory";
-        $type->category = "Assets";
-        $type->save();
-        //4- bank
-        $type = new AccountType();
-        $type->name = "Bank";
-        $type->category = "Assets";
-        $type->save();
-        //5- account receivable
-        $type = new AccountType();
-        $type->name = "Account Receivable";
-        $type->category = "Assets";
-        $type->save();
-        //6- equity
-        $type = new AccountType();
-        $type->name = "equity";
-        $type->category = "equity";
-        $type->save();
-        //7- account payable
-        $type = new AccountType();
-        $type->name = "Account Payable";
-        $type->category = "Liabilty";
-        $type->save();
-        //8- expenses
-        $type = new AccountType();
-        $type->name = "Expenses";
-        $type->category = "Expenses";
-        $type->save();
-        //9-sale revenue
-        $type = new AccountType();
-        $type->name = "Sale Revenue";
-        $type->category = "Revenue";
-        $type->save();
-        //10-trade discount revenue
-        $type = new AccountType();
-        $type->name = "Trade Discount Revenue";
-        $type->category = "Revenue";
-        $type->save();
+        // $type = new AccountType();
+        // $type->name = "cash";
+        // $type->category = "Assets";
+        // $type->save();
+        // //2- equipment  
+        // $type = new AccountType();
+        // $type->name = "Equipment";
+        // $type->category = "Assets";
+        // $type->save();
+        // //3- inventory
+        // $type = new AccountType();
+        // $type->name = "inventory";
+        // $type->category = "Assets";
+        // $type->save();
+        // //4- bank
+        // $type = new AccountType();
+        // $type->name = "Bank";
+        // $type->category = "Assets";
+        // $type->save();
+        // //5- account receivable
+        // $type = new AccountType();
+        // $type->name = "Account Receivable";
+        // $type->category = "Assets";
+        // $type->save();
+        // //6- equity
+        // $type = new AccountType();
+        // $type->name = "equity";
+        // $type->category = "equity";
+        // $type->save();
+        // //7- account payable
+        // $type = new AccountType();
+        // $type->name = "Account Payable";
+        // $type->category = "Liabilty";
+        // $type->save();
+        // //8- expenses
+        // $type = new AccountType();
+        // $type->name = "Expenses";
+        // $type->category = "Expenses";
+        // $type->save();
+        // //9-sale revenue
+        // $type = new AccountType();
+        // $type->name = "Sale Revenue";
+        // $type->category = "Revenue";
+        // $type->save();
+        // //10-trade discount revenue
+        // $type = new AccountType();
+        // $type->name = "Trade Discount Revenue";
+        // $type->category = "Revenue";
+        // $type->save();
+
+        $transaction_type = new TransactionStatus();
+        $transaction_type->desc = "entry";
+        $transaction_type->save();
+
+        $transaction_type = new TransactionStatus();
+        $transaction_type->desc = "cancelled";
+        $transaction_type->save();
+
+        $transaction_type = new TransactionStatus();
+        $transaction_type->desc = "posted";
+        $transaction_type->save();
+
+        $transaction_type = new TransactionStatus();
+        $transaction_type->desc = "returned";
+        $transaction_type->save();
+
+
+        
 
 
         return redirect()->route('index');
+
     }
 
 
     public function index()
-    {
-        // queries for dashboard  calculations
-        $investors = Investor::all();
-        // finding the company investor
-        $investor = Investor::find(1);
-
-        $invCashAcc= $investor->charOfAccounts->where('account_type','=',1)->first()->id;
-        $invRcvAcc= $investor->charOfAccounts->where('account_type','=',5)->first()->id;
-        $invProAcc = $investor->charOfAccounts->where('account_type','=',9)->first()->id;
-        $invinvAcc = $investor->charOfAccounts->where('account_type','=',3)->first()->id;
-        //tatal cash
-        $total_cash = GLeadger:: where('account_id','=',1)->sum('value');
-        // total bank
-        $total_bank = GLeadger:: where('account_id','=',4)->sum('value');
-        // company cash
-        $available_cash = GLeadger:: where('account_id','=',1)->where('investor_id',1)->sum('value');
-        // company bank
-        $company_bank = GLeadger:: where('account_id','=',4)->where('investor_id',1)->sum('value');
-
-        $rcv_cash = GLeadger:: where('account_id','=',5)->where('investor_id',1)->sum('value');
-        $pft = GLeadger:: where('account_id','=',9)->where('investor_id',1)->sum('value');
-        $pft = $pft * -1;
-        $asset = GLeadger:: where('account_id','=',3)->where('investor_id',1)->sum('value');
-        $sale = Sale::where('investor_id',1)->sum('total');
-        $total_balance = $available_cash+$company_bank;
-
-        return view("template.dashboard-content", compact('investors','investor','available_cash','rcv_cash','pft','sale','asset','total_cash','total_bank','company_bank','total_balance'));
+    {   
+        // redirect to admin dashboard
+        return redirect()->route('home',1);
     }
-
-
+    
     public function getRecoveryOff(Request $request){
+
         // get user matching the key
         $users = User::where('name','like','%'.$request->key.'%')->get();
         return $users;
     }
+
     public function getMarketingOff(Request $request){
        
         // get user matching the key
@@ -255,42 +253,37 @@ class Controller extends BaseController
     public function home($id)
     {   
 
-
-
         $investors = Investor::all();
         $investor = Investor::find($id);
-        
-         //tatal cash
-         $total_cash = GLeadger:: where('account_id','=',1)->sum('value');
-         // total bank
-         $total_bank = GLeadger:: where('account_id','=',4)->sum('value');
-
-         // investor cash
-         $investor_cash = GLeadger:: where('account_id','=',1)->where('investor_id',$id)->sum('value');
-         // investor bank
-         $investor_bank = GLeadger:: where('account_id','=',4)->where('investor_id',$id)->sum('value');
-
+        //tatal cash
+        $total_cash = GLeadger:: where('account_id','=',1)->sum('value');
+        // total bank
+        $total_bank = GLeadger:: where('account_id','=',4)->sum('value');
+        // investor cash
+        $investor_cash = GLeadger:: where('account_id','=',1)->where('investor_id',$id)->sum('value');
+        // investor bank
+        $investor_bank = GLeadger:: where('account_id','=',4)->where('investor_id',$id)->sum('value');
         //others investors cash 
         $investors_cash = GLeadger:: where('account_id','=',1)->where('investor_id','!=',1)->sum('value');
         // others investor bank balances
         $investors_bank = GLeadger:: where('account_id','=',4)->where('investor_id','!=',1)->sum('value');
         // other investors total
         $others_total = $investors_cash+ $investors_bank;
-
         // payables of investor 
         $payables = GLeadger:: where('investor_id','=',$id)->whereHas('account',function ($query){
             $query->where('account_type',7);
-        })->sum('value');
-
-
-        $rcv_cash = GLeadger:: where('account_id','=',5)->where('investor_id',$id)->sum('value');
-        $pft = GLeadger:: where('account_id','=',9)->where('investor_id',$id)->sum('value');
-        $pft = $pft * -1;
-        $asset = GLeadger:: where('account_id','=',3)->where('investor_id',$id)->sum('value');
-        $sale = Sale::where('investor_id',$id)->sum('total');
+        })->sum('value')*-1;
         
+        // recievables of investors
+        $rcv_cash = GLeadger:: where('account_id','=',5)->where('investor_id',$id)->sum('value');
+        // unrealized profit of investor
+        $pft = GLeadger:: where('account_id','=',9)->where('investor_id',$id)->sum('value')*-1;
+        // assests of the invstors
+        $asset = GLeadger:: where('account_id','=',3)->where('investor_id',$id)->sum('value');
+        // sales made by investor
+        $sale = Sale::where('investor_id',$id)->sum('total');
+        // total balance of the investor
         $total_balance = $investor_cash+$investor_bank;
-
         return view("template.dashboard-content", compact('investors','investor','investor_cash','rcv_cash','pft','sale','asset','total_cash','total_bank','investor_bank','total_balance','others_total','payables'));
     }
 

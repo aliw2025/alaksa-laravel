@@ -126,8 +126,46 @@
                                 <div class="">
                                     <div class="mb-1">
                                         <label class="form-label" for="contact-info-vertical">CNIC</label>
-                                        <input value="{{old('CNIC',isset($customer)? $customer->CNIC:'')}}" type="number" id="contact-info-vertical" class="@error('CNIC') is-invalid @enderror form-control" name="CNIC" placeholder="Mobile">
+                                        <input value="{{old('CNIC',isset($customer)? $customer->CNIC:'')}}" type="number" id="contact-info-vertical" class="@error('CNIC') is-invalid @enderror form-control" name="CNIC" placeholder="CNIC">
                                         @error('CNIC')
+                                        <div class="alert alert-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class=" ">
+                                    <div class="mb-1">
+                                        <label class="form-label" for="first-name-vertical">Customer Address</label>
+                                        <textarea value="{{old('customer_address',isset($customer)? $customer->customer_address  :'')}}" type="text" id="customerAddress" class=" @error('customer_address') is-invalid @enderror form-control" name="customer_address" placeholder="customer Address">
+                                        </textarea>
+                                        @error('customer_address')
+                                        <div class="alert alert-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class="">
+                                    <div class="mb-1">
+                                        <label class="form-label" for="contact-info-vertical">Garentier Name</label>
+                                        <input value="{{old('g_name',isset($customer)? $customer->g_name:'')}}" type="number" id="contact-info-vertical" class="@error('g_name') is-invalid @enderror form-control" name="g_name" placeholder="Garantier Name">
+                                        @error('g_names')
+                                        <div class="alert alert-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class="">
+                                    <div class="mb-1">
+                                        <label class="form-label" for="contact-info-vertical">Garentier CNIC</label>
+                                        <input value="{{old('g_CNIC',isset($customer)? $customer->g_CNIC:'')}}" type="number" id="contact-info-vertical" class="@error('g_CNIC') is-invalid @enderror form-control" name="g_CNIC" placeholder="Garentier CNIC">
+                                        @error('g_CNIC')
+                                        <div class="alert alert-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class=" ">
+                                    <div class="mb-1">
+                                        <label class="form-label" for="first-name-vertical">Garentier Address</label>
+                                        <textarea value="{{old('g_address',isset($customer)? $customer->g_address  :'')}}" type="text" id="gAddress" class=" @error('g_address') is-invalid @enderror form-control" name="g_address" placeholder="Garentier Address">
+                                        </textarea>
+                                        @error('customer_address')
                                         <div class="alert alert-danger">{{ $message }}</div>
                                         @enderror
                                     </div>

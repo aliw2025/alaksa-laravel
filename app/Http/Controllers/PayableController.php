@@ -12,6 +12,8 @@ use App\Models\Investor;
 use App\Models\InvestorLeadger;
 use App\Models\Item;
 use App\Models\PurchaseItem;
+use Illuminate\Support\Facades\Auth;
+
 
 class PayableController extends Controller
 {
@@ -29,11 +31,14 @@ class PayableController extends Controller
     
     public function payablesRepTem($id){
         
+
         $leadger = GLeadger::where('investor_id',$id)->whereHas('account',function ($query)  {
             $query->where('account_type',7);
-        })->get();
+        })->orderBy('account_id')->get()  ;
+        $total = $leadger->sum('value');
+
         // where('transaction_type','like',"%purchase%")
-        return  view('payable.payables2', compact('leadger'));
+        return  view('payable.payables2', compact('leadger','total'));
     }
 
 
@@ -100,7 +105,7 @@ class PayableController extends Controller
      */
     public function store(Request $request)
     {
-
+        $user = Auth::user();
         $id = Payable::max('id');
         if ($id == null) {
             $id = 0;
@@ -119,7 +124,7 @@ class PayableController extends Controller
 
         //  getting investor asset account
         $investor = Investor::find($request->investor_id);
-        $inv_acc_id =  $investor->charOfAccounts->where('account_type', $request->acc_type)->first()->id;
+        // $inv_acc_id =  $investor->charOfAccounts->where('account_type', $request->acc_type)->first()->id;
 
         // getting supplier payable account
         $supplier = Supplier::find($request->supplier);
@@ -130,14 +135,16 @@ class PayableController extends Controller
             'account_id' =>  $sup_acc_id,
             'value' =>  str_replace(',','',$request->amount),
             'investor_id'=>$investor->id,
-            'date' => $request->payment_date
+            'date' => $request->payment_date,
+            'user_id'=>$user->id,
         ]);
 
         $payable->leadgerEntries()->create([
             'account_id' => $request->acc_type,
             'value' => -str_replace(',','',$request->amount),
             'investor_id'=>$investor->id,
-            'date' => $request->payment_date
+            'date' => $request->payment_date,
+            'user_id'=>$user->id,
         ]);
 
         return redirect()->route('payable.create');

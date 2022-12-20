@@ -7,6 +7,8 @@ use App\Models\InstalmentPayment;
 use App\Models\Investor;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
 
 class InstalmentController extends Controller
 {
@@ -37,7 +39,7 @@ class InstalmentController extends Controller
 
     public function payInstalment(Request $request){
        
-
+        $user = Auth::user();
         // dd($requssest->all());
         $instalment = Instalment::find($request->id);
         $sale = $instalment->sale;
@@ -107,14 +109,16 @@ class InstalmentController extends Controller
             'account_id' => $request->account,
             'value' => $ins_mon,
             'investor_id' => $investor->id,
-            'date' => $sale->sale_date
+            'date' => $sale->sale_date,
+            'user_id' =>$user->id,
         ]);
         //  * credit recievable of inventory recovery
         $instalment->leadgerEntries()->create([
             'account_id' =>  5,
             'value' => -$ins_mon,
             'investor_id' => $investor->id,
-            'date' => $sale->sale_date
+            'date' => $sale->sale_date,
+            'user_id' =>$user->id,
         ]);
 
          // debit company cash of markup
@@ -122,7 +126,8 @@ class InstalmentController extends Controller
             'account_id' => $request->account,
             'value' => $share,
             'investor_id' => 1,
-            'date' => $sale->sale_date
+            'date' => $sale->sale_date,
+            'user_id' =>$user->id,
         ]);
 
         // * credit  company  recievable of markup
@@ -130,7 +135,8 @@ class InstalmentController extends Controller
             'account_id' =>  5,
             'value' => -$share,
             'investor_id' => 1,
-            'date' => $sale->sale_date
+            'date' => $sale->sale_date,
+            'user_id' =>$user->id,
         ]);
         
          // debit investor cash  of markup
@@ -138,7 +144,8 @@ class InstalmentController extends Controller
             'account_id' => $request->accounts,
             'value' => $share,
             'investor_id' => $investor->id,
-            'date' => $sale->sale_date
+            'date' => $sale->sale_date,
+            'user_id' =>$user->id,
         ]);
 
          // * credit  investor  recievable of markup
@@ -146,7 +153,8 @@ class InstalmentController extends Controller
             'account_id' =>  5,
             'value' => -$share,
             'investor_id' => $investor->id,
-            'date' => $sale->sale_date
+            'date' => $sale->sale_date,
+            'user_id' =>$user->id,
         ]);
         
     
@@ -156,7 +164,8 @@ class InstalmentController extends Controller
                 'user_id' => $sale->rec_of_id,
                 'amount' =>  str_replace(',','',$request->amount_paid) * 0.01,
                 'status' => 0,
-                'earned_date' => $sale->sale_date
+                'earned_date' => $sale->sale_date,
+                'user_id' =>$user->id,
             ]
         );
         

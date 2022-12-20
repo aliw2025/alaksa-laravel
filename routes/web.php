@@ -14,6 +14,11 @@ use App\Http\Controllers\PayableController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\CommissionController;
 use App\Http\Controllers\InstalmentController;
+use App\Http\Controllers\desingationContoller;
+
+use App\Http\Controllers\payScaleContoller;
+
+
 
 
 
@@ -65,6 +70,8 @@ Route::get('/test-pdf' , [\App\Http\Controllers\SaleController::class,'testPdf']
 Route::get('/get-invoices' , [\App\Http\Controllers\SaleController::class,'getInvoices'])->name('get-invoices');
 // Route::get('/search-sales' , [\App\Http\Controllers\SaleController::class,'searchSales'])->name('search-sales');
 Route::get('/search-sales' , [\App\Http\Controllers\SaleController::class,'searchSalesPost'])->name('search-sales-post');
+Route::get('/sale-close' , [\App\Http\Controllers\SaleController::class,'saleClose'])->name('sale-close');
+
 
 
 Route::get('/list-inventory/{id}' , [\App\Http\Controllers\InventoryController::class,'showInventory'])->name('list-inventory');
@@ -102,6 +109,10 @@ Route::resource('sale', SaleController::class);
 Route::resource('payable',PayableController::class);
 Route::resource('supplier',SupplierController::class);
 Route::resource('commission', CommissionController::class);
+Route::resource('designation', desingationContoller::class);
+Route::resource('payScale', payScaleContoller::class);
+
+
 
 
 

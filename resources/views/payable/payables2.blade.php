@@ -14,9 +14,8 @@
                             <thead class="thead-dark">
                                 <tr style="background-color:red !important;">
                                     <th style="width: 2px !important">#</th>
-                                    <th scope="col">Transaction No</th>
-                                    <th>Transaction Type</th>
                                     <th scope="col">Supplier</th>
+                                    <th>Transaction Type</th>
                                     <th scope="col">Amount</th>
                                     <th scope="col">Date</th>
                                     <th scope="col">Action</th>
@@ -30,11 +29,11 @@
                                 @foreach ($leadger as $pay)
                                     <tr>
                                         <td>{{ $count }}</td>
-                                        @if ($pay->transaction_type == 'App\Models\Purchase')
+                                        {{-- @if ($pay->transaction_type == 'App\Models\Purchase')
                                             <td>
                                                 @php
                                                     $a = $pay->transactionable()->get();
-                                                    $va = $pay->transactionable()->first();
+                                                    // $va = $pay->transactionable()->first();
                                                 @endphp
                                                 @foreach ($a as $b)
                                                     {{ $b->purchase_no }}
@@ -44,16 +43,17 @@
                                             <td>
                                                 @php
                                                     $a = $pay->transactionable()->get();
-                                                    $va = $pay->transactionable()->first();
+                                                    // $va = $pay->transactionable()->first();
                                                 @endphp
                                                 @foreach ($a as $b)
                                                     {{ $b->id }}
                                                 @endforeach
                                             </td>
-                                        @endif
-                                        <td>{{ $pay->transaction_type }}</td>
+                                        @endif --}}
                                         <td>{{ $pay->account->owner->name }}</td>
-                                        <td>{{ number_format($pay->value) }}</td>
+                                        <td>{{ $pay->transaction_type}}</td>
+                                      
+                                        <td>{{ number_format($pay->value *-1) }}</td>
                                         <td>{{ $pay->date }}</td>
 
                                         @if ($pay->transaction_type == 'App\Models\Purchase')
@@ -77,6 +77,9 @@
                                 @endforeach
                             </tbody>
                         </table>
+                        <div class="d-flex justify-content-end">
+                            <p>Total payable : {{$total}}</p>
+                        </div>
 
                     </div>
                 </div>
