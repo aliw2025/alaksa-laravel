@@ -31,7 +31,7 @@
                                         $count = 1
                                     @endphp
                                     @foreach ($instalment_payments as $pay)
-
+                                    
                                     <tr>
                                         <td>{{$count}}</td>
                                         <td>{{$pay->id}}</td>

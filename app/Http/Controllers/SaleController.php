@@ -62,17 +62,17 @@ class SaleController extends Controller
         // finding the investor to get investor name
         $investor = Investor::find($request->investor_id);
         // getting investory inventory account 
-        $inv_acc_id =  $investor->charOfAccounts->where('account_type', 3)->first()->id;
+        // $inv_acc_id =  $investor->charOfAccounts->where('account_type', 3)->first()->id;
         //  getting investor recievable account
-        $inv_rcv_acc = $investor->charOfAccounts->where('account_type', 5)->first()->id;
+        // $inv_rcv_acc = $investor->charOfAccounts->where('account_type', 5)->first()->id;
         // getting investor unrealized profit account
-        $inv_un_pft_acc = $investor->charOfAccounts->where('account_type', 9)->first()->id;
+        // $inv_un_pft_acc = $investor->charOfAccounts->where('account_type', 9)->first()->id;
         //  getting company
         $cmp = Investor::where('investor_type', '=', 1)->first();
         //  getting company cash account
         $cmp_cash_acc =  $cmp->charOfAccounts->where('account_type', 1)->first()->id;
          //  getting investor cash account
-         $inv_cash_acc =  $investor->charOfAccounts->where('account_type', 1)->first()->id;
+        //  $inv_cash_acc =  $investor->charOfAccounts->where('account_type', 1)->first()->id;
         //  getting company recibable account
         $cmp_rcv_acc =  $cmp->charOfAccounts->where('account_type', 5)->first()->id;
         //  getting company unrealized profit account
@@ -105,6 +105,7 @@ class SaleController extends Controller
         $sale->status = 1;
         $sale->plan = $request->plan;
         $sale->markup = $request->markup;
+        $sale->user_id = $user->id;
         $sale->selling_price = str_replace(',','',$request->selling_price);
         $sale->sale_type = $request->sale_type;
 
@@ -167,7 +168,9 @@ class SaleController extends Controller
                     'account_id' => $request->acc_type,
                     'value' => $share,
                     'investor_id' => 1,
-                    'date' => $sale->sale_date
+                    'date' => $sale->sale_date,
+                    'user_id'=>$user->id
+
                 ]);
                 
                 //*  credit company  recievable of markup
@@ -513,22 +516,31 @@ class SaleController extends Controller
         $user = Auth::user();
         $mytime = Carbon::today();
         // dd($mytisme);
-        $transactions = GLeadger::where('date',$mytime)->whereHas('account',function($query){
+        $transactions = GLeadger::where('user_id',$user->id)->where('date',$mytime)->whereHas('account',function($query){
             $query->where(function ($query2) {
                 $query2->where('account_type',1)->orWhere('account_type',4);
             });
         })->get();
-        $cash_sum = GLeadger::whereHas('account',function($query){
+
+        $cash_sum = GLeadger::where('user_id',$user->id)->where('date',$mytime)->whereHas('account',function($query){
             $query->where('account_type',1);
         })->sum('value');
 
-        $bank_sum = GLeadger::whereHas('account',function($query){
+        $bank_sum = GLeadger::where('user_id',$user->id)->where('date',$mytime)->whereHas('account',function($query){
+            $query->where('account_type',4);
+        })->sum('value');
+
+        $cash_sum_all = GLeadger::whereHas('account',function($query){
+            $query->where('account_type',1);
+        })->sum('value');
+        
+        $bank_sum_all = GLeadger::whereHas('account',function($query){
             $query->where('account_type',4);
         })->sum('value');
 
         $transactions->sum('value');
         // return $transactions;
-        return view('sale.sale_close_user',compact('user','transactions','bank_sum','cash_sum'));
+        return view('sale.sale_close_user',compact('user','transactions','bank_sum','cash_sum','cash_sum_all','bank_sum_all'));
 
     }
 

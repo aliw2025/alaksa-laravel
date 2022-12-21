@@ -78,17 +78,17 @@ class InstalmentController extends Controller
         // calculate commisions 
         $investor = Investor::find($sale->investor_id);
         // getting investory inventory account 
-        $inv_acc_id =  $investor->charOfAccounts->where('account_type', 3)->first()->id;
+        // $inv_acc_id =  $investor->charOfAccounts->where('account_type', 3)->first()->id;
         //  getting investor recievable account
-        $inv_rcv_acc = $investor->charOfAccounts->where('account_type', 5)->first()->id;
+        // $inv_rcv_acc = $investor->charOfAccounts->where('account_type', 5)->first()->id;
         // getting investor unrealized profit account
-        $inv_un_pft_acc = $investor->charOfAccounts->where('account_type', 9)->first()->id;
+        // $inv_un_pft_acc = $investor->charOfAccounts->where('account_type', 9)->first()->id;
         //  getting company
         $cmp = Investor::where('investor_type', '=', 1)->first();
         //  getting company cash account
         $cmp_cash_acc =  $cmp->charOfAccounts->where('account_type', 1)->first()->id;
          //  getting investor cash account
-         $inv_cash_acc =  $investor->charOfAccounts->where('account_type', 1)->first()->id;
+        //  $inv_cash_acc =  $investor->charOfAccounts->where('account_type', 1)->first()->id;
         //  getting company recibable account
         $cmp_rcv_acc =  $cmp->charOfAccounts->where('account_type', 5)->first()->id;
         //  getting company unrealized profit account
@@ -141,7 +141,7 @@ class InstalmentController extends Controller
         
          // debit investor cash  of markup
          $instalment->leadgerEntries()->create([
-            'account_id' => $request->accounts,
+            'account_id' => $request->account,
             'value' => $share,
             'investor_id' => $investor->id,
             'date' => $sale->sale_date,
@@ -201,7 +201,7 @@ class InstalmentController extends Controller
      */
     public function show(Instalment $instalment)
     {
-        //
+        return $instalment;
     }
 
     /**

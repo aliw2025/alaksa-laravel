@@ -148,7 +148,7 @@
                             <label> Account: </label>
                             <select class="form-control" name="account" id="">
                                 <option value="1"> Cash</option>
-                                <option value="1">Bank Account</option>
+                                <option value="4">Bank Account</option>
                             </select>
                         </div>
                         <div class="col-12 my-1 ">

@@ -15,101 +15,107 @@
                     
                     <div class="row">
                         <div class="col-6">
-                            <label class="mt-1" for="" >User </label>
-                             <input type="text"  class="form-control" value="{{$user->name}}" >
-                            {{-- <label class="mt-1" for="" >take back from alp </label>
-                            <input type="text"  class="form-control" >
-                            <label class="mt-1" for="" >investor will receive </label>
-                            <input type="text"  class="form-control" >
-                            <label class="mt-1" for="" >alp recived </label>
-                            <input type="text"  class="form-control"> --}}
+                            <label class="mt-1" for="" >User: </label>
+                            <input type="text"  class="form-control mt-1" value="{{$user->name}}" >
+                           
                         </div>
-                        <div class="col-6">
-                            {{-- <label class="mt-1" for="" >Select Account </label>
-                            <select id="acc_type" name="acc_type" class="form-select ">
-                                <option value="1">
-                                   cash
-                                </option>
-                                <option value="4">
-                                    Bank
-                                 </option>
-
-                            </select>
-                            <label class="mt-1" for="" >Select Account </label>
-                            <select id="acc_type" name="acc_type" class="form-select ">
-                                <option value="1">
-                                   cash
-                                </option>
-                                <option value="4">
-                                    Bank
-                                 </option>
-
-                            </select>
-                            <label class="mt-1" for="" >Select Account </label>
-                            <select id="acc_type" name="acc_type" class="form-select ">
-                                <option value="1">
-                                   cash
-                                </option>
-                                <option value="4">
-                                    Bank
-                                 </option>
-
-                            </select>
-                            <label class="mt-1" for="" >Select Account </label>
-                            <select id="acc_type" name="acc_type" class="form-select ">
-                                <option value="1">
-                                   cash
-                                </option>
-                                <option value="4">
-                                    Bank
-                                 </option>
-
-                            </select> --}}
-                        
+                        <div class="col-3">
 
                         </div>
+                        <div class="col-3">
+                            <label class="mt-1" for="" >Date: </label>
+                            <input type="text"  class="form-control mt-1" value="{{ Carbon\Carbon::today()}}" >
+                        </div>
+                       
                         
+                    </div>
+                    <div class="row mt-1">
+                        <table id="investor-table" class="table">
+                            <thead class="thead-dark">
+                                <tr style="background-color:red !important;">
+                                    <th style="width: 2px !important">#</th>
+                                    <th>Investor</th>
+                                    <th>Transaction Type</th>
+                                    <th>Account</th>
+                                    <th>Amount</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody class="inventory-iems-body" id="inventory-iems-body">
+                                @php
+                                    $count = 1
+                                @endphp
+                                
+                                @foreach($transactions as $tran)
+
+                                <tr>
+                                    <td>{{$count}}</td>
+                                    <td> {{$tran->investor->investor_name}}</td>
+                                    <td> 
+                                        @if($tran->transaction_type=="App\Models\Purchase")
+                                        Purchase
+                                        @elseif($tran->transaction_type=="App\Models\Sale")   
+                                        Sale
+                                        @elseif($tran->transaction_type=="App\Models\Expense")
+                                        Expense
+                                        @elseif($tran->transaction_type=="App\Models\Instalment") 
+                                        Instalment 
+                                        @elseif($tran->transaction_type=="App\Models\Payable")
+                                        Supplier Payment  
+                                        @endif
+                                       
+                                        {{-- {{$tran->transaction_type}} --}}
+                                    </td>
+                                    <td>    
+                                        {{$tran->account->account_type==1?"cash":'bank'
+                                        }}
+                                    </td>
+                                    <td>    
+                                        {{number_format($tran->value)}}
+                                    </td>
+                                    <td>
+                                        @if($tran->transaction_type=="App\Models\Purchase")
+                                        <a style="text-decoration: none;color:black"
+                                            href="{{ route('purchase.show', $tran->transaction_id) }}"><i
+                                                data-feather='eye'></i></a>
+                                        @elseif($tran->transaction_type=="App\Models\Sale")   
+                                        <a style="text-decoration: none;color:black"
+                                            href="{{ route('sale.show', $tran->transaction_id) }}"><i
+                                                data-feather='eye'></i></a>
+                                        @elseif($tran->transaction_type=="App\Models\Expense")
+                                        <a style="text-decoration: none;color:black"
+                                            href="{{ route('instalment.show', $tran->transaction_id) }}"><i
+                                                data-feather='eye'></i></a>
+                                        @elseif($tran->transaction_type=="App\Models\Instalment") 
+                                        <a style="text-decoration: none;color:black"
+                                            href="{{ route('instalment.show', $tran->transaction_id) }}"><i
+                                                data-feather='eye'></i></a>
+                                        @elseif($tran->transaction_type=="App\Models\Payable")
+                                        <a style="text-decoration: none;color:black"
+                                            href="{{ route('payable.show', $tran->transaction_id) }}"><i
+                                                data-feather='eye'></i></a>
+                                        @endif
+                                    </td>
+                                </tr>
+                                @php
+                                    $count = $count+1
+                                @endphp
+
+                                @endforeach
+                               
+                             
+                        
+                            </tbody>
+                        </table>
                     </div>
                    
                     <div class="row mt-1">
 
                         <div class="col-12">
-                                <table class="table">
-                                    <th>investor</th>
-                                    <th>transaction type</th>
-                                    <th>account</th>
-                                    <th>amount</th>
-
-                                    <tbody >
-                                        @foreach($transactions as $tran)
-                                        <tr>
-                                            <td>    
-                                                {{$tran->investor->investor_name}}
-                                            </td>
-                                            <td>    
-                                                {{$tran->transaction_type}}
-                                            </td>
-                                            <td>    
-                                                {{$tran->account->account_type==1?"cash":'bank'}}
-                                            </td>
-                                            <td>    
-                                                {{$tran->value}}
-                                            </td>
-                                            
-                                           
-                                        </tr>
-                                        @endforeach
-                                    </tbody>
-                                    
-                                </table>
-                        </div>
-
-                    </div>
-                    <div class="row mt-1">
-
-                        <div class="col-12">
-                            <p> bank balance : {{$bank_sum}}</p>
-                            <p> cash balance : {{$cash_sum}}</p>
+                            <p> Total Bank Transactions : {{number_format($bank_sum) }}</p>
+                            <p> Total Cash Transactions : {{number_format($cash_sum) }}</p>
+                            <p> Total Bank Balance : {{number_format($bank_sum_all) }}</p>
+                            <p> Total Cash Balance : {{ number_format($cash_sum_all) }}</p>
                         </div>
                     </div>
 
@@ -137,7 +143,7 @@
 
         $(document).ready(function() {
             
-            $('#investor-table').DataTable();
+            // $('#investor-table').DataTable();
         });
 
     });

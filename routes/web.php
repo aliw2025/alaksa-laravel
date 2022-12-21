@@ -17,15 +17,7 @@ use App\Http\Controllers\InstalmentController;
 use App\Http\Controllers\desingationContoller;
 
 use App\Http\Controllers\payScaleContoller;
-
-
-
-
-
-
-
-
-
+use App\Models\Instalment;
 
 /*
 |--------------------------------------------------------------------------
@@ -111,6 +103,7 @@ Route::resource('supplier',SupplierController::class);
 Route::resource('commission', CommissionController::class);
 Route::resource('designation', desingationContoller::class);
 Route::resource('payScale', payScaleContoller::class);
+Route::resource('instalment',InstalmentController::class);
 
 
 
