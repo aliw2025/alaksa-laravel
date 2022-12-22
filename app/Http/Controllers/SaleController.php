@@ -61,31 +61,13 @@ class SaleController extends Controller
         $user = Auth::user();
         // finding the investor to get investor name
         $investor = Investor::find($request->investor_id);
-        // getting investory inventory account 
-        // $inv_acc_id =  $investor->charOfAccounts->where('account_type', 3)->first()->id;
-        //  getting investor recievable account
-        // $inv_rcv_acc = $investor->charOfAccounts->where('account_type', 5)->first()->id;
-        // getting investor unrealized profit account
-        // $inv_un_pft_acc = $investor->charOfAccounts->where('account_type', 9)->first()->id;
-        //  getting company
+       
         $cmp = Investor::where('investor_type', '=', 1)->first();
-        //  getting company cash account
-        $cmp_cash_acc =  $cmp->charOfAccounts->where('account_type', 1)->first()->id;
-         //  getting investor cash account
-        //  $inv_cash_acc =  $investor->charOfAccounts->where('account_type', 1)->first()->id;
-        //  getting company recibable account
-        $cmp_rcv_acc =  $cmp->charOfAccounts->where('account_type', 5)->first()->id;
-        //  getting company unrealized profit account
-        $cmp_un_pft_acc =  $cmp->charOfAccounts->where('account_type', 9)->first()->id;
-        // getting company trade discount profit account
-        $cmp_td_pft_acc =  $cmp->charOfAccounts->where('account_type', 10)->first()->id;
-
-        // $userId = Auth::id();    
+     
         $down_payment = false;
         if ($request->input('down_payment_paid') != NULL) {
             $down_payment = true;
         }
-
         // creatin the sale 
         $sale = new Sale();
         // getting sale id for sale invoice
@@ -109,13 +91,11 @@ class SaleController extends Controller
         $sale->selling_price = str_replace(',','',$request->selling_price);
         $sale->sale_type = $request->sale_type;
 
-        
+        // if sale is of type cash 
         if ($request->sale_type == 2) {
-
             $payment_type = "Cash";
             $sale->total = str_replace(',','',$request->selling_price);
         } else {
-
             $payment_type = "Instalments";
             $sale->total = str_replace(',','',$request->total_sum);
         }
@@ -130,9 +110,8 @@ class SaleController extends Controller
         // each investor share in markup profit
         $share = (str_replace(',','',$request->down_payment) - $ins_mon) * 0.50;
 
-
+        // if its an instalments sale
         if ($request->sale_type == 1) {
-            
             // creating down payment
             $instalment = new Instalment();
             $instalment->sale_id = $sale->id;
@@ -339,6 +318,8 @@ class SaleController extends Controller
         // return redirect()->route('get-sales', $request->investor_id);
     }
 
+    
+
     // function to return sale invoice
     public function postReturn(Request $request)
     {
@@ -513,9 +494,12 @@ class SaleController extends Controller
 
 
     public function saleClose(){
+
         $user = Auth::user();
         $mytime = Carbon::today();
-        // dd($mytisme);
+       
+        $sales = Sale::where('sale_date',$mytime)->where('user_id',$user->id);
+
         $transactions = GLeadger::where('user_id',$user->id)->where('date',$mytime)->whereHas('account',function($query){
             $query->where(function ($query2) {
                 $query2->where('account_type',1)->orWhere('account_type',4);
@@ -541,6 +525,40 @@ class SaleController extends Controller
         $transactions->sum('value');
         // return $transactions;
         return view('sale.sale_close_user',compact('user','transactions','bank_sum','cash_sum','cash_sum_all','bank_sum_all'));
+
+    }
+    public function saleClose2(){
+
+        $user = Auth::user();
+        $mytime = Carbon::today();
+       
+        $sales = Sale::where('sale_date',$mytime)->where('user_id',$user->id);
+
+        $transactions = GLeadger::where('user_id',$user->id)->where('date',$mytime)->whereHas('account',function($query){
+            $query->where(function ($query2) {
+                $query2->where('account_type',1)->orWhere('account_type',4);
+            });
+        })->get();
+
+        $cash_sum = GLeadger::where('user_id',$user->id)->where('date',$mytime)->whereHas('account',function($query){
+            $query->where('account_type',1);
+        })->sum('value');
+
+        $bank_sum = GLeadger::where('user_id',$user->id)->where('date',$mytime)->whereHas('account',function($query){
+            $query->where('account_type',4);
+        })->sum('value');
+
+        $cash_sum_all = GLeadger::whereHas('account',function($query){
+            $query->where('account_type',1);
+        })->sum('value');
+        
+        $bank_sum_all = GLeadger::whereHas('account',function($query){
+            $query->where('account_type',4);
+        })->sum('value');
+
+        $transactions->sum('value');
+        // return $transactions;
+        return view('sale.sale_close_user2',compact('user','transactions','bank_sum','cash_sum','cash_sum_all','bank_sum_all'));
 
     }
 

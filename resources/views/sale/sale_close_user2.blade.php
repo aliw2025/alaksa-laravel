@@ -8,7 +8,7 @@
             <div class="card">
                 <div class="card-header">
                     <div class="card-title">
-                        <h4 class="">Sale Close</h4>
+                        <h4 class="">Sale Close Report</h4>
                     </div>
                 </div>
                 <div class="card-body">
