@@ -42,6 +42,16 @@ class Sale extends Model
 
         return $this->morphMany(GLeadger::class,'transaction');
     }
+    public function createLeadgerEntry($accound_id,$value,$investor_id,$date,$user_id ){
+
+        $this->leadgerEntries()->create([
+            'account_id' => $accound_id,
+            'value' => $value,
+            'investor_id' => $investor_id,
+            'date' => $date,
+            'user_id'=>$user_id
+        ]);
+    }
     
     public function saleCommision(){
         return $this->morphMany(Commission::class,'transaction');
@@ -56,37 +66,22 @@ class Sale extends Model
         // dd($commission);
         
         if($invoice!=NULL){
+            
             return $query->where('invoice_no','like','%'.$invoice);
-        }else if($customer_id!= NULL){
+        }
+        else if($customer_id!= NULL){
             return $query->where('customer_id',$customer_id);
             
-        }else if($customer_name!= NULL){
+        }
+        else if($customer_name!= NULL){
 
             return $query->whereHas('customer', function ($cus)  use ($customer_name) {
                 $cus->where('customer_name','like','%'.$customer_name.'%');
             });
-            
+        
+        
         }
-
-
-
-    //    if($user==NULL){
-    //         // dd('null');
-    //         if($commission==3){
-    //             return $query->whereBetween('earned_date',[$from_date,$to_date]);
-
-    //         }
-    //         return $query->whereBetween('earned_date',[$from_date,$to_date])->where('commission_type',$commission);
-    //    }else{
-    //         if($commission==3){
-    //             return $query->whereBetween('earned_date',[$from_date,$to_date])->where('user_id',$user);
-
-    //         }
-    //         // dd($commission);
-    //         return $query->whereBetween('earned_date',[$from_date,$to_date])->where('commission_type',$commission)->where('user_id',$user);
-    //    }
-        return$query->whereBetween('sale_date',[$from_date,$to_date]);
+        return $query->whereBetween('sale_date',[$from_date,$to_date]);
     }
    
 }
-
