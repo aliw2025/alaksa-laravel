@@ -19,11 +19,11 @@
                             <input type="text"  class="form-control mt-1" value="{{$user->name}}" >
                         </div>
                         <div class="col-3">
-
-                        </div>
-                        <div class="col-3">
                             <label class="mt-1" for="" >Date: </label>
                             <input type="text"  class="form-control mt-1" value="{{ Carbon\Carbon::today()}}" >
+                        </div>
+                        <div class="col-3">
+                           <button class="mt-4 btn btn-primary"> Populate </button>
                         </div>     
                     </div>
                     <div class="row mt-1">
@@ -31,7 +31,8 @@
                             <thead class="thead-dark">
                                 <tr style="background-color:red !important;">
                                     <th style="width: 2px !important">#</th>
-                                    <th>Investor</th>
+                                    
+                                    {{-- <th>Date</th> --}}
                                     <th>Transaction Type</th>
                                     <th>Account</th>
                                     <th>Amount</th>
@@ -46,7 +47,7 @@
                                 @foreach($transactions as $tran)
                                 <tr>
                                     <td>{{$count}}</td>
-                                    <td> {{$tran->investor->investor_name}}</td>
+                                    {{-- <td> {{ date('d-m-Y', strtotime($tran->date))}}</td> --}}
                                     <td> 
                                         @if($tran->transaction_type=="App\Models\Purchase")
                                         Purchase
@@ -55,7 +56,9 @@
                                         @elseif($tran->transaction_type=="App\Models\Expense")
                                         Expense
                                         @elseif($tran->transaction_type=="App\Models\Instalment") 
-                                        Instalment 
+                                        Instalment
+                                        @elseif($tran->transaction_type=="App\Models\InstalmentPayment") 
+                                        Instalment Payment  
                                         @elseif($tran->transaction_type=="App\Models\Payable")
                                         Supplier Payment  
                                         @endif
@@ -87,6 +90,10 @@
                                         <a style="text-decoration: none;color:black"
                                             href="{{ route('payable.show', $tran->transaction_id) }}"><i
                                                 data-feather='eye'></i></a>
+                                        @elseif($tran->transaction_type=="App\Models\InstalmentPayment") 
+                                         <a style="text-decoration: none;color:black"
+                                             href="{{ route('show-instalment-payment', $tran->transaction_id) }}"><i
+                                            data-feather='eye'></i></a>
                                         @endif
                                     </td>
                                 </tr>

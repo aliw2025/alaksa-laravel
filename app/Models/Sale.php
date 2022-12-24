@@ -52,10 +52,23 @@ class Sale extends Model
             'user_id'=>$user_id
         ]);
     }
-    
+
     public function saleCommision(){
         return $this->morphMany(Commission::class,'transaction');
     }
+    public function createSaleComision($sale,$user_id){
+        $this->saleCommision()->create(
+            [
+                'commission_type' => 1,
+                'user_id' => $sale->mar_of_id,
+                'amount' => str_replace(',','',$sale->total) * 0.01,
+                'status' => 0,
+                'earned_date' => $sale->sale_date,
+                'user_id'=>$user_id
+            ]
+        );
+    }
+
     public function saleStatus( ){
 
         return $this->belongsTo(SaleStatus::class,'stauts');

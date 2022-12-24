@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Instalment;
+use App\Models\InstalmentPayment;
+
 use App\Models\Sale;
 use App\Models\Inventory;
 use App\Models\Investor;
@@ -20,6 +22,8 @@ use PDF;
 use Carbon\Carbon;
 use FontLib\Table\Type\cmap;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+
 
 class SaleController extends Controller
 {
@@ -57,6 +61,7 @@ class SaleController extends Controller
      */
     public function store(Request $request)
     {
+        //**************  CREATING SALE *****************/
         $user = Auth::user();
         // finding the investor to get investor name
         $investor = Investor::find($request->investor_id);
@@ -65,13 +70,14 @@ class SaleController extends Controller
         if ($request->input('down_payment_paid') != NULL) {
             $down_payment = true;
         }
-        // creatin the sale 
+
         $sale = new Sale();
         // getting sale id for sale invoice
         $id = Sale::max('id');
         if ($id == null) {
             $id = 0;
         }
+
         // create a 14 digit sale invoice
         $num = str_pad($id + 1, 10, '0', STR_PAD_LEFT);
         $sale->invoice_no = $investor->prefix . '22' . $num;
@@ -85,55 +91,62 @@ class SaleController extends Controller
         $sale->plan = $request->plan;
         $sale->markup = $request->markup;
         $sale->user_id = $user->id;
-        $sale->selling_price = str_replace(',','',$request->selling_price);
+        // creaating a selling price var
+        $selling_price = str_replace(',', '', $request->selling_price);
+        $sale->selling_price =  $selling_price;
         $sale->sale_type = $request->sale_type;
-
         // if sale is of type cash 
         if ($request->sale_type == 2) {
             $payment_type = "Cash";
-            $sale->total = str_replace(',','',$request->selling_price);
+            $sale->total =  $selling_price;
         } else {
             $payment_type = "Instalments";
-            $sale->total = str_replace(',','',$request->total_sum);
+            $sale->total = str_replace(',', '', $request->total_sum);
         }
-
         $sale->sale_date = $request->sale_date;
         $sale->save();
 
-        $inv_per = floatval(str_replace(',','',$request->selling_price))   / floatval(str_replace(',','',$request->total_sum)); 
-        $markup_per = 1 - $inv_per;
-        // item price recovry
-        $ins_mon = str_replace(',','',$request->down_payment) * $inv_per;
-        // each investor share in markup profit
-        $share = (str_replace(',','',$request->down_payment) - $ins_mon) * 0.50;
 
+        //**************  creating instalments  *****************/
         // if its an instalments sale
         if ($request->sale_type == 1) {
             // creating down payment
             $instalment = new Instalment();
             $instalment->sale_id = $sale->id;
-            $instalment->amount = str_replace(',','',$request->down_payment); 
+            $instalment->amount = str_replace(',', '', $request->down_payment);
             // if down payment is paid $down_payment is true
             $instalment->instalment_paid = $down_payment;
             $instalment->due_date = $request->sale_date;
             $instalment->instalment_no = 0;
-            $instalment->amount_paid = $down_payment?str_replace(',','',$request->down_payment):0;
+            $instalment->amount_paid = $down_payment ? str_replace(',', '', $request->down_payment) : 0;
             $instalment->save();
-            
+
+            //**************  creating inventory and markup share  *****************/
+            $inv_per = floatval($selling_price) / $sale->total;
+            // item price recovery
+            $ins_mon = str_replace(',', '', $request->down_payment) * $inv_per;
+            // each investor share in markup profit
+            $share = (str_replace(',', '', $request->down_payment) - $ins_mon) * 0.50;
+
             if ($down_payment) {
+                $payment = new InstalmentPayment();
+                $payment->instalment_id = $instalment->id;
+                $payment->amount =   $ins_mon;
+                $payment->payment_date = $request->sale_date;
+                $payment->save();
+
                 // debit cash of investor for inventory recovery
-                $instalment->createLeadgerEntry($request->acc_type,$ins_mon,$investor->id,$sale->sale_date,$user->id);
+                $payment->createLeadgerEntry($request->acc_type, $ins_mon, $investor->id, $sale->sale_date, $user->id);
                 //*  credit recievable of inventory recovery
-                $instalment->createLeadgerEntry(5,-$ins_mon,$investor->id,$sale->sale_date,$user->id);
-                // debit company cash of markup
-                $instalment->createLeadgerEntry($request->acc_type,$share,1,$sale->sale_date,$user->id);                
-                //*  credit company  recievable of markup
-                $instalment->createLeadgerEntry(5,-$share,1,$sale->sale_date,$user->id);                
+                $payment->createLeadgerEntry(5, -$ins_mon, $investor->id, $sale->sale_date, $user->id);
                 // debit investor cash  of markup
-                $instalment->createLeadgerEntry($request->acc_type,$share,$investor->id,$sale->sale_date,$user->id);                
-                 //* credit investor  recievable of markup
-                $instalment->createLeadgerEntry(5,-$share,$investor->id,$sale->sale_date,$user->id);                
-                
+                $payment->createLeadgerEntry($request->acc_type, $share, $investor->id, $sale->sale_date, $user->id);
+                //* credit investor recievable of markup
+                $payment->createLeadgerEntry(5, -$share, $investor->id, $sale->sale_date, $user->id);
+                // debit company cash of markup
+                $payment->createLeadgerEntry($request->acc_type, $share, 1, $sale->sale_date, $user->id);
+                //*  credit company  recievable of markup
+                $payment->createLeadgerEntry(5, -$share, 1, $sale->sale_date, $user->id);
             }
 
             $temp =  new Carbon($request->sale_date);
@@ -142,124 +155,84 @@ class SaleController extends Controller
                 $next = $temp->addMonth();
                 $instalment = new Instalment();
                 $instalment->sale_id = $sale->id;
-                $instalment->amount = str_replace(',','',$request->instalment_per_month);
+                $instalment->amount = str_replace(',', '', $request->instalment_per_month);
                 $instalment->instalment_paid = false;
                 $instalment->due_date = $next;
-                $instalment->instalment_no = $i+1;
+                $instalment->instalment_no = $i + 1;
                 $instalment->save();
                 $temp = $next;
             }
         }
 
+        //************** inventory update  *****************/
         // updating inventory 
         $inventory = Inventory::where('investor_id', '=', $sale->investor_id)->where('item_id', '=', $sale->item_id)->first();
         $inventory->quantity =  $inventory->quantity - 1;
         $inventory->save();
 
-        // calculating commission for marketing officer
-        $commision = new Commission();
-        $commision->commission_type = 1;
-        $commision->user_id = $sale->mar_of_id;
-        
-        $sale->saleCommision()->create(
-            [
-                'commission_type' => 1,
-                'user_id' => $sale->mar_of_id,
-                'amount' => str_replace(',','',$sale->total) * 0.01,
-                'status' => 0,
-                'earned_date' => $sale->sale_date,
-                'user_id'=>$user->id
-            ]
-        );
+        //**************  creating sale comission  *****************/
+        $sale->createSaleComision($sale, $user->id);
 
+        //**************  calculating trade discount  *****************/
         $item_price = $investor->inventories()->where('item_id', '=', $request->item_id)->first()->unit_cost;
-        $trade_discount = str_replace(',','',$request->selling_price )- $item_price;
+        $trade_discount = 0;
+        if ($request->sale_type == 1) {
+            $trade_discount = $selling_price - $item_price;
+        } else {
+            $trade_discount = $request->trade_discount;
+        }
 
-        //* leadger entry for credit inventory for actual price of item
-        $sale->createLeadgerEntry(3,$item_price,$investor->id,$sale->sale_date,$user->id);
-        
-         //* leadger entry for credit cash of investor for trade profit
-         $sale->leadgerEntries()->create([
-            'account_id' =>  4,
-            'value' => -str_replace(',','',$trade_discount),
-            'investor_id' => $investor->id,
-            'date' => $sale->sale_date,
-            'user_id'=>$user->id
-        ]);
+        //**************  LEADGER *****************/
+        if ($request->sale_type == 1) {
 
+            //  leadger entry for debit recievable of inventory
+            $sale->createLeadgerEntry(5, $selling_price, $investor->id, $sale->sale_date, $user->id);
+            //* leadger entry for credit inventory for actual price of item
+            $sale->createLeadgerEntry(3, -$item_price, $investor->id, $sale->sale_date, $user->id);
+            //* leadger entry for credit cash of investor bank account for trade profit
+            $sale->createLeadgerEntry(4, -$trade_discount, $investor->id, $sale->sale_date, $user->id);
 
-        //  leadger entry for debit recievable of inventory
-        $sale->leadgerEntries()->create([
-            'account_id' => 5,
-            'value' => str_replace(',','',$request->selling_price),
-            'investor_id' => $investor->id,
-            'date' => $sale->sale_date,
-            'user_id'=>$user->id
-        ]);
+            // calculating profit share of investor and company
+            $inv_mark_pft = (str_replace(',', '', $request->total_sum) - str_replace(',', '', $request->selling_price)) * 0.50;
 
-        // calculating profit share of investor and company
-        $inv_mark_pft = (str_replace(',','',$request->total_sum )- str_replace(',','',$request->selling_price)) * 0.50;
-        $cmp_mark_pft =  $inv_mark_pft;
+            // leadger entry for investor debit recievable of markup 
+            $sale->createLeadgerEntry(5, $inv_mark_pft, $investor->id, $sale->sale_date, $user->id);
+            //* leadger entry for credit markup profit
+            $sale->createLeadgerEntry(9, -$inv_mark_pft, $investor->id, $sale->sale_date, $user->id);
 
+            // leadger entry for company debit recievable of markup
+            $sale->createLeadgerEntry(5, $inv_mark_pft, 1, $sale->sale_date, $user->id);
+            // *leadger entry for credit markup profit
+            $sale->createLeadgerEntry(9, -$inv_mark_pft, 1, $sale->sale_date, $user->id);
+            // leadger entry for company debit cash of trade profit
+            $sale->createLeadgerEntry(4, $trade_discount, 1, $sale->sale_date, $user->id);
+            //* leadger entry for credit trade discount profit
+            $sale->createLeadgerEntry(10, -$trade_discount, 1, $sale->sale_date, $user->id);
+        } else {
 
-        // leadger entry for investor debit recievable of markup 
-        $sale->leadgerEntries()->create([
-            'account_id' =>  5,  
-            'value' => $inv_mark_pft,
-            'investor_id' => $investor->id,
-            'date' => $sale->sale_date,
-            'user_id'=>$user->id
-        ]);
-        
+            //  leadger entry for debit cash/bank of investory
+            $sale->createLeadgerEntry($request->acc_type, $item_price, $investor->id, $sale->sale_date, $user->id);
+            //* leadger entry for credit inventory for actual price of item
+            $sale->createLeadgerEntry(3, -$item_price, $investor->id, $sale->sale_date, $user->id);
+            // calculating profit share of investor and company
+            $inv_pft = ($selling_price -  $trade_discount - $item_price) * 0.50;
 
-        //* leadger entry for credit markup profit
-        $sale->leadgerEntries()->create([
-            'account_id' => 9,
-            'value' => -$inv_mark_pft,
-            'investor_id' => $investor->id,
-            'date' => $sale->sale_date,
-            'user_id'=>$user->id
-        ]);
+            // leadger entry for investor debit cash/bank for profit money 
+            $sale->createLeadgerEntry($request->acc_type, $inv_pft, $investor->id, $sale->sale_date, $user->id);
+            //* leadger entry for credit markup profit
+            $sale->createLeadgerEntry(9, -$inv_pft, $investor->id, $sale->sale_date, $user->id);
+            // leadger entry for company debit recievable of markup
+            $sale->createLeadgerEntry($request->acc_type, $inv_pft, 1, $sale->sale_date, $user->id);
+            // *leadger entry for credit markup profit
+            $sale->createLeadgerEntry(9, -$inv_pft, 1, $sale->sale_date, $user->id);
+            // leadger entry for company debit cash of trade profit
+            $sale->createLeadgerEntry(1, $trade_discount, 1, $sale->sale_date, $user->id);
+            //* leadger entry for credit trade discount profit
+            $sale->createLeadgerEntry(10, -$trade_discount, 1, $sale->sale_date, $user->id);
+        }
 
-        // leadger entry for company debit recievable of markup
-        $sale->leadgerEntries()->create([
-            'account_id' =>  5,
-            'value' => $inv_mark_pft,
-            'investor_id' => 1,
-            'date' => $sale->sale_date,
-            'user_id'=>$user->id
-        ]);
+        //************** INVOICE *****************/
 
-        // *leadger entry for credit markup profit
-        $sale->leadgerEntries()->create([
-            'account_id' => 9,
-            'value' => -$inv_mark_pft,
-            'investor_id' => 1,
-            'date' => $sale->sale_date,
-            'user_id'=>$user->id
-        ]);
-
-       
-
-        // leadger entry for company debit cash of trade profit
-        $sale->leadgerEntries()->create([
-            'account_id' => 4,
-            'value' => $trade_discount,
-            'investor_id' => 1,
-            'date' => $sale->sale_date,
-            'user_id'=>$user->id
-        ]);
-
-        // leadger entry for credit trade discount profit
-        $sale->leadgerEntries()->create([
-            'account_id' => 10,
-            'value' => -$trade_discount,
-            'investor_id' => 1,
-            'date' => $sale->sale_date,
-            'user_id'=>$user->id
-        ]);
-
-        //  printing invoice
         $sale_detail = null;
         $data = [
             'title' => 'Welcome to ItSolutionStuff.com',
@@ -267,10 +240,10 @@ class SaleController extends Controller
             'sale' => $sale,
             'sale_detail' => $sale_detail,
             'payment_type' => $payment_type,
-            'selling_price' => str_replace(',','',$request->selling_price),
+            'selling_price' => str_replace(',', '', $request->selling_price),
             'markup' => $request->mark_up,
             'plan' => $request->plan,
-             'user_id'=>$user->id
+            'user_id' => $user->id
 
         ];
         $pdf = PDF::loadView('sale.sale_invoice_pdf', $data);
@@ -278,21 +251,23 @@ class SaleController extends Controller
         // return redirect()->route('get-sales', $request->investor_id);
     }
 
-    
+
+
+
 
     // function to return sale invoice
     public function postReturn(Request $request)
     {
 
         $user = Auth::user();
-        $cash_back_investor = $request->investor_share+$request->inventory_money;
+        $cash_back_investor = $request->investor_share + $request->inventory_money;
         $cash_back_company = $request->investor_share;
 
         $give_to_investor = $request->return_investor;
         $give_to_company = $request->return_alp;
 
-        return view('sale.return_final',compact('cash_back_investor','cash_back_company','give_to_investor', 'give_to_company'));
-        echo $request->sale_id."<br>";
+        return view('sale.return_final', compact('cash_back_investor', 'cash_back_company', 'give_to_investor', 'give_to_company'));
+        echo $request->sale_id . "<br>";
         $sale = Sale::find($request->sale_id);
         // finding the investor to get investor name
         $investor = Investor::find($sale->investor_id);
@@ -306,18 +281,18 @@ class SaleController extends Controller
         $cmp = Investor::where('investor_type', '=', 1)->first();
         //  getting company cash account
         $cmp_cash_acc =  $cmp->charOfAccounts->where('account_type', 1)->first()->id;
-         //  getting investor cash account
-         $inv_cash_acc =  $investor->charOfAccounts->where('account_type', 1)->first()->id;
+        //  getting investor cash account
+        $inv_cash_acc =  $investor->charOfAccounts->where('account_type', 1)->first()->id;
         //  getting company recibable account
         $cmp_rcv_acc =  $cmp->charOfAccounts->where('account_type', 5)->first()->id;
         //  getting company unrealized profit account
         $cmp_un_pft_acc =  $cmp->charOfAccounts->where('account_type', 9)->first()->id;
         // getting company trade discount profit account
         $cmp_td_pft_acc =  $cmp->charOfAccounts->where('account_type', 10)->first()->id;
-        if($sale->status==2){
+        if ($sale->status == 2) {
             return "already Returned";
         }
-        
+
         $instalment = $sale->instalments->first();
         $sale->status = 2;
         echo $instalment->amount;
@@ -343,7 +318,7 @@ class SaleController extends Controller
             'value' =>  $item_price,
             'investor_id' => $investor->id,
             'date' => $sale->sale_date,
-            'user_id'=>$user->id       
+            'user_id' => $user->id
         ]);
         // leadger entry for debit cash of investor
         $sale->leadgerEntries()->create([
@@ -351,7 +326,7 @@ class SaleController extends Controller
             'value' =>  $trade_discount,
             'investor_id' => $investor->id,
             'date' => $sale->sale_date,
-            'user_id'=>$user->id       
+            'user_id' => $user->id
         ]);
 
 
@@ -361,14 +336,14 @@ class SaleController extends Controller
             'value' => -$sale->selling_price,
             'investor_id' => $investor->id,
             'date' => $sale->sale_date,
-            'user_id'=>$user->id       
+            'user_id' => $user->id
         ]);
 
         // calculating profit share of investor and company
         $inv_mark_pft = ($sale->total - $sale->selling_price) * 0.50;
         $cmp_mark_pft =  $inv_mark_pft;
 
-        echo "inv_mark : ".$inv_mark_pft.'<br>';
+        echo "inv_mark : " . $inv_mark_pft . '<br>';
 
         //* leadger entry for investor credit recievable of markup. 
         $sale->leadgerEntries()->create([
@@ -376,7 +351,7 @@ class SaleController extends Controller
             'value' => -$inv_mark_pft,
             'investor_id' => $investor->id,
             'date' => $sale->sale_date,
-            'user_id'=>$user->id       
+            'user_id' => $user->id
         ]);
         // leadger entry for debit markup profit.
         $sale->leadgerEntries()->create([
@@ -384,7 +359,7 @@ class SaleController extends Controller
             'value' => $inv_mark_pft,
             'investor_id' => $investor->id,
             'date' => $sale->sale_date,
-            'user_id'=>$user->id       
+            'user_id' => $user->id
         ]);
 
         //* leadger entry for company credit recievable of markup.
@@ -393,7 +368,7 @@ class SaleController extends Controller
             'value' => -$inv_mark_pft,
             'investor_id' => $investor->id,
             'date' => $sale->sale_date,
-            'user_id'=>$user->id       
+            'user_id' => $user->id
         ]);
         // leadger entry for debit markup profit.
         $sale->leadgerEntries()->create([
@@ -401,10 +376,10 @@ class SaleController extends Controller
             'value' => $inv_mark_pft,
             'investor_id' => $investor->id,
             'date' => $sale->sale_date,
-            'user_id'=>$user->id       
+            'user_id' => $user->id
         ]);
 
-      
+
 
         //* leadger entry for company credit cash of trade profit.
         $sale->leadgerEntries()->create([
@@ -412,7 +387,7 @@ class SaleController extends Controller
             'value' => -$trade_discount,
             'investor_id' => $investor->id,
             'date' => $sale->sale_date,
-            'user_id'=>$user->id       
+            'user_id' => $user->id
         ]);
 
         // leadger entry for debit trade discount profit.
@@ -421,7 +396,7 @@ class SaleController extends Controller
             'value' => $trade_discount,
             'investor_id' => $investor->id,
             'date' => $sale->sale_date,
-            'user_id'=>$user->id       
+            'user_id' => $user->id
         ]);
 
         // //* credit cash of investor for inventory recovery
@@ -439,13 +414,13 @@ class SaleController extends Controller
         //     'date' => $sale->sale_date
         // ]);
         //**** adjusting the recived and paid back to customer */
-        
+
         $sale->leadgerEntries()->create([
             'account_id' => $cmp_cash_acc,
             'value' => -$trade_discount,
             'investor_id' => $investor->id,
             'date' => $sale->sale_date,
-            'user_id'=>$user->id       
+            'user_id' => $user->id
             // inventory_money
         ]);
 
@@ -455,81 +430,83 @@ class SaleController extends Controller
             'value' => $trade_discount,
             'investor_id' => $investor->id,
             'date' => $sale->sale_date,
-            'user_id'=>$user->id       
+            'user_id' => $user->id
         ]);
 
-         $sale->save();
-
+        $sale->save();
     }
 
 
-    public function saleClose(){
+
+    public function saleClose()
+    {   
+      
 
         $user = Auth::user();
         $mytime = Carbon::today();
-       
-        $sales = Sale::where('sale_date',$mytime)->where('user_id',$user->id);
 
-        $transactions = GLeadger::where('user_id',$user->id)->where('date',$mytime)->whereHas('account',function($query){
+        $sales = Sale::where('sale_date', $mytime)->where('user_id', $user->id);
+
+        $transactions = GLeadger::select('transaction_type','transaction_id','date','account_id', DB::raw('sum(value) as value'))->where('user_id', $user->id)->where('date', $mytime)->whereHas('account', function ($query) {
             $query->where(function ($query2) {
-                $query2->where('account_type',1)->orWhere('account_type',4);
+                $query2->where('account_type', 1)->orWhere('account_type', 4);
             });
-        })->get();
-
-        $cash_sum = GLeadger::where('user_id',$user->id)->where('date',$mytime)->whereHas('account',function($query){
-            $query->where('account_type',1);
+        })->groupBy('transaction_type')->groupBy('transaction_id')->groupBy('date')->groupBy('account_id')->groupBy('user_id')->get();
+       
+        $cash_sum = GLeadger::where('user_id', $user->id)->where('date', $mytime)->whereHas('account', function ($query) {
+            $query->where('account_type', 1);
         })->sum('value');
 
-        $bank_sum = GLeadger::where('user_id',$user->id)->where('date',$mytime)->whereHas('account',function($query){
-            $query->where('account_type',4);
+        $bank_sum = GLeadger::where('user_id', $user->id)->where('date', $mytime)->whereHas('account', function ($query) {
+            $query->where('account_type', 4);
         })->sum('value');
 
-        $cash_sum_all = GLeadger::whereHas('account',function($query){
-            $query->where('account_type',1);
+        $cash_sum_all = GLeadger::whereHas('account', function ($query) {
+            $query->where('account_type', 1);
         })->sum('value');
-        
-        $bank_sum_all = GLeadger::whereHas('account',function($query){
-            $query->where('account_type',4);
+
+        $bank_sum_all = GLeadger::whereHas('account', function ($query) {
+            $query->where('account_type', 4);
         })->sum('value');
 
         $transactions->sum('value');
         // return $transactions;
-        return view('sale.sale_close_user',compact('user','transactions','bank_sum','cash_sum','cash_sum_all','bank_sum_all'));
-
+        return view('sale.sale_close_user', compact('user', 'transactions', 'bank_sum', 'cash_sum', 'cash_sum_all', 'bank_sum_all'));
     }
-    public function saleClose2(){
+
+    public function saleClose2()
+    {
 
         $user = Auth::user();
         $mytime = Carbon::today();
-       
-        $sales = Sale::where('sale_date',$mytime)->where('user_id',$user->id);
 
-        $transactions = GLeadger::where('user_id',$user->id)->where('date',$mytime)->whereHas('account',function($query){
+        $sales = Sale::where('sale_date', $mytime)->where('user_id', $user->id);
+
+        $transactions = GLeadger::where('user_id', $user->id)->where('date', $mytime)->whereHas('account', function ($query) {
             $query->where(function ($query2) {
-                $query2->where('account_type',1)->orWhere('account_type',4);
+                $query2->where('account_type', 1)->orWhere('account_type', 4);
             });
         })->get();
 
-        $cash_sum = GLeadger::where('user_id',$user->id)->where('date',$mytime)->whereHas('account',function($query){
-            $query->where('account_type',1);
+        $cash_sum = GLeadger::where('user_id', $user->id)->where('date', $mytime)->whereHas('account', function ($query) {
+            $query->where('account_type', 1);
         })->sum('value');
 
-        $bank_sum = GLeadger::where('user_id',$user->id)->where('date',$mytime)->whereHas('account',function($query){
-            $query->where('account_type',4);
+        $bank_sum = GLeadger::where('user_id', $user->id)->where('date', $mytime)->whereHas('account', function ($query) {
+            $query->where('account_type', 4);
         })->sum('value');
 
-        $cash_sum_all = GLeadger::whereHas('account',function($query){
-            $query->where('account_type',1);
+        $cash_sum_all = GLeadger::whereHas('account', function ($query) {
+            $query->where('account_type', 1);
         })->sum('value');
-        
-        $bank_sum_all = GLeadger::whereHas('account',function($query){
-            $query->where('account_type',4);
+
+        $bank_sum_all = GLeadger::whereHas('account', function ($query) {
+            $query->where('account_type', 4);
         })->sum('value');
 
         $transactions->sum('value');
         // return $transactions;
-        return view('sale.sale_close_user2',compact('user','transactions','bank_sum','cash_sum','cash_sum_all','bank_sum_all'));
-
+        return view('sale.sale_close_user2', compact('user', 'transactions', 'bank_sum', 'cash_sum', 'cash_sum_all', 'bank_sum_all'));
     }
 
 
@@ -583,7 +560,7 @@ class SaleController extends Controller
      */
     public function show(Sale $sale)
     {
-        return view('sale.sale_show',compact('sale'));
+        return view('sale.sale_show', compact('sale'));
     }
 
     /**
@@ -606,7 +583,6 @@ class SaleController extends Controller
      */
     public function update(Request $request, Sale $sale)
     {
-
     }
 
     /**
@@ -617,12 +593,11 @@ class SaleController extends Controller
      */
     public function destroy(Sale $sale)
     {
-
     }
 
 
     public function showSales($id)
-    {   
+    {
         $investor = Investor::find($id);
         $sales = $investor->sales;
         return view('sale.sale-list', compact('sales', 'investor'));
@@ -632,25 +607,24 @@ class SaleController extends Controller
     public function showInstalments(Request $request)
     {
         // dd($request->all());
-        if(isset($request->id)){
+        if (isset($request->id)) {
 
             $sale = Sale::find($request->id);
             $instalments = $sale->instalments;
-            if(isset($request->user_exception)){
+            if (isset($request->user_exception)) {
                 // dd("hererserer");
-                
+
                 $user_exception = $request->user_exception;
-                 return view('sale.sale-instalments',compact('sale','instalments','user_exception'));
-            }else{
-                
-                return view('sale.sale-instalments',compact('sale','instalments'));
+                return view('sale.sale-instalments', compact('sale', 'instalments', 'user_exception'));
+            } else {
+
+                return view('sale.sale-instalments', compact('sale', 'instalments'));
             }
-            
         }
-       
+
         return view('sale.sale-instalments');
     }
-    
+
     public function  getInvoices(Request $request)
     {
 
@@ -659,9 +633,9 @@ class SaleController extends Controller
     }
 
     public function getSaleNo(Request $request)
-    {   
+    {
 
-        $sale = Sale::where('invoice_no', 'like',  "%".$request->key)->with('item')->with('marketingOfficer')->with('recoveryOfficer')->with('customer')->with('investor')->with('instalments')->get();
+        $sale = Sale::where('invoice_no', 'like',  "%" . $request->key)->with('item')->with('marketingOfficer')->with('recoveryOfficer')->with('customer')->with('investor')->with('instalments')->get();
         return $sale;
     }
 
@@ -680,13 +654,13 @@ class SaleController extends Controller
     }
 
 
-    public function saleReturns( Request $request)
-    {   
+    public function saleReturns(Request $request)
+    {
         $type = 2;
         $investors = Investor::all();
         $suppliers = Supplier::all();
         // dd($request->id);
-        if(isset($request->id)){
+        if (isset($request->id)) {
 
             $sale = Sale::find($request->id);
             $inv_per = $sale->selling_price  / $sale->total;
@@ -696,36 +670,35 @@ class SaleController extends Controller
             // dd($total_amount_paid);
             $inventory_money = $total_amount_paid * $inv_per;
             // each investor share in markup profit
-            $share = ($total_amount_paid - $inventory_money)*0.50;
-                       
-            return view('sale.sale', compact('investors', 'suppliers', 'type','sale','total_amount_paid','inventory_money','share'));
+            $share = ($total_amount_paid - $inventory_money) * 0.50;
+
+            return view('sale.sale', compact('investors', 'suppliers', 'type', 'sale', 'total_amount_paid', 'inventory_money', 'share'));
         }
-       
+
         // for purchase return
-      
+
         return view('sale.sale', compact('investors', 'suppliers', 'type'));
     }
 
-    public function searchSales(Request $request){
-        
+    public function searchSales(Request $request)
+    {
+
 
         return view('sale.search_sale');
-        
-
     }
 
-    public function searchSalesPost(Request $request){
+    public function searchSalesPost(Request $request)
+    {
         // dd($request->all());
-        $sales = Sale::SearchSale($request->from_date,$request->to_date,$request->customer_name,$request->customer_id,$request->invoice_no)->paginate(10);
+        $sales = Sale::SearchSale($request->from_date, $request->to_date, $request->customer_name, $request->customer_id, $request->invoice_no)->paginate(10);
         $sales->appends([
-            'from_date'=>$request->from_date,
-            'to_date'=>$request->to_date,
-            'customer_name'=>$request->customer_name,
-            'customer_id'=>$request->customer_id,
-            'invoice_no'=>$request->invoice_no
+            'from_date' => $request->from_date,
+            'to_date' => $request->to_date,
+            'customer_name' => $request->customer_name,
+            'customer_id' => $request->customer_id,
+            'invoice_no' => $request->invoice_no
         ]);
         // dd($sales);
-        return view('sale.search_sale',compact('sales'));
-
+        return view('sale.search_sale', compact('sales'));
     }
 }

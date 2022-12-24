@@ -22,6 +22,7 @@
                                         <th scope="col">Total</th>
                                         <th>Note</th>
                                         <th scope="col">Date</th>
+                                        <th scope="col">Action</th>
                                         
                                         {{-- <th scope="col">Action</th> --}}
                                     </tr>
@@ -38,7 +39,12 @@
                                         <td> {{ number_format($pay->amount) }}</td>
                                         <td>{{$pay->notes}}</td>
                                         <td>{{date('d-m-Y', strtotime($pay->payment_date));
-                                            }}</td>      
+                                            }}</td>  
+                                             <td>
+                                                <a style="text-decoration: none;color:black" href="#"><i data-feather='eye'></i></a>
+                                                <a style="text-decoration: none;color:black" href="#" ><i data-feather='rotate-ccw'></i></i></a>
+                                                <a style="text-decoration: none;color:black" href="#"><i data-feather='dollar-sign'></i></a>
+                                            </td>    
                                     </tr>
                                     @php
                                         $count = $count+1

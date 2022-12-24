@@ -24,6 +24,8 @@ class Instalment extends Model
             'user_id'=>$user_id
         ]);
     }
+
+   
     public function sale(){
 
         return $this->belongsTo(Sale::class,'sale_id');
@@ -31,6 +33,19 @@ class Instalment extends Model
     
     public function saleCommision(){
         return $this->morphMany(Commission::class,'transaction');
+    }
+    public function createInstalmentComision($sale,$user_id,$payment){
+       
+        $this->saleCommision()->create(
+            [
+                'commission_type' => 2,
+                'user_id' => $sale->rec_of_id,
+                'amount' =>  $payment->amount,
+                'status' => 0,
+                'earned_date' => $payment->payment_date,
+                'user_id' =>$user_id,
+            ]
+        );
     }
     public function instalmentPayments(){
         return $this->hasMany(InstalmentPayment::class,'instalment_id');

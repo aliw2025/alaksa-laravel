@@ -62,7 +62,7 @@ Route::get('/test-pdf' , [\App\Http\Controllers\SaleController::class,'testPdf']
 Route::get('/get-invoices' , [\App\Http\Controllers\SaleController::class,'getInvoices'])->name('get-invoices');
 // Route::get('/search-sales' , [\App\Http\Controllers\SaleController::class,'searchSales'])->name('search-sales');
 Route::get('/search-sales' , [\App\Http\Controllers\SaleController::class,'searchSalesPost'])->name('search-sales-post');
-Route::get('/sale-close' , [\App\Http\Controllers\SaleController::class,'saleClose2'])->name('sale-close');
+Route::get('/sale-close' , [\App\Http\Controllers\SaleController::class,'saleClose'])->name('sale-close');
 
 
 
@@ -83,6 +83,8 @@ Route::get('/commission-report' , [\App\Http\Controllers\CommissionController::c
 Route::get('/recieve-instalment/{instalment}' , [\App\Http\Controllers\InstalmentController::class,'recieveInstalment'])->name('recieve-instalment');
 Route::post('/pay-instalment' , [\App\Http\Controllers\InstalmentController::class,'payInstalment'])->name('pay-instalment');
 Route::get('/show-instalment-payments/{id}' , [\App\Http\Controllers\InstalmentController::class,'showInstalmentDetails'])->name('show-instalment-payments');
+Route::get('/show-instalment-payment/{id}' , [\App\Http\Controllers\InstalmentController::class,'showInstalmentPayment'])->name('show-instalment-payment');
+
 Route::get('/pay-instalment' , function (){});
 
 
