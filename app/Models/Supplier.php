@@ -40,6 +40,16 @@ class Supplier extends Model
        return $this->purchases()->where('investor_id', '=', $id)->get();
     }
 
+    public function investor_Sup_expenses($id){
+       
+        $sup_acc_id = $this->charOfAccounts->where('account_type',7)->first()->id;
+      
+         $led =  GLeadger::where('investor_id', '=', $id)->where('transaction_type','App\Models\Expense')->where('account_id',$sup_acc_id)->get();
+        //  dd($led);
+        return $led;
+    }
+
+
    
 
     public function leadgerEntries(){

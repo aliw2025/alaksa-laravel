@@ -80,7 +80,7 @@
                                                 data-feather='eye'></i></a>
                                         @elseif($tran->transaction_type=="App\Models\Expense")
                                         <a style="text-decoration: none;color:black"
-                                            href="{{ route('instalment.show', $tran->transaction_id) }}"><i
+                                            href="{{ route('expense.show', $tran->transaction_id) }}"><i
                                                 data-feather='eye'></i></a>
                                         @elseif($tran->transaction_type=="App\Models\Instalment") 
                                         <a style="text-decoration: none;color:black"

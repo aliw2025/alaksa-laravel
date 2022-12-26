@@ -131,7 +131,7 @@ class PurchaseController extends Controller
             if($request->tran_type==2){
                 // creating expene
                 $expense = new Expense();
-                $expense->description = $investor->investor_name." ".$inventory->item->name." return to".$supplier->supplier_name."loss";
+                $expense->description = $investor->investor_name." ".$inventory->item->name." return to".$supplier->name." loss";
                 $expense->amount = str_replace(',','',$request->td_loss[$a]);
                 $expense->date = $purchase->purchase_date;
                 $expense->save();

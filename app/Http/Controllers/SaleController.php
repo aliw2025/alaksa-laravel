@@ -265,8 +265,8 @@ class SaleController extends Controller
 
         $give_to_investor = $request->return_investor;
         $give_to_company = $request->return_alp;
-
         return view('sale.return_final', compact('cash_back_investor', 'cash_back_company', 'give_to_investor', 'give_to_company'));
+        
         echo $request->sale_id . "<br>";
         $sale = Sale::find($request->sale_id);
         // finding the investor to get investor name
@@ -447,7 +447,7 @@ class SaleController extends Controller
 
         $sales = Sale::where('sale_date', $mytime)->where('user_id', $user->id);
 
-        $transactions = GLeadger::select('transaction_type','transaction_id','date','account_id', DB::raw('sum(value) as value'))->where('user_id', $user->id)->where('date', $mytime)->whereHas('account', function ($query) {
+        $transactions = GLeadger::select('transaction_type','transaction_id','date','account_id', DB::raw('sum(value) as value'))->where('user_id', $user->id)->where('value','!=',0)->where('date', $mytime)->whereHas('account', function ($query) {
             $query->where(function ($query2) {
                 $query2->where('account_type', 1)->orWhere('account_type', 4);
             });

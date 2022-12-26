@@ -15,6 +15,8 @@ use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\CommissionController;
 use App\Http\Controllers\InstalmentController;
 use App\Http\Controllers\desingationContoller;
+use App\Http\Controllers\ExpenseController;
+
 
 use App\Http\Controllers\payScaleContoller;
 use App\Models\Instalment;
@@ -86,6 +88,7 @@ Route::get('/show-instalment-payments/{id}' , [\App\Http\Controllers\InstalmentC
 Route::get('/show-instalment-payment/{id}' , [\App\Http\Controllers\InstalmentController::class,'showInstalmentPayment'])->name('show-instalment-payment');
 
 Route::get('/pay-instalment' , function (){});
+Route::get('/show-expenses' , [\App\Http\Controllers\ExpenseController::class,'showExpenses'])->name('show-expenses');
 
 
 
@@ -106,6 +109,7 @@ Route::resource('commission', CommissionController::class);
 Route::resource('designation', desingationContoller::class);
 Route::resource('payScale', payScaleContoller::class);
 Route::resource('instalment',InstalmentController::class);
+Route::resource('expense',ExpenseController::class);
 
 
 

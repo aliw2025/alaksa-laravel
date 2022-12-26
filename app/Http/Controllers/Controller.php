@@ -280,11 +280,13 @@ class Controller extends BaseController
         $pft = GLeadger:: where('account_id','=',9)->where('investor_id',$id)->sum('value')*-1;
         // assests of the invstors
         $asset = GLeadger:: where('account_id','=',3)->where('investor_id',$id)->sum('value');
+        // expenses
+        $expenses = GLeadger:: where('account_id','=',8)->where('investor_id',$id)->sum('value')*-1;
         // sales made by investor
         $sale = Sale::where('investor_id',$id)->sum('total');
         // total balance of the investor
         $total_balance = $investor_cash+$investor_bank;
-        return view("template.dashboard-content", compact('investors','investor','investor_cash','rcv_cash','pft','sale','asset','total_cash','total_bank','investor_bank','total_balance','others_total','payables'));
+        return view("template.dashboard-content", compact('investors','investor','investor_cash','rcv_cash','pft','sale','asset','total_cash','total_bank','investor_bank','total_balance','others_total','payables','expenses'));
     }
 
     public function showInvestments()
