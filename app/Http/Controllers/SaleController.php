@@ -189,7 +189,7 @@ class SaleController extends Controller
             $sale->createLeadgerEntry(5, $selling_price, $investor->id, $sale->sale_date, $user->id);
             //* leadger entry for credit inventory for actual price of item
             $sale->createLeadgerEntry(3, -$item_price, $investor->id, $sale->sale_date, $user->id);
-            //* leadger entry for credit cash of investor bank account for trade profit
+            //* leadger entry for credit cash of investor bank account for trade profit ??
             $sale->createLeadgerEntry(4, -$trade_discount, $investor->id, $sale->sale_date, $user->id);
 
             // calculating profit share of investor and company
@@ -204,7 +204,7 @@ class SaleController extends Controller
             $sale->createLeadgerEntry(5, $inv_mark_pft, 1, $sale->sale_date, $user->id);
             // *leadger entry for credit markup profit
             $sale->createLeadgerEntry(9, -$inv_mark_pft, 1, $sale->sale_date, $user->id);
-            // leadger entry for company debit cash of trade profit
+            // leadger entry for company debit cash of trade profit ??
             $sale->createLeadgerEntry(4, $trade_discount, 1, $sale->sale_date, $user->id);
             //* leadger entry for credit trade discount profit
             $sale->createLeadgerEntry(10, -$trade_discount, 1, $sale->sale_date, $user->id);
@@ -221,12 +221,12 @@ class SaleController extends Controller
             $sale->createLeadgerEntry($request->acc_type, $inv_pft, $investor->id, $sale->sale_date, $user->id);
             //* leadger entry for credit markup profit
             $sale->createLeadgerEntry(9, -$inv_pft, $investor->id, $sale->sale_date, $user->id);
-            // leadger entry for company debit recievable of markup
+            // leadger entry for company debit  of 
             $sale->createLeadgerEntry($request->acc_type, $inv_pft, 1, $sale->sale_date, $user->id);
             // *leadger entry for credit markup profit
             $sale->createLeadgerEntry(9, -$inv_pft, 1, $sale->sale_date, $user->id);
             // leadger entry for company debit cash of trade profit
-            $sale->createLeadgerEntry(1, $trade_discount, 1, $sale->sale_date, $user->id);
+            $sale->createLeadgerEntry($request->acc_type, $trade_discount, 1, $sale->sale_date, $user->id);
             //* leadger entry for credit trade discount profit
             $sale->createLeadgerEntry(10, -$trade_discount, 1, $sale->sale_date, $user->id);
         }
@@ -320,16 +320,7 @@ class SaleController extends Controller
             'date' => $sale->sale_date,
             'user_id' => $user->id
         ]);
-        // leadger entry for debit cash of investor
-        $sale->leadgerEntries()->create([
-            'account_id' =>  4,
-            'value' =>  $trade_discount,
-            'investor_id' => $investor->id,
-            'date' => $sale->sale_date,
-            'user_id' => $user->id
-        ]);
-
-
+       
         //*  leadger entry for credit recievable of inventory.
         $sale->leadgerEntries()->create([
             'account_id' =>  $inv_rcv_acc,
@@ -379,9 +370,7 @@ class SaleController extends Controller
             'user_id' => $user->id
         ]);
 
-
-
-        //* leadger entry for company credit cash of trade profit.
+        //* leadger entry for company credit cash of trade profit. ??
         $sale->leadgerEntries()->create([
             'account_id' => 4,
             'value' => -$trade_discount,
@@ -389,8 +378,17 @@ class SaleController extends Controller
             'date' => $sale->sale_date,
             'user_id' => $user->id
         ]);
+         // leadger entry for debit cash of investor??
+         $sale->leadgerEntries()->create([
+            'account_id' =>  4,
+            'value' =>  $trade_discount,
+            'investor_id' => $investor->id,
+            'date' => $sale->sale_date,
+            'user_id' => $user->id
+        ]);
 
-        // leadger entry for debit trade discount profit.
+
+        // leadger entry for debit trade discount profit.??
         $sale->leadgerEntries()->create([
             'account_id' => $cmp_td_pft_acc,
             'value' => $trade_discount,

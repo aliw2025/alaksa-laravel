@@ -56,12 +56,26 @@ class ExpenseController extends Controller
         
 
     }
-
-    public function showExpenses($id){
+    public function showExpenses(Request $request){
         
-        $expenses = Expense::where('investor_id',$id)->get();
+        $investors = Investor::all();
+       
+        return view('expenses.expenses_all',compact('investors'));
+    }
+
+
+    public function showExpensesPost(Request $request){
+
+        $investors = Investor::all();
+        $expenses = Expense::ShowExpenses($request->from_date, $request->to_date, $request->investor_id)->paginate(2);
+        $expenses->appends([
+            'from_date' => $request->from_date,
+            'to_date' => $request->to_date,
+            'investor_id' => $request->investor_id,
+           
+        ]);
         // return $expenses;
-        return view('expenses.expenses_all',compact('expenses'));
+        return view('expenses.expenses_all',compact('expenses','investors'));
     }
 
     /**

@@ -16,13 +16,13 @@
                     <div class="row">
                         <div class="col-6">
                             <label class="mt-1" for="" >take back from investor </label>
-                            <input type="text"  class="form-control" value="{{$cash_back_investor}}">
+                            <input type="text"  class="form-control" value="{{ number_format($cash_back_investor)}}">
                             <label class="mt-1" for="" >take back from alp </label>
-                            <input type="text"  class="form-control" value="{{$cash_back_company}}">
+                            <input type="text"  class="form-control" value="{{ number_format($cash_back_company)}}">
                             <label class="mt-1" for="" >investor will receive </label>
-                            <input type="text"  class="form-control" value="{{$give_to_investor}}">
+                            <input type="text"  class="form-control" value="{{ number_format($give_to_investor)}}">
                             <label class="mt-1" for="" >alp recived </label>
-                            <input type="text"  class="form-control" value="{{$give_to_company}}">
+                            <input type="text"  class="form-control" value="{{ number_format($give_to_company)}}">
                         </div>
                         <div class="col-6">
                             <label class="mt-1" for="" >Select Account </label>

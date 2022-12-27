@@ -317,23 +317,11 @@
                             <span class=" menu-title text-truncate" data-i18n="comision">Purchase Return</span></a>
                     </li>
                     <li class=" nav-item">
-                        <a class="d-flex align-items-center" href="#">
+                        <a class="d-flex align-items-center" href="{{route('get-purchases')}}">
                             <i data-feather="circle"></i>
                             <span class="menu-title text-truncate" data-i18n="Dashboards">Reports</span>
                         </a>
-                        <ul class="menu-content">
-
-                            @foreach ($inv_sales as $investor)
-                                <li>
-                                    <a href="{{ route('get-purchases', $investor->id) }}"
-                                        class="d-flex align-items-center ">
-                                        <i data-feather="circle"></i>
-                                        <span class="menu-item text-truncate"
-                                            data-i18n="eCommerce">{{ $investor->prefix }}</span>
-                                    </a>
-                                </li>
-                            @endforeach
-                        </ul>
+                        
                     </li>
                 </ul>
             </li>
@@ -408,13 +396,11 @@
 
             </li>
 
-            <li class=" nav-item"><a class="d-flex align-items-center">
+            {{-- <li class=" nav-item"><a class="d-flex align-items-center">
                     <span class=" menu-title text-truncate" data-i18n="recovery">Recovery</span></a>
-            </li>
+            </li> --}}
 
-            <li class=" nav-item"><a class="d-flex align-items-center">
-                    <span class=" menu-title text-truncate" data-i18n="payabeles">Payables</span></a>
-            </li>
+          
             <!------------------------------------------- Purchase --------------------------------------------------->
             <li class=" nav-item">
                 <a class="d-flex align-items-center" href="#">
@@ -429,6 +415,11 @@
                             class="d-flex align-items-center">
                             <i data-feather="circle"></i>
                             <span class=" menu-title text-truncate" data-i18n="comision">Add Expense</span></a>
+                    </li>
+                    <li class=" nav-item"><a href="{{ route('show-expenses') }}"
+                        class="d-flex align-items-center">
+                        <i data-feather="circle"></i>
+                        <span class=" menu-title text-truncate" data-i18n="comision">Report</span></a>
                     </li>
                     
                     <!-- <li class=" nav-item">

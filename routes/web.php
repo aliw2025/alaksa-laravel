@@ -50,7 +50,9 @@ Route::get('/capital-investments' , [\App\Http\Controllers\Controller::class,'sh
 Route::get('/get-items' , [\App\Http\Controllers\ItemController::class,'getItems'])->name('get-items');
 
 Route::get('/get-purchase-items/{id}' , [\App\Http\Controllers\PurchaseController::class,'showPurchaseItems'])->name('get-purchase-items');
-Route::get('/get-purchases/{id}' , [\App\Http\Controllers\PurchaseController::class,'showPurchases'])->name('get-purchases');
+Route::get('/get-purchases' , [\App\Http\Controllers\PurchaseController::class,'showPurchases'])->name('get-purchases');
+Route::get('/get-purchases-post' , [\App\Http\Controllers\PurchaseController::class,'showPurchasesPost'])->name('get-purchases-post');
+
 Route::get('/purchase-return' , [\App\Http\Controllers\PurchaseController::class,'purchaseReturn'])->name('purchase-return');
 Route::get('/get-last-purchase' , [\App\Http\Controllers\PurchaseController::class,'getLastPurchase'])->name('get-last-purchase');
 
@@ -88,7 +90,8 @@ Route::get('/show-instalment-payments/{id}' , [\App\Http\Controllers\InstalmentC
 Route::get('/show-instalment-payment/{id}' , [\App\Http\Controllers\InstalmentController::class,'showInstalmentPayment'])->name('show-instalment-payment');
 
 Route::get('/pay-instalment' , function (){});
-Route::get('/show-expenses/{id}' , [\App\Http\Controllers\ExpenseController::class,'showExpenses'])->name('show-expenses');
+Route::get('/show-expenses-post' , [\App\Http\Controllers\ExpenseController::class,'showExpensesPost'])->name('show-expenses-post');
+Route::get('/show-expenses' , [\App\Http\Controllers\ExpenseController::class,'showExpenses'])->name('show-expenses');
 
 
 

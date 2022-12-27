@@ -53,4 +53,12 @@ class Purchase extends Model
         return $this->belongsTo(Supplier::class,'supplier');
     }
     
+    public function scopeShowPurchases($query,$from_date,$to_date,$investor_id)
+    {   
+        
+        return $query->whereBetween('purchase_date',[$from_date,$to_date])->where('investor_id',$investor_id);
+
+        
+    }
+    
 }

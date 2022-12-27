@@ -131,10 +131,11 @@ class PurchaseController extends Controller
             if($request->tran_type==2){
                 // creating expene
                 $expense = new Expense();
-                $expense->description = $investor->investor_name." ".$inventory->item->name." return to".$supplier->name." loss";
+                $expense->description = $investor->investor_name." ".$inventory->item->name." return to ".$supplier->name." loss";
                 $expense->amount = str_replace(',','',$request->td_loss[$a]);
                 $expense->date = $purchase->purchase_date;
                 $expense->save();
+                $expense->investor_id = $investor->id;
                 // creating impact of expense on leadger
                 $expense->leadgerEntries()->create([
                     'account_id'=> 8,
@@ -189,14 +190,30 @@ class PurchaseController extends Controller
 
     }
 
-    public function showPurchases($id){
+    public function showPurchases(Request $request){
 
 
-        $investor = Investor::find($id);
-        $purchases= $investor->purchases;
-        return view('purchase.purchases-list',compact('purchases','investor'));
+        $investors = Investor::all();
+      
+        return view('purchase.purchases-list',compact('investors'));
 
     }
+    public function showPurchasesPost(Request $request){
+
+        $purchases = Purchase::showPurchases($request->from_date, $request->to_date, $request->investor_id)->paginate(20);
+        $purchases->appends([
+            'from_date' => $request->from_date,
+            'to_date' => $request->to_date,
+            'investor_id' => $request->investor_id,
+           
+        ]);
+
+        $investors = Investor::all();
+        
+        return view('purchase.purchases-list',compact('purchases','investors'));
+
+    }
+    
 
     /**
      * Display the specified resource.

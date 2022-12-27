@@ -27,4 +27,11 @@ class Expense extends Model
     public function investor(){
         return $this->belongsTo(Investor::class,'investor_id');
     }
+    public function scopeShowExpenses($query,$from_date,$to_date,$investor_id)
+    {   
+        
+        return $query->whereBetween('date',[$from_date,$to_date])->where('investor_id',$investor_id);
+
+        
+    }
 }

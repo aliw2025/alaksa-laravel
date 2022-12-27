@@ -10,7 +10,7 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <form class=""  method="POST" autocomplete="on" action="#">
+                        <form class=""  method="GET" autocomplete="on" action="{{route('show-expenses-post')}}">
                             @csrf
                             <div class="row d-flex align-items-center">
                                 
@@ -33,9 +33,11 @@
                                 <div class="col-2">
                                     <div class="">
                                         <span class="title">Investor</span>
-                                        <input name="to_date" type="text"
-                                            class="form-control invoice-edit-input date-picker flatpickr-input"
-                                            readonly="readonly">
+                                        <select class="form-select" name="investor_id" id="">
+                                            @foreach($investors as $inv)
+                                            <option value="{{$inv->id}}">{{$inv->investor_name}}</option>
+                                            @endforeach
+                                        </select>   
                                     </div>
                                 </div>
 
@@ -50,9 +52,10 @@
 
                         </form>
                         
-                    <div class="row ">
+                    <div class="row mt-2">
                         <div  class="col-12 table-responsive ">
-                            <table id="investor-table" class="table">
+                            @if(isset($expenses))
+                            <table  class="table">
                                 <thead class="thead-dark">
                                     <tr style="background-color:red !important;">
                                         <th style="width: 2px !important">#</th>
@@ -84,6 +87,17 @@
                                  
                                 </tbody>
                             </table>
+                            <div class="row my-2">
+                                <div class="col-6">
+                                    
+                                </div>
+                                {{-- @dd($expenses) --}}
+                                <div class="col-6 d-flex justify-content-end">
+                                    {{ $expenses->links() }}
+                                </div>
+                              
+                            </div>
+                            @endif
                         </div>
                     </div>
                     </div>
