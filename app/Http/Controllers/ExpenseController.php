@@ -52,16 +52,16 @@ class ExpenseController extends Controller
         $expense->createLeadgerEntry($request->acc_type,$expense->amount,$request->investor_id,$request->date,$user->id);
         $expense->createLeadgerEntry(8,-$expense->amount,$request->investor_id,$request->date,$user->id);
         
-        return redirect()->route('show-expenses');
+        return redirect()->route('show-expenses',$request->investor_id);
         
 
     }
 
-    public function showExpenses(){
+    public function showExpenses($id){
         
-        $expenses = Expense::all();
-        return $expenses;
-        // view('expenses.expenses',compact('expenses'));
+        $expenses = Expense::where('investor_id',$id)->get();
+        // return $expenses;
+        return view('expenses.expenses_all',compact('expenses'));
     }
 
     /**

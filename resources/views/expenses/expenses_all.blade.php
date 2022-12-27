@@ -10,7 +10,7 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <form class=""  method="POST" autocomplete="on" action="{{ route('show-expenses') }}">
+                        <form class=""  method="POST" autocomplete="on" action="#">
                             @csrf
                             <div class="row d-flex align-items-center">
                                 
@@ -40,17 +40,7 @@
                                 </div>
 
 
-                                <div class="col-2 ">
-                                    <span class="title">User:</span>
-                                    <input id="rec_of_id"  placeholder="User" name="user_id" type="hidden" class="form-control">
-                                    <input id="rec_of_name" onkeyup="getRUserByName()" placeholder="User" name="user" type="text" class="form-control">
-                                    <div class="list-type" id="rec_list" style="position: absolute; z-index: 1;"
-                                        class="card mb-4">
-                                        <div id="rec_list_body" class="list-group">
-
-                                        </div>
-                                    </div>
-                                </div>
+                               
                                 <div class="col-2 ">
                                     <Button type="submit" class="mt-1 btn btn-relief-primary">Report</Button>
                                 </div>
@@ -59,14 +49,14 @@
 
 
                         </form>
-                        {{-- 
+                        
                     <div class="row ">
                         <div  class="col-12 table-responsive ">
                             <table id="investor-table" class="table">
                                 <thead class="thead-dark">
                                     <tr style="background-color:red !important;">
                                         <th style="width: 2px !important">#</th>
-                                        <th scope="col">invoice NO</th>  
+                                        <th scope="col">description</th>  
                                         <th scope="col">Total</th>
                                         <th scope="col">Date</th>
                                         <th scope="col">Action</th>
@@ -77,14 +67,14 @@
                                     @php
                                         $count = 1
                                     @endphp
-                                    @foreach ($sales as $pur)
+                                    @foreach ($expenses as $exp)
 
                                     <tr>
                                         <td>{{$count}}</td>
-                                        <td>{{$pur->invoice_no}}</td>
-                                        <td>{{$pur->total}}</td>
-                                        <td>{{$pur->sale_date}}</td>
-                                        <td><a style="text-decoration: none;color:black" href="{{route('get-sale-instalments',$pur->id)}}"><i data-feather='eye'></i></a></td>
+                                        <td>{{$exp->description}}</td>
+                                        <td>{{$exp->amount}}</td>
+                                        <td>{{$exp->date}}</td>
+                                        <td><a style="text-decoration: none;color:black" href="{{route('expense.show',$exp->id)}}"><i data-feather='eye'></i></a></td>
                                     </tr>
                                     @php
                                         $count = $count+1
@@ -95,7 +85,7 @@
                                 </tbody>
                             </table>
                         </div>
-                    </div> --}}
+                    </div>
                     </div>
                 </div>
             </div>

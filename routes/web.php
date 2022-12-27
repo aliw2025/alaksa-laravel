@@ -88,7 +88,7 @@ Route::get('/show-instalment-payments/{id}' , [\App\Http\Controllers\InstalmentC
 Route::get('/show-instalment-payment/{id}' , [\App\Http\Controllers\InstalmentController::class,'showInstalmentPayment'])->name('show-instalment-payment');
 
 Route::get('/pay-instalment' , function (){});
-Route::get('/show-expenses' , [\App\Http\Controllers\ExpenseController::class,'showExpenses'])->name('show-expenses');
+Route::get('/show-expenses/{id}' , [\App\Http\Controllers\ExpenseController::class,'showExpenses'])->name('show-expenses');
 
 
 
