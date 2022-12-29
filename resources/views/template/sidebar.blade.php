@@ -53,9 +53,9 @@
                         </a>
                     </li>
                     <li>
-                        <a class="d-flex align-items-center">
+                        <a href="{{route('charOfAccount.create')}}" class="d-flex align-items-center">
                             <i data-feather="circle"></i>
-                            <span class="menu-item text-truncate" data-i18n="eCommerce">Analytics</span>
+                            <span class="menu-item text-truncate" data-i18n="eCommerce">Accounts</span>
                         </a>
                     </li>
                 </ul>
@@ -70,23 +70,18 @@
                     <li>
                         <a class="d-flex align-items-center @if (request()->is('investor.create')) active text-white @endif"
                             href="{{ route('register') }}">
-                            {{-- <i data-feather="circle"></i> --}}
-                            <span class="menu-item text-truncate" data-i18n="eCommerce">Add New User</span>
+                            <i data-feather="circle"></i>
+                            <span class="menu-item text-truncate" data-i18n="eCommerce">Add Employee</span>
                         </a>
                     </li>
 
                     <li>
                         <a href="{{ route('users') }}" class="d-flex align-items-center ">
                             <i data-feather="circle"></i>
-                            <span class="menu-item text-truncate" data-i18n="eCommerce">Users</span>
+                            <span class="menu-item text-truncate" data-i18n="eCommerce">Employees</span>
                         </a>
                     </li>
-                    <li>
-                        <a href="{{ route('users') }}" class="d-flex align-items-center ">
-                            <i data-feather="circle"></i>
-                            <span class="menu-item text-truncate" data-i18n="eCommerce">Add Employee</span>
-                        </a>
-                    </li>
+                  
                     <li>
                         <a href="{{ route('payScale.create') }}" class="d-flex align-items-center ">
                             <i data-feather="circle"></i>

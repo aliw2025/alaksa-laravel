@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\InvestorController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\AccountController;
+use App\Http\Controllers\ChartOfAccountController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\StoreController;
 use App\Http\Controllers\InventoryController;
@@ -94,9 +95,8 @@ Route::get('/pay-instalment' , function (){});
 Route::get('/show-expenses-post' , [\App\Http\Controllers\ExpenseController::class,'showExpensesPost'])->name('show-expenses-post');
 Route::get('/show-expenses' , [\App\Http\Controllers\ExpenseController::class,'showExpenses'])->name('show-expenses');
 Route::get('/get-salary-post' , [\App\Http\Controllers\PaySalaryController::class,'paySalaryPost'])->name('get-salary-post');
-
-
-
+Route::get('/edit-designation/{id}' , [\App\Http\Controllers\desingationContoller::class,'editDesignation'])->name('edit-designation');
+Route::Post('/change-designation' , [\App\Http\Controllers\desingationContoller::class,'changeDesignation'])->name('change-designation');
 
 
 Auth::routes();
@@ -117,6 +117,9 @@ Route::resource('instalment',InstalmentController::class);
 Route::resource('expense',ExpenseController::class);
 Route::resource('payScale',PayScaleController::class);
 Route::resource('paySalary',PaySalaryController::class);
+Route::resource('charOfAccount',ChartOfAccountController::class);
+
+
 
 
 

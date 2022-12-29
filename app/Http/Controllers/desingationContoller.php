@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Designation;
 use App\Models\PayScale;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class desingationContoller extends Controller
@@ -16,6 +17,22 @@ class desingationContoller extends Controller
     public function index()
     {
         //
+    }
+    public function editDesignation($id){
+        $designations  = Designation::all();
+        $user = User::find($id);
+        return view('hrm.edit-designation',compact('user','designations'));
+    }
+
+    public function changeDesignation(Request $request){
+
+        // dd($request->all());
+
+        $user = User::find($request->user_id);
+        $user->designation_id = $request->designation_id;
+        $user->save();
+        
+        return redirect()->route('users');
     }
 
     /**

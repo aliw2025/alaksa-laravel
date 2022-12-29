@@ -16,6 +16,9 @@
                                         <th style="width: 2px !important">#</th>
                                         <th scope="col">name</th>
                                         <th scope="col">email</th>
+                                        <th scope="col">Designation</th>
+                                        <th scope="col">Action</th>
+
                                     </tr>
                                 </thead>
                                 <tbody class="inventory-iems-body" id="nventory-iems-body">
@@ -27,6 +30,12 @@
                                         <td>{{$count}}</td>
                                         <td>{{$user->name}}</td>
                                         <td>{{$user->email}}</td>
+                                        <td>{{$user->designation->Name}}</td>
+                                        <td>
+                                            <a style="text-decoration: none;color:black" href="{{route('edit-designation',$user->id)}}"><i data-feather='edit'></i></a>
+             
+                                        </td>
+                                        </td>
                                     </tr>
                                     @php
                                         $count = $count+1
