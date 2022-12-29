@@ -52,7 +52,23 @@
                                 @enderror
                             </div>
                         </div>
-
+                        @php
+                        $dess = \App\Models\Designation::all();
+                        @endphp
+                        <div class="row mb-3">
+                            
+                                <label  class="col-md-4 col-form-label text-md-end">Designation</label>
+                                
+                            <div class="col-md-6">
+                                <select name="designation_id" class="form-select" id="">
+                                    @foreach($dess as $des)
+                                    <option value="{{$des->id}}">{{$des->Name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                           
+                         
+                        </div>
                         <div class="row mb-3">
                             <label for="password-confirm" class="col-md-4 col-form-label text-md-end">{{ __('Confirm Password') }}</label>
 

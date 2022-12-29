@@ -5,11 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Designation extends Model
+class PaySalary extends Model
 {
     use HasFactory;
-
-    public function pay_Scale(){
-        return $this->belongsTo(PayScale::class,'pay_scale');
-    }
 }

@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Designation;
-use App\Models\PayScale;
+use App\Models\PaySalary;
 use Illuminate\Http\Request;
+use App\Models\User;
+use App\Models\Commission;
 
-class desingationContoller extends Controller
+
+
+
+class PaySalaryController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -26,11 +30,19 @@ class desingationContoller extends Controller
     public function create()
     {
         //
-        $scales = PayScale::all();
-        $designations = Designation::all();
-        return view('hrm.designation',compact('scales','designations'));
+        $users = User::all();
+        return view('hrm.paySalary',compact('users'));
     }
+    public function paySalaryPost(Request $request){
+        $users = User::all();
+        $user = User::find($request->user_id);
+        $salary = $user->designation->pay_Scale->scale_pay;
+        $commissions = Commission::ReportData($request->from_date,$request->to_date,$request->user_id,3)->get();
+        $com_am = $commissions->sum('amount');
+        // dd($commissions->sum('amount'));
+        return view('hrm.paySalary',compact('users','salary','com_am'));
 
+    }
     /**
      * Store a newly created resource in storage.
      *
@@ -40,21 +52,15 @@ class desingationContoller extends Controller
     public function store(Request $request)
     {
         //
-        $designation = new Designation();
-        $designation->Name = $request->designation_name;
-        $designation->pay_scale = $request->pay_scale;
-        $designation->save(); 
-
-        return redirect()->route('designation.create');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Designation  $designation
+     * @param  \App\Models\PaySalary  $paySalary
      * @return \Illuminate\Http\Response
      */
-    public function show(Designation $designation)
+    public function show(PaySalary $paySalary)
     {
         //
     }
@@ -62,10 +68,10 @@ class desingationContoller extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Designation  $designation
+     * @param  \App\Models\PaySalary  $paySalary
      * @return \Illuminate\Http\Response
      */
-    public function edit(Designation $designation)
+    public function edit(PaySalary $paySalary)
     {
         //
     }
@@ -74,10 +80,10 @@ class desingationContoller extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Designation  $designation
+     * @param  \App\Models\PaySalary  $paySalary
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Designation $designation)
+    public function update(Request $request, PaySalary $paySalary)
     {
         //
     }
@@ -85,10 +91,10 @@ class desingationContoller extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Designation  $designation
+     * @param  \App\Models\PaySalary  $paySalary
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Designation $designation)
+    public function destroy(PaySalary $paySalary)
     {
         //
     }

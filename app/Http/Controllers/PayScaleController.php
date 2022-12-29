@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\PayScale;
 use Illuminate\Http\Request;
 
-class payScaleContoller extends Controller
+class PayScaleController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +14,9 @@ class payScaleContoller extends Controller
      */
     public function index()
     {
-        //
+        
+
+        
     }
 
     /**
@@ -25,7 +27,8 @@ class payScaleContoller extends Controller
     public function create()
     {
         //
-        return view('hrm.payScale');
+        $scales = PayScale::all();
+        return view('hrm.payScale',compact('scales'));
     }
 
     /**
@@ -37,6 +40,15 @@ class payScaleContoller extends Controller
     public function store(Request $request)
     {
         //
+        $scale = new PayScale();
+        $scale->scale_name = $request->scale_name;
+        $scale->scale_pay = $request->scale_pay;
+        $scale->save();
+
+        return redirect()->route('payScale.create');
+
+
+
     }
 
     /**

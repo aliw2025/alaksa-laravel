@@ -16,9 +16,10 @@ use App\Http\Controllers\CommissionController;
 use App\Http\Controllers\InstalmentController;
 use App\Http\Controllers\desingationContoller;
 use App\Http\Controllers\ExpenseController;
-
-
+use App\Http\Controllers\PayScaleController;
 use App\Http\Controllers\payScaleContoller;
+use App\Http\Controllers\PaySalaryController;
+
 use App\Models\Instalment;
 
 /*
@@ -92,6 +93,7 @@ Route::get('/show-instalment-payment/{id}' , [\App\Http\Controllers\InstalmentCo
 Route::get('/pay-instalment' , function (){});
 Route::get('/show-expenses-post' , [\App\Http\Controllers\ExpenseController::class,'showExpensesPost'])->name('show-expenses-post');
 Route::get('/show-expenses' , [\App\Http\Controllers\ExpenseController::class,'showExpenses'])->name('show-expenses');
+Route::get('/get-salary-post' , [\App\Http\Controllers\PaySalaryController::class,'paySalaryPost'])->name('get-salary-post');
 
 
 
@@ -113,6 +115,10 @@ Route::resource('designation', desingationContoller::class);
 Route::resource('payScale', payScaleContoller::class);
 Route::resource('instalment',InstalmentController::class);
 Route::resource('expense',ExpenseController::class);
+Route::resource('payScale',PayScaleController::class);
+Route::resource('paySalary',PaySalaryController::class);
+
+
 
 
 

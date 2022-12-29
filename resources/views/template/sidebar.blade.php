@@ -42,6 +42,7 @@
                             </a>
                         </li>
                     @endif
+                    
 
                     <li>
                         {{-- href="{{ route('investor.create') }}" --}}
@@ -84,6 +85,24 @@
                         <a href="{{ route('users') }}" class="d-flex align-items-center ">
                             <i data-feather="circle"></i>
                             <span class="menu-item text-truncate" data-i18n="eCommerce">Add Employee</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('payScale.create') }}" class="d-flex align-items-center ">
+                            <i data-feather="circle"></i>
+                            <span class="menu-item text-truncate" data-i18n="eCommerce">Pay Scales</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('designation.create') }}" class="d-flex align-items-center ">
+                            <i data-feather="circle"></i>
+                            <span class="menu-item text-truncate" data-i18n="eCommerce">Designations</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('paySalary.create') }}" class="d-flex align-items-center ">
+                            <i data-feather="circle"></i>
+                            <span class="menu-item text-truncate" data-i18n="eCommerce">Pay Salary</span>
                         </a>
                     </li>
 
