@@ -97,7 +97,7 @@
                                                 value="{{ $payable->investor->investor_name }}" @endif
                                                         name="acc_type" class="form-select"
                                                         aria-label="Default select example">
-
+                                                
                                                         <option value="1"> Cash</option>
                                                         <option value="4"> Bank Account</option>
 

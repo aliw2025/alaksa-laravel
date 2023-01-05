@@ -9,7 +9,7 @@
                     <div class="card">
                     <div class="card-header d-flex ">
                         <div>
-                            <h4 class="text-center">Accounts</h4>
+                            <h4 class="text-center">Bank Accounts</h4>
                         </div>
                     </div>
                         <div class="card-body">
@@ -48,16 +48,19 @@
                 <div class="col-3 ">
                         <div class="card">
                             <div class="card-body">
-                            <div class="card-header d-flex ">
-                                <div>
-                                    <h4 class="text-center">Create Account</h4>
+                                <div class="card-header d-flex justify-content-center">
+                                    <div>
+                                        <h4 class="text-center">Add New Account</h4>
+                                    </div>
                                 </div>
-                            </div>
-                                <form action="">
-                                    <label for="">Account Name </label>
+                                <form method="POST" class="form form-vertical" autocomplete="on" action="{{route('chartOfAccount.store')}}">
+                                    @csrf
+                                    <label class="form-label" for="">Account Name </label>
                                     <input type="text" class="form-control" name="account_name" >
-                                    <label class="mt-1" for="">Account Number  </label>
-                                    <input type="text" class="form-control" name="account_name" >
+                                    <label class="form-label mt-1"  for="">Account Number  </label>
+                                    <input type="text" class="form-control" name="account_number" >
+                                    <button class="btn btn-primary mt-2" >save</button>
+                                    
                                 </form>
                             </div>  
                         </div>

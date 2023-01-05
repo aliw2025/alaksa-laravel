@@ -53,7 +53,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="{{route('charOfAccount.create')}}" class="d-flex align-items-center">
+                        <a href="{{route('chartOfAccount.create')}}" class="d-flex align-items-center">
                             <i data-feather="circle"></i>
                             <span class="menu-item text-truncate" data-i18n="eCommerce">Accounts</span>
                         </a>

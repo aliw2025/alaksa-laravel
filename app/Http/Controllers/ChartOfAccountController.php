@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ChartOfAccount;
+use App\Models\Investor;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -40,6 +41,17 @@ class ChartOfAccountController extends Controller
     public function store(Request $request)
     {
         //
+        $investor = Investor::where('investor_type', '=', 1)->first();
+        $investor->charOfAccounts()->create([
+            'account_name' => $request->account_name,
+            'account_type' => 4,
+            'opening_balance' => 0
+        ]);
+      
+       
+        // dd($request->all());
+
+        return redirect()->route('chartOfAccount.create');
     }
 
     /**

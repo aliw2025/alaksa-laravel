@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ChartOfAccount;
 use App\Models\GLeadger;
 use App\Models\Payable;
 use App\Models\Purchase;
@@ -94,6 +95,7 @@ class PayableController extends Controller
     {
         $investors = Investor::all();
         $suppliers = Supplier::all();
+        $bank_acoounts = ChartOfAccount::whereHas(' ')
         return view('payable.pay', compact('investors', 'suppliers'));
     }
 

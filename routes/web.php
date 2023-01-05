@@ -117,7 +117,7 @@ Route::resource('instalment',InstalmentController::class);
 Route::resource('expense',ExpenseController::class);
 Route::resource('payScale',PayScaleController::class);
 Route::resource('paySalary',PaySalaryController::class);
-Route::resource('charOfAccount',ChartOfAccountController::class);
+Route::resource('chartOfAccount',ChartOfAccountController::class);
 
 
 
