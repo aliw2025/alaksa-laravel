@@ -4,7 +4,7 @@
     <div class="card">
         <div class="card-header d-flex justify-content-center">
             <div>
-                <h4 class="text-center">Investments Dashboard</h4>
+                    <h4 class="text-center">Investments Dashboard</h4>
             </div>
         </div>
        

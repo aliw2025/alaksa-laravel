@@ -25,7 +25,7 @@ class ChartOfAccountController extends Controller
      */
     public function create()
     {
-        $accounts = ChartOfAccount::all();
+        $accounts = ChartOfAccount::where('account_type',4)->get();
         return view('capital-investments.accounts',compact('accounts'));
     }
 
