@@ -99,87 +99,103 @@
                             <form method="POST" class="form form-vertical" autocomplete="on"
                                 action=" {{ isset($item) ? route('item.update', $item) : route('item.store') }}">
                                 @csrf
-                               
-
-                                    <div class="mb-1">
-                                        <label class="form-label" for="first-name-vertical">item Name</label>
-                                        <input value="{{ old('name', isset($item) ? $item->name : '') }}" type="text"
-                                            id="itemName" class=" @error('name') is-invalid @enderror form-control"
-                                            name="name" placeholder="item Name">
-                                        @error('name')
-                                            <div class="alert alert-danger">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-
-                                    <div class="mb-1">
-                                        <label class="form-label" for="first-name-vertical">make</label>
-                                        <input value="{{ old('make', isset($item) ? $item->make : '') }}" type="text"
-                                            id="cateogoryName" class=" @error('make') is-invalid @enderror form-control"
-                                            name="make" placeholder="make">
-                                        @error('make')
-                                            <div class="alert alert-danger">{{ $message }}</div>
-                                        @enderror
-                                    </div>
 
 
-                                    <div class="mb-1">
-                                        <label class="form-label" for="first-name-vertical">model</label>
-                                        <input value="{{ old('model', isset($item) ? $item->model : '') }}" type="text"
-                                            id="cateogoryName" class=" @error('model') is-invalid @enderror form-control"
-                                            name="model" placeholder="model">
-                                        @error('model')
-                                            <div class="alert alert-danger">{{ $message }}</div>
-                                        @enderror
-                                    </div>
+                                <div class="mb-1">
+                                    <label class="form-label" for="first-name-vertical">item Name</label>
+                                    <input value="{{ old('name', isset($item) ? $item->name : '') }}" type="text"
+                                        id="itemName" class=" @error('name') is-invalid @enderror form-control"
+                                        name="name" placeholder="item Name">
+                                    @error('name')
+                                        <div class="alert alert-danger">{{ $message }}</div>
+                                    @enderror
+                                </div>
 
-                                    <div class="mb-1">
-                                        <label class="form-label" for="first-name-vertical">supplier</label>
-                                        @if (isset($item))
-                                            <input
-                                                value="{{ old('supplier', isset($item) ? (isset($item->supplier) ? $item->supplier->name : '') : '') }}"
-                                                type="text" id="cateogoryName"
-                                                class=" @error('supplier') is-invalid @enderror form-control"
-                                                placeholder="supplier">
-                                        @else
-                                            <select class="form-control" name="supplier" id="">
-                                                @foreach ($suppliers as $supplier)
-                                                    <option value="{{ $supplier->id }}">{{ $supplier->name }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                        @endif
-
-                                        @error('supplier')
-                                            <div class="alert alert-danger">{{ $message }}</div>
-                                        @enderror
+                                <div class="mb-1">
+                                    <label class="form-label" for="first-name-vertical">make</label>
+                                    <input value="{{ old('make', isset($item) ? $item->make : '') }}" type="text"
+                                        id="cateogoryName" class=" @error('make') is-invalid @enderror form-control"
+                                        name="make" placeholder="make">
+                                    @error('make')
+                                        <div class="alert alert-danger">{{ $message }}</div>
+                                    @enderror
+                                </div>
 
 
-                                    </div>
+                                <div class="mb-1">
+                                    <label class="form-label" for="first-name-vertical">model</label>
+                                    <input value="{{ old('model', isset($item) ? $item->model : '') }}" type="text"
+                                        id="cateogoryName" class=" @error('model') is-invalid @enderror form-control"
+                                        name="model" placeholder="model">
+                                    @error('model')
+                                        <div class="alert alert-danger">{{ $message }}</div>
+                                    @enderror
+                                </div>
 
-                                    <div class="mb-1">
-                                        <label class="form-label" for="first-name-vertical">category</label>
-                                        <select name="category_id" class="form-select" id="cat_id">
-                                            @foreach ($categories as $cat)
-                                                <option value="{{ $cat->id }}">{{ $cat->category_name }}
+                                <div class="mb-1">
+                                    <label class="form-label" for="first-name-vertical">supplier</label>
+                                    @if (isset($item))
+                                        <input
+                                            value="{{ old('supplier', isset($item) ? (isset($item->supplier) ? $item->supplier->name : '') : '') }}"
+                                            type="text" id="cateogoryName"
+                                            class=" @error('supplier') is-invalid @enderror form-control"
+                                            placeholder="supplier">
+                                    @else
+                                        <select class="form-control" name="supplier" id="">
+                                            @foreach ($suppliers as $supplier)
+                                                <option value="{{ $supplier->id }}">{{ $supplier->name }}
                                                 </option>
                                             @endforeach
                                         </select>
-                                    </div>
+                                    @endif
 
-                                    <div id="custom-feilds">
+                                    @error('supplier')
+                                        <div class="alert alert-danger">{{ $message }}</div>
+                                    @enderror
 
-                                    </div>
 
-                                    <div class="mt-2">
-                                        @if (isset($item))
-                                            {{ method_field('PUT') }}
-                                        @endif
+                                </div>
 
-                                        <button type="submit"
-                                            class="btn btn-primary me-1 waves-effect waves-float waves-light">{{ isset($item) ? 'Update' : 'Add' }}</button>
-                                        <button type="reset"
-                                            class="btn btn-outline-secondary waves-effect">Reset</button>
-                                    </div>
+                                <div class="mb-1">
+                                    <label class="form-label" for="first-name-vertical">category</label>
+                                    <select name="category_id" class="form-select" id="cat_id">
+                                        @foreach ($categories as $cat)
+                                            @if(isset($item))
+                                                @if($cat->id==$item->cat_id)
+                                                <option value="{{ $cat->id }}" selected >{{ $cat->category_name }} </option>
+                                                @else
+                                                <option value="{{ $cat->id }}" >{{ $cat->category_name }} </option>
+                                                @endif
+                                            @else
+                                                <option value="{{ $cat->id }}">{{ $cat->category_name }} </option>
+                                            @endif
+                                           
+                                        @endforeach
+                                       
+                                    </select>
+                                </div>
+
+                                <div id="custom-feilds">
+                                    @if (isset($propertyValues))
+                                        @foreach ($propertyValues as $pv)
+                                            <label class="form-label"
+                                                for="first-name-vertical">{{ $pv->prop_name }}</label>
+                                            <input value="{{ $pv->prop_value }}" type="text"
+                                                class=" @error('model') is-invalid @enderror form-control"
+                                                name="{{$pv->prop_id}}" placeholder="{{ $pv->prop_name }}">
+                                        @endforeach
+                                    @endif
+                                </div>
+
+                                <div class="mt-2">
+                                    @if (isset($item))
+                                        {{ method_field('PUT') }}
+                                    @endif
+
+                                    <button type="submit"
+                                        class="btn btn-primary me-1 waves-effect waves-float waves-light">{{ isset($item) ? 'Update' : 'Add' }}</button>
+                                    <button type="reset" class="btn btn-outline-secondary waves-effect">Reset</button>
+                                </div>
 
                             </form>
                         </div>
@@ -211,15 +227,17 @@
                     section.empty();
                     console.log('recv');
                     console.log(dataResult);
-                    for(i =0 ; i<dataResult.length;i++){
+                    for (i = 0; i < dataResult.length; i++) {
                         var prop = dataResult[i];
-                        var markup = `<label class="form-label" for="first-name-vertical">`+prop.property_name+`</label>`+
-                                    ` <input value="{{ old('model', isset($item) ? $item->model : '') }}" type="text"
-                                id="cateogoryName" class=" @error('model') is-invalid @enderror form-control"
-                                name="model" placeholder="model">`
+                        // value="{{ old('model', isset($item) ? $item->model : '') }}"
+                        var markup = `<label class="form-label" for="first-name-vertical">` + prop
+                            .property_name + `</label>` +
+                            ` <input  type="text"
+                                class=" @error('model') is-invalid @enderror form-control"
+                                name="` + prop.id + `" placeholder="`+prop.property_name +`">`
                         section.append(markup);
                     }
-                   
+
 
                 },
                 error: function(xhr, status, error) {

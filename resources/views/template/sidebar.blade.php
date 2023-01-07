@@ -148,7 +148,7 @@
                     </li>
                     <li class=" nav-item"><a href="{{ route('category.create') }}" class="d-flex align-items-center">
                         <i data-feather="circle"></i>
-                        <span class=" menu-title text-truncate" data-i18n="comision">Define Item Categoriess</span></a>
+                        <span class=" menu-title text-truncate" data-i18n="comision">Define Category</span></a>
                     </li>
                     <li class=" nav-item"><a href="{{ route('supplier.create') }}" class="d-flex align-items-center">
                             <i data-feather="circle"></i>

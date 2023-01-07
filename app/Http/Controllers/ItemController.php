@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\CategoryProperty;
 use App\Models\Item;
+use App\Models\PropertyValue;
 use App\Models\Supplier;
 use Illuminate\Http\Request;
 
@@ -19,7 +21,8 @@ class ItemController extends Controller
         //s
         $items = Item::all();
         $suppliers = Supplier::all();
-        return view('inventory.new-item', compact('items','suppliers'));
+        $categories = Category::all();
+        return view('inventory.new-item', compact('items','suppliers','categories'));
     }
     /**
      * Show  return matcing items
@@ -54,14 +57,30 @@ class ItemController extends Controller
     public function store(Request $request)
     {
         //
+        $props = CategoryProperty::where('cat_id',$request->category_id)->get();
+       
+        // dd($request->all());
         $item = new Item();
         $item->name = $request->name;
-        $item->category = $request->category;
+       
         $item->make = $request->make;
         $item->model = $request->model;
         $item->supplier_id = $request->supplier;
         $item->cat_id =  $request->category_id;
         $item->save();
+         
+        foreach($props as $p){
+            $propValue = new PropertyValue();
+            $propValue->prop_name = $p->property_name;
+            $propValue->prop_id =  $p->id;
+            $propValue->prop_value =$request[$p->id];
+            $propValue->item_id = $item->id;
+            $propValue->save();  
+        }
+
+        
+        
+
 
         return redirect()->route('item.create');
     }
@@ -88,7 +107,10 @@ class ItemController extends Controller
     {   
          
         $items = Item::all();
-        return view('inventory.new-item', compact('items','item'));
+        $categories = Category::all();
+        $propertyValues = PropertyValue::where('item_id',$item->id)->get();
+        // dd($propertyValues);
+        return view('inventory.new-item', compact('items','item','categories','propertyValues'));
     }
 
     /** 
@@ -102,14 +124,20 @@ class ItemController extends Controller
     {   
        
         $item->name = $request->name;
-        $item->category = $request->category;
         $item->make = $request->make;
         $item->model = $request->model;
-        $item-> prop_1 = $request-> prop_1;
-        $item-> prop_2 = $request-> prop_2;
-        $item-> prop_3 = $request-> prop_3;
-        $item-> prop_4 = $request-> prop_4;   
         $item->save();
+        $oldProps = PropertyValue::where('item_id',$item->id);
+        $oldProps->delete();
+        $props = CategoryProperty::where('cat_id',$request->category_id)->get();
+        foreach($props as $p){
+            $propValue = new PropertyValue();
+            $propValue->prop_name = $p->property_name;
+            $propValue->prop_id =  $p->id;
+            $propValue->prop_value =$request[$p->id];
+            $propValue->item_id = $item->id;
+            $propValue->save();  
+        }
         return redirect()->route('item.create');
     }
 
