@@ -20,6 +20,9 @@ use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\PayScaleController;
 use App\Http\Controllers\payScaleContoller;
 use App\Http\Controllers\PaySalaryController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CategoryPropController;
+
 
 use App\Models\Instalment;
 
@@ -97,6 +100,8 @@ Route::get('/show-expenses' , [\App\Http\Controllers\ExpenseController::class,'s
 Route::get('/get-salary-post' , [\App\Http\Controllers\PaySalaryController::class,'paySalaryPost'])->name('get-salary-post');
 Route::get('/edit-designation/{id}' , [\App\Http\Controllers\desingationContoller::class,'editDesignation'])->name('edit-designation');
 Route::Post('/change-designation' , [\App\Http\Controllers\desingationContoller::class,'changeDesignation'])->name('change-designation');
+Route::get('/create-property/{id}' , [\App\Http\Controllers\CategoryPropController::class,'createProperty'])->name('create-property');
+Route::get('/get-properties/{id}' , [\App\Http\Controllers\CategoryPropController::class,'getProperties'])->name('get-properties');
 
 
 Auth::routes();
@@ -118,6 +123,10 @@ Route::resource('expense',ExpenseController::class);
 Route::resource('payScale',PayScaleController::class);
 Route::resource('paySalary',PaySalaryController::class);
 Route::resource('chartOfAccount',ChartOfAccountController::class);
+Route::resource('category',CategoryController::class);
+Route::resource('categoryProperty',CategoryPropController::class);
+
+
 
 
 

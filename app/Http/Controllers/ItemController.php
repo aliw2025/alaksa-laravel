@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Item;
 use App\Models\Supplier;
 use Illuminate\Http\Request;
@@ -40,7 +41,8 @@ class ItemController extends Controller
         //
         $items = Item::all();
         $suppliers = Supplier::all();
-        return view('inventory.new-item', compact('items','suppliers'));
+        $categories = Category::all();
+        return view('inventory.new-item', compact('items','suppliers','categories'));
     }
 
     /**
@@ -57,12 +59,8 @@ class ItemController extends Controller
         $item->category = $request->category;
         $item->make = $request->make;
         $item->model = $request->model;
-
         $item->supplier_id = $request->supplier;
-        $item-> prop_1 = $request-> prop_1;
-        $item-> prop_2 = $request-> prop_2;
-        $item-> prop_3 = $request-> prop_3;
-        $item-> prop_4 = $request-> prop_4;       
+        $item->cat_id =  $request->category_id;
         $item->save();
 
         return redirect()->route('item.create');
