@@ -57,7 +57,14 @@
                                                         placeholder="" disabled>
                                                 </div>
                                             </div>
-
+                                            <div class="d-flex align-items-center justify-content-between mb-1">
+                                                <span class="title">Status:</span>
+                                                
+                                                    <input  value="{{ $sale->transaction_status->desc}}" id="sale_status"
+                                                        name="purchase_date" type="text"
+                                                        class="form-control invoice-edit-input" readonly="readonly">
+                                               
+                                            </div>
                                             <div class="d-flex align-items-center justify-content-between mb-1">
                                                 <span class="title">Date:</span>
                                                     <input   value="{{$sale->sale_date}} "id="sale_date" name="purchase_date" type="text"

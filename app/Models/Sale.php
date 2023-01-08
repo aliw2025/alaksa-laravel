@@ -54,8 +54,10 @@ class Sale extends Model
     }
 
     public function saleCommision(){
+        
         return $this->morphMany(Commission::class,'transaction');
     }
+
     public function createSaleComision($sale,$user_id){
         $this->saleCommision()->create(
             [
@@ -69,6 +71,11 @@ class Sale extends Model
         );
     }
 
+    public function transaction_status(){
+        
+       return $this->belongsTo(TransactionStatus::class,'status');
+
+    }
     public function saleStatus( ){
 
         return $this->belongsTo(SaleStatus::class,'stauts');

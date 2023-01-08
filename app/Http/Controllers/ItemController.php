@@ -96,6 +96,11 @@ class ItemController extends Controller
         //
        
     }
+    public function Itemdetail($id){
+
+        $item = Item::where('id',$id)->with('propertyValues')->first();
+        return $item;
+    }
 
     /**
      * Show the form for editing the specified resource.

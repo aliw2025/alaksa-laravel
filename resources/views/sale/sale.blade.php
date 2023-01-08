@@ -109,8 +109,6 @@
                                                         id="sale_type" name="sale_type" type="text"
                                                         class="form-control invoice-edit-input" readonly="readonly">
                                                 @endif
-
-
                                             </div>
                                         </div>
                                         <div class="mt-2">
@@ -136,6 +134,18 @@
                                                         type="text" class="form-control invoice-edit-input"
                                                         placeholder="">
                                                 </div>
+                                            </div>
+                                            <div class="d-flex align-items-center justify-content-between mb-1">
+                                                <span class="title">Status:</span>
+                                                @if ($type == 1)
+                                                    <input value="entry"   name="sale_status" type="text"
+                                                        class="form-control invoice-edit-input"
+                                                        readonly="readonly">
+                                                @else
+                                                    <input  value="{{ $sale->transaction_status->desc}}" id="sale_status"
+                                                        name="purchase_date" type="text"
+                                                        class="form-control invoice-edit-input" readonly="readonly">
+                                                @endif
                                             </div>
 
                                             <div class="d-flex align-items-center justify-content-between mb-1">
@@ -309,9 +319,10 @@
 
                                                         </div>
                                                     </div>
-                                                    <div id="instalment_sec">
+                                                    <div >
                                                         <div class="row mt-1">
-                                                            <div class="col-lg-5 col-12 mt-lg-0 mt-2">
+                                                            <div id="instalment_sec" class="col-lg-5 col-12 mt-lg-0 mt-2">
+                                                                <h4>Instalment details</h4>
                                                                 <div class="row d-flex align-items-center">
                                                                     <div class="col-6  mt-1">
                                                                         <p>Total Sum :</p>
@@ -321,14 +332,9 @@
                                                                             style=" border: none;background-color: transparent;resize: none;outline: none;"
                                                                             name="total_sum" class="form-control"
                                                                             value="0">
-                                                                        {{-- <p id="total_sum_label"> 0</p> --}}
                                                                     </div>
                                                                 </div>
-                                                            </div>
-                                                        </div>
 
-                                                        <div class="row ">
-                                                            <div class="col-lg-5 col-12 mt-lg-0 mt-2">
                                                                 <div class="row d-flex align-items-center">
                                                                     <div class="col-6  mt-1">
                                                                         <p>Down Payment :</p>
@@ -339,15 +345,9 @@
                                                                             name="down_payment"
                                                                             class="number-separator form-control"
                                                                             value="0">
-                                                                        {{-- <p id="down_payment_label"> 0</p> --}}
                                                                     </div>
                                                                 </div>
-                                                            </div>
-                                                            
-                                                        </div>
 
-                                                        <div class="row">
-                                                            <div class="col-lg-5 col-12 mt-lg-0 mt-2">
                                                                 <div class="row d-flex align-items-center ">
                                                                     <div class="col-6 mt-1">
                                                                         <p>instalments :</p>
@@ -357,14 +357,9 @@
                                                                             style=" border: none;background-color: transparent;resize: none;outline: none;"
                                                                             name="instalments" class=" form-control"
                                                                             value="0">
-                                                                        {{-- <p id="instalments_label"> 0</p> --}}
-
                                                                     </div>
                                                                 </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="row">
-                                                            <div class="col-lg-5 col-12 mt-lg-0 mt-2">
+
                                                                 <div class="row d-flex align-items-center">
                                                                     <div class="col-6 mt-1">
                                                                         <p>instalments per Month :</p>
@@ -375,13 +370,10 @@
                                                                             name="instalment_per_month"
                                                                             class=" number-separator form-control"
                                                                             value="0">
-                                                                        {{-- <p id="per_month_label"> 0</p> --}}
+
                                                                     </div>
                                                                 </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="row d-flex align-items-center">
-                                                            <div class="col-5">
+
                                                                 <div class="row d-flex align-items-center">
                                                                     <div class="col-6  mt-1">
                                                                         <p>Down Payment Paid :</p>
@@ -390,14 +382,47 @@
                                                                         <input name="down_payment_paid"
                                                                             class="ms-1 form-check-input" type="checkbox"
                                                                             value="1" id="flexCheckDefault">
-
                                                                     </div>
                                                                 </div>
                                                             </div>
 
+                                                            <div class="col-7">
+                                                                <h4>Item details</h4>
+                                                                <div id="item-detail-sec" class="row">
+                                                                    {{-- style="border: none;background-color: transparent;resize: none;outline: none;" --}}
+
+                                                                    <div class="col-6">
+                                                                        <label class="form-slabel"
+                                                                            for="">Serial / IME#</label>
+                                                                        <input name='serial_no' type="text" class="form-control">
+                                                                    </div>
+                                                                    <div class="col-6">
+                                                                        <label class="form-label" for="">Item
+                                                                            Name</label>
+                                                                        <input id="i_name"  type="text" class="form-control">
+                                                                    </div>
+                                                                    <div class="col-6">
+                                                                        <label class="form-label"
+                                                                            for="">Make</label>
+                                                                        <input id="i_make"  type="text" class="form-control">
+                                                                    </div>
+                                                                    <div class="col-6">
+                                                                        <label class="form-slabel"
+                                                                            for="">Model</label>
+                                                                        <input id="i_model"  type="text" class="form-control">
+                                                                    </div>
+                                                                    
+                                                                    
+                                                                   
+                                                                    
+                                                                </div>
+                                                                <div id="custom-section" class="row">
+                                                                        
+                                                                </div>
+
+                                                            </div>
                                                         </div>
                                                     </div>
-
                                                 </div>
                                             </div>
                                         @else
@@ -593,7 +618,6 @@
 
         // get items 
         function getItems() {
-
 
             var letters = $('#item_name').val();
             if (letters.length < 2) {
@@ -906,6 +930,38 @@
             $("#item_name").val($('#btnItem' + item).text());
             $("#item_id").val(item);
             $("#list").hide();
+
+
+            $.ajax({
+                url: "{{ url('get-item') }}/"+item,
+                type: "GET",
+               
+                success: function(itemDetail) {
+                   
+                    console.log('got item2');
+                    console.log(itemDetail);
+                    $('#i_name').val(itemDetail.name);
+                    $('#i_make').val(itemDetail.make);
+                    $('#i_model').val(itemDetail.model);
+
+                    var sec = $('#custom-section');
+                    sec.empty();
+                    // style="border: none;background-color: transparent;resize: none;outline: none;"
+                    for(i = 0 ; i<itemDetail.property_values.length;i++){
+                        var prop = itemDetail.property_values[i];
+                        var markup = ` <div class="col-6">`+
+                                            `<label class="form-label" for="">`+prop.prop_name+`</label>`+
+                                            `<input value="`+prop.prop_value +`" id="i_model"  type="text" class="form-control"></div>`;
+
+                        sec.append(markup);
+                    }
+                    
+                
+                },
+                error: function(xhr, status, error) {
+                    
+                },
+            });
         }
 
         function setCustomer(item) {

@@ -53,6 +53,7 @@ Route::get('/investor-cash-accounts/{id}' , [\App\Http\Controllers\Controller::c
 
 Route::get('/capital-investments' , [\App\Http\Controllers\Controller::class,'showInvestments'])->name('capital-investments');
 Route::get('/get-items' , [\App\Http\Controllers\ItemController::class,'getItems'])->name('get-items');
+Route::get('/get-item/{id}' , [\App\Http\Controllers\ItemController::class,'Itemdetail'])->name('get-item');
 
 Route::get('/get-purchase-items/{id}' , [\App\Http\Controllers\PurchaseController::class,'showPurchaseItems'])->name('get-purchase-items');
 Route::get('/get-purchases' , [\App\Http\Controllers\PurchaseController::class,'showPurchases'])->name('get-purchases');
