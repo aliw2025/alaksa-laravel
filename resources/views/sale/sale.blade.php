@@ -159,11 +159,11 @@
                                                         class="align-items-center">
                                                         <select id="acc_type" name="acc_type" class="form-select">
                                                             <option value="1">
-                                                               cash
+                                                                cash
                                                             </option>
                                                             <option value="4">
                                                                 Bank
-                                                             </option>
+                                                            </option>
 
                                                         </select>
                                                     </div>
@@ -343,20 +343,9 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <div class="col-5">
-                                                                <div class="row d-flex align-items-center">
-                                                                    <div class="col-6  mt-1">
-                                                                        <p>Down Payment Paid :</p>
-                                                                    </div>
-                                                                    <div class="col-6">
-                                                                        <input name="down_payment_paid"
-                                                                            class="form-check-input" type="checkbox"
-                                                                            value="1" id="flexCheckDefault">
-
-                                                                    </div>
-                                                                </div>
-                                                            </div>
+                                                            
                                                         </div>
+
                                                         <div class="row">
                                                             <div class="col-lg-5 col-12 mt-lg-0 mt-2">
                                                                 <div class="row d-flex align-items-center ">
@@ -375,13 +364,12 @@
                                                             </div>
                                                         </div>
                                                         <div class="row">
-
                                                             <div class="col-lg-5 col-12 mt-lg-0 mt-2">
                                                                 <div class="row d-flex align-items-center">
                                                                     <div class="col-6 mt-1">
                                                                         <p>instalments per Month :</p>
                                                                     </div>
-                                                                    <div class="col-6  ">
+                                                                    <div class="col-6 ">
                                                                         <input onkeyup="reAdjust2()" id="per_month"
                                                                             style=" border: none;background-color: transparent;resize: none;outline: none;"
                                                                             name="instalment_per_month"
@@ -391,6 +379,22 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
+                                                        </div>
+                                                        <div class="row d-flex align-items-center">
+                                                            <div class="col-5">
+                                                                <div class="row d-flex align-items-center">
+                                                                    <div class="col-6  mt-1">
+                                                                        <p>Down Payment Paid :</p>
+                                                                    </div>
+                                                                    <div class=" col-6">
+                                                                        <input name="down_payment_paid"
+                                                                            class="ms-1 form-check-input" type="checkbox"
+                                                                            value="1" id="flexCheckDefault">
+
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
                                                         </div>
                                                     </div>
 
@@ -414,56 +418,62 @@
                                                     <td>1</td>
                                                     <td>{{ $sale->item->id }}</td>
                                                     <td>{{ $sale->item->name }}</td>
-                                                    <td>{{ number_format($sale->selling_price)  }}</td>
+                                                    <td>{{ number_format($sale->selling_price) }}</td>
                                                     <td>{{ $sale->plan }}</td>
                                                     <td>{{ $sale->markup }}</td>
-                                                    <td>{{ number_format($sale->total)}}</td>
+                                                    <td>{{ number_format($sale->total) }}</td>
                                                 </tbody>
                                             </table>
                                             <div cslass="row">
-                                                
+
                                                 <div class="col-3">
                                                     <div class=" mt-1">
-                                                        <label  class="title me-1">Return to Customer:</label>
-                                                        <input  id="customer_id" name="return_customer" type="text" class="form-control ">  
+                                                        <label class="title me-1">Return to Customer:</label>
+                                                        <input id="customer_id" name="return_customer" type="text"
+                                                            class="form-control ">
                                                     </div>
                                                 </div>
                                                 <div class="col-3">
                                                     <div class=" mt-1">
-                                                        <label   class="title me-1">Returns to Investor:</label>
-                                                        <input  id="customer_id" name="return_investor" type="text" class="form-control ">  
+                                                        <label class="title me-1">Returns to Investor:</label>
+                                                        <input id="customer_id" name="return_investor" type="text"
+                                                            class="form-control ">
                                                     </div>
                                                 </div>
                                                 <div class="col-3">
                                                     <div class="mt-1">
-                                                        <label   class="title me-1">Alp Cut:</label>
-                                                        <input  id="customer_id" name="return_alp" type="text" class="form-control ">  
+                                                        <label class="title me-1">Alp Cut:</label>
+                                                        <input id="customer_id" name="return_alp" type="text"
+                                                            class="form-control ">
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="row">
-                                               
+
                                             </div>
                                             <div class="row">
-                                                
+
                                             </div>
 
                                             <div class="row mt-2">
                                                 <div class="col-12 mt-1">
-                                                   Total Amount Recieved: {{number_format($total_amount_paid)}}
-                                                   <input type="hidden" name="total_amount_paid" value="{{$total_amount_paid}}">
+                                                    Total Amount Recieved: {{ number_format($total_amount_paid) }}
+                                                    <input type="hidden" name="total_amount_paid"
+                                                        value="{{ $total_amount_paid }}">
                                                 </div>
                                                 <div class="col-12 mt-1">
-                                                    Total Inventory Recovery: {{number_format($inventory_money) }}
-                                                    <input type="hidden" name="inventory_money" value="{{$inventory_money}}">
+                                                    Total Inventory Recovery: {{ number_format($inventory_money) }}
+                                                    <input type="hidden" name="inventory_money"
+                                                        value="{{ $inventory_money }}">
                                                 </div>
                                                 <div class="col-12 mt-1">
-                                                    Investor Mark up Recieved: {{number_format($share)}}
-                                                    <input type="hidden" name="investor_share" value="{{$share}}">
+                                                    Investor Mark up Recieved: {{ number_format($share) }}
+                                                    <input type="hidden" name="investor_share"
+                                                        value="{{ $share }}">
                                                 </div>
                                                 <div class="col-12 mt-1">
-                                                    Company Mark up Recieved: {{number_format($share)}}
-                                                    <input type="hidden" name="company" value="{{$share}}">
+                                                    Company Mark up Recieved: {{ number_format($share) }}
+                                                    <input type="hidden" name="company" value="{{ $share }}">
                                                 </div>
                                             </div>
                                         @endif
@@ -474,7 +484,6 @@
                                     <div class="col-12">
 
                                         @if (isset($sale))
-
                                             {{-- <table class="table">
                                                 <thead class="thead-dark">
                                                     <tr style="background-color:red !important;">
