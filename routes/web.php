@@ -86,6 +86,7 @@ Route::get('/customer-by-name' , [\App\Http\Controllers\CustomerController::clas
 
 Route::get('/get-recovery-off' , [\App\Http\Controllers\Controller::class,'getRecoveryOff'])->name('get-recovery-off');
 Route::get('/get-marketing-off' , [\App\Http\Controllers\Controller::class,'getMarketingOff'])->name('get-marketing-off');
+Route::get('/get-inquiry-off' , [\App\Http\Controllers\Controller::class,'getInquiryOff'])->name('get-inquiry-off');
 
 Route::get('/get-commissions' , [\App\Http\Controllers\CommissionController::class,'getCommisions'])->name('get-commissions');
 Route::post('/commission-report' , [\App\Http\Controllers\CommissionController::class,'commissionReport'])->name('commission-report');

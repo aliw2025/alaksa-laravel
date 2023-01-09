@@ -32,11 +32,12 @@ class Sale extends Model
      }
      
      public function inquiryOfficer(){
-        return $this->belongsTo(User::class,'rec_of_id');
+        return $this->belongsTo(User::class,'inq_of_id');
      }
      public function marketingOfficer(){
         return $this->belongsTo(User::class,'mar_of_id');
      }
+     
 
     public function leadgerEntries(){
 

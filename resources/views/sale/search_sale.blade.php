@@ -60,6 +60,7 @@
                                         <th style="width: 2px !important">#</th>
                                         <th>Customer  Name</th>
                                         <th scope="col">invoice NO</th>  
+                                        <th>Staus</th>
                                         <th scope="col">Total</th>
                                         <th scope="col">Date</th>
                                         <th scope="col">Action</th>
@@ -77,13 +78,16 @@
                                         <td>{{$count}}</td>
                                         <td>{{$pur->customer->customer_name}}</td>
                                         <td>{{$pur->invoice_no}}</td>
-                                        
+                                        <td>{{$pur->transaction_status->desc}}</td>
                                         <td> {{ number_format($pur->total) }}</td>
                                         <td>{{date('d-m-Y', strtotime($pur->sale_date))}}</td>
+                                        
                                         <td>
                                             <a style="text-decoration: none;color:black" href="{{route('sale.show',$pur->id)}}"><i data-feather='eye'></i></a>
                                             <a style="text-decoration: none;color:black" href="{{url('sale-return')."?id=".$pur->id}}" ><i data-feather='rotate-ccw'></i></i></a>
                                             <a style="text-decoration: none;color:black" href="{{url('get-sale-instalments')."?id=".$pur->id}}"><i data-feather='dollar-sign'></i></a>
+                                            <a style="text-decoration: none;color:black" href="{{route('sale.edit',$pur->id)}}"><i data-feather='edit'></i></a>
+
                                         </td>
                                     </tr>
                                     @php
@@ -98,7 +102,7 @@
                             </table>
                             <div class="row my-2">
                                 <div class="col-6">
-
+                                    
                                 </div>
                                 <div class="col-6 d-flex justify-content-end">
                                     {{ $sales->links() }}

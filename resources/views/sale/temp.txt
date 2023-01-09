@@ -23,18 +23,14 @@
 
                                             <div class="mt-2 d-flex align-items-center justify-content-between">
                                                 <span class="title me-1">Marketing Officer: </span>
-                                                {{-- if its new sale --}}
-                                                @if ($type == 1)
+                                                @if ($sale->transaction_status->id!=1)
                                                     <div style="width: 11.21rem; max-width:11.21rem;"
                                                         class="align-items-center">
-                                                        <input
-                                                            @if (isset($sale)) value="{{ $sale->marketingOfficer->id }}" @endif
-                                                            name="mar_of_id" id="mar_of_id"s class="form-control"
+                                                        <input name="mar_of_id" id="mar_of_id"s class="form-control"
                                                             placeholder="Name" type="hidden">
-                                                        <input
-                                                            @if (isset($sale)) value="{{ $sale->marketingOfficer->name }}" @endif
-                                                            name="mar_of_name" onkeyup="getMUserByName()" id="mar_of_name"
-                                                            class="form-control" placeholder="Name" type="text">
+                                                        <input name="mar_of_name" onkeyup="getMUserByName()"
+                                                            id="mar_of_name" class="form-control" placeholder="Name"
+                                                            type="text">
                                                         <div class="list-type" id="mar_list"
                                                             style="position: absolute; z-index: 1;" class="card mb-4">
                                                             <div id="mar_list_body" class="list-group">
@@ -45,7 +41,7 @@
                                                 @else
                                                     <input value="{{ $sale->marketingOfficer->name }}" id="mar_of_name"
                                                         name="purchase_date" type="text"
-                                                        class="form-control invoice-edit-input" readonly="readonly">
+                                                        class="form-control invoice-edit-input"  readonly="readonly" >
                                                 @endif
 
                                             </div>
@@ -54,14 +50,11 @@
                                                 @if ($type == 1)
                                                     <div style="width: 11.21rem; max-width:11.21rem;"
                                                         class="align-items-center">
-                                                        <input
-                                                            @if (isset($sale)) value="{{ $sale->recoveryOfficer->id }}" @endif
-                                                            name="rec_of_id" id="rec_of_id" class="form-control"
+                                                        <input name="rec_of_id" id="rec_of_id"s class="form-control"
                                                             placeholder="Name" type="hidden">
-                                                        <input
-                                                            @if (isset($sale)) value="{{ $sale->recoveryOfficer->name }}" @endif
-                                                            name="rec_of_name" onkeyup="getRUserByName()" id="rec_of_name"
-                                                            class="form-control" placeholder="Name" type="text">
+                                                        <input name="rec_of_name" onkeyup="getRUserByName()"
+                                                            id="rec_of_name" class="form-control" placeholder="Name"
+                                                            type="text">
                                                         <div class="list-type" id="rec_list"
                                                             style="position: absolute; z-index: 1;" class="card mb-4">
                                                             <div id="rec_list_body" class="list-group">
@@ -72,7 +65,7 @@
                                                 @else
                                                     <input value="{{ $sale->recoveryOfficer->name }}" id="rec_of_name"
                                                         name="purchase_date" type="text"
-                                                        class="form-control invoice-edit-input" readonly="readonly">
+                                                        class="form-control invoice-edit-input"  readonly="readonly" >
                                                 @endif
 
                                             </div>
@@ -81,14 +74,11 @@
                                                 @if ($type == 1)
                                                     <div style="width: 11.21rem; max-width:11.21rem;"
                                                         class="align-items-center">
-                                                        <input
-                                                            @if (isset($sale)) value="{{ $sale->inquiryOfficer->id }}" @endif
-                                                            name="inq_of_id" id="inq_of_id"s class="form-control"
+                                                        <input name="inq_of_id" id="inq_of_id"s class="form-control"
                                                             placeholder="Name" type="hidden">
-                                                        <input
-                                                            @if (isset($sale)) value="{{ $sale->inquiryOfficer->name }}" @endif
-                                                            name="inq_of_name" onkeyup="getInUserByName()" id="inq_of_name"
-                                                            class="form-control" placeholder="Name" type="text">
+                                                        <input name="inq_of_name" onkeyup="getInUserByName()"
+                                                            id="inq_of_name" class="form-control" placeholder="Name"
+                                                            type="text">
                                                         <div class="list-type" id="inq_list"
                                                             style="position: absolute; z-index: 1;" class="card mb-4">
                                                             <div id="inq_list_body" class="list-group">
@@ -110,10 +100,8 @@
                                                         class="align-items-center">
                                                         <select id="sale_type" name="sale_type" class="form-select"
                                                             aria-label="Default select example">
-
                                                             <option value="1">Instalments</option>
                                                             <option value="2">Cash</option>
-
                                                         </select>
                                                     </div>
                                                 @else
@@ -139,20 +127,22 @@
                                                 </h4>
                                                 <div class="input-group input-group-merge invoice-edit-input-group">
 
+
                                                     <input id="search_inv"
                                                         @if (isset($sale)) value="{{ $sale->invoice_no }}" @endif
-                                                        @if ($type == 1) disabled @endif
-                                                        name="purchaseId" type="text"
-                                                        class="form-control invoice-edit-input" placeholder="">
+                                                        @if ($type == 1) disabled @endif name="purchaseId"
+                                                        type="text" class="form-control invoice-edit-input"
+                                                        placeholder="">
                                                 </div>
                                             </div>
                                             <div class="d-flex align-items-center justify-content-between mb-1">
                                                 <span class="title">Status:</span>
                                                 @if ($type == 1)
-                                                    <input value="entry" name="sale_status" type="text"
-                                                        class="form-control invoice-edit-input" readonly="readonly">
+                                                    <input value="entry"   name="sale_status" type="text"
+                                                        class="form-control invoice-edit-input"
+                                                        readonly="readonly">
                                                 @else
-                                                    <input value="{{ $sale->transaction_status->desc }}" id="sale_status"
+                                                    <input  value="{{ $sale->transaction_status->desc}}" id="sale_status"
                                                         name="purchase_date" type="text"
                                                         class="form-control invoice-edit-input" readonly="readonly">
                                                 @endif
@@ -221,9 +211,7 @@
                                                 <div style="width: 11.21rem; max-width:11.21rem; "
                                                     class="align-items-center">
                                                     @if ($type == 1)
-                                                        <input
-                                                            @if (isset($sale)) value="{{ $sale->customer->id }}" @endif
-                                                            name="customer_id" onkeyup="getCustomerById()"
+                                                        <input name="customer_id" onkeyup="getCustomerById()"
                                                             id="customer_id" class="form-control" placeholder="ID"
                                                             type="text">
                                                     @else
@@ -239,11 +227,9 @@
                                                 @if ($type == 1)
                                                     <div style="width: 11.21rem; max-width:11.21rem; "
                                                         class="align-items-center">
-                                                        <input
-                                                            @if (isset($sale)) value="{{ $sale->customer->customer_name }}" @endif
-                                                            name="customer_name" onkeyup="getByName()" id="customer_name"
-                                                            class="form-control" placeholder="Customer Name"
-                                                            type="text">
+                                                        <input name="customer_name" onkeyup="getByName()"
+                                                            id="customer_name" class="form-control"
+                                                            placeholder="Customer Name" type="text">
                                                         <div class="list-type" id="customer_list"
                                                             style="position: absolute; z-index: 1;" class="card mb-4">
                                                             <div id="customer_list_body" class="list-group">
@@ -275,18 +261,14 @@
                                                             <div class="row py-2">
                                                                 <div class="col-1 my-lg-0 my-2">
                                                                     <p class="card-text col-title mb-md-2 mb-0">id</p>
-                                                                    <input
-                                                                        @if (isset($sale)) value="{{ $sale->item_id }}" @endif
-                                                                        name="item_id" id="item_id" type="number"
+                                                                    <input name="item_id" id="item_id" type="number"
                                                                         class="form-control" value=""
                                                                         placeholder="id">
                                                                 </div>
                                                                 <div class="col-3 my-lg-0 my-2">
                                                                     <p class="card-text col-title mb-md-2 mb-0">Item Name
                                                                     </p>
-                                                                    <input
-                                                                        @if (isset($sale)) value="{{ $sale->item->name }}" @endif
-                                                                        onkeyup="getItems()" id="item_name"
+                                                                    <input onkeyup="getItems()" id="item_name"
                                                                         name="item_name" type="text"
                                                                         class="form-control" placeholder="Item Name">
                                                                     <div class="list-type" id="list"
@@ -301,9 +283,7 @@
                                                                     <p class="card-text col-title mb-md-2 mb-0">Selling
                                                                         Price
                                                                     </p>
-                                                                    <input
-                                                                        @if (isset($sale)) value="{{ number_format($sale->selling_price) }}" @endif
-                                                                        name="selling_price"
+                                                                    <input name="selling_price"
                                                                         onkeyup="calculateInstallments()"
                                                                         id="selling_price"
                                                                         class="number-separator form-control"
@@ -314,22 +294,18 @@
                                                                     <p class="card-text col-title mb-md-2 mb-0">Plan
                                                                         (Months)
                                                                     </p>
-                                                                    <input
-                                                                        @if (isset($sale)) value="{{ number_format($sale->plan) }}" @endif
-                                                                        name="plan" onkeyup="calculateInstallments()"
-                                                                        id="plan" type="number"
-                                                                        class="form-control" value=""
-                                                                        placeholder="Months">
+                                                                    <input name="plan"
+                                                                        onkeyup="calculateInstallments()" id="plan"
+                                                                        type="number" class="form-control"
+                                                                        value="" placeholder="Months">
                                                                 </div>
 
                                                                 <div id="markup_div" class="col-2 my-lg-0 my-2">
                                                                     <p class="card-text col-title mb-md-2 mb-0">MarkUp</p>
-                                                                    <input
-                                                                        @if (isset($sale)) value="{{ number_format($sale->markup) }}" @endif
-                                                                        name="markup" onkeyup="calculateInstallments()"
-                                                                        id="markup" type="number"
-                                                                        class="form-control" value=""
-                                                                        placeholder="%">
+                                                                    <input name="markup"
+                                                                        onkeyup="calculateInstallments()" id="markup"
+                                                                        type="number" class="form-control"
+                                                                        value="" placeholder="%">
                                                                 </div>
                                                                 <div id="discount_div" class="col-2 my-lg-0 my-2">
                                                                     <p class="card-text col-title mb-md-2 mb-0">Trade
@@ -343,7 +319,7 @@
 
                                                         </div>
                                                     </div>
-                                                    <div>
+                                                    <div >
                                                         <div class="row mt-1">
                                                             <div id="instalment_sec" class="col-lg-5 col-12 mt-lg-0 mt-2">
                                                                 <h4>Instalment details</h4>
@@ -352,9 +328,7 @@
                                                                         <p>Total Sum :</p>
                                                                     </div>
                                                                     <div class="col-6">
-                                                                        <input
-                                                                            @if (isset($sale)) value="{{ number_format($sale->total) }}" @endif
-                                                                            id="total_sum"
+                                                                        <input id="total_sum"
                                                                             style=" border: none;background-color: transparent;resize: none;outline: none;"
                                                                             name="total_sum" class="form-control"
                                                                             value="0">
@@ -366,9 +340,7 @@
                                                                         <p>Down Payment :</p>
                                                                     </div>
                                                                     <div class="col-6">
-                                                                        <input
-                                                                            @if (isset($sale)) value="{{ number_format($sale->downpayment) }}" @endif
-                                                                            onkeyup="reAdjust()" id="down_payment"
+                                                                        <input onkeyup="reAdjust()" id="down_payment"
                                                                             style="border: none;background-color: transparent;resize: none;outline: none;"
                                                                             name="down_payment"
                                                                             class="number-separator form-control"
@@ -381,9 +353,7 @@
                                                                         <p>instalments :</p>
                                                                     </div>
                                                                     <div class="col-6">
-                                                                        <input
-                                                                            @if (isset($sale)) value="{{ number_format($sale->plan) }}" @endif
-                                                                            disabled id="instalments"
+                                                                        <input disabled id="instalments"
                                                                             style=" border: none;background-color: transparent;resize: none;outline: none;"
                                                                             name="instalments" class=" form-control"
                                                                             value="0">
@@ -395,9 +365,7 @@
                                                                         <p>instalments per Month :</p>
                                                                     </div>
                                                                     <div class="col-6 ">
-                                                                        <input
-                                                                            @if (isset($sale)) value="{{ number_format(($sale->total - $sale->downpayment) / $sale->plan) }}" @endif
-                                                                            onkeyup="reAdjust2()" id="per_month"
+                                                                        <input onkeyup="reAdjust2()" id="per_month"
                                                                             style=" border: none;background-color: transparent;resize: none;outline: none;"
                                                                             name="instalment_per_month"
                                                                             class=" number-separator form-control"
@@ -424,50 +392,32 @@
                                                                     {{-- style="border: none;background-color: transparent;resize: none;outline: none;" --}}
 
                                                                     <div class="col-6">
-                                                                        <label class="form-slabel" for="">Serial /
-                                                                            IME#</label>
-                                                                        <input
-                                                                            @if (isset($sale)) value="{{ $sale->seriel_no }}" @endif
-                                                                            name='seriel_no' type="text"
-                                                                            class="form-control">
+                                                                        <label class="form-slabel"
+                                                                            for="">Serial / IME#</label>
+                                                                        <input name='serial_no' type="text" class="form-control">
                                                                     </div>
                                                                     <div class="col-6">
                                                                         <label class="form-label" for="">Item
                                                                             Name</label>
-                                                                        <input
-                                                                            @if (isset($sale)) value="{{ $sale->item->name }}" @endif
-                                                                            id="i_name" type="text"
-                                                                            class="form-control">
+                                                                        <input id="i_name"  type="text" class="form-control">
                                                                     </div>
                                                                     <div class="col-6">
                                                                         <label class="form-label"
                                                                             for="">Make</label>
-                                                                        <input
-                                                                            @if (isset($sale)) value="{{ $sale->item->make }}" @endif
-                                                                            id="i_make" type="text"
-                                                                            class="form-control">
+                                                                        <input id="i_make"  type="text" class="form-control">
                                                                     </div>
                                                                     <div class="col-6">
                                                                         <label class="form-slabel"
                                                                             for="">Model</label>
-                                                                        <input
-                                                                            @if (isset($sale)) value="{{ $sale->item->model }}" @endif
-                                                                            id="i_model" type="text"
-                                                                            class="form-control">
+                                                                        <input id="i_model"  type="text" class="form-control">
                                                                     </div>
+                                                                    
+                                                                    
+                                                                   
+                                                                    
                                                                 </div>
                                                                 <div id="custom-section" class="row">
-                                                                    @if (isset($sale))
-                                                                        @foreach ($sale->item->propertyValues as $prop)
-                                                                            <div class="col-6">
-                                                                                <label class="form-slabel"
-                                                                                    for="">{{ $prop->propertyName->property_name }}</label>
-                                                                                <input value="{{ $prop->prop_value }}"
-                                                                                    id="i_model" type="text"
-                                                                                    class="form-control">
-                                                                            </div>
-                                                                        @endforeach
-                                                                    @endif
+                                                                        
                                                                 </div>
 
                                                             </div>
@@ -709,12 +659,14 @@
         }
 
         function getCustomerById() {
+
             var id = $('#customer_id').val();
             //lo
             if (id.toString().length < 1) {
                 $("#customer_name").val("");
                 return;
             }
+
             $.ajax({
                 url: "{{ url('customer') }}/" + id,
                 type: "GET",
@@ -730,7 +682,12 @@
                     $("#customer_id").val("");
                 },
             });
+
+
         }
+
+
+
 
         function getMUserByName() {
             var key = $('#mar_of_name').val();
@@ -773,7 +730,7 @@
             }
             // change the routes later after done with roles
             $.ajax({
-                url: "{{ url('get-inquiry-off') }}/",
+                url: "{{ url('get-recovery-off') }}/",
                 type: "GET",
                 data: {
                     key: key,
@@ -976,11 +933,11 @@
 
 
             $.ajax({
-                url: "{{ url('get-item') }}/" + item,
+                url: "{{ url('get-item') }}/"+item,
                 type: "GET",
-
+               
                 success: function(itemDetail) {
-
+                   
                     console.log('got item2');
                     console.log(itemDetail);
                     $('#i_name').val(itemDetail.name);
@@ -990,20 +947,19 @@
                     var sec = $('#custom-section');
                     sec.empty();
                     // style="border: none;background-color: transparent;resize: none;outline: none;"
-                    for (i = 0; i < itemDetail.property_values.length; i++) {
+                    for(i = 0 ; i<itemDetail.property_values.length;i++){
                         var prop = itemDetail.property_values[i];
-                        var markup = ` <div class="col-6">` +
-                            `<label class="form-label" for="">` + prop.prop_name + `</label>` +
-                            `<input value="` + prop.prop_value +
-                            `" id="i_model"  type="text" class="form-control"></div>`;
+                        var markup = ` <div class="col-6">`+
+                                            `<label class="form-label" for="">`+prop.prop_name+`</label>`+
+                                            `<input value="`+prop.prop_value +`" id="i_model"  type="text" class="form-control"></div>`;
 
                         sec.append(markup);
                     }
-
-
+                    
+                
                 },
                 error: function(xhr, status, error) {
-
+                    
                 },
             });
         }

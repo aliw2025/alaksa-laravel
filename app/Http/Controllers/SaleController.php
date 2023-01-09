@@ -86,6 +86,10 @@ class SaleController extends Controller
         $sale->store_id = 1;
         $sale->mar_of_id = $request->mar_of_id;
         $sale->rec_of_id = $request->rec_of_id;
+        $sale->inq_of_id = $request->inq_of_id;
+        $sale->downpayment =  $request->down_payment;
+        $sale->seriel_no =  $request->seriel_no;
+        
         $sale->investor_id = $request->investor_id;
         $sale->status = 1;
         $sale->plan = $request->plan;
@@ -105,6 +109,7 @@ class SaleController extends Controller
         }
         $sale->sale_date = $request->sale_date;
         $sale->save();
+
 
 
         //**************  creating instalments  *****************/
@@ -249,6 +254,12 @@ class SaleController extends Controller
         $pdf = PDF::loadView('sale.sale_invoice_pdf', $data);
         return $pdf->stream('my.pdf', array('Attachment' => 0));
         // return redirect()->route('get-sales', $request->investor_id);
+    }
+
+    public function postSale(){
+
+
+
     }
 
 
@@ -569,7 +580,10 @@ class SaleController extends Controller
      */
     public function edit(Sale $sale)
     {
-        //
+        $investors = Investor::all();
+        $suppliers = Supplier::all();
+        $type = 1;
+        return view('sale.sale', compact('sale','investors', 'suppliers', 'type'));
     }
 
     /**

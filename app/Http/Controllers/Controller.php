@@ -249,6 +249,11 @@ class Controller extends BaseController
         $users = User::where('name','like','%'.$request->key.'%')->get();
         return $users;
     }
+    public function getInquiryOff(Request $request){
+         // get user matching the key
+        $users = User::where('name','like','%'.$request->key.'%')->get();
+        return $users;
+    }
 
     public function home($id)
     {   
