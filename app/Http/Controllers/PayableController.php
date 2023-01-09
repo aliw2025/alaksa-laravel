@@ -95,8 +95,9 @@ class PayableController extends Controller
     {
         $investors = Investor::all();
         $suppliers = Supplier::all();
-        $bank_acoounts = ChartOfAccount::whereHas(' ')
-        return view('payable.pay', compact('investors', 'suppliers'));
+        // $bank_acoounts = ChartOfAccount::whereHas(' ')
+        $bank_acc = ChartOfAccount::where('account_type',4)->get();
+        return view('payable.pay', compact('investors', 'suppliers','bank_acc'));
     }
 
     /**

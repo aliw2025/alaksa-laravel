@@ -97,9 +97,14 @@
                                                 value="{{ $payable->investor->investor_name }}" @endif
                                                         name="acc_type" class="form-select"
                                                         aria-label="Default select example">
-                                                
+
                                                         <option value="1"> Cash</option>
-                                                        <option value="4"> Bank Account</option>
+                                                        @foreach ($bank_acc as $acc)
+                                                            <option value="{{ $acc->id }}">
+                                                                {{ $acc->account_name }}
+                                                            </option>
+                                                        @endforeach
+                                                        {{-- <option value="4"> Bank Account</option> --}}
 
                                                     </select>
                                                 </div>
@@ -112,8 +117,7 @@
                                                 <div style="width: 11.21rem; max-width:11.21rem; "
                                                     class="align-items-center">
                                                     @if (isset($payable))
-                                                        <input  value="{{ $payable->supplier_val->name}}"
-                                                        disabled
+                                                        <input value="{{ $payable->supplier_val->name }}" disabled
                                                             name="payment_date" type="text"
                                                             class="form-control invoice-edit-input ">
                                                     @else
@@ -149,10 +153,10 @@
 
                                                             <div class="col-3 my-lg-0 my-2">
                                                                 <p class="card-text col-title mb-md-2 mb-0">Amount</p>
-                                                                <input 
+                                                                <input
                                                                     @if (isset($payable)) disabled
                                                                 value="{{ $payable->amount }}" @endif
-                                                                    id="cost0" name="amount" 
+                                                                    id="cost0" name="amount"
                                                                     class="number-separator form-control" placeholder="">
                                                             </div>
                                                             <div class="col-9 my-lg-0 my-2">

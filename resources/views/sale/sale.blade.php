@@ -181,9 +181,14 @@
                                                             <option value="1">
                                                                 cash
                                                             </option>
-                                                            <option value="4">
+                                                            @foreach ($bank_acc as $acc)
+                                                                <option value="{{$acc->id}}">
+                                                                    {{$acc->account_name}}
+                                                                </option>
+                                                            @endforeach
+                                                            {{-- <option value="4">
                                                                 Bank
-                                                            </option>
+                                                            </option> --}}
 
                                                         </select>
                                                     </div>

@@ -1,34 +1,35 @@
 @extends('template.header')
 @section('section')
-<div class="content-wrapper container-xxl p-0">
-    <div class="content-body">
-        <section class="invoice-add-wrapper">
-            <div class="row invoice-add">
-                <!-- Invoice Add Left starts -->
-                <div class="col-xl-12 col-md-12 col-12">
-                    <form class="" method="POST" autocomplete="on" action="{{ route('expense.store') }}">
-                        <div class="card invoice-preview-card">
-                            <!-- Header starts -->
-                            <div class="card-body invoice-padding pb-0">
-                                <div class="d-flex justify-content-between flex-md-row flex-column invoice-spacing mt-0">
-                                    <div>
-                                        <div class="logo-wrapper">
-                                            <h3 class="ms-0 text-primary invoice-logo">Alpha Digital</h3>
+    <div class="content-wrapper container-xxl p-0">
+        <div class="content-body">
+            <section class="invoice-add-wrapper">
+                <div class="row invoice-add">
+                    <!-- Invoice Add Left starts -->
+                    <div class="col-xl-12 col-md-12 col-12">
+                        <form class="" method="POST" autocomplete="on" action="{{ route('expense.store') }}">
+                            <div class="card invoice-preview-card">
+                                <!-- Header starts -->
+                                <div class="card-body invoice-padding pb-0">
+                                    <div
+                                        class="d-flex justify-content-between flex-md-row flex-column invoice-spacing mt-0">
+                                        <div>
+                                            <div class="logo-wrapper">
+                                                <h3 class="ms-0 text-primary invoice-logo">Alpha Digital</h3>
+                                            </div>
+                                            <p class="card-text mb-25">Office 149,Mustafa plaza</p>
+                                            <p class="card-text mb-25">Ring Road Peshawar, PK</p>
+                                            <p class="card-text mb-0">+1 (123) 456 7891, +44 (876) 543 2198</p>
                                         </div>
-                                        <p class="card-text mb-25">Office 149,Mustafa plaza</p>
-                                        <p class="card-text mb-25">Ring Road Peshawar, PK</p>
-                                        <p class="card-text mb-0">+1 (123) 456 7891, +44 (876) 543 2198</p>
-                                    </div>
-                                    <div class="mt-2">
-                                        <h4 style="text-decoration: underline">
-                                            Expense</h4>
-                                    </div>
-                                    <div class="invoice-number-date mt-md-0 mt-2">
-                                        <div class="d-flex align-items-center justify-content-between mb-1">
-                                            @csrf
-                                            <!-- <h4 class="invoice-title">Payment #</h4>
-                                                <div class="input-group input-group-merge invoice-edit-input-group">
-                                                    {{-- <div class="input-group-text">
+                                        <div class="mt-2">
+                                            <h4 style="text-decoration: underline">
+                                                Expense</h4>
+                                        </div>
+                                        <div class="invoice-number-date mt-md-0 mt-2">
+                                            <div class="d-flex align-items-center justify-content-between mb-1">
+                                                @csrf
+                                                <!-- <h4 class="invoice-title">Payment #</h4>
+                                                    <div class="input-group input-group-merge invoice-edit-input-group">
+                                                        {{-- <div class="input-group-text">
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="14"
                                                             height="14" viewBox="0 0 24 24" fill="none"
                                                             stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -47,141 +48,161 @@
                                                             </line>
                                                         </svg>
                                                     </div> --}}
-                                                    <input style="font-size: 12px"
-                                                        @if (isset($expense)) disabled
+                                                        <input style="font-size: 12px"
+                                                            @if (isset($expense)) disabled
                                                             value="{{ $expense->payment_no }}" @endif
-                                                        name="purchaseId" type="text"
-                                                        class="form-control invoice-edit-input" placeholder="">
-                                                </div> -->
-                                        </div>  
+                                                            name="purchaseId" type="text"
+                                                            class="form-control invoice-edit-input" placeholder="">
+                                                    </div> -->
+                                            </div>
 
-                                        <div class="d-flex align-items-center justify-content-between mb-1">
-                                            <span class="title">Date:</span>
-                                            @if (isset($expense))
-                                            <input value="{{ $expense->date }}" disabled name="date" type="text" class="form-control invoice-edit-input ">
-                                            @else
-                                            <input name="date" type="text" class="form-control invoice-edit-input date-picker flatpickr-input" readonly="readonly">
-                                            @endif
-
-                                        </div>
-                                        <div class="d-flex align-items-center justify-content-between">
-                                            <span class="title">Investor:</span>
-                                            <div style="width: 11.21rem; max-width:11.21rem; " class="align-items-center">
+                                            <div class="d-flex align-items-center justify-content-between mb-1">
+                                                <span class="title">Date:</span>
                                                 @if (isset($expense))
-                                                <input disabled value="{{ $expense->investor->investor_name }}" name="date" type="text" class="form-control invoice-edit-input ">
+                                                    <input value="{{ $expense->date }}" disabled name="date"
+                                                        type="text" class="form-control invoice-edit-input ">
                                                 @else
-                                                <select name="investor_id" class=" select2 select2-hidden-accessible form-control invoice-edit-input" id="select2-basic" data-select2-id="select2-basic" tabindex="-1" aria-hidden="true">
-                                                    @foreach ($investors as $investor)
-                                                    <option value="{{ $investor->id }}">
-                                                        {{ $investor->investor_name }}
-                                                    </option>
-                                                    @endforeach
-                                                </select>
+                                                    <input name="date" type="text"
+                                                        class="form-control invoice-edit-input date-picker flatpickr-input"
+                                                        readonly="readonly">
                                                 @endif
 
                                             </div>
-                                        </div>
-                                        @if(!isset($expense))
-                                        <div class="d-flex align-items-center justify-content-between mt-1">
-                                            <span class="title">Account</span>
-                                            
-                                            <div style="width: 11.21rem; max-width:11.21rem; " class="align-items-center">
-                                                <select name="acc_type" class="form-select" aria-label="Default select example">
-                                                            
-                                                    <option value="1"> Cash</option>
-                                                    <option value="4"> Bank Account</option>
-
-                                                </select>
-                                            </div>
-
-                                        </div>
-                                        @endif
-
-
-                                    </div>
-                                </div>
-
-                            </div>
-                            <!-- Header ends -->
-                            <hr class="invoice-spacing">
-                            <!-- Product Details starts -->
-                            <div class="card-body invoice-padding invoice-product-details">
-                                <form class="source-item">
-                                    <div data-repeater-list="group-a">
-                                        <div class="repeater-wrapper" data-repeater-item="">
-                                            <div class="row">
-                                                <div class="col-12  product-details-border position-relative pe-0">
-                                                    <div class="row py-2">
-
-                                                        <div class="col-3 my-lg-0 my-2">
-                                                            <p class="card-text col-title mb-md-2 mb-0">Amount</p>
-                                                            <input @if (isset($expense)) disabled value="{{ $expense->amount }}" @endif id="cost0" name="amount" class="number-separator form-control" placeholder="">
-                                                        </div>
-                                                        <div class="col-9 my-lg-0 my-2">
-                                                            <p class="card-text col-title mb-md-2 mb-0">Description</p>
-                                                            
-                                                            <textarea name="description" class="form-control" rows="1" id="note"> @if(isset($expense)){{$expense->description}} @endif 
-                                                           
-                                                            </textarea>
-                                                        </div>
-
-
-                                                    </div><s></s>
+                                            <div class="d-flex align-items-center justify-content-between">
+                                                <span class="title">Investor:</span>
+                                                <div style="width: 11.21rem; max-width:11.21rem; "
+                                                    class="align-items-center">
+                                                    @if (isset($expense))
+                                                        <input disabled value="{{ $expense->investor->investor_name }}"
+                                                            name="date" type="text"
+                                                            class="form-control invoice-edit-input ">
+                                                    @else
+                                                        <select name="investor_id"
+                                                            class=" select2 select2-hidden-accessible form-control invoice-edit-input"
+                                                            id="select2-basic" data-select2-id="select2-basic"
+                                                            tabindex="-1" aria-hidden="true">
+                                                            @foreach ($investors as $investor)
+                                                                <option value="{{ $investor->id }}">
+                                                                    {{ $investor->investor_name }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+                                                    @endif
 
                                                 </div>
                                             </div>
+                                            @if (!isset($expense))
+                                                <div class="d-flex align-items-center justify-content-between mt-1">
+                                                    <span class="title">Account</span>
+
+                                                    <div style="width: 11.21rem; max-width:11.21rem; "
+                                                        class="align-items-center">
+                                                        <select name="acc_type" class="form-select"
+                                                            aria-label="Default select example">
+
+                                                            <option value="1"> Cash</option>
+                                                            @foreach ($bank_acc as $acc)
+                                                                <option value="{{ $acc->id }}">
+                                                                    {{ $acc->account_name }}
+                                                                </option>
+                                                            @endforeach
+                                                            {{-- <option value="4"> Bank Account</option> --}}
+
+                                                        </select>
+                                                    </div>
+
+                                                </div>
+                                            @endif
+
+
                                         </div>
                                     </div>
 
-                                </form>
-                            </div>
-                            <!-- Product Details ends -->
+                                </div>
+                                <!-- Header ends -->
+                                <hr class="invoice-spacing">
+                                <!-- Product Details starts -->
+                                <div class="card-body invoice-padding invoice-product-details">
+                                    <form class="source-item">
+                                        <div data-repeater-list="group-a">
+                                            <div class="repeater-wrapper" data-repeater-item="">
+                                                <div class="row">
+                                                    <div class="col-12  product-details-border position-relative pe-0">
+                                                        <div class="row py-2">
+
+                                                            <div class="col-3 my-lg-0 my-2">
+                                                                <p class="card-text col-title mb-md-2 mb-0">Amount</p>
+                                                                <input
+                                                                    @if (isset($expense)) disabled value="{{ $expense->amount }}" @endif
+                                                                    id="cost0" name="amount"
+                                                                    class="number-separator form-control" placeholder="">
+                                                            </div>
+                                                            <div class="col-9 my-lg-0 my-2">
+                                                                <p class="card-text col-title mb-md-2 mb-0">Description</p>
+
+                                                                <textarea name="description" class="form-control" rows="1" id="note"> @if (isset($expense))
+{{ $expense->description }}
+@endif 
+                                                           
+                                                            </textarea>
+                                                            </div>
 
 
-                            <!-- Invoice Total ends -->
-                            <hr class="invoice-spacing mt-0">
+                                                        </div><s></s>
 
-                            <div class="card-body invoice-padding py-0">
-                                <!-- Invoice Note starts -->
-                                <div class="row">
-                                    <div class="col-12">
-                                        {{-- <div class="mb-2">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </form>
+                                </div>
+                                <!-- Product Details ends -->
+
+
+                                <!-- Invoice Total ends -->
+                                <hr class="invoice-spacing mt-0">
+
+                                <div class="card-body invoice-padding py-0">
+                                    <!-- Invoice Note starts -->
+                                    <div class="row">
+                                        <div class="col-12">
+                                            {{-- <div class="mb-2">
                                                 <label for="note" class="form-label fw-bold">Note:</label>
                                                 <textarea name="note" class="form-control" rows="2" id="note"></textarea>
                                             </div> --}}
+                                        </div>
+                                    </div>
+                                    <!-- Invoice Note ends -->
+                                </div>
+                                <div class="row p-2">
+                                    <div class="col-12">
+                                        @if (isset($expense))
+                                        @else
+                                            <div class="d-flex justify-content-end">
+                                                <button type="submit" class="btn btn-primary me-2">Save</button>
+                                                <button type="reset" class="btn btn-danger">Reset</button>
+                                            </div>
+                                        @endif
+
                                     </div>
                                 </div>
-                                <!-- Invoice Note ends -->
-                            </div>
-                            <div class="row p-2">
-                                <div class="col-12">
-                                    @if (isset($expense))
-                                  
-                                    @else
-                                    <div class="d-flex justify-content-end">
-                                        <button type="submit" class="btn btn-primary me-2">Save</button>
-                                        <button type="reset" class="btn btn-danger">Reset</button>
-                                    </div>
-                                    @endif
 
-                                </div>
                             </div>
-
-                        </div>
-                    </form>
-                </div>
-        </section>
+                        </form>
+                    </div>
+            </section>
+        </div>
     </div>
-</div>
 
-<script src="{{ url('/resources/vendors/js/forms/select/select2.full.min.js') }}"></script>
-<script src="{{ url('/resources/js/scripts/forms/form-select2.min.js') }}"></script>
-<script src="{{ url('/resources/js/scripts/pages/app-invoice.min.js') }}"></script>
-<script>
-    var rowId = 0;
-    $(document).ready(function() {
+    <script src="{{ url('/resources/vendors/js/forms/select/select2.full.min.js') }}"></script>
+    <script src="{{ url('/resources/js/scripts/forms/form-select2.min.js') }}"></script>
+    <script src="{{ url('/resources/js/scripts/pages/app-invoice.min.js') }}"></script>
+    <script>
+        var rowId = 0;
+        $(document).ready(function() {
 
-        $('.select2-selection__arrow').hide();
-    });
-</script>
+            $('.select2-selection__arrow').hide();
+        });
+    </script>
 @endsection

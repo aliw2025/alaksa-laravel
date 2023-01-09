@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Expense;
 use App\Models\Investor;
+use App\Models\ChartOfAccount;
+
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -30,7 +32,8 @@ class ExpenseController extends Controller
     {
         //
         $investors = Investor::all();
-        return view('expenses.expense',compact('investors'));
+        $bank_acc = ChartOfAccount::where('account_type',4)->get();
+        return view('expenses.expense',compact('investors','bank_acc'));
     }
 
     /**
@@ -67,7 +70,9 @@ class ExpenseController extends Controller
     public function showExpensesPost(Request $request){
 
         $investors = Investor::all();
+        
         $expenses = Expense::ShowExpenses($request->from_date, $request->to_date, $request->investor_id)->paginate(2);
+        $bank_acc = ChartOfAccount::where('account_type',4)->get();
         $expenses->appends([
             'from_date' => $request->from_date,
             'to_date' => $request->to_date,
@@ -75,7 +80,7 @@ class ExpenseController extends Controller
            
         ]);
         // return $expenses;
-        return view('expenses.expenses_all',compact('expenses','investors'));
+        return view('expenses.expenses_all',compact('expenses','investors','bank_acc'));
     }
 
     /**

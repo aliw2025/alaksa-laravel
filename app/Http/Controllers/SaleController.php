@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ChartOfAccount;
 use App\Models\Instalment;
 use App\Models\InstalmentPayment;
 
@@ -47,8 +48,9 @@ class SaleController extends Controller
         //
         $investors = Investor::all();
         $suppliers = Supplier::all();
+        $bank_acc = ChartOfAccount::where('account_type',4)->get();
         $type = 1;
-        return view('sale.sale', compact('investors', 'suppliers', 'type'));
+        return view('sale.sale', compact('investors', 'suppliers', 'type','bank_acc'));
     }
 
 
@@ -582,8 +584,9 @@ class SaleController extends Controller
     {
         $investors = Investor::all();
         $suppliers = Supplier::all();
+        $bank_acc = ChartOfAccount::where('account_type',4)->get();
         $type = 1;
-        return view('sale.sale', compact('sale','investors', 'suppliers', 'type'));
+        return view('sale.sale', compact('sale','investors', 'suppliers', 'type','bank_acc'));
     }
 
     /**
@@ -671,9 +674,10 @@ class SaleController extends Controller
         $type = 2;
         $investors = Investor::all();
         $suppliers = Supplier::all();
+        $bank_acc = ChartOfAccount::where('account_type',4)->get();
         // dd($request->id);
         if (isset($request->id)) {
-
+            dd($request->id);
             $sale = Sale::find($request->id);
             $inv_per = $sale->selling_price  / $sale->total;
             $markup_per = 1 - $inv_per;
@@ -689,7 +693,7 @@ class SaleController extends Controller
 
         // for purchase return
 
-        return view('sale.sale', compact('investors', 'suppliers', 'type'));
+        return view('sale.sale', compact('investors', 'suppliers', 'type','bank_acc'));
     }
 
     public function searchSales(Request $request)
