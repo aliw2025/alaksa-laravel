@@ -536,6 +536,7 @@ class SaleController extends Controller
         $sale->customer_id = 1;
         $sale->item_id = 2;
         $sale->store_id = 1;
+        $sale->id=1;
         $sale->investor_id = 1;
         if (0) {
             $payment_type = "Cash";
@@ -597,7 +598,40 @@ class SaleController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Sale $sale)
-    {
+    {   
+        $user = Auth::user();
+       
+        $sale->customer_id = $request->customer_id;
+        $sale->item_id = $request->item_id;
+        $sale->store_id = 1;
+        $sale->mar_of_id = $request->mar_of_id;
+        $sale->rec_of_id = $request->rec_of_id;
+        $sale->inq_of_id = $request->inq_of_id;
+        $sale->downpayment = str_replace(',', '', $request->down_payment);
+        $sale->seriel_no =  $request->seriel_no;
+
+        $sale->investor_id = $request->investor_id;
+        $sale->status = 1;
+        $sale->plan = $request->plan;
+        $sale->markup = $request->markup;
+        $sale->user_id = $user->id;
+        // creaating a selling price var
+        $selling_price = str_replace(',', '', $request->selling_price);
+        $sale->selling_price =  $selling_price;
+        $sale->sale_type = $request->sale_type;
+        // if sale is of type cash 
+        if ($request->sale_type == 2) {
+            $payment_type = "Cash";
+            $sale->total =  $selling_price;
+        } else {
+            $payment_type = "Instalments";
+            $sale->total = str_replace(',', '', $request->total_sum);
+        }
+        $sale->sale_date = $request->sale_date;
+        $sale->save();
+
+        return redirect()->route('index');
+
     }
 
     /**
@@ -621,19 +655,20 @@ class SaleController extends Controller
 
     public function showInstalments(Request $request)
     {
-        // dd($request->all());
+       
         if (isset($request->id)) {
 
             $sale = Sale::find($request->id);
             $instalments = $sale->instalments;
+            $bank_acc = ChartOfAccount::where('account_type',4)->get();
             if (isset($request->user_exception)) {
                 // dd("hererserer");
-
                 $user_exception = $request->user_exception;
-                return view('sale.sale-instalments', compact('sale', 'instalments', 'user_exception'));
+                return view('sale.sale-instalments', compact('sale', 'instalments', 'user_exception','bank_acc'));
+                
             } else {
 
-                return view('sale.sale-instalments', compact('sale', 'instalments'));
+                return view('sale.sale-instalments', compact('sale', 'instalments','bank_acc'));
             }
         }
 

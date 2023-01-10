@@ -22,6 +22,7 @@
                                             <th scope="col">Item name</th>
                                             <th scope="col">Category</th>
                                             <th scope="col">Make</th>
+                                       
                                             <th scope="col">Model</th>
                                             <th scope="col">Action</th>
 
@@ -99,8 +100,6 @@
                             <form method="POST" class="form form-vertical" autocomplete="on"
                                 action=" {{ isset($item) ? route('item.update', $item) : route('item.store') }}">
                                 @csrf
-
-
                                 <div class="mb-1">
                                     <label class="form-label" for="first-name-vertical">item Name</label>
                                     <input value="{{ old('name', isset($item) ? $item->name : '') }}" type="text"

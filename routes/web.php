@@ -37,7 +37,7 @@ use App\Models\Instalment;
 |
 */
 
-Route::get('/home', [\App\Http\Controllers\Controller::class,'index'])->name('index');
+// Route::get('/home', [\App\Http\Controllers\Controller::class,'index'])->name('index');
 Route::get('/users', [\App\Http\Controllers\Controller::class,'Users'])->name('users');
 
 Route::get('/', [\App\Http\Controllers\Controller::class,'index'])->name('index');
@@ -104,6 +104,7 @@ Route::get('/edit-designation/{id}' , [\App\Http\Controllers\desingationContolle
 Route::Post('/change-designation' , [\App\Http\Controllers\desingationContoller::class,'changeDesignation'])->name('change-designation');
 Route::get('/create-property/{id}' , [\App\Http\Controllers\CategoryPropController::class,'createProperty'])->name('create-property');
 Route::get('/get-properties/{id}' , [\App\Http\Controllers\CategoryPropController::class,'getProperties'])->name('get-properties');
+Route::get('/get-account-balances' , [\App\Http\Controllers\GLController::class,'AccountBalances'])->name('get-account-balances');
 
 
 Auth::routes();

@@ -51,7 +51,7 @@ class Controller extends BaseController
             /********************** creating accounts ****************************/
             // 1- cash
             $investor_cash = $investor->charOfAccounts()->create([
-                'account_name' => $investor->prefix . '_cash',
+                'account_name' => 'cash',
                 'account_type' => 1,
                 'opening_balance' => 120000
             ]);
@@ -69,7 +69,7 @@ class Controller extends BaseController
             ]);
             // 4 - bank
             $investor_bnk = $investor->charOfAccounts()->create([
-                'account_name' => $investor->prefix . '_bank',
+                'account_name' => 'bank',
                 'account_type' => 4,
                 'opening_balance' => 0
             ]);

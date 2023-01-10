@@ -33,10 +33,9 @@
                                 </form>
                             </div>
                         </div>
-                      
-                        @if(isset($user_exception))
-                       
-                        <div class="alert alert-danger"> {{ $user_exception}}</div>
+
+                        @if (isset($user_exception))
+                            <div class="alert alert-danger"> {{ $user_exception }}</div>
                         @endif
                         <div class="row ">
 
@@ -97,10 +96,8 @@
                                                             data-bs-toggle="modal" data-bs-target="#addNewCard">
                                                             Pay
                                                         </button>
-                                                        <a 
-                                                            class=" abc btn btn-primary waves-effect waves-float waves-light"
-                                                            href = "{{route('show-instalment-payments',$pur->id)}}"
-                                                            >
+                                                        <a class=" abc btn btn-primary waves-effect waves-float waves-light"
+                                                            href="{{ route('show-instalment-payments', $pur->id) }}">
                                                             Details
                                                         </a>
 
@@ -148,7 +145,12 @@
                             <label> Account: </label>
                             <select class="form-control" name="account" id="">
                                 <option value="1"> Cash</option>
-                                <option value="4">Bank Account</option>
+                                @foreach ($bank_acc as $acc)
+                                    <option value="{{ $acc->id }}">
+                                        {{ $acc->account_name }}
+                                    </option>
+                                @endforeach
+                                {{-- <option value="4">Bank Account</option> --}}
                             </select>
                         </div>
                         <div class="col-12 my-1 ">
@@ -157,15 +159,17 @@
                         </div>
                         <div class="col-12 my-1 ">
                             <label> Amount: </label>
-                            <input id="amount" name=" amount_paid" type="text" class="number-separator   form-control">
-                          
-                            
+                            <input id="amount" name=" amount_paid" type="text"
+                                class="number-separator   form-control">
+
+
                         </div>
                         <div class="col-12 my-1 form-check">
-                            <input  name="move_to_next" class="form-check-input" type="checkbox" value="1" id="move_to_next">
+                            <input name="move_to_next" class="form-check-input" type="checkbox" value="1"
+                                id="move_to_next">
                             <label class="form-check-label" for="flexCheckDefault">
                                 Add Remaining amount to next instalment?
-                            </label>    
+                            </label>
                         </div>
                         <div class="col-12 my-1">
                             <label> Note: </label>
@@ -202,15 +206,15 @@
         $(document).on('keyup', '#amount', function() {
             var rem_amount = ($("#rem_amount").val());
             var rem_amount = Number(rem_amount.replace(/[^0-9.-]+/g, ""));
-        
+
             var amount = ($(this).val());
             amount = Number(amount.replace(/[^0-9.-]+/g, ""));
             if (amount > rem_amount) {
                 $(this).val("");
-            }else if (amount < rem_amount) {
-                $('#move_to_next').attr('disabled',false);
-            }else{
-                $('#move_to_next').attr('disabled',true);
+            } else if (amount < rem_amount) {
+                $('#move_to_next').attr('disabled', false);
+            } else {
+                $('#move_to_next').attr('disabled', true);
             }
 
         });

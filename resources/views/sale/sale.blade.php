@@ -6,10 +6,13 @@
                 <div class="row invoice-add">
                     <!-- Invoice Add Left starts -->
                     <div class="col-xl-12 col-md-12 col-12">
-                        <form id="sale_form" class="" method="POST" target="_blank" autocomplete="on"
-                            action="{{ $type == 1 ? route('sale.store') : route('post-return') }}">
+                        <form id="sale_form" method="POST" target="_blank" autocomplete="on"
+                            action="{{ $type == 1 ? (isset($sale) ? route('sale.update', $sale->id) : route('sale.store')) : route('post-return') }}">
                             <div class="card invoice-preview-card">
                                 <!-- Header starts -->
+                                @if (isset($sale))
+                                    {{ method_field('PUT') }}
+                                @endif
                                 <div class="card-body invoice-padding pb-0">
                                     <div
                                         class="d-flex justify-content-between flex-md-row flex-column invoice-spacing mt-0">
@@ -182,8 +185,8 @@
                                                                 cash
                                                             </option>
                                                             @foreach ($bank_acc as $acc)
-                                                                <option value="{{$acc->id}}">
-                                                                    {{$acc->account_name}}
+                                                                <option value="{{ $acc->id }}">
+                                                                    {{ $acc->account_name }}
                                                                 </option>
                                                             @endforeach
                                                             {{-- <option value="4">
@@ -629,6 +632,7 @@
                                 @endif
 
                             </div>
+
                         </form>
                     </div>
             </section>

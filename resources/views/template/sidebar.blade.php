@@ -58,6 +58,12 @@
                             <span class="menu-item text-truncate" data-i18n="eCommerce">Accounts</span>
                         </a>
                     </li>
+                    <li>
+                        <a href="{{route('get-account-balances')}}" class="d-flex align-items-center">
+                            <i data-feather="circle"></i>
+                            <span class="menu-item text-truncate" data-i18n="eCommerce">Account Balances</span>
+                        </a>
+                    </li>
                 </ul>
             </li>
             <!------------------------------------------- HRM --------------------------------------------------->

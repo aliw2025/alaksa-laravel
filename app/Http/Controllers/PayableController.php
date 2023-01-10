@@ -49,42 +49,6 @@ class PayableController extends Controller
         $suppliers = Supplier::whereIn('id', Purchase::select('supplier')->distinct()->pluck('supplier'))->get();
         return view('payable.payables', compact('suppliers', 'id'));
         
-        //  for debuging purpose
-        echo 'suppliers:<br>';
-        foreach ($suppliers as $sup) {
-
-            $sid = $sup->charOfAccounts->first->get();
-
-            echo 'supplier name: ' . $sup->name . ' acc_id:' . $sid->id . '<br>';
-            $purchases = $sup->investor_purchases($id);
-            $payments = $sup->investor_payments($id);
-
-            if ($purchases != NULL) {
-                foreach ($purchases as $pur) {
-                    echo $pur->purchase_no . ' ' . $pur->investor_id . '<br>';
-                }
-                echo 'purchahse id is: ' . $purchases->pluck('id') . '<br>';
-                $leadgers = GLeadger::where('account_id', '=', $sid->id)->whereIn('transaction_id', $purchases->pluck('id'))->where('transaction_type', 'like', "%purchase%")->get();
-                $leadgers2 = GLeadger::where('account_id', '=', $sid->id)->whereIn('transaction_id', $payments->pluck('id'))->where('transaction_type', 'like', "%payable%")->get();
-                echo 'total rem: ' . $leadgers->sum('value') . '<br>';
-                echo 'total rem: ' . $purchases->sum('total') . '<br>';
-                echo 'total paid: ' . $leadgers2->sum('value') . '<br>';
-                echo 'total paid: ' . $payments->sum('amount') . '<br>';
-
-                echo 'leadger entries:<br>';
-                $c = 1;
-                foreach ($leadgers as $led) {
-                    echo $c . ':   ' . $led->value . '<br>';
-                    $c++;
-                }
-            }
-        }
-        dd($suppliers);
-        $purchases = Purchase::where('investor_id', '=', $id)->get();
-
-        // $investor_purchases = Purchase::whereIn('id',Payable::all()->pluck('transaction_id'))->where('investor_id','=',$id)->pluck('id');
-        // $payables = Payable::whereIn('transaction_id',$investor_purchases)->get();
-        return view('payable.payables', compact('purchases'));
     }
     /**
      * Show the form for creating a new resource.

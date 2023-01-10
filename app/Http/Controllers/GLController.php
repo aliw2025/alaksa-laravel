@@ -4,7 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\GLeadger;
 use App\Http\Controllers\Controller;
+use App\Models\ChartOfAccount;
+use App\Models\Investor;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
 
 class GLController extends Controller
 {
@@ -71,6 +75,31 @@ class GLController extends Controller
     public function update(Request $request, GLeadger $gLeadger)
     {
         //
+    }
+
+    public function AccountBalances(Request $request)
+    {   
+       
+        $transactions = GLeadger::select('investor_id','account_id', DB::raw('sum(value) as value'))->where('value','!=',0)->whereHas('account', function ($query) {
+            $query->where(function ($query2) {
+                $query2->where('account_type', 1)->orWhere('account_type', 4);
+            });
+        })->groupBy('account_id')->groupBy('investor_id')->with('account')->with('investor')->get();
+        
+        return view('capital-investments.account-balances',compact('transactions'));
+        // return $transactions;
+        // // allbank accounts
+        // $bank_acc  = ChartOfAccount::where(function ($query) {
+        //     $query->where('account_type', 1)
+        //           ->orWhere('account_type', 4);
+        //         }
+        //     )->get();
+        // dd($bank_acc);
+        // foreach($investors as $inv){
+        //     foreach($bank_acc as $acc){
+        //     }
+
+               
     }
 
     /**
