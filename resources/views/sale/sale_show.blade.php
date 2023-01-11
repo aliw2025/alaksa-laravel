@@ -30,8 +30,8 @@
                                                         class="form-control invoice-edit-input" readonly="readonly">
                                             </div>
                                             <div class="mt-1 d-flex align-items-center justify-content-between">
-                                                <span class="title">Inquiry Officer: </span>
-                                                    <input  id="rec_of_name" name="purchase_date" type="text"
+                                                <span  class="title">Inquiry Officer: </span>
+                                                    <input   value={{$sale->inquiryOfficer->name}} id="rec_of_name" name="purchase_date" type="text"
                                                         class="form-control invoice-edit-input" readonly="readonly">                     
                                             </div>
                                             <div class="d-flex align-items-center justify-content-between mt-1">
@@ -132,6 +132,7 @@
                                     <div  class="mt-1" id="instalment_sec">
                                         <div class="row mt-1">
                                             <div class="col-lg-5 col-12 mt-lg-0 mt-2">
+                                                <h4>Instalment details</h4>
                                                 <div class="row d-flex align-items-center">
                                                     <div class="col-6  mt-1">
                                                         <p>Total Sum :</p>
@@ -144,14 +145,7 @@
                                                         {{-- <p id="total_sum_label"> 0</p> --}}
                                                     </div>
                                                 </div>
-                                                
-                                            </div>
 
-
-                                        </div>
-    
-                                        <div class="row ">
-                                            <div class="col-lg-5 col-12 mt-lg-0 mt-2">
                                                 <div class="row d-flex align-items-center">
                                                     <div class="col-6  mt-1">
                                                         <p>Down Payment :</p>
@@ -165,11 +159,7 @@
                                                         {{-- <p id="down_payment_label"> 0</p> --}}
                                                     </div>
                                                 </div>
-                                            </div>
-                                            
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-lg-5 col-12 mt-lg-0 mt-2">
+
                                                 <div class="row d-flex align-items-center ">
                                                     <div class="col-6 mt-1">
                                                         <p>instalments :</p>
@@ -183,11 +173,7 @@
                                                         
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-    
-                                            <div class="col-lg-5 col-12 mt-lg-0 mt-2">
+
                                                 <div class="row d-flex align-items-center">
                                                     <div class="col-6 mt-1">
                                                         <p>instalments per Month :</p>
@@ -201,6 +187,62 @@
                                                         {{-- <p id="per_month_label"> 0</p> --}}
                                                     </div>
                                                 </div>
+                                            </div>
+                                            <div class="col-7">
+                                                <h4>Item details</h4>
+                                                <div id="item-detail-sec" class="row">
+                                                    {{-- style="border: none;background-color: transparent;resize: none;outline: none;" --}}
+
+                                                    <div class="col-6">
+                                                        <label class="form-slabel" for="">Serial /
+                                                            IME#</label>
+                                                        <input readonly 
+                                                            @if (isset($sale)) value="{{ $sale->seriel_no }}" @endif
+                                                            name='seriel_no' type="text"
+                                                            class="form-control">
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <label class="form-label" for="">Item
+                                                            Name</label>
+                                                        <input readonly 
+                                                            @if (isset($sale)) value="{{ $sale->item->name }}" @endif
+                                                            id="i_name" type="text"
+                                                            class="form-control">
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <label class="form-label"
+                                                            for="">Make</label>
+                                                        <input readonly 
+                                                            @if (isset($sale)) value="{{ $sale->item->make }}" @endif
+                                                            id="i_make" type="text"
+                                                            class="form-control">
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <label class="form-slabel"
+                                                            for="">Model</label>
+                                                        <input readonly 
+                                                            @if (isset($sale)) value="{{ $sale->item->model }}" @endif
+                                                            id="i_model" type="text"
+                                                            class="form-control">
+                                                    </div>
+                                                </div>
+                                                <div id="custom-section" class="row">
+                                                    @if (isset($sale))
+                                                        @foreach ($sale->item->propertyValues as $prop)
+                                                            <div class="col-6">
+                                                                <label class="form-slabel"
+                                                                    for="">{{ $prop->propertyName->property_name }}</label>
+                                                                <input readonly  value="{{ $prop->prop_value }}"
+                                                                    id="i_model" type="text"
+                                                                    class="form-control">
+                                                            </div>
+                                                        @endforeach
+                                                    @endif
+                                                </div>
+
+                                            </div>
+                                            <div class="mt-2 row">
+
                                             </div>
                                         </div>
                                     </div> 
