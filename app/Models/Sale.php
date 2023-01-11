@@ -32,10 +32,17 @@ class Sale extends Model
      }
      
      public function inquiryOfficer(){
+
         return $this->belongsTo(User::class,'inq_of_id');
      }
      public function marketingOfficer(){
+
         return $this->belongsTo(User::class,'mar_of_id');
+     }
+     public function pay_type_name(){
+
+        return $this->belongsTo(PaymentType::class,'payment_type');
+
      }
      
 

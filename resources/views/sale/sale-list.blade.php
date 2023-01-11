@@ -37,8 +37,6 @@
                                         <td> {{ number_format($pur->total) }}</td>
                                         <td>{{date('d-m-Y', strtotime($pur->sale_date))}}</td>
                                         <td><a style="text-decoration: none;color:black" href="{{route('get-sale-instalments',$pur->id)}}"><i data-feather='eye'></i></a></td>
-                                       
-                                      
                                     </tr>
                                     @php
                                         $count = $count+1

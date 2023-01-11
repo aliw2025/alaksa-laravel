@@ -6,12 +6,15 @@
                 <div class="row invoice-add">
                     <!-- Invoice Add Left starts -->
                     <div class="col-xl-12 col-md-12 col-12">
-                        <form id="sale_form" method="POST" target="_blank" autocomplete="on"
+                        <form id="sale_form" method="POST"  autocomplete="on"
                             action="{{ $type == 1 ? (isset($sale) ? route('sale.update', $sale->id) : route('sale.store')) : route('post-return') }}">
                             <div class="card invoice-preview-card">
                                 <!-- Header starts -->
                                 @if (isset($sale))
                                     {{ method_field('PUT') }}
+                                @endif
+                                @if(isset($sale))
+                                    <input type="hidden" name="sale_id" value="{{$sale->id}}">
                                 @endif
                                 <div class="card-body invoice-padding pb-0">
                                     <div
@@ -120,7 +123,7 @@
                                                         </select>
                                                     </div>
                                                 @else
-                                                    <input value="{{ $sale->sale_type == 1 ? 'instaments' : 'Cash' }}"
+                                                    <input value="{{ $sale->payment_type == 1 ? 'instaments' : 'Cash' }}"
                                                         id="sale_type" name="sale_type" type="text"
                                                         class="form-control invoice-edit-input" readonly="readonly">
                                                 @endif
@@ -614,8 +617,19 @@
                                     <div class="row p-2">
                                         <div class="col-12">
                                             <div class="d-flex justify-content-end">
-                                                <button type="submit" class="btn btn-primary me-2">Save</button>
+                                                @if(isset($sale))
+                                                    @if($sale->status==1)
+                                                        <button  type="submit" name="action" value="post" class="btn btn-success me-2">Post</button>
+                                                        <button  type="submit" name="action" value="cancel" class="btn btn-danger me-2">Cancel</button>
+                                                        <button type="submit" name="action" value="save" class="btn btn-primary me-2">Save</button>
+                                                        
+                                                    @endif  
+
+                                                @else
+                                                
+                                                <button type="submit" name="action" value="save" class="btn btn-primary me-2">Save</button>
                                                 <button type="reset" class="btn btn-danger">Reset</button>
+                                                @endif
                                             </div>
                                         </div>
                                     </div>

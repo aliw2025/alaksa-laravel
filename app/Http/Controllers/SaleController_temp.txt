@@ -100,8 +100,7 @@ class SaleController extends Controller
         // creaating a selling price var
         $selling_price = str_replace(',', '', $request->selling_price);
         $sale->selling_price =  $selling_price;
-        // $sale->sale_type = $request->sale_type;
-        $sale->payment_type = $request->sale_type;
+        $sale->sale_type = $request->sale_type;
         // if sale is of type cash 
         if ($request->sale_type == 2) {
             $payment_type = "Cash";
@@ -113,23 +112,8 @@ class SaleController extends Controller
         $sale->sale_date = $request->sale_date;
         $sale->save();
 
-        return redirect()->route('sale.edit',$sale->id);
         
         
-        // return redirect()->route('get-sales', $request->investor_id);
-    }
-
-    public function postSale(Request $request){
-        // dd($request->all());
-        $sale = Sale::find($request->sale_id);
-        $sale->status = 3;
-        $down_payment = false;
-        $investor = Investor::find($request->investor_id);
-        $user = Auth::user();
-        if ($request->input('down_payment_paid') != NULL) {
-            $down_payment = true;
-        }      
-        $selling_price = str_replace(',', '', $request->selling_price);
         //**************  creating instalments  *****************/
         // if its an instalments sale
         if ($request->sale_type == 1) {
@@ -263,16 +247,21 @@ class SaleController extends Controller
             'date' => date('m/d/Y'),
             'sale' => $sale,
             'sale_detail' => $sale_detail,
-            'payment_type' => $sale->pay_type_name->name,
+            'payment_type' => $payment_type,
             'selling_price' => str_replace(',', '', $request->selling_price),
             'markup' => $request->mark_up,
             'plan' => $request->plan,
             'user_id' => $user->id
 
         ];
-        $sale->save();
         $pdf = PDF::loadView('sale.sale_invoice_pdf', $data);
         return $pdf->stream('my.pdf', array('Attachment' => 0));
+        // return redirect()->route('get-sales', $request->investor_id);
+    }
+
+    public function postSale(){
+
+
 
     }
 
@@ -294,7 +283,6 @@ class SaleController extends Controller
         
         echo $request->sale_id . "<br>";
         $sale = Sale::find($request->sale_id);
-        
         // finding the investor to get investor name
         $investor = Investor::find($sale->investor_id);
         // getting investory inventory account 
@@ -456,10 +444,8 @@ class SaleController extends Controller
             'date' => $sale->sale_date,
             'user_id' => $user->id
         ]);
-        // changing the status to post
-        
+
         $sale->save();
-        
     }
 
 
@@ -602,10 +588,6 @@ class SaleController extends Controller
         $suppliers = Supplier::all();
         $bank_acc = ChartOfAccount::where('account_type',4)->get();
         $type = 1;
-        if($sale->status!=1){
-           
-            return "sale status other than entry  cannot be edited";
-        }
         return view('sale.sale', compact('sale','investors', 'suppliers', 'type','bank_acc'));
     }
 
@@ -617,14 +599,7 @@ class SaleController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Sale $sale)
-    {      
-        if($request->input('action')=="post"){
-            return redirect()->route('post-sale',$request->all());
-        }
-        if($sale->status!=1){
-           
-            return "sale status other than entry  cannot be edited";
-        } 
+    {   
         $user = Auth::user();
        
         $sale->customer_id = $request->customer_id;
@@ -644,9 +619,7 @@ class SaleController extends Controller
         // creaating a selling price var
         $selling_price = str_replace(',', '', $request->selling_price);
         $sale->selling_price =  $selling_price;
-        // $sale->sale_type = $request->sale_type;
-        $sale->payment_type = $request->sale_type;
-
+        $sale->sale_type = $request->sale_type;
         // if sale is of type cash 
         if ($request->sale_type == 2) {
             $payment_type = "Cash";
@@ -658,7 +631,7 @@ class SaleController extends Controller
         $sale->sale_date = $request->sale_date;
         $sale->save();
 
-        return redirect()->route('sale.edit',$sale->id);
+        return redirect()->route('index');
 
     }
 
@@ -740,7 +713,7 @@ class SaleController extends Controller
         $bank_acc = ChartOfAccount::where('account_type',4)->get();
         // dd($request->id);
         if (isset($request->id)) {
-            
+            dd($request->id);
             $sale = Sale::find($request->id);
             $inv_per = $sale->selling_price  / $sale->total;
             $markup_per = 1 - $inv_per;

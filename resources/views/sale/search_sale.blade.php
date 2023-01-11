@@ -84,9 +84,13 @@
                                         
                                         <td>
                                             <a style="text-decoration: none;color:black" href="{{route('sale.show',$pur->id)}}"><i data-feather='eye'></i></a>
+                                            @if($pur->status==1)
+                                            <a style="text-decoration: none;color:black" href="{{route('sale.edit',$pur->id)}}"><i data-feather='edit'></i></a>
+                                            @endif
+                                            @if($pur->status==3)
                                             <a style="text-decoration: none;color:black" href="{{url('sale-return')."?id=".$pur->id}}" ><i data-feather='rotate-ccw'></i></i></a>
                                             <a style="text-decoration: none;color:black" href="{{url('get-sale-instalments')."?id=".$pur->id}}"><i data-feather='dollar-sign'></i></a>
-                                            <a style="text-decoration: none;color:black" href="{{route('sale.edit',$pur->id)}}"><i data-feather='edit'></i></a>
+                                            @endif
 
                                         </td>
                                     </tr>
