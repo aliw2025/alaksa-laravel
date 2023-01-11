@@ -75,6 +75,7 @@ Route::get('/search-sales' , [\App\Http\Controllers\SaleController::class,'searc
 Route::get('/sale-close' , [\App\Http\Controllers\SaleController::class,'saleClose'])->name('sale-close');
 Route::get('/post-sale' , [\App\Http\Controllers\SaleController::class,'postSale'])->name('post-sale');
 Route::post('/reprint-invoice' , [\App\Http\Controllers\SaleController::class,'reprintInvoice'])->name('reprint-invoice');
+Route::get('/cancel-sale' , [\App\Http\Controllers\SaleController::class,'cancelSale'])->name('cancel-sale');
 
 
 

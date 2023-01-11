@@ -144,7 +144,10 @@
                                                         {{-- <p id="total_sum_label"> 0</p> --}}
                                                     </div>
                                                 </div>
+                                                
                                             </div>
+
+
                                         </div>
     
                                         <div class="row ">

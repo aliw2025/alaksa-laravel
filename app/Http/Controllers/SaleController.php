@@ -620,7 +620,11 @@ class SaleController extends Controller
     {      
         if($request->input('action')=="post"){
             return redirect()->route('post-sale',$request->all());
+        }else if($request->input('action')=="cancel"){
+            return redirect()->route('cancel-sale',$request->all());
         }
+        
+
         if($sale->status!=1){
            
             return "sale status other than entry  cannot be edited";
@@ -661,11 +665,25 @@ class SaleController extends Controller
         return redirect()->route('sale.edit',$sale->id);
 
     }
+    public function cancelSale(Request $request){
+
+        $sale = Sale::find($request->sale_id);
+        if($sale->status!=1){
+            return "transaction with entry status can be cancelled only";
+        }
+        $sale->status = 2;
+        $sale->save();
+
+        return redirect()->route('sale.show',$sale->id);
+    }
 
     // function to reprint invoice
     public function reprintInvoice(Request $request){
 
         $sale = Sale::find($request->sale_id);
+        if($sale->status!=3){
+            return "only posted invoices can be printed";
+        }
         $sale_detail = null;
         $data = [
             'title' => 'Welcome to ItSolutionStuff.com',
