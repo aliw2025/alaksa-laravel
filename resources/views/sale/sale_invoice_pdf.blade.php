@@ -111,6 +111,7 @@
     <table  class="invoice_tab">
         <tr>
             <td style="text-align: left"  >Name : {{ $sale->item->name }}</td>
+            <td style="text-align: left"  >Seriel /IMEA # : {{ $sale->seriel_no }}</td>
             <td  style="text-align: left" >Make : {{ $sale->item->make }}</td>
             <td  style="text-align: left" >Model : {{ $sale->item->make }}</td>
         <tr>

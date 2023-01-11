@@ -6,7 +6,7 @@
                 <div class="row invoice-add">
                     <!-- Invoice Add Left starts -->
                     <div class="col-xl-12 col-md-12 col-12">
-                        <form class="" method="POST" target="_blank" autocomplete="on">
+                        <form class="" method="POST" target="_blank" action="{{route('reprint-invoice',$sale->id)}}" autocomplete="on">
                             <div class="card invoice-preview-card">
                                 <!-- Header starts -->
                                 <div class="card-body invoice-padding pb-0">
@@ -49,6 +49,7 @@
                                                 @csrf
                                                 <h4 class="invoice-title"> Sale #
                                                 </h4>
+                                                <input type="hidden" name="sale_id" value="{{$sale->id}}">
                                                 <div class="input-group input-group-merge invoice-edit-input-group">
                                                     <input id="search_inv"
                                                         value="{{$sale->invoice_no}}"
@@ -201,6 +202,7 @@
                                         </div>
                                     </div> 
                                 </div>
+                                @if($sale->status==3)
                                 <div class="row p-2">
                                     <div class="col-12">
                                         <div class="d-flex justify-content-end">
@@ -210,6 +212,7 @@
                                         </div>
                                     </div>
                                 </div>
+                                @endif
                             </div>
                         </form>
                     </div>

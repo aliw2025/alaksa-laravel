@@ -626,7 +626,7 @@ class SaleController extends Controller
             return "sale status other than entry  cannot be edited";
         } 
         $user = Auth::user();
-       
+        
         $sale->customer_id = $request->customer_id;
         $sale->item_id = $request->item_id;
         $sale->store_id = 1;
@@ -659,6 +659,27 @@ class SaleController extends Controller
         $sale->save();
 
         return redirect()->route('sale.edit',$sale->id);
+
+    }
+
+    // function to reprint invoice
+    public function reprintInvoice(Request $request){
+
+        $sale = Sale::find($request->sale_id);
+        $sale_detail = null;
+        $data = [
+            'title' => 'Welcome to ItSolutionStuff.com',
+            'date' => date('m/d/Y'),
+            'sale' => $sale,
+            'sale_detail' => $sale_detail,
+            'payment_type' => $sale->pay_type_name->name,
+            'selling_price' => 12000,
+            'markup' => 20,
+            'plan' => 6
+
+        ];
+        $pdf = PDF::loadView('sale.sale_invoice_pdf', $data);
+        return $pdf->stream('my.pdf', array('Attachment' => 0));
 
     }
 
