@@ -89,7 +89,7 @@ class SaleController extends Controller
         $sale->mar_of_id = $request->mar_of_id;
         $sale->rec_of_id = $request->rec_of_id;
         $sale->inq_of_id = $request->inq_of_id;
-        $sale->downpayment =  $request->down_payment;
+        $sale->downpayment = str_replace(',', '', $request->down_payment);
         $sale->seriel_no =  $request->seriel_no;
         
         $sale->investor_id = $request->investor_id;
