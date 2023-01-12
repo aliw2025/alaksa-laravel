@@ -155,7 +155,7 @@
                                                             style="border: none;background-color: transparent;resize: none;outline: none;"
                                                             name="down_payment"
                                                             class="number-separator form-control"
-                                                            value="{{number_format($sale->instalments->first()->amount)}}" >
+                                                            value="{{number_format($sale->downpayment)}}">
                                                         {{-- <p id="down_payment_label"> 0</p> --}}
                                                     </div>
                                                 </div>
@@ -183,7 +183,7 @@
                                                             style=" border: none;background-color: transparent;resize: none;outline: none;"
                                                             name="instalment_per_month"
                                                             class=" number-separator form-control"
-                                                            value="{{number_format($sale->instalments->get(1)->amount)}}" >
+                                                            value="{{ number_format(($sale->total - $sale->downpayment) / $sale->plan) }}" >
                                                         {{-- <p id="per_month_label"> 0</p> --}}
                                                     </div>
                                                 </div>

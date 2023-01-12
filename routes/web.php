@@ -63,10 +63,13 @@ Route::get('/purchase-return' , [\App\Http\Controllers\PurchaseController::class
 Route::get('/get-last-purchase' , [\App\Http\Controllers\PurchaseController::class,'getLastPurchase'])->name('get-last-purchase');
 
 Route::get('/get-sales/{id}' , [\App\Http\Controllers\SaleController::class,'showSales'])->name('get-sales');
-Route::get('/sale-return' , [\App\Http\Controllers\SaleController::class,'saleReturns'])->name('sale-return');
+
+Route::get('/sale-return' , [\App\Http\Controllers\SaleController::class,'saleReturn'])->name('sale-return');
+Route::put('/sale-return-adjusment' , [\App\Http\Controllers\SaleController::class,'saleReturnAdjustment'])->name('sale-return-adjustment');
+Route::Post('/post-return-adjustment' , [\App\Http\Controllers\SaleController::class,'postReturnAdjustment'])->name('post-return-adjustment');
+
+
 Route::get('/get-sale-no' , [\App\Http\Controllers\SaleController::class,'getSaleNo'])->name('get-sale-no');
-Route::post('/post-return' , [\App\Http\Controllers\SaleController::class,'postReturn'])->name('post-return');
-Route::get('/post-return' , [\App\Http\Controllers\SaleController::class,'redirectPost'])->name('post-return2');
 Route::get('/get-sale-instalments' , [\App\Http\Controllers\SaleController::class,'showInstalments'])->name('get-sale-instalments');
 Route::get('/test-pdf' , [\App\Http\Controllers\SaleController::class,'testPdf'])->name('test-pdf');
 Route::get('/get-invoices' , [\App\Http\Controllers\SaleController::class,'getInvoices'])->name('get-invoices');

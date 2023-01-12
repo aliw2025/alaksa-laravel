@@ -7,7 +7,7 @@
                     <!-- Invoice Add Left starts -->
                     <div class="col-xl-12 col-md-12 col-12">
                         <form id="sale_form" method="POST"  autocomplete="on"
-                            action="{{ $type == 1 ? (isset($sale) ? route('sale.update', $sale->id) : route('sale.store')) : route('post-return') }}">
+                            action="{{ $type == 1 ? (isset($sale) ? route('sale.update', $sale->id) : route('sale.store')) : route('sale-return-adjustment') }}">
                             <div class="card invoice-preview-card">
                                 <!-- Header starts -->
                                 @if (isset($sale))
@@ -108,18 +108,32 @@
                                                 @endif
 
                                             </div>
-
+                                            
                                             <div class="d-flex align-items-center justify-content-between mt-1">
                                                 <span class="title">Sale Type:</span>
                                                 @if ($type == 1)
                                                     <div style="width: 11.21rem; max-width:11.21rem; "
                                                         class="align-items-center">
+                                                            
+                                                        
                                                         <select id="sale_type" name="sale_type" class="form-select"
                                                             aria-label="Default select example">
-
-                                                            <option value="1">Instalments</option>
-                                                            <option value="2">Cash</option>
-
+                                                            @if(isset($sale))
+                                                               
+                                                                @if($sale->payment_type == 1)
+                                                                   
+                                                                    <option selected value="1">Instalments</option>
+                                                                    <option value="2">Cash</option>
+                                                                @else 
+                                                                    
+                                                                    <option  value="1">Instalments</option>
+                                                                    <option selected value="2">Cash</option>
+                                                                @endif
+                                                            @else
+                                                            
+                                                                <option value="1">Instalments</option>
+                                                                <option value="2">Cash</option>
+                                                            @endif
                                                         </select>
                                                     </div>
                                                 @else
@@ -136,10 +150,10 @@
                                         <div class="invoice-number-date mt-md-0 mt-2">
                                             <div class="d-flex align-items-center justify-content-between mb-1">
                                                 @csrf
-
+                                                <!-- type =2  is for sale return  -->
                                                 @if ($type == 2)
                                                     <input id="sale_id" name="sale_id" type="hidden"
-                                                        class="form-control " placeholder="">
+                                                        class="form-control " placeholder="" value="{{$sale->id}}">
                                                 @endif
                                                 <h4 class="invoice-title"> {{ $type == 1 ? 'Sale #' : 'Search Sale #' }}
                                                 </h4>
@@ -356,6 +370,7 @@
                                                     </div>
                                                     <div>
                                                         <div class="row mt-1">
+                                                            @if($sale->payment_type==1)
                                                             <div id="instalment_sec" class="col-lg-5 col-12 mt-lg-0 mt-2">
                                                                 <h4>Instalment details</h4>
                                                                 <div class="row d-flex align-items-center">
@@ -428,6 +443,7 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
+                                                            @endif
 
                                                             <div class="col-7">
                                                                 <h4>Item details</h4>

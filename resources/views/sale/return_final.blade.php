@@ -12,61 +12,65 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    
+                <form id="sale_form" method="POST"  autocomplete="on" action="{{route('post-return-adjustment') }}">
+                    @csrf
                     <div class="row">
+                        <input type="hidden" name="sale_id" id="" value="{{$sale->id}}">
                         <div class="col-6">
                             <label class="mt-1" for="" >take back from investor </label>
-                            <input type="text"  class="form-control" value="{{ number_format($cash_back_investor)}}">
+                            <input name="take_back_inv"  type="text"  class="form-control" value="{{ number_format($cash_back_investor)}}">
                             <label class="mt-1" for="" >take back from alp </label>
-                            <input type="text"  class="form-control" value="{{ number_format($cash_back_company)}}">
+                            <input name="take_back_alp" type="text"  class="form-control" value="{{ number_format($cash_back_company)}}">
                             <label class="mt-1" for="" >investor will receive </label>
-                            <input type="text"  class="form-control" value="{{ number_format($give_to_investor)}}">
+                            <input name="give_back_inv" type="text"  class="form-control" value="{{ number_format($give_to_investor)}}">
                             <label class="mt-1" for="" >alp recived </label>
-                            <input type="text"  class="form-control" value="{{ number_format($give_to_company)}}">
+                            <input name="take_back_alp"  type="text"  class="form-control" value="{{ number_format($give_to_company)}}">
                         </div>
                         <div class="col-6">
                             <label class="mt-1" for="" >Select Account </label>
-                            <select id="acc_type" name="acc_type" class="form-select ">
+                            <select id="acc_type" name="acc_back_inv" class="form-select ">
                                 <option value="1">
                                    cash
                                 </option>
-                                <option value="4">
-                                    Bank
-                                 </option>
+                                @foreach($bank_acc as $acc)
+                                <option value="{{$acc->id}}">{{$acc->account_name}}</option>
+                                @endforeach
+                               
 
                             </select>
                             <label class="mt-1" for="" >Select Account </label>
-                            <select id="acc_type" name="acc_type" class="form-select ">
+                            <select id="acc_type" name="acc_back_alp" class="form-select ">
                                 <option value="1">
                                    cash
                                 </option>
-                                <option value="4">
-                                    Bank
-                                 </option>
+                                @foreach($bank_acc as $acc)
+                                <option value="{{$acc->id}}">{{$acc->account_name}}</option>
+                                @endforeach
 
                             </select>
                             <label class="mt-1" for="" >Select Account </label>
-                            <select id="acc_type" name="acc_type" class="form-select ">
+                            <select id="acc_type" name="acc_rcv_inv" class="form-select ">
                                 <option value="1">
                                    cash
                                 </option>
-                                <option value="4">
-                                    Bank
-                                 </option>
+                                @foreach($bank_acc as $acc)
+                                <option value="{{$acc->id}}">{{$acc->account_name}}</option>
+                                @endforeach
+                                
 
                             </select>
                             <label class="mt-1" for="" >Select Account </label>
-                            <select id="acc_type" name="acc_type" class="form-select ">
+                            <select id="acc_type" name="acc_rcv_alp" class="form-select ">
                                 <option value="1">
                                    cash
                                 </option>
-                                <option value="4">
-                                    Bank
-                                 </option>
+                                @foreach($bank_acc as $acc)
+                                <option value="{{$acc->id}}">{{$acc->account_name}}</option>
+                                @endforeach
+                               
 
                             </select>
-                        
-
+                    
                         </div>
                         
                     </div>
@@ -76,7 +80,7 @@
 
                         </div>
                     </div>
-                   
+                    </form>
 
                 </div>
             </div>
