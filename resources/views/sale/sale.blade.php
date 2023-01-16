@@ -370,6 +370,7 @@
                                                     </div>
                                                     <div>
                                                         <div class="row mt-1">
+                                                            @if(isset($sale))
                                                             @if($sale->payment_type==1)
                                                             <div id="instalment_sec" class="col-lg-5 col-12 mt-lg-0 mt-2">
                                                                 <h4>Instalment details</h4>
@@ -443,6 +444,7 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
+                                                            @endif
                                                             @endif
 
                                                             <div class="col-7">

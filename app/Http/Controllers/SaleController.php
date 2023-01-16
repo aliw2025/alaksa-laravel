@@ -281,7 +281,13 @@ class SaleController extends Controller
         // dd($request->all());
         $user = Auth::user();
         $sale = Sale::find($request->sale_id);
+
        
+
+        //**************  calculating trade discount  *****************/
+        $trade_discount = $sale->trade_discount;
+        dd($trade_discount);
+
         $cash_back_investor = $request->investor_share + $request->inventory_money;
         $cash_back_company = $request->investor_share;
         $give_to_investor = $request->return_investor;
