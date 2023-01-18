@@ -298,7 +298,7 @@ class SaleController extends Controller
        
         dd($request->all());
         $sale = Sale::find($request->sale_id);
-        $sale->status = 3;
+        $sale->status = 4;
         $down_payment = false;
         $investor = Investor::find($sale->investor_id);
         $user = Auth::user();
