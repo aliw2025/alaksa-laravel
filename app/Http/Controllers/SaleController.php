@@ -357,9 +357,9 @@ class SaleController extends Controller
             //5 - debit td pft
             $sale->createLeadgerEntry(10, $request->take_back__td,1, $sale->sale_date, $user->id);
             //* credit alp selected
-            $sale->createLeadgerEntry($request->give_back__td_acc, -$request->give_back_td,1, $sale->sale_date, $user->id);
+            $sale->createLeadgerEntry($request->take_back__td_acc, -$request->take_back_td,1, $sale->sale_date, $user->id);
             //5 - debit td to inv
-            $sale->createLeadgerEntry($request->give_back__td_acc, $request->take_back__td,$sale->investor, $sale->sale_date, $user->id);
+            $sale->createLeadgerEntry($request->take_back__td_acc, $request->take_back__td,$sale->investor, $sale->sale_date, $user->id);
             
 
         } else {
@@ -384,7 +384,7 @@ class SaleController extends Controller
             $sale->createLeadgerEntry(10, -$trade_discount, 1, $sale->sale_date, $user->id);
         }
 
-
+        $sale->save();
 
 
     }

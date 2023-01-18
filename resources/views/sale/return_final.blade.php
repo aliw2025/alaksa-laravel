@@ -1,5 +1,4 @@
 
-
 @extends('template.header')
 @section('section')
 <div class="content-wrapper" id="content-wrapper">
@@ -24,13 +23,13 @@
                             <label class="mt-1" for="" >investor will receive </label>
                             <input name="give_back_inv" type="text"  class="form-control" value="{{ number_format($give_to_investor)}}">
                             <label class="mt-1" for="" >alp recived </label>
-                            <input name="take_back_alp"  type="text"  class="form-control" value="{{ number_format($give_to_company)}}">
+                            <input name=give_back_alp"  type="text"  class="form-control" value="{{ number_format($give_to_company)}}">
                             <label class="mt-1" for="" >TD Return </label>
-                            <input name="take_back_alp"  type="text"  class="form-control" value="{{ number_format($sale->trade_discount)}}">
+                            <input name="take_back_td"  type="text"  class="form-control" value="{{ number_format($sale->trade_discount)}}">
                         </div>
                         <div class="col-6">
                             <label class="mt-1" for="" >Select Account </label>
-                            <select id="acc_type" name="acc_back_inv" class="form-select ">
+                            <select id="acc_type" name="take_back_inv_acc" class="form-select ">
                                 <option value="1">
                                    cash
                                 </option>
@@ -41,7 +40,7 @@
 
                             </select>
                             <label class="mt-1" for="" >Select Account </label>
-                            <select id="acc_type" name="acc_back_alp" class="form-select ">
+                            <select id="acc_type" name="take_back_alp_acc" class="form-select ">
                                 <option value="1">
                                    cash
                                 </option>
@@ -51,7 +50,7 @@
 
                             </select>
                             <label class="mt-1" for="" >Select Account </label>
-                            <select id="acc_type" name="acc_rcv_inv" class="form-select ">
+                            <select id="acc_type" name="give_back_inv_acc" class="form-select ">
                                 <option value="1">
                                    cash
                                 </option>
@@ -62,7 +61,7 @@
 
                             </select>
                             <label class="mt-1" for="" >Select Account </label>
-                            <select id="acc_type" name="acc_rcv_alp" class="form-select ">
+                            <select id="acc_type" name="give_back_alp_acc" class="form-select ">
                                 <option value="1">
                                    cash
                                 </option>
@@ -73,7 +72,7 @@
 
                             </select>
                             <label class="mt-1" for="" >Select Account </label>
-                            <select id="acc_type" name="acc_rcv_alp" class="form-select ">
+                            <select id="acc_type" name="take_back_td_acc" class="form-select ">
                                 <option value="1">
                                    cash
                                 </option>
