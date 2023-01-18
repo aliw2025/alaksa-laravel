@@ -131,6 +131,7 @@
                                 <div class="container">
                                     <div  class="mt-1" id="instalment_sec">
                                         <div class="row mt-1">
+                                            @if($sale->payment_type==1)
                                             <div class="col-lg-5 col-12 mt-lg-0 mt-2">
                                                 <h4>Instalment details</h4>
                                                 <div class="row d-flex align-items-center">
@@ -188,6 +189,7 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            @endif
                                             <div class="col-7">
                                                 <h4>Item details</h4>
                                                 <div id="item-detail-sec" class="row">

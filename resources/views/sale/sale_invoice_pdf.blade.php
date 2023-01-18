@@ -85,7 +85,7 @@
                 <td> {{ $sale->item->name }}</td>
                 <td> {{ $plan }}</td>
                 <td> {{ $markup }}%</td>
-                <td> {{ number_format($selling_price) }}</td>
+                <td> {{ number_format($sale->selling_price) }}</td>
 
             </tr>
             <tr style="margin-bottom:0;margin-top:0">

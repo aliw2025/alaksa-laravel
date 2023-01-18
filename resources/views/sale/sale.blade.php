@@ -322,6 +322,7 @@
                                                                         </div>
                                                                     </div>
                                                                 </div>
+                                                                @if(!isset($sale) || (isset($sale) && $sale->payment_type==1))
                                                                 <div class="col-2 my-lg-0 my-2">
                                                                     <p class="card-text col-title mb-md-2 mb-0">Selling
                                                                         Price
@@ -334,7 +335,7 @@
                                                                         class="number-separator form-control"
                                                                         value="" placeholder="Selling Price">
                                                                 </div>
-
+                                                                
                                                                 <div id="plan_div" class="col-2 my-lg-0 my-2">
                                                                     <p class="card-text col-title mb-md-2 mb-0">Plan
                                                                         (Months)
@@ -356,14 +357,16 @@
                                                                         class="form-control" value=""
                                                                         placeholder="%">
                                                                 </div>
+                                                               @endif
                                                                 <div id="discount_div" class="col-2 my-lg-0 my-2">
                                                                     <p class="card-text col-title mb-md-2 mb-0">Trade
                                                                         Discount
                                                                     </p>
                                                                     <input name="trade_discount" id="trade_discount"
                                                                         type="number" class="form-control"
-                                                                        value="" placeholder="Discount">
+                                                                        @if (isset($sale)) value="{{ number_format($sale->trade_discount) }}" @endif placeholder="Discount">
                                                                 </div>
+                                                              
                                                             </div><s></s>
 
                                                         </div>
@@ -681,7 +684,13 @@
             $('#instal').text('name is khan');
             var type = $('#sale_type').val();
             console.log("type: " + type);
-            $('#discount_div').hide();
+            if(type==1){
+                $('#discount_div').hide();
+            }else{
+                $('#markup_div').hide();
+                $('#plan_div').hide();
+            }
+          
             // getinvAccount()
             var inv = $('#search_inv').val();
 
