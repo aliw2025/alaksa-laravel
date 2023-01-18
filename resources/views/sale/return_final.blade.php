@@ -25,6 +25,8 @@
                             <input name="give_back_inv" type="text"  class="form-control" value="{{ number_format($give_to_investor)}}">
                             <label class="mt-1" for="" >alp recived </label>
                             <input name="take_back_alp"  type="text"  class="form-control" value="{{ number_format($give_to_company)}}">
+                            <label class="mt-1" for="" >TD Return </label>
+                            <input name="take_back_alp"  type="text"  class="form-control" value="{{ number_format($sale->trade_discount)}}">
                         </div>
                         <div class="col-6">
                             <label class="mt-1" for="" >Select Account </label>
@@ -57,6 +59,17 @@
                                 <option value="{{$acc->id}}">{{$acc->account_name}}</option>
                                 @endforeach
                                 
+
+                            </select>
+                            <label class="mt-1" for="" >Select Account </label>
+                            <select id="acc_type" name="acc_rcv_alp" class="form-select ">
+                                <option value="1">
+                                   cash
+                                </option>
+                                @foreach($bank_acc as $acc)
+                                <option value="{{$acc->id}}">{{$acc->account_name}}</option>
+                                @endforeach
+                               
 
                             </select>
                             <label class="mt-1" for="" >Select Account </label>

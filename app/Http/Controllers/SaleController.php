@@ -282,12 +282,8 @@ class SaleController extends Controller
         $user = Auth::user();
         $sale = Sale::find($request->sale_id);
 
-       
-
         //**************  calculating trade discount  *****************/
         $trade_discount = $sale->trade_discount;
-        dd($trade_discount);
-
         $cash_back_investor = $request->investor_share + $request->inventory_money;
         $cash_back_company = $request->investor_share;
         $give_to_investor = $request->return_investor;
@@ -325,7 +321,7 @@ class SaleController extends Controller
             //* leadger entry for credit inventory for actual price of item
             $sale->createLeadgerEntry(3, $item_price, $investor->id, $sale->sale_date, $user->id);
             //* leadger entry for credit cash of investor bank account for trade profit ??
-            $sale->createLeadgerEntry(4, $trade_discount, $investor->id, $sale->sale_date, $user->id);
+            // $sale->createLeadgerEntry(4, $trade_discount, $investor->id, $sale->sale_date, $user->id);
             // calculating profit share of investor and company
             $inv_mark_pft = (str_replace(',', '', $request->total_sum) - str_replace(',', '', $request->selling_price)) * 0.50;
             // leadger entry for investor debit recievable of markup 
@@ -337,11 +333,34 @@ class SaleController extends Controller
             // *leadger entry for credit markup profit
             $sale->createLeadgerEntry(9, $inv_mark_pft, 1, $sale->sale_date, $user->id);
             // leadger entry for company debit cash of trade profit ??
-            $sale->createLeadgerEntry(4, -$trade_discount, 1, $sale->sale_date, $user->id);
+            // $sale->createLeadgerEntry(4, -$trade_discount, 1, $sale->sale_date, $user->id);
             //* leadger entry for credit trade discount profit
-            $sale->createLeadgerEntry(10, $trade_discount, 1, $sale->sale_date, $user->id);
-
-            // Adjustments
+            // $sale->createLeadgerEntry(10, $trade_discount, 1, $sale->sale_date, $user->id);
+            //*** Adjustments****/ 
+            // 1 - debit reciveable investor
+            $sale->createLeadgerEntry(5, $request->take_back_inv,$sale->investor_id, $sale->sale_date, $user->id);
+            //* credit selected_acc
+            $sale->createLeadgerEntry($request->take_back__inv_acc, -$request->take_back__inv,$sale->investor_id, $sale->sale_date, $user->id);
+            // 2- debit recv alp
+            $sale->createLeadgerEntry(5, $request->take_back_alp,1, $sale->sale_date, $user->id);
+            //* credit selected_acc alp
+            $sale->createLeadgerEntry($request->take_back__alp_acc, -$request->take_back__inv,1, $sale->sale_date, $user->id);
+            
+            // 3 - debit investor selected_acc
+            $sale->createLeadgerEntry($request->give_back__inv_acc, $request->give_back_inv,$sale->investor_id, $sale->sale_date, $user->id);
+            //* credit pft
+            $sale->createLeadgerEntry(9, -$request->take_back__inv,$sale->ivestor_id, $sale->sale_date, $user->id);
+            // 4 - debit investor selected_acc
+            $sale->createLeadgerEntry($request->give_back__alp_acc, $request->give_back_alp,1, $sale->sale_date, $user->id);
+            //* credit pft
+            $sale->createLeadgerEntry(9, -$request->take_back__alp,1, $sale->sale_date, $user->id);
+            //5 - debit td pft
+            $sale->createLeadgerEntry(10, $request->take_back__td,1, $sale->sale_date, $user->id);
+            //* credit alp selected
+            $sale->createLeadgerEntry($request->give_back__td_acc, -$request->give_back_td,1, $sale->sale_date, $user->id);
+            //5 - debit td to inv
+            $sale->createLeadgerEntry($request->give_back__td_acc, $request->take_back__td,$sale->investor, $sale->sale_date, $user->id);
+            
 
         } else {
 
@@ -364,6 +383,8 @@ class SaleController extends Controller
             //* leadger entry for credit trade discount profit
             $sale->createLeadgerEntry(10, -$trade_discount, 1, $sale->sale_date, $user->id);
         }
+
+
 
 
     }
