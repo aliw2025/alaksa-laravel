@@ -48,9 +48,9 @@ class SaleController extends Controller
         //
         $investors = Investor::all();
         $suppliers = Supplier::all();
-        $bank_acc = ChartOfAccount::where('account_type',4)->get();
+        $bank_acc = ChartOfAccount::where('account_type', 4)->get();
         $type = 1;
-        return view('sale.sale', compact('investors', 'suppliers', 'type','bank_acc'));
+        return view('sale.sale', compact('investors', 'suppliers', 'type', 'bank_acc'));
     }
 
 
@@ -94,7 +94,7 @@ class SaleController extends Controller
         $sale->status = 1;
         $sale->seriel_no =  $request->seriel_no;
 
-       
+
         $sale->user_id = $user->id;
         // creaating a selling price var
         $selling_price = str_replace(',', '', $request->selling_price);
@@ -115,22 +115,26 @@ class SaleController extends Controller
         $sale->sale_date = $request->sale_date;
         $sale->save();
 
-        return redirect()->route('sale.edit',$sale->id);
-        
-        
+        return redirect()->route('sale.edit', $sale->id);
+
+
         // return redirect()->route('get-sales', $request->investor_id);
     }
 
-    public function postSale(Request $request){
-        // dd($request->all());
+    public function postSale(Request $request)
+    {
+
         $sale = Sale::find($request->sale_id);
+        if ($sale->status == 3) {
+            return "sale alreaddy postedd";
+        }
         $sale->status = 3;
         $down_payment = false;
         $investor = Investor::find($request->investor_id);
         $user = Auth::user();
         if ($request->input('down_payment_paid') != NULL) {
             $down_payment = true;
-        }      
+        }
         $selling_price = floatval(str_replace(',', '', $request->selling_price));
         //**************  creating instalments  *****************/
         // if its an instalments sale
@@ -152,7 +156,7 @@ class SaleController extends Controller
             $ins_mon = str_replace(',', '', $request->down_payment) * $inv_per;
             // each investor share in markup profit
             $share = (str_replace(',', '', $request->down_payment) - $ins_mon) * 0.50;
-            
+
             if ($down_payment) {
                 $payment = new InstalmentPayment();
                 $payment->instalment_id = $instalment->id;
@@ -201,7 +205,7 @@ class SaleController extends Controller
 
         //**************  calculating trade discount  *****************/
         $item_price = $investor->inventories()->where('item_id', '=', $request->item_id)->first()->unit_cost;
-      
+
         $trade_discount = 0;
         if ($request->sale_type == 1) {
             $trade_discount = $selling_price - $item_price;
@@ -234,7 +238,7 @@ class SaleController extends Controller
             //* leadger entry for credit trade discount profit
             $sale->createLeadgerEntry(10, -$trade_discount, 1, $sale->sale_date, $user->id);
         } else {
-           
+
             //  leadger entry for debit cash/bank of investory
             $sale->createLeadgerEntry($request->acc_type, $item_price, $investor->id, $sale->sale_date, $user->id);
             //* leadger entry for credit inventory for actual price of item
@@ -274,7 +278,6 @@ class SaleController extends Controller
         $sale->save();
         $pdf = PDF::loadView('sale.sale_invoice_pdf', $data);
         return $pdf->stream('my.pdf', array('Attachment' => 0));
-
     }
 
     public function saleReturnAdjustment(Request $request)
@@ -289,13 +292,14 @@ class SaleController extends Controller
         $cash_back_company = $request->investor_share;
         $give_to_investor = $request->return_investor;
         $give_to_company = $request->return_alp;
-        $bank_acc = ChartOfAccount::where('account_type',4)->get();
-        return view('sale.return_final', compact('cash_back_investor', 'cash_back_company', 'give_to_investor', 'give_to_company','bank_acc','sale'));
-        
+        $bank_acc = ChartOfAccount::where('account_type', 4)->get();
+        return view('sale.return_final', compact('cash_back_investor', 'cash_back_company', 'give_to_investor', 'give_to_company', 'bank_acc', 'sale'));
     }
 
 
-    public function postReturnAdjustment(Request $request){
+    public function postReturnAdjustment(Request $request)
+    {
+        $mytime =date('Y-m-d'); // 
        
         // dd($request->all());
         $sale = Sale::find($request->sale_id);
@@ -304,158 +308,156 @@ class SaleController extends Controller
         $investor = Investor::find($sale->investor_id);
         $user = Auth::user();
         $selling_price = str_replace(',', '', $sale->selling_price);
-       
         // dd($investor->inventories()->where('item_id', '=', $request->item_id)->first());
         $item_price = $investor->inventories()->where('item_id', '=', $sale->item_id)->first()->unit_cost;
-
         //************** inventory update  *****************/
         // updating inventory 
         $inventory = Inventory::where('investor_id', '=', $sale->investor_id)->where('item_id', '=', $sale->item_id)->first();
         $inventory->quantity =  $inventory->quantity + 1;
         $inventory->save();
-
         //**************  calculating trade discount  *****************/
         $trade_discount = $sale->trade_discount;
 
         //**************  LEADGER *****************/
         if ($sale->payment_type == 1) {
-          
             //  leadger entry for debit recievable of inventory
-            $sale->createLeadgerEntry(5, -$selling_price, $investor->id, $sale->sale_date, $user->id);
+            $sale->createLeadgerEntry(5, -$selling_price, $investor->id, $mytime, $user->id);
             //* leadger entry for credit inventory for actual price of item
-            $sale->createLeadgerEntry(3, $item_price, $investor->id, $sale->sale_date, $user->id);
+            $sale->createLeadgerEntry(3, $item_price, $investor->id, $mytime, $user->id);
             //* leadger entry for credit cash of investor bank account for trade profit ??
-            // $sale->createLeadgerEntry(4, $trade_discount, $investor->id, $sale->sale_date, $user->id);
+            // $sale->createLeadgerEntry(4, $trade_discount, $investor->id, $mytime, $user->id);
             // calculating profit share of investor and company
             $inv_mark_pft = ($sale->total_sum - $sale->selling_price) * 0.50;
             // leadger entry for investor debit recievable of markup 
-            $sale->createLeadgerEntry(5, -$inv_mark_pft, $investor->id, $sale->sale_date, $user->id);
+            $sale->createLeadgerEntry(5, -$inv_mark_pft, $investor->id, $mytime, $user->id);
             //* leadger entry for credit markup profit
-            $sale->createLeadgerEntry(9, $inv_mark_pft, $investor->id, $sale->sale_date, $user->id);
+            $sale->createLeadgerEntry(9, $inv_mark_pft, $investor->id, $mytime, $user->id);
             // leadger entry for company debit recievable of markup
-            $sale->createLeadgerEntry(5, -$inv_mark_pft, 1, $sale->sale_date, $user->id);
+            $sale->createLeadgerEntry(5, -$inv_mark_pft, 1, $mytime, $user->id);
             // *leadger entry for credit markup profit
-            $sale->createLeadgerEntry(9, $inv_mark_pft, 1, $sale->sale_date, $user->id);
+            $sale->createLeadgerEntry(9, $inv_mark_pft, 1, $mytime, $user->id);
             // leadger entry for company debit cash of trade profit ??
-            // $sale->createLeadgerEntry(4, -$trade_discount, 1, $sale->sale_date, $user->id);
+            // $sale->createLeadgerEntry(4, -$trade_discount, 1, $mytime, $user->id);
             //* leadger entry for credit trade discount profit
-            // $sale->createLeadgerEntry(10, $trade_discount, 1, $sale->sale_date, $user->id);
-          
+            // $sale->createLeadgerEntry(10, $trade_discount, 1, $mytime, $user->id);
+
             //*** Adjustments****/ 
             // 1 - debit reciveable investor
-            $sale->createLeadgerEntry(5,str_replace(',', '', $request->take_back_inv),$sale->investor_id, $sale->sale_date, $user->id);
+            $sale->createLeadgerEntry(5, str_replace(',', '', $request->take_back_inv), $sale->investor_id, $mytime, $user->id);
             //* credit selected_acc
-            $sale->createLeadgerEntry($request->take_back_inv_acc, -str_replace(',', '', $request->take_back_inv),$sale->investor_id, $sale->sale_date, $user->id);
+            $sale->createLeadgerEntry($request->take_back_inv_acc, -str_replace(',', '', $request->take_back_inv), $sale->investor_id, $mytime, $user->id);
             // 2- debit recv alp
-            $sale->createLeadgerEntry(5, str_replace(',', '',$request->take_back_alp),1, $sale->sale_date, $user->id);
+            $sale->createLeadgerEntry(5, str_replace(',', '', $request->take_back_alp), 1, $mytime, $user->id);
             //* credit selected_acc alp
-            $sale->createLeadgerEntry($request->take_back_alp_acc,-str_replace(',', '', $request->take_back_inv),1, $sale->sale_date, $user->id);
-            
-            // 3 - debit investor selected_acc
-            $sale->createLeadgerEntry($request->give_back_inv_acc, str_replace(',', '',$request->give_back_inv),$sale->investor_id, $sale->sale_date, $user->id);
-            //* credit pft
-            $sale->createLeadgerEntry(9, -str_replace(',', '', $request->give_back_inv),$sale->investor_id, $sale->sale_date, $user->id);
-            // 4 - debit investor selected_acc
-            $sale->createLeadgerEntry($request->give_back_alp_acc, str_replace(',', '',$request->give_back_alp),1, $sale->sale_date, $user->id);
-            //* credit pft
-            $sale->createLeadgerEntry(9, -str_replace(',', '',$request->take_back_alp),1, $sale->sale_date, $user->id);
-            //5 - debit td pft
-            $sale->createLeadgerEntry(10,str_replace(',', '', $request->take_back_td),1, $sale->sale_date, $user->id);
-            //* credit alp selected
-            $sale->createLeadgerEntry($request->take_back_td_acc, -str_replace(',', '',$request->take_back_td),1, $sale->sale_date, $user->id);
-            //5 - debit td to inv
-            $sale->createLeadgerEntry($request->take_back_td_acc, str_replace(',', '',$request->take_back_td),$sale->investor_id, $sale->sale_date, $user->id);
-            
+            $sale->createLeadgerEntry($request->take_back_alp_acc, -str_replace(',', '', $request->take_back_inv), 1, $mytime, $user->id);
 
+            // 3 - debit investor selected_acc
+            $sale->createLeadgerEntry($request->give_back_inv_acc, str_replace(',', '', $request->give_back_inv), $sale->investor_id, $mytime, $user->id);
+            //* credit pft
+            $sale->createLeadgerEntry(9, -str_replace(',', '', $request->give_back_inv), $sale->investor_id, $mytime, $user->id);
+            // 4 - debit investor selected_acc
+            $sale->createLeadgerEntry($request->give_back_alp_acc, str_replace(',', '', $request->give_back_alp), 1, $mytime, $user->id);
+            //* credit pft
+            $sale->createLeadgerEntry(9, -str_replace(',', '', $request->take_back_alp), 1, $mytime, $user->id);
+            //5 - debit td pft
+            $sale->createLeadgerEntry(10, str_replace(',', '', $request->take_back_td), 1, $mytime, $user->id);
+            //* credit alp selected
+            $sale->createLeadgerEntry($request->take_back_td_acc, -str_replace(',', '', $request->take_back_td), 1, $mytime, $user->id);
+            //5 - debit td to inv
+            $sale->createLeadgerEntry($request->take_back_td_acc, str_replace(',', '', $request->take_back_td), $sale->investor_id, $mytime, $user->id);
         } else {
 
             //  leadger entry for debit cash/bank of investory
-            $sale->createLeadgerEntry($request->acc_type, $item_price, $investor->id, $sale->sale_date, $user->id);
+            $sale->createLeadgerEntry($request->take_back_inv_acc, -$item_price, $investor->id, $mytime, $user->id);
             //* leadger entry for credit inventory for actual price of item
-            $sale->createLeadgerEntry(3, -$item_price, $investor->id, $sale->sale_date, $user->id);
+            $sale->createLeadgerEntry(3, $item_price, $investor->id, $mytime, $user->id);
             // calculating profit share of investor and company
             $inv_pft = ($selling_price - $trade_discount - $item_price) * 0.50;
             // leadger entry for investor debit cash/bank for profit money 
-            $sale->createLeadgerEntry($request->acc_type, $inv_pft, $investor->id, $sale->sale_date, $user->id);
+            $sale->createLeadgerEntry($request->take_back_inv_acc, -$inv_pft, $investor->id, $mytime, $user->id);
             //* leadger entry for credit markup profit
-            $sale->createLeadgerEntry(9, -$inv_pft, $investor->id, $sale->sale_date, $user->id);
+            $sale->createLeadgerEntry(9, $inv_pft, $investor->id, $mytime, $user->id);
             // leadger entry for company debit  of 
-            $sale->createLeadgerEntry($request->acc_type, $inv_pft, 1, $sale->sale_date, $user->id);
+            $sale->createLeadgerEntry($request->take_back_alp_acc, -$inv_pft, 1, $mytime, $user->id);
             // *leadger entry for credit markup profit
-            $sale->createLeadgerEntry(9, -$inv_pft, 1, $sale->sale_date, $user->id);
+            $sale->createLeadgerEntry(9, $inv_pft, 1, $mytime, $user->id);
             // leadger entry for company debit cash of trade profit
-            $sale->createLeadgerEntry($request->acc_type, $trade_discount, 1, $sale->sale_date, $user->id);
+            $sale->createLeadgerEntry($request->take_back_td_acc, -$trade_discount, 1, $mytime, $user->id);
             //* leadger entry for credit trade discount profit
-            $sale->createLeadgerEntry(10, -$trade_discount, 1, $sale->sale_date, $user->id);
+            $sale->createLeadgerEntry(10, $trade_discount, 1, $mytime, $user->id);
+            // adjustments
+            // 3 - debit investor selected_acc
+            $sale->createLeadgerEntry($request->give_back_inv_acc, str_replace(',', '', $request->give_back_inv), $sale->investor_id, $mytime, $user->id);
+            //* credit pft
+            $sale->createLeadgerEntry(9, -str_replace(',', '', $request->give_back_inv), $sale->investor_id, $mytime, $user->id);
+            // 4 - debit investor selected_acc
+            $sale->createLeadgerEntry($request->give_back_alp_acc, str_replace(',', '', $request->give_back_alp), 1, $mytime, $user->id);
+            //* credit pft
+            $sale->createLeadgerEntry(9, -str_replace(',', '', $request->take_back_alp), 1, $mytime, $user->id);
+
+            //* credit alp selected
+            $sale->createLeadgerEntry($request->take_back_td_acc, -str_replace(',', '', $request->take_back_td), 1, $mytime, $user->id);
+            //5 - debit td to inv
+            $sale->createLeadgerEntry($request->take_back_td_acc, str_replace(',', '', $request->take_back_td), $sale->investor_id, $mytime, $user->id);
         }
 
         $sale->save();
 
-
+        return redirect()->route('sale.show', $sale->id);
     }
+
 
     public function saleReturn(Request $request)
     {
         $type = 2;
         $investors = Investor::all();
         $suppliers = Supplier::all();
-        $bank_acc = ChartOfAccount::where('account_type',4)->get();
-      
-
+        $bank_acc = ChartOfAccount::where('account_type', 4)->get();
         // dd($request->id);
         if (isset($request->id)) {
-            
+
             $sale = Sale::find($request->id);
             $investor = Investor::find($sale->investor_id);
             $item_price = $investor->inventories()->where('item_id', '=', $sale->item_id)->first()->unit_cost;
-
             $inv_per = $sale->selling_price  / $sale->total;
             $markup_per = 1 - $inv_per;
-            if($sale->type==1){
+
+            if ($sale->type == 1) {
                 $total_amount_paid = $sale->instalments->sum('amount_paid');
                 // dd($total_amount_paid);
                 $inventory_money = $total_amount_paid * $inv_per;
                 // each investor share in markup profit
                 $share = ($total_amount_paid - $inventory_money) * 0.50;
-            }else{
+            } else {
+
                 $total_amount_paid = $sale->total;
-               
                 $inventory_money = $item_price;
                 // dd(   $inventory_money );
                 // each investor share in markup profit
-                $share = ($sale->total - $inventory_money- $sale->trade_discount) * 0.50;
+                $share = ($sale->total - $inventory_money - $sale->trade_discount) * 0.50;
             }
-           
-           
-            
+
             return view('sale.sale', compact('investors', 'suppliers', 'type', 'sale', 'total_amount_paid', 'inventory_money', 'share'));
         }
-
         // for purchase return
 
-        return view('sale.sale', compact('investors', 'suppliers', 'type','bank_acc'));
+        return view('sale.sale', compact('investors', 'suppliers', 'type', 'bank_acc'));
     }
+
+
     // function to return sale invoice
-   
-
-
-
-
     public function saleClose()
-    {   
-      
+    {
 
         $user = Auth::user();
         $mytime = Carbon::today();
-
         $sales = Sale::where('sale_date', $mytime)->where('user_id', $user->id);
-
-        $transactions = GLeadger::select('transaction_type','transaction_id','date','account_id', DB::raw('sum(value) as value'))->where('user_id', $user->id)->where('value','!=',0)->where('date', $mytime)->whereHas('account', function ($query) {
+        $transactions = GLeadger::select('transaction_type', 'transaction_id', 'date', 'account_id', DB::raw('sum(value) as value'))->where('user_id', $user->id)->where('value', '!=', 0)->where('date', $mytime)->whereHas('account', function ($query) {
             $query->where(function ($query2) {
                 $query2->where('account_type', 1)->orWhere('account_type', 4);
             });
         })->groupBy('transaction_type')->groupBy('transaction_id')->groupBy('date')->groupBy('account_id')->groupBy('user_id')->get();
-       
+
         $cash_sum = GLeadger::where('user_id', $user->id)->where('date', $mytime)->whereHas('account', function ($query) {
             $query->where('account_type', 1);
         })->sum('value');
@@ -476,6 +478,7 @@ class SaleController extends Controller
         // return $transactions;
         return view('sale.sale_close_user', compact('user', 'transactions', 'bank_sum', 'cash_sum', 'cash_sum_all', 'bank_sum_all'));
     }
+    
 
     public function saleClose2()
     {
@@ -528,7 +531,7 @@ class SaleController extends Controller
         $sale->customer_id = 1;
         $sale->item_id = 2;
         $sale->store_id = 1;
-        $sale->id=1;
+        $sale->id = 1;
         $sale->investor_id = 1;
         if (0) {
             $payment_type = "Cash";
@@ -577,13 +580,13 @@ class SaleController extends Controller
     {
         $investors = Investor::all();
         $suppliers = Supplier::all();
-        $bank_acc = ChartOfAccount::where('account_type',4)->get();
+        $bank_acc = ChartOfAccount::where('account_type', 4)->get();
         $type = 1;
-        if($sale->status!=1){
-           
+        if ($sale->status != 1) {
+
             return "sale status other than entry  cannot be edited";
         }
-        return view('sale.sale', compact('sale','investors', 'suppliers', 'type','bank_acc'));
+        return view('sale.sale', compact('sale', 'investors', 'suppliers', 'type', 'bank_acc'));
     }
 
     /**
@@ -594,20 +597,20 @@ class SaleController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Sale $sale)
-    {      
-        if($request->input('action')=="post"){
-            return redirect()->route('post-sale',$request->all());
-        }else if($request->input('action')=="cancel"){
-            return redirect()->route('cancel-sale',$request->all());
+    {
+        if ($request->input('action') == "post") {
+            return redirect()->route('post-sale', $request->all());
+        } else if ($request->input('action') == "cancel") {
+            return redirect()->route('cancel-sale', $request->all());
         }
-        
 
-        if($sale->status!=1){
-           
+
+        if ($sale->status != 1) {
+
             return "sale status other than entry  cannot be edited";
-        } 
+        }
         $user = Auth::user();
-        
+
         $sale->customer_id = $request->customer_id;
         $sale->item_id = $request->item_id;
         $sale->store_id = 1;
@@ -639,26 +642,27 @@ class SaleController extends Controller
         $sale->sale_date = $request->sale_date;
         $sale->save();
 
-        return redirect()->route('sale.edit',$sale->id);
-
+        return redirect()->route('sale.edit', $sale->id);
     }
-    public function cancelSale(Request $request){
+    public function cancelSale(Request $request)
+    {
 
         $sale = Sale::find($request->sale_id);
-        if($sale->status!=1){
+        if ($sale->status != 1) {
             return "transaction with entry status can be cancelled only";
         }
         $sale->status = 2;
         $sale->save();
 
-        return redirect()->route('sale.show',$sale->id);
+        return redirect()->route('sale.show', $sale->id);
     }
 
     // function to reprint invoice
-    public function reprintInvoice(Request $request){
+    public function reprintInvoice(Request $request)
+    {
 
         $sale = Sale::find($request->sale_id);
-        if($sale->status!=3){
+        if ($sale->status != 3) {
             return "only posted invoices can be printed";
         }
         $sale_detail = null;
@@ -675,7 +679,6 @@ class SaleController extends Controller
         ];
         $pdf = PDF::loadView('sale.sale_invoice_pdf', $data);
         return $pdf->stream('my.pdf', array('Attachment' => 0));
-
     }
 
     /**
@@ -699,20 +702,19 @@ class SaleController extends Controller
 
     public function showInstalments(Request $request)
     {
-       
+
         if (isset($request->id)) {
 
             $sale = Sale::find($request->id);
             $instalments = $sale->instalments;
-            $bank_acc = ChartOfAccount::where('account_type',4)->get();
+            $bank_acc = ChartOfAccount::where('account_type', 4)->get();
             if (isset($request->user_exception)) {
                 // dd("hererserer");
                 $user_exception = $request->user_exception;
-                return view('sale.sale-instalments', compact('sale', 'instalments', 'user_exception','bank_acc'));
-                
+                return view('sale.sale-instalments', compact('sale', 'instalments', 'user_exception', 'bank_acc'));
             } else {
 
-                return view('sale.sale-instalments', compact('sale', 'instalments','bank_acc'));
+                return view('sale.sale-instalments', compact('sale', 'instalments', 'bank_acc'));
             }
         }
 
@@ -735,7 +737,7 @@ class SaleController extends Controller
 
 
 
-    
+
 
 
     // function to spof get requests of post request
@@ -744,7 +746,7 @@ class SaleController extends Controller
     }
 
 
-   
+
 
     public function searchSales(Request $request)
     {
