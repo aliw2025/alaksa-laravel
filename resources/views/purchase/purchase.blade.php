@@ -157,22 +157,26 @@
                                         </table>
 
                                         @else
-                                       
-                                        <div data-repeater-list="group-a">
+                                        {{--  --}}
+                                        <div id="test-section" data-repeater-list="group-a">
                                             @if(isset($purchase) )
-                                          
-                                            <div class="repeater-wrapper" data-repeater-item="">
+                                            {{-- --}}
+                                           
+                                            <div   class="repeater-wrapper" data-repeater-item="" >
+                                                @php
+                                                    $row_count=1
+                                                @endphp
                                                 @foreach($purchase->purchaseItems as $pitem)
-                                                <div class="row">
+                                                <div id="row{{$row_count}}" class="mt-3 row">
                                                     <div
                                                         class="col-12 d-flex product-details-border position-relative pe-0">
                                                         <div class="row py-2">
                                                             <div class="col-lg-1 col-12 my-lg-0 my-2">
                                                                 <p class="card-text col-title mb-md-2 mb-0">Item Id</p>
-                                                                <input value="{{$pitem->item_id}}" id="passId0" type="number"
+                                                                <input value="{{$pitem->item_id}}" id="passId{{$row_count}}" type="number"
                                                                     class="form-control" value="" placeholder=""
                                                                     disabled>
-                                                                <input name="item_id[]" id="item_id0" type="hidden"
+                                                                <input name="item_id[]" id="item_id{{$row_count}}" type="hidden"
                                                                     class="form-control" value="" placeholder="">
                                                             </div>
                                                             <div class="col-2">
@@ -180,7 +184,7 @@
                                                                 </p>
                                                                 <input value="{{$pitem->item->name}}" autocomplete="off" id="itemBox0"
                                                                     class=" form-control" autocomplete="off"
-                                                                    placeholder="Enter Item" @if($type==1) onkeyup="getItems(0)" @else onkeyup="getInvItems(0)" @endif>
+                                                                    placeholder="Enter Item" @if($type==1) onkeyup="getItems({{$row_count}})" @else onkeyup="getInvItems(0)" @endif>
                                                                 <div class="list-type" id="list0"
                                                                     style="position: absolute; z-index: 1;"
                                                                     class="card mb-4">
@@ -191,7 +195,7 @@
                                                             </div>
                                                             <div class="col-lg-2 col-12 my-lg-0 my-2">
                                                                 <p class="card-text col-title mb-md-2 mb-0">cost</p>
-                                                                <input value="{{$pitem->unit_cost}}"  onkeyup="calRowTotal(0)" id="cost0"
+                                                                <input value="{{$pitem->unit_cost}}"  onkeyup="calRowTotal({{$row_count}})" id="cost0"
                                                                     name="cost[]" 
                                                                     class="number-separator form-control" value=""
                                                                     placeholder="">
@@ -200,7 +204,7 @@
                                                                 {{-- @dd("wwwwwww") --}}
                                                                 <div class="col-lg-2 col-12 my-lg-0 my-2">
                                                                     <p class="card-text col-title mb-md-2 mb-0">Curr Price</p>
-                                                                    <input onkeyup="calLoss(0)"  id="cur_cost0"
+                                                                    <input onkeyup="calLoss({{$row_count}})"  id="cur_cost0"
                                                                         name="cost[]" 
                                                                         class="number-separator form-control" value=""
                                                                         placeholder="">
@@ -210,7 +214,7 @@
                                                             
                                                             <div class="col-lg-1 col-12 my-lg-0 my-2">
                                                                 <p class="card-text col-title mb-md-2 mb-0">Qty</p>
-                                                                <input  value="{{$pitem->quantity}}" pattern="[0-9]{10}" onkeyup="calRowTotal(0)"
+                                                                <input  value="{{$pitem->quantity}}" pattern="[0-9]{10}" onkeyup="calRowTotal({{$row_count}})"
                                                                     id="qty0" name="qty[]" type="number"
                                                                     onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13 || event.charCode == 45) ? null : event.charCode >= 48 && event.charCode <= 57"
                                                                     class="form-control" value=""
@@ -220,7 +224,7 @@
                                                 
                                                                 <div class="col-lg-2 col-12 my-lg-0 my-2">
                                                                     <p class="card-text col-title mb-md-2 mb-0">Trade Loss</p>
-                                                                    <input   onkeyup="calRowTotal(0)" id="td_loss0"
+                                                                    <input   onkeyup="calRowTotal({{$row_count}})" id="td_loss0"
                                                                         name="td_loss[]" 
                                                                         class="number-separator form-control" value=""
                                                                         placeholder="">
@@ -238,7 +242,7 @@
                                                         </div>
                                                         <div
                                                             class="d-flex flex-column align-items-center justify-content-between border-start invoice-product-actions py-50 px-25">
-                                                            <svg onclick="deleteItem(0)"
+                                                            <svg onclick="deleteItem({{$row_count}})"
                                                                 xmlns="http://www.w3.org/2000/svg" width="14"
                                                                 height="14" viewBox="0 0 24 24" fill="none"
                                                                 stroke="currentColor" stroke-width="2"
@@ -286,12 +290,16 @@
                                                         </div>
                                                     </div>
                                                 </div>
+                                                @php
+                                                    $row_count=$row_count+1
+                                                @endphp
                                                 @endforeach
                                             </div>
+                                           
                                             
                                             @else
                                             {{-- testing --}}
-                                            <div class="repeater-wrapper" data-repeater-item="">
+                                            <div  class="repeater-wrapper" data-repeater-item="">
                                                
                                                 <div class="row">
                                                     <div
@@ -425,6 +433,7 @@
                                         
                                         <div id="itemRows" class="row mt-1">
                                             <div class="col-12 px-0">
+                                               
                                                 <button id="addNewBtn" type="button"
                                                     class="btn btn-primary btn-sm btn-add-new waves-effect waves-float waves-light">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="14"
@@ -515,7 +524,8 @@
     <script src="{{ url('/resources/js/scripts/forms/form-select2.min.js') }}"></script>
     <script src="{{ url('/resources/js/scripts/pages/app-invoice.min.js') }}"></script>
     <script>
-        var rowId = 0;
+        
+        var rowId = parseInt({{$row_count}})-1;
         $(document).ready(function() {
             // $("span.numbers").digits();
             $('.select2-selection__arrow').hide();
