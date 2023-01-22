@@ -87,6 +87,7 @@ class PurchaseController extends Controller
         $purchase->type = $request->purchase_type;
         $purchase->purchase_date = $request->purchase_date;
         $purchase->tran_type = $request->tran_type;
+        $purchase->status = 1;
         $purchase->save();
 
         //  saving each item of the purchase transaction
@@ -100,6 +101,24 @@ class PurchaseController extends Controller
             $purchase_item->trade_discount = 0;
             $purchase_item->purchase_id = $purchase->id;
             $purchase_item->save();
+
+        }   
+        
+        return redirect()->route('get-purchases',$investor->id);   
+    }
+
+
+    public function postPurchase(Request $request){
+      
+        $user = Auth::user();
+        $investor = Investor::find($request->investor_id);
+        // creating purchase transactions
+        $purchase = Purchase::find($request->purchase_id);
+        
+
+        //  saving each item of the purchase transaction
+        foreach ($purchase->purchaseItems as $purchase_item) {
+            
             // updating inventory
             $inventory = Inventory::where('investor_id','=',$purchase->investor_id)->where('item_id','=',$purchase_item->item_id)->first();
           
@@ -177,10 +196,9 @@ class PurchaseController extends Controller
         ]);
         
         return redirect()->route('get-purchases',$investor->id);   
-    }
-
     
-
+    }
+    
 
     public function showPurchaseItems($id){
 
@@ -265,6 +283,8 @@ class PurchaseController extends Controller
     public function update(Request $request, Purchase $purchase)
     {
         //
+
+
     }
 
     /**
