@@ -60,5 +60,10 @@ class Purchase extends Model
 
         
     }
+    public function transaction_status(){
+        
+        return $this->belongsTo(TransactionStatus::class,'status');
+ 
+    }
     
 }

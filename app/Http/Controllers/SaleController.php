@@ -19,6 +19,8 @@ use App\Models\Supplier;
 use App\Models\Commission;
 use App\Models\GLeadger;
 use Illuminate\Http\Request;
+use Session;
+
 use PDF;
 use Carbon\Carbon;
 use FontLib\Table\Type\cmap;
@@ -45,7 +47,7 @@ class SaleController extends Controller
      */
     public function create()
     {
-        //
+        
         $investors = Investor::all();
         $suppliers = Supplier::all();
         $bank_acc = ChartOfAccount::where('account_type', 4)->get();
@@ -63,6 +65,22 @@ class SaleController extends Controller
      */
     public function store(Request $request)
     {
+        $validated = $request->validate(
+            [
+                'customer_id' => 'required',
+                'item_id' => 'required',
+                // 'email' => 'required|email|unique:investors',
+                // 'phone' => 'required|min:8|max:11|unique:investors',
+                // 'prefix' => 'required|unique:investors',
+            ],
+            [
+
+                // 'investor_name.unique' => ' investor Name already exists',
+                // 'email.unique' => ' Email already exists',
+                // 'phone.unique' => ' Number already exists',
+                // 'prefix.unique' => ' prefix already exists'
+            ]
+        );
         // dd($request->all());
         //**************  CREATING SALE *****************/
         $user = Auth::user();
@@ -114,10 +132,14 @@ class SaleController extends Controller
         }
         $sale->sale_date = $request->sale_date;
         $sale->save();
-
-        return redirect()->route('sale.edit', $sale->id);
-
-
+        // ->with('message','Record saved')
+        $type = 1 ;
+        $investors = Investor::all();
+        // $suppliers = Supplier::all();
+        $bank_acc = ChartOfAccount::where('account_type', 4)->get();
+        return view('sale.sale', compact('sale','type','bank_acc','investors'))->with('message','Record saved');
+        
+        // return redirect()->route('sale.edit', $sale->id,$message);
         // return redirect()->route('get-sales', $request->investor_id);
     }
 
@@ -577,7 +599,8 @@ class SaleController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit(Sale $sale)
-    {
+    {   
+        
         $investors = Investor::all();
         $suppliers = Supplier::all();
         $bank_acc = ChartOfAccount::where('account_type', 4)->get();
@@ -641,8 +664,12 @@ class SaleController extends Controller
         }
         $sale->sale_date = $request->sale_date;
         $sale->save();
-
-        return redirect()->route('sale.edit', $sale->id);
+        $type=1;
+        // Session::push('message','record saved');
+        $bank_acc = ChartOfAccount::where('account_type', 4)->get();
+        $investors = Investor::all();
+        return view('sale.sale', compact('sale','type','bank_acc','investors'))->with('message','Record saved');
+        // return redirect()->route('sale.edit', $sale->id);
     }
     public function cancelSale(Request $request)
     {

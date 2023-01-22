@@ -2,19 +2,23 @@
 @section('section')
     <div class="content-wrapper container-xxl p-0">
         <div class="content-body">
-            <section class="invoice-add-wrapper">
+            @if($errors->any())
+            {!! implode('', $errors->all('<div>:message</div>')) !!}
+            @endif
+          
+            <section class="invoice-add-wrapper">   
                 <div class="row invoice-add">
                     <!-- Invoice Add Left starts -->
                     <div class="col-xl-12 col-md-12 col-12">
-                        <form id="sale_form" method="POST"  autocomplete="on"
+                        <form id="sale_form" method="POST" autocomplete="on"
                             action="{{ $type == 1 ? (isset($sale) ? route('sale.update', $sale->id) : route('sale.store')) : route('sale-return-adjustment') }}">
                             <div class="card invoice-preview-card">
                                 <!-- Header starts -->
                                 @if (isset($sale))
                                     {{ method_field('PUT') }}
                                 @endif
-                                @if(isset($sale))
-                                    <input type="hidden" name="sale_id" value="{{$sale->id}}">
+                                @if (isset($sale))
+                                    <input type="hidden" name="sale_id" value="{{ $sale->id }}">
                                 @endif
                                 <div class="card-body invoice-padding pb-0">
                                     <div
@@ -108,29 +112,25 @@
                                                 @endif
 
                                             </div>
-                                            
+
                                             <div class="d-flex align-items-center justify-content-between mt-1">
                                                 <span class="title">Sale Type:</span>
                                                 @if ($type == 1)
                                                     <div style="width: 11.21rem; max-width:11.21rem; "
                                                         class="align-items-center">
-                                                            
-                                                        
+
+
                                                         <select id="sale_type" name="sale_type" class="form-select"
                                                             aria-label="Default select example">
-                                                            @if(isset($sale))
-                                                               
-                                                                @if($sale->payment_type == 1)
-                                                                   
+                                                            @if (isset($sale))
+                                                                @if ($sale->payment_type == 1)
                                                                     <option selected value="1">Instalments</option>
                                                                     <option value="2">Cash</option>
-                                                                @else 
-                                                                    
-                                                                    <option  value="1">Instalments</option>
+                                                                @else
+                                                                    <option value="1">Instalments</option>
                                                                     <option selected value="2">Cash</option>
                                                                 @endif
                                                             @else
-                                                            
                                                                 <option value="1">Instalments</option>
                                                                 <option value="2">Cash</option>
                                                             @endif
@@ -153,7 +153,8 @@
                                                 <!-- type =2  is for sale return  -->
                                                 @if ($type == 2)
                                                     <input id="sale_id" name="sale_id" type="hidden"
-                                                        class="form-control " placeholder="" value="{{$sale->id}}">
+                                                        class="form-control " placeholder=""
+                                                        value="{{ $sale->id }}">
                                                 @endif
                                                 <h4 class="invoice-title"> {{ $type == 1 ? 'Sale #' : 'Search Sale #' }}
                                                 </h4>
@@ -322,133 +323,137 @@
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                                @if(!isset($sale) || (isset($sale) && $sale->payment_type==1))
-                                                                <div class="col-2 my-lg-0 my-2">
-                                                                    <p class="card-text col-title mb-md-2 mb-0">Selling
-                                                                        Price
-                                                                    </p>
-                                                                    <input
-                                                                        @if (isset($sale)) value="{{ number_format($sale->selling_price) }}" @endif
-                                                                        name="selling_price"
-                                                                        onkeyup="calculateInstallments()"
-                                                                        id="selling_price"
-                                                                        class="number-separator form-control"
-                                                                        value="" placeholder="Selling Price">
-                                                                </div>
-                                                                
-                                                                <div id="plan_div" class="col-2 my-lg-0 my-2">
-                                                                    <p class="card-text col-title mb-md-2 mb-0">Plan
-                                                                        (Months)
-                                                                    </p>
-                                                                    <input
-                                                                        @if (isset($sale)) value="{{ number_format($sale->plan) }}" @endif
-                                                                        name="plan" onkeyup="calculateInstallments()"
-                                                                        id="plan" type="number"
-                                                                        class="form-control" value=""
-                                                                        placeholder="Months">
-                                                                </div>
+                                                                @if (!isset($sale) || (isset($sale) && $sale->payment_type == 1))
+                                                                    <div class="col-2 my-lg-0 my-2">
+                                                                        <p class="card-text col-title mb-md-2 mb-0">Selling
+                                                                            Price
+                                                                        </p>
+                                                                        <input
+                                                                            @if (isset($sale)) value="{{ number_format($sale->selling_price) }}" @endif
+                                                                            name="selling_price"
+                                                                            onkeyup="calculateInstallments()"
+                                                                            id="selling_price"
+                                                                            class="number-separator form-control"
+                                                                            value="" placeholder="Selling Price">
+                                                                    </div>
 
-                                                                <div id="markup_div" class="col-2 my-lg-0 my-2">
-                                                                    <p class="card-text col-title mb-md-2 mb-0">MarkUp</p>
-                                                                    <input
-                                                                        @if (isset($sale)) value="{{ number_format($sale->markup) }}" @endif
-                                                                        name="markup" onkeyup="calculateInstallments()"
-                                                                        id="markup" type="number"
-                                                                        class="form-control" value=""
-                                                                        placeholder="%">
-                                                                </div>
-                                                               @endif
+                                                                    <div id="plan_div" class="col-2 my-lg-0 my-2">
+                                                                        <p class="card-text col-title mb-md-2 mb-0">Plan
+                                                                            (Months)
+                                                                        </p>
+                                                                        <input
+                                                                            @if (isset($sale)) value="{{ number_format($sale->plan) }}" @endif
+                                                                            name="plan"
+                                                                            onkeyup="calculateInstallments()"
+                                                                            id="plan" type="number"
+                                                                            class="form-control" value=""
+                                                                            placeholder="Months">
+                                                                    </div>
+
+                                                                    <div id="markup_div" class="col-2 my-lg-0 my-2">
+                                                                        <p class="card-text col-title mb-md-2 mb-0">MarkUp
+                                                                        </p>
+                                                                        <input
+                                                                            @if (isset($sale)) value="{{ number_format($sale->markup) }}" @endif
+                                                                            name="markup"
+                                                                            onkeyup="calculateInstallments()"
+                                                                            id="markup" type="number"
+                                                                            class="form-control" value=""
+                                                                            placeholder="%">
+                                                                    </div>
+                                                                @endif
                                                                 <div id="discount_div" class="col-2 my-lg-0 my-2">
                                                                     <p class="card-text col-title mb-md-2 mb-0">Trade
                                                                         Discount
                                                                     </p>
                                                                     <input name="trade_discount" id="trade_discount"
                                                                         type="number" class="form-control"
-                                                                        @if (isset($sale)) value="{{ number_format($sale->trade_discount) }}" @endif placeholder="Discount">
+                                                                        @if (isset($sale)) value="{{ number_format($sale->trade_discount) }}" @endif
+                                                                        placeholder="Discount">
                                                                 </div>
-                                                              
+
                                                             </div><s></s>
 
                                                         </div>
                                                     </div>
                                                     <div>
                                                         <div class="row mt-1">
-                                                        @if(!isset($sale) || (isset($sale) && $sale->payment_type==1))
-                                                           
-                                                            <div id="instalment_sec" class="col-lg-5 col-12 mt-lg-0 mt-2">
-                                                                <h4>Instalment details</h4>
-                                                                <div class="row d-flex align-items-center">
-                                                                    <div class="col-6  mt-1">
-                                                                        <p>Total Sum :</p>
+                                                            @if (!isset($sale) || (isset($sale) && $sale->payment_type == 1))
+                                                                <div id="instalment_sec"
+                                                                    class="col-lg-5 col-12 mt-lg-0 mt-2">
+                                                                    <h4>Instalment details</h4>
+                                                                    <div class="row d-flex align-items-center">
+                                                                        <div class="col-6  mt-1">
+                                                                            <p>Total Sum :</p>
+                                                                        </div>
+                                                                        <div class="col-6">
+                                                                            <input
+                                                                                @if (isset($sale)) value="{{ number_format($sale->total) }}" @endif
+                                                                                id="total_sum"
+                                                                                style=" border: none;background-color: transparent;resize: none;outline: none;"
+                                                                                name="total_sum" class="form-control"
+                                                                                value="0">
+                                                                        </div>
                                                                     </div>
-                                                                    <div class="col-6">
-                                                                        <input
-                                                                            @if (isset($sale)) value="{{ number_format($sale->total) }}" @endif
-                                                                            id="total_sum"
-                                                                            style=" border: none;background-color: transparent;resize: none;outline: none;"
-                                                                            name="total_sum" class="form-control"
-                                                                            value="0">
+
+                                                                    <div class="row d-flex align-items-center">
+                                                                        <div class="col-6  mt-1">
+                                                                            <p>Down Payment :</p>
+                                                                        </div>
+                                                                        <div class="col-6">
+                                                                            <input
+                                                                                @if (isset($sale)) value="{{ number_format($sale->downpayment) }}" @endif
+                                                                                onkeyup="reAdjust()" id="down_payment"
+                                                                                style="border: none;background-color: transparent;resize: none;outline: none;"
+                                                                                name="down_payment"
+                                                                                class="number-separator form-control"
+                                                                                value="0">
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="row d-flex align-items-center ">
+                                                                        <div class="col-6 mt-1">
+                                                                            <p>instalments :</p>
+                                                                        </div>
+                                                                        <div class="col-6">
+                                                                            <input
+                                                                                @if (isset($sale)) value="{{ number_format($sale->plan) }}" @endif
+                                                                                disabled id="instalments"
+                                                                                style=" border: none;background-color: transparent;resize: none;outline: none;"
+                                                                                name="instalments" class=" form-control"
+                                                                                value="0">
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="row d-flex align-items-center">
+                                                                        <div class="col-6 mt-1">
+                                                                            <p>instalments per Month :</p>
+                                                                        </div>
+                                                                        <div class="col-6 ">
+                                                                            <input
+                                                                                @if (isset($sale)) value="{{ number_format(($sale->total - $sale->downpayment) / $sale->plan) }}" @endif
+                                                                                onkeyup="reAdjust2()" id="per_month"
+                                                                                style=" border: none;background-color: transparent;resize: none;outline: none;"
+                                                                                name="instalment_per_month"
+                                                                                class=" number-separator form-control"
+                                                                                value="0">
+
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="row d-flex align-items-center">
+                                                                        <div class="col-6  mt-1">
+                                                                            <p>Down Payment Paid :</p>
+                                                                        </div>
+                                                                        <div class=" col-6">
+                                                                            <input name="down_payment_paid"
+                                                                                class="ms-1 form-check-input"
+                                                                                type="checkbox" value="1"
+                                                                                id="flexCheckDefault">
+                                                                        </div>
                                                                     </div>
                                                                 </div>
-
-                                                                <div class="row d-flex align-items-center">
-                                                                    <div class="col-6  mt-1">
-                                                                        <p>Down Payment :</p>
-                                                                    </div>
-                                                                    <div class="col-6">
-                                                                        <input
-                                                                            @if (isset($sale)) value="{{ number_format($sale->downpayment) }}" @endif
-                                                                            onkeyup="reAdjust()" id="down_payment"
-                                                                            style="border: none;background-color: transparent;resize: none;outline: none;"
-                                                                            name="down_payment"
-                                                                            class="number-separator form-control"
-                                                                            value="0">
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="row d-flex align-items-center ">
-                                                                    <div class="col-6 mt-1">
-                                                                        <p>instalments :</p>
-                                                                    </div>
-                                                                    <div class="col-6">
-                                                                        <input
-                                                                            @if (isset($sale)) value="{{ number_format($sale->plan) }}" @endif
-                                                                            disabled id="instalments"
-                                                                            style=" border: none;background-color: transparent;resize: none;outline: none;"
-                                                                            name="instalments" class=" form-control"
-                                                                            value="0">
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="row d-flex align-items-center">
-                                                                    <div class="col-6 mt-1">
-                                                                        <p>instalments per Month :</p>
-                                                                    </div>
-                                                                    <div class="col-6 ">
-                                                                        <input
-                                                                            @if (isset($sale)) value="{{ number_format(($sale->total - $sale->downpayment) / $sale->plan) }}" @endif
-                                                                            onkeyup="reAdjust2()" id="per_month"
-                                                                            style=" border: none;background-color: transparent;resize: none;outline: none;"
-                                                                            name="instalment_per_month"
-                                                                            class=" number-separator form-control"
-                                                                            value="0">
-
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="row d-flex align-items-center">
-                                                                    <div class="col-6  mt-1">
-                                                                        <p>Down Payment Paid :</p>
-                                                                    </div>
-                                                                    <div class=" col-6">
-                                                                        <input name="down_payment_paid"
-                                                                            class="ms-1 form-check-input" type="checkbox"
-                                                                            value="1" id="flexCheckDefault">
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                          
-                                                        @endif
+                                                            @endif
 
                                                             <div class="col-7">
                                                                 <h4>Item details</h4>
@@ -638,18 +643,19 @@
                                     <div class="row p-2">
                                         <div class="col-12">
                                             <div class="d-flex justify-content-end">
-                                                @if(isset($sale))
-                                                    @if($sale->status==1)
-                                                        <button  type="submit" name="action" value="post" class="btn btn-success me-2">Post</button>
-                                                        <button  type="submit" name="action" value="cancel" class="btn btn-danger me-2">Cancel</button>
-                                                        <button type="submit" name="action" value="save" class="btn btn-primary me-2">Save</button>
-                                                        
-                                                    @endif  
-
+                                                @if (isset($sale))
+                                                    @if ($sale->status == 1)
+                                                        <button type="submit" name="action" value="post"
+                                                            class="btn btn-success me-2">Post</button>
+                                                        <button type="submit" name="action" value="cancel"
+                                                            class="btn btn-danger me-2">Cancel</button>
+                                                        <button type="submit" name="action" value="save"
+                                                            class="btn btn-primary me-2">Save</button>
+                                                    @endif
                                                 @else
-                                                
-                                                <button type="submit" name="action" value="save" class="btn btn-primary me-2">Save</button>
-                                                <button type="reset" class="btn btn-danger">Reset</button>
+                                                    <button type="submit" name="action" value="save"
+                                                        class="btn btn-primary me-2">Save</button>
+                                                    <button type="reset" class="btn btn-danger">Reset</button>
                                                 @endif
                                             </div>
                                         </div>
@@ -677,20 +683,31 @@
     <script src="{{ url('/resources/vendors/js/forms/select/select2.full.min.js') }}"></script>
     <script src="{{ url('/resources/js/scripts/forms/form-select2.min.js') }}"></script>
     <script src="{{ url('/resources/js/scripts/pages/app-invoice.min.js') }}"></script>
+    {{-- <script src="http://localhost/cssd/resources/vendors/js/extensions/toastr.min.js"></script> --}}
 
     <script>
         $(document).ready(function() {
+            @if(isset($message))
+            toastr.success(
+                "{{$message}}",
+                "Success!", {
+                    closeButton: !0,
+                    tapToDismiss: !1,
+                    rtl: false
+                }
+            );
+            @endif
             $('.select2-selection__arrow').hide();
             $('#instal').text('name is khan');
             var type = $('#sale_type').val();
             console.log("type: " + type);
-            if(type==1){
+            if (type == 1) {
                 $('#discount_div').hide();
-            }else{
+            } else {
                 $('#markup_div').hide();
                 $('#plan_div').hide();
             }
-          
+
             // getinvAccount()
             var inv = $('#search_inv').val();
 
