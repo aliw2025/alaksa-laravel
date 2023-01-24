@@ -22,6 +22,8 @@ use App\Http\Controllers\payScaleContoller;
 use App\Http\Controllers\PaySalaryController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CategoryPropController;
+use App\Http\Controllers\ExpenseHeadController;
+
 
 
 use App\Models\Instalment;
@@ -112,6 +114,8 @@ Route::Post('/change-designation' , [\App\Http\Controllers\desingationContoller:
 Route::get('/create-property/{id}' , [\App\Http\Controllers\CategoryPropController::class,'createProperty'])->name('create-property');
 Route::get('/get-properties/{id}' , [\App\Http\Controllers\CategoryPropController::class,'getProperties'])->name('get-properties');
 Route::get('/get-account-balances' , [\App\Http\Controllers\GLController::class,'AccountBalances'])->name('get-account-balances');
+Route::get('/add-sub-exp-heads{id}' , [\App\Http\Controllers\ExpenseHeadController::class,'addSubexpHeads'])->name('add-sub-exp-head');
+Route::POST('/store-Subexp-Heads' , [\App\Http\Controllers\ExpenseHeadController::class,'storeSubexpHeads'])->name('storeSubexpHeads');
 
 
 Auth::routes();
@@ -135,6 +139,8 @@ Route::resource('paySalary',PaySalaryController::class);
 Route::resource('chartOfAccount',ChartOfAccountController::class);
 Route::resource('category',CategoryController::class);
 Route::resource('categoryProperty',CategoryPropController::class);
+Route::resource('expenseHead',ExpenseHeadController::class);
+
 
 
 

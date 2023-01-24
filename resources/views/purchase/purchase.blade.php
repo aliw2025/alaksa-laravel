@@ -525,7 +525,7 @@
     <script src="{{ url('/resources/js/scripts/pages/app-invoice.min.js') }}"></script>
     <script>
         
-        var rowId = parseInt({{$row_count}})-1;
+        var rowId =0;
         $(document).ready(function() {
             // $("span.numbers").digits();
             $('.select2-selection__arrow').hide();

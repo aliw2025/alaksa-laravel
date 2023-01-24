@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Expense;
 use App\Models\Investor;
 use App\Models\ChartOfAccount;
+use App\Models\ExpenseHead;
+use App\Models\SubExpenseHead;
+
 
 
 use App\Http\Controllers\Controller;
@@ -32,8 +35,10 @@ class ExpenseController extends Controller
     {
         //
         $investors = Investor::all();
+        $heads  = ExpenseHead::all();
+        $sheads = SubExpenseHead::all();
         $bank_acc = ChartOfAccount::where('account_type',4)->get();
-        return view('expenses.expense',compact('investors','bank_acc'));
+        return view('expenses.expense',compact('investors','bank_acc','heads','sheads'));
     }
 
     /**

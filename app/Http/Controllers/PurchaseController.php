@@ -51,7 +51,8 @@ class PurchaseController extends Controller
         $suppliers = Supplier::all();
         // for purchase return
         $type = 2;
-        return view('purchase.purchase',compact('items','investors','suppliers','type'));
+        $row_count = 0;
+        return view('purchase.purchase',compact('items','investors','suppliers','type','row_count'));
     }
 
     /**

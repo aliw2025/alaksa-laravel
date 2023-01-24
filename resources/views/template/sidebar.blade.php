@@ -51,7 +51,7 @@
                             <i data-feather="circle"></i>
                             <span class="menu-item text-truncate" data-i18n="eCommerce">Capital Investments</span>
                         </a>
-                    </li>
+                    </li>   
                     <li>
                         <a href="{{route('chartOfAccount.create')}}" class="d-flex align-items-center">
                             <i data-feather="circle"></i>
@@ -440,6 +440,11 @@
                             <i data-feather="circle"></i>
                             <span class=" menu-title text-truncate" data-i18n="comision">Add Expense</span></a>
                     </li>
+                    <li class=" nav-item"><a href="{{ route('expenseHead.create') }}"
+                        class="d-flex align-items-center">
+                        <i data-feather="circle"></i>
+                        <span class=" menu-title text-truncate" data-i18n="comision">Add Expense Head</span></a>
+                </li>
                     <li class=" nav-item"><a href="{{ route('show-expenses') }}"
                         class="d-flex align-items-center">
                         <i data-feather="circle"></i>

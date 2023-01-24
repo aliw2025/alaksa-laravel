@@ -91,6 +91,44 @@
 
                                                 </div>
                                             </div>
+                                            <div class="mt-1 d-flex align-items-center justify-content-between">
+                                                <span class="title">Head:</span>
+                                                <div style="width: 11.21rem; max-width:11.21rem; "
+                                                    class="align-items-center">
+                                                   
+                                                        <select name="head_id"
+                                                            class=" select2 select2-hidden-accessible form-control invoice-edit-input"
+                                                            id="select2-basic" data-select2-id="select2-basic"
+                                                            tabindex="-1" aria-hidden="true">
+                                                            @foreach ($heads as $h)
+                                                                <option value="{{ $h->id }}">
+                                                                    {{ $h->name }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+                                                   
+
+                                                </div>
+                                            </div>
+                                            <div class="mt-1 d-flex align-items-center justify-content-between">
+                                                <span class="title">sub Head:</span>
+                                                <div style="width: 11.21rem; max-width:11.21rem; "
+                                                    class="align-items-center">
+                                                   
+                                                        <select name="head_id"
+                                                            class=" select2 select2-hidden-accessible form-control invoice-edit-input"
+                                                            id="select2-basic" data-select2-id="select2-basic"
+                                                            tabindex="-1" aria-hidden="true">
+                                                            @foreach ($sheads as $sh)
+                                                                <option value="{{ $sh->id }}">
+                                                                    {{ $sh->sub_head_name }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+                                                   
+
+                                                </div>
+                                            </div>
                                             @if (!isset($expense))
                                                 <div class="d-flex align-items-center justify-content-between mt-1">
                                                     <span class="title">Account</span>
@@ -113,7 +151,7 @@
 
                                                 </div>
                                             @endif
-
+                                            
 
                                         </div>
                                     </div>
