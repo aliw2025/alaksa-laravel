@@ -14,7 +14,6 @@
                         </div>
                     </div>
                     <div class="card-body">
-
                         <div class="row ">
                             <div class="col-12 table-responsive">
                                 <table id="investor-table" class="table">

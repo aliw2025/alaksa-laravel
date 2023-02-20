@@ -42,7 +42,7 @@
                             </a>
                         </li>
                     @endif
-                    
+
 
                     <li>
                         {{-- href="{{ route('investor.create') }}" --}}
@@ -51,17 +51,23 @@
                             <i data-feather="circle"></i>
                             <span class="menu-item text-truncate" data-i18n="eCommerce">Capital Investments</span>
                         </a>
-                    </li>   
+                    </li>
                     <li>
-                        <a href="{{route('chartOfAccount.create')}}" class="d-flex align-items-center">
+                        <a href="{{ route('chartOfAccount.create') }}" class="d-flex align-items-center">
                             <i data-feather="circle"></i>
                             <span class="menu-item text-truncate" data-i18n="eCommerce">Accounts</span>
                         </a>
                     </li>
                     <li>
-                        <a href="{{route('get-account-balances')}}" class="d-flex align-items-center">
+                        <a href="{{ route('get-account-balances') }}" class="d-flex align-items-center">
                             <i data-feather="circle"></i>
                             <span class="menu-item text-truncate" data-i18n="eCommerce">Account Balances</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('transfer-balances') }}" class="d-flex align-items-center">
+                            <i data-feather="circle"></i>
+                            <span class="menu-item text-truncate" data-i18n="eCommerce">Transfer Balances</span>
                         </a>
                     </li>
                 </ul>
@@ -87,7 +93,7 @@
                             <span class="menu-item text-truncate" data-i18n="eCommerce">Employees</span>
                         </a>
                     </li>
-                  
+
                     <li>
                         <a href="{{ route('payScale.create') }}" class="d-flex align-items-center ">
                             <i data-feather="circle"></i>
@@ -140,6 +146,30 @@
 
                 </ul>
             </li>
+            <!------------------------------------------- Customer--------------------------------------------------->
+
+            <li class=" nav-item">
+                <a class="d-flex align-items-center" href="#">
+                    <i data-feather='user-plus'></i>
+                    <span class="menu-title text-truncate" data-i18n="Dashboards">Customer</span>
+                </a>
+                <ul class="menu-content">
+                    <li class=" nav-item"><a href="{{ route('customer.create') }}"
+                            class="d-flex align-items-center">
+                            <i data-feather="circle"></i>
+                            <span class=" menu-title text-truncate" data-i18n="comision">Add Customer</span></a>
+                    </li>
+                    <li class=" nav-item"><a href="{{ route('customer-files') }}"
+                            class="d-flex align-items-center">
+                            <i data-feather="circle"></i>
+                            <span class=" menu-title text-truncate" data-i18n="comision">Customer-docs</span></a>
+                    </li>
+
+
+
+                </ul>
+            </li>
+
             <!------------------------------------------- Inventory --------------------------------------------------->
             <li class=" nav-item">
                 <a class="d-flex align-items-center" href="#">
@@ -152,11 +182,13 @@
                             <i data-feather="circle"></i>
                             <span class=" menu-title text-truncate" data-i18n="comision">Define Item</span></a>
                     </li>
-                    <li class=" nav-item"><a href="{{ route('category.create') }}" class="d-flex align-items-center">
-                        <i data-feather="circle"></i>
-                        <span class=" menu-title text-truncate" data-i18n="comision">Define Category</span></a>
+                    <li class=" nav-item"><a href="{{ route('category.create') }}"
+                            class="d-flex align-items-center">
+                            <i data-feather="circle"></i>
+                            <span class=" menu-title text-truncate" data-i18n="comision">Define Category</span></a>
                     </li>
-                    <li class=" nav-item"><a href="{{ route('supplier.create') }}" class="d-flex align-items-center">
+                    <li class=" nav-item"><a href="{{ route('supplier.create') }}"
+                            class="d-flex align-items-center">
                             <i data-feather="circle"></i>
                             <span class=" menu-title text-truncate" data-i18n="comision">Define Supplier</span></a>
                     </li>
@@ -200,19 +232,19 @@
                     @php
                         $inv_sales = \App\Models\Investor::all();
                     @endphp
-                    <li class=" nav-item"><a href="{{ route('customer.create') }}"
+                    {{-- <li class=" nav-item"><a href="{{ route('customer.create') }}"
                             class="d-flex align-items-center">
                             <i data-feather="circle"></i>
                             <span class=" menu-title text-truncate" data-i18n="comision">Add Customer</span></a>
-                    </li>
-                    
+                    </li> --}}
+
                     <li class=" nav-item"><a href="{{ route('sale.create') }}" class="d-flex align-items-center">
-                        <i data-feather="circle"></i>
-                        <span class=" menu-title text-truncate" data-i18n="comision">New Sale</span></a>
+                            <i data-feather="circle"></i>
+                            <span class=" menu-title text-truncate" data-i18n="comision">New Sale</span></a>
                     </li>
                     <li class=" nav-item"><a href="{{ route('sale-close') }}" class="d-flex align-items-center">
-                        <i data-feather="circle"></i>
-                        <span class=" menu-title text-truncate" data-i18n="comision"> Sale Close</span></a>
+                            <i data-feather="circle"></i>
+                            <span class=" menu-title text-truncate" data-i18n="comision"> Sale Close</span></a>
                     </li>
 
                     {{-- <li class=" nav-item"><a href="{{ route('sale-return') }}" class="d-flex align-items-center">
@@ -341,11 +373,11 @@
                             <span class=" menu-title text-truncate" data-i18n="comision">Purchase Return</span></a>
                     </li>
                     <li class=" nav-item">
-                        <a class="d-flex align-items-center" href="{{route('get-purchases')}}">
+                        <a class="d-flex align-items-center" href="{{ route('get-purchases') }}">
                             <i data-feather="circle"></i>
                             <span class="menu-title text-truncate" data-i18n="Dashboards">Reports</span>
                         </a>
-                        
+
                     </li>
                 </ul>
             </li>
@@ -424,7 +456,7 @@
                     <span class=" menu-title text-truncate" data-i18n="recovery">Recovery</span></a>
             </li> --}}
 
-          
+
             <!------------------------------------------- Purchase --------------------------------------------------->
             <li class=" nav-item">
                 <a class="d-flex align-items-center" href="#">
@@ -435,22 +467,20 @@
                     @php
                         $inv_sales = \App\Models\Investor::all();
                     @endphp
-                    <li class=" nav-item"><a href="{{ route('expense.create') }}"
-                            class="d-flex align-items-center">
+                    <li class=" nav-item"><a href="{{ route('expense.create') }}" class="d-flex align-items-center">
                             <i data-feather="circle"></i>
                             <span class=" menu-title text-truncate" data-i18n="comision">Add Expense</span></a>
                     </li>
                     <li class=" nav-item"><a href="{{ route('expenseHead.create') }}"
-                        class="d-flex align-items-center">
-                        <i data-feather="circle"></i>
-                        <span class=" menu-title text-truncate" data-i18n="comision">Add Expense Head</span></a>
-                </li>
-                    <li class=" nav-item"><a href="{{ route('show-expenses') }}"
-                        class="d-flex align-items-center">
-                        <i data-feather="circle"></i>
-                        <span class=" menu-title text-truncate" data-i18n="comision">Report</span></a>
+                            class="d-flex align-items-center">
+                            <i data-feather="circle"></i>
+                            <span class=" menu-title text-truncate" data-i18n="comision">Add Expense Head</span></a>
                     </li>
-                    
+                    <li class=" nav-item"><a href="{{ route('show-expenses') }}" class="d-flex align-items-center">
+                            <i data-feather="circle"></i>
+                            <span class=" menu-title text-truncate" data-i18n="comision">Report</span></a>
+                    </li>
+
                     <!-- <li class=" nav-item">
                         <a class="d-flex align-items-center" href="#">
                             <i data-feather="circle"></i>
@@ -459,7 +489,7 @@
                         <ul class="menu-content">
 
                             @foreach ($inv_sales as $investor)
-                                <li>
+<li>
                                     <a href="{{ route('get-purchases', $investor->id) }}"
                                         class="d-flex align-items-center ">
                                         <i data-feather="circle"></i>
@@ -467,7 +497,7 @@
                                             data-i18n="eCommerce">{{ $investor->prefix }}</span>
                                     </a>
                                 </li>
-                            @endforeach
+@endforeach
                         </ul>
                     </li> -->
                 </ul>

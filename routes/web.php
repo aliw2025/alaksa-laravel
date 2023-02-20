@@ -114,6 +114,13 @@ Route::Post('/change-designation' , [\App\Http\Controllers\desingationContoller:
 Route::get('/create-property/{id}' , [\App\Http\Controllers\CategoryPropController::class,'createProperty'])->name('create-property');
 Route::get('/get-properties/{id}' , [\App\Http\Controllers\CategoryPropController::class,'getProperties'])->name('get-properties');
 Route::get('/get-account-balances' , [\App\Http\Controllers\GLController::class,'AccountBalances'])->name('get-account-balances');
+Route::get('/transfer-balances' , [\App\Http\Controllers\GLController::class,'transferBalances'])->name('transfer-balances');
+Route::post('/bnk_transfer' , [\App\Http\Controllers\GLController::class,'bankTransfer'])->name('bnk_transfer');
+Route::get('/customer-files' , [\App\Http\Controllers\CustomerController::class,'customerFiles'])->name('customer-files');
+Route::post('/customer-file-upload' , [\App\Http\Controllers\CustomerController::class,'customerFileUpload'])->name('customer-file-upload');
+
+
+
 Route::get('/add-sub-exp-heads{id}' , [\App\Http\Controllers\ExpenseHeadController::class,'addSubexpHeads'])->name('add-sub-exp-head');
 Route::POST('/store-Subexp-Heads' , [\App\Http\Controllers\ExpenseHeadController::class,'storeSubexpHeads'])->name('storeSubexpHeads');
 

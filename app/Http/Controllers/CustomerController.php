@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Customer;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\File;
+
 
 class CustomerController extends Controller
 {
@@ -101,6 +103,37 @@ class CustomerController extends Controller
      * @param  \App\Models\Customer  $customer
      * @return \Illuminate\Http\Response
      */
+
+     public function CustomerFiles(Request $request){
+        $files = File::all();
+        $customers = Customer::all();
+        return view('customer.files',compact('customers','files'));
+     }
+     public function CustomerFileUpload(Request $request){
+        // dd($request->all());
+        $request->validate([
+            'file_name' => 'required'
+        ]);
+       
+        // dd($request->all());
+        $fileModel = new File();
+        // dd($request->all());
+        // dd();
+        if($request->hasFile('file_name')) {
+            $file = $request->file('file_name');
+            // dd($file);s
+            $fileModel->db_name  = $request->db_name;
+            $fileName = $file->getClientOriginalName();
+            $fileModel->customer_id = $request->customer_id;
+            $filePath = $request->file('file_name')->storeAs('uploads', $fileName, 'public');
+            $fileModel->name = $file->getClientOriginalName();
+            $fileModel->file_path = url('/').'/public/storage/' . $filePath;
+            $fileModel->save();
+            return "files has been uploaded";
+        }
+
+    }
+
     public function update(Request $request, Customer $customer)
     {
         //

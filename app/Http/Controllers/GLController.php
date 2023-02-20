@@ -76,17 +76,33 @@ class GLController extends Controller
     {
         //
     }
+    public function transferBalances(Request $request){
 
+        $bank_accounts = ChartOfAccount ::where('account_type', 1)->orWhere('account_type', 4)->get();
+        $investors = Investor::all();
+        return view('capital-investments.transfer-balances',compact('bank_accounts','investors'));
+    }
+    public function bankTransfer(Request $request)
+    {   
+        dd($request->all());
+        if($request->inv_1 == $request->inv_2){
+            // $bnk_1 = ChartOfAccount ::where('account_id');
+        }else{
+            
+        }
+    }
     public function AccountBalances(Request $request)
     {   
-       
+        $investors = Investor::all();
+        $bank_accounts = ChartOfAccount ::where('account_type', 1)->orWhere('account_type', 4)->get();
         $transactions = GLeadger::select('investor_id','account_id', DB::raw('sum(value) as value'))->where('value','!=',0)->whereHas('account', function ($query) {
             $query->where(function ($query2) {
                 $query2->where('account_type', 1)->orWhere('account_type', 4);
             });
         })->groupBy('account_id')->groupBy('investor_id')->with('account')->with('investor')->get();
         
-        return view('capital-investments.account-balances',compact('transactions'));
+        return view('capital-investments.account-balances',compact('transactions','investors','bank_accounts'));
+       
         // return $transactions;
         // // allbank accounts
         // $bank_acc  = ChartOfAccount::where(function ($query) {
@@ -99,7 +115,6 @@ class GLController extends Controller
         //     foreach($bank_acc as $acc){
         //     }
 
-               
     }
 
     /**
