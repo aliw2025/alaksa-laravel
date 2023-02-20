@@ -29,7 +29,7 @@ class InvestorController extends Controller
      */
     public function create()
     {
-      
+        
         $investors = Investor::where('investor_type', '!=', 1)->get();
         return view('investor.investor', compact('investors'));
         return view('investor.add-new-investor', compact('investors'));

@@ -2,7 +2,7 @@
 @section('section')
     <div class="content-wrapper" id="content-wrapper">
         <div class="row">
-            @dd($errors)
+            {{-- @dd($errors) --}}
             @if ($errors->any())
                 {{ implode('', $errors->all('<div>:message</div>')) }}
             @endif
