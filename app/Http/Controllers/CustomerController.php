@@ -106,8 +106,8 @@ class CustomerController extends Controller
 
      public function CustomerFiles(Request $request){
         $files = File::all();
-        $customers = Customer::all();
-        return view('customer.files',compact('customers','files'));
+        $customer = Customer::find($request->id);
+        return view('customer.files',compact('customer','files'));
      }
      public function CustomerFileUpload(Request $request){
         // dd($request->all());
@@ -129,7 +129,8 @@ class CustomerController extends Controller
             $fileModel->name = $file->getClientOriginalName();
             $fileModel->file_path = url('/').'/public/storage/' . $filePath;
             $fileModel->save();
-            return "files has been uploaded";
+            
+            return redirect()->route('customer-files',$request->customer_id);
         }
 
     }

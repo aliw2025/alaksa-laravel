@@ -116,7 +116,7 @@ Route::get('/get-properties/{id}' , [\App\Http\Controllers\CategoryPropControlle
 Route::get('/get-account-balances' , [\App\Http\Controllers\GLController::class,'AccountBalances'])->name('get-account-balances');
 Route::get('/transfer-balances' , [\App\Http\Controllers\GLController::class,'transferBalances'])->name('transfer-balances');
 Route::post('/bnk_transfer' , [\App\Http\Controllers\GLController::class,'bankTransfer'])->name('bnk_transfer');
-Route::get('/customer-files' , [\App\Http\Controllers\CustomerController::class,'customerFiles'])->name('customer-files');
+Route::get('/customer-files/{id}' , [\App\Http\Controllers\CustomerController::class,'customerFiles'])->name('customer-files');
 Route::post('/customer-file-upload' , [\App\Http\Controllers\CustomerController::class,'customerFileUpload'])->name('customer-file-upload');
 
 

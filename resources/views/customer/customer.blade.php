@@ -50,6 +50,7 @@
                                                     {{ method_field('GET') }}
                                                     <button style="border:0ch;background-color:white !important;" id="btnDel{{$inv->id}}" type="submit" class=""><i data-feather='edit'></i></button>
                                                 </form>
+                                                <a style="color: black" href="{{route('customer-files',$inv->id)}}"><i data-feather="file"></i></a>
                                             </div>
                                         </td>
                                         @php

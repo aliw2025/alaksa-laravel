@@ -159,11 +159,11 @@
                             <i data-feather="circle"></i>
                             <span class=" menu-title text-truncate" data-i18n="comision">Add Customer</span></a>
                     </li>
-                    <li class=" nav-item"><a href="{{ route('customer-files') }}"
+                    {{-- <li class=" nav-item"><a href="{{ route('customer-files') }}"
                             class="d-flex align-items-center">
                             <i data-feather="circle"></i>
                             <span class=" menu-title text-truncate" data-i18n="comision">Customer-docs</span></a>
-                    </li>
+                    </li> --}}
 
 
 
