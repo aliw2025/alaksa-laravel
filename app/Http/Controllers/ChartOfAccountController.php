@@ -45,6 +45,7 @@ class ChartOfAccountController extends Controller
         $investor->charOfAccounts()->create([
             'account_name' => $request->account_name,
             'account_type' => 4,
+            'account_number'=>$request->account_number,
             'opening_balance' => 0
         ]);
       

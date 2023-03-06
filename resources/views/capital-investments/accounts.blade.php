@@ -9,7 +9,7 @@
                     <div class="card">
                     <div class="card-header d-flex ">
                         <div>
-                            <h4 class="text-center">Bank Accounts</h4>
+                            <h4 class="text-center">Investor Bank Accounts</h4>
                         </div>
                     </div>
                         <div class="card-body">
@@ -17,7 +17,8 @@
                                 <thead class="thead-dark">
                                     <tr style="background-color:red !important;">
                                         <th style="width: 2px !important">#</th>
-                                        <th scope="col">name</th>
+                                        <th scope="col">Account Name</th>
+                                        <th scope="col">Account Number</th>
                                         <!-- <th scope="col">email</th>
                                         <th scope="col">Designation</th> -->
                                         <th scope="col">Action</th>
@@ -32,6 +33,8 @@
                                     <tr>
                                         <td>{{$count}}</td>
                                         <td>{{$ac->account_name}}</td>
+                                        <td>{{$ac->account_number}}</td>
+
                                         <td>
                                             <a style="text-decoration: none;color:black" href="#"><i data-feather='edit'></i></a>
                                         </td>
@@ -58,7 +61,7 @@
                                     <label class="form-label" for="">Account Name </label>
                                     <input type="text" class="form-control" name="account_name" >
                                     <label class="form-label mt-1"  for="">Account Number  </label>
-                                    <input type="text" class="form-control" name="account_number" >
+                                    <input type="text" class="form-control" name="account_number" > 
                                     <button class="btn btn-primary mt-2" >save</button>
                                     
                                 </form>

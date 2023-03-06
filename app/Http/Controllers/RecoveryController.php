@@ -27,6 +27,10 @@ class RecoveryController extends Controller
         //
     }
 
+    public function roDashboard(){
+
+        return view('recovery.ro-dashboard');
+    }
     /**
      * Store a newly created resource in storage.
      *

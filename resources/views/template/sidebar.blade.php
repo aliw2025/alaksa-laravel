@@ -154,8 +154,8 @@
                     <span class="menu-title text-truncate" data-i18n="Dashboards">Customer</span>
                 </a>
                 <ul class="menu-content">
-                    <li class=" nav-item"><a href="{{ route('customer.create') }}"
-                            class="d-flex align-items-center">
+
+                    <li class=" nav-item"><a href="{{ route('customer.create') }}" class="d-flex align-items-center">
                             <i data-feather="circle"></i>
                             <span class=" menu-title text-truncate" data-i18n="comision">Add Customer</span></a>
                     </li>
@@ -165,11 +165,29 @@
                             <span class=" menu-title text-truncate" data-i18n="comision">Customer-docs</span></a>
                     </li> --}}
 
+                </ul>
+            </li>
+            <!------------------------------------------- Customer--------------------------------------------------->
 
+            <li class=" nav-item">
+                <a class="d-flex align-items-center" href="#">
+                    <i data-feather='user-plus'></i>
+                    <span class="menu-title text-truncate" data-i18n="Dashboards">Recovery Officer</span>
+                </a>
+                <ul class="menu-content">
+                    
+                    <li class=" nav-item"><a href="{{ route('ro-dashboard') }}" class="d-flex align-items-center">
+                            <i data-feather="circle"></i>
+                            <span class=" menu-title text-truncate" data-i18n="comision">Dashbaard</span></a>
+                    </li>
+                    {{-- <li class=" nav-item"><a href="{{ route('customer-files') }}"
+                            class="d-flex align-items-center">
+                            <i data-feather="circle"></i>
+                            <span class=" menu-title text-truncate" data-i18n="comision">Customer-docs</span></a>
+                    </li> --}}
 
                 </ul>
             </li>
-
             <!------------------------------------------- Inventory --------------------------------------------------->
             <li class=" nav-item">
                 <a class="d-flex align-items-center" href="#">
