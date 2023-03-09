@@ -30,14 +30,15 @@ class PayScaleController extends Controller
         $scales = PayScale::all();
         return view('hrm.payScale',compact('scales'));
     }
-
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    
+    
+     public function store(Request $request)
     {
         //
        $validated = $request->validate([
@@ -51,9 +52,6 @@ class PayScaleController extends Controller
         $scale->save();
 
         return redirect()->route('payScale.create');
-
-
-
     }
 
     /**

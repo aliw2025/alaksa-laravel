@@ -20,6 +20,7 @@ class desingationContoller extends Controller
     }
     public function editDesignation($id){
         $designations  = Designation::all();
+
         $user = User::find($id);
         return view('hrm.edit-designation',compact('user','designations'));
     }
@@ -28,6 +29,7 @@ class desingationContoller extends Controller
 
         // dd($request->all());
 
+        
         $user = User::find($request->user_id);
         $user->designation_id = $request->designation_id;
         $user->save();
@@ -43,6 +45,7 @@ class desingationContoller extends Controller
     public function create()
     {
         //
+
         $scales = PayScale::all();
         $designations = Designation::all();
         return view('hrm.designation',compact('scales','designations'));
@@ -57,6 +60,10 @@ class desingationContoller extends Controller
     public function store(Request $request)
     {
         //
+       $validated =  $request->validate([
+            'designation_name'=> 'required',
+
+        ]);
         $designation = new Designation();
         $designation->Name = $request->designation_name;
         $designation->pay_scale = $request->pay_scale;

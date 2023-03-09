@@ -38,11 +38,11 @@
                                         <td>
                                             <div class="d-flex align-items-center">
 
-                                                <form class="" method="POST" autocomplete="on" action="#">
+                                                {{-- <form class="" method="POST" autocomplete="on" action="#">
                                                     @csrf
                                                     {{ method_field('DELETE') }}
                                                     <button style="border:0ch;background-color:white !important;" id="btnDel{{$inv->id}}" type="submit" class=""><i data-feather='trash-2'></i></button>
-                                                </form>
+                                                </form> --}}
                                                 <form class="" method="GET  " autocomplete="on" action="#">
                                                     @csrf
                                                     {{ method_field('GET') }}
@@ -87,9 +87,9 @@
                                 
                                 <div class=" ">
                                     <div class="mb-1">
-                                        <label class="form-label" for="first-name-vertical">Scale Name</label>
-                                        <input value="{{old('designation_name',isset($scale)? $scale->scale_name  :'')}}" type="text" id="investorName" class=" @error('scale_name') is-invalid @enderror form-control" name="designation_name" placeholder="designation Name">
-                                        @error('scale_name')
+                                        <label class="form-label" for="first-name-vertical">Designation Name</label>
+                                        <input value="{{old('designation_name',isset($scale)? $scale->scale_name  :'')}}" type="text" id="investorName" class=" @error('designation_name') is-invalid @enderror form-control" name="designation_name" placeholder="designation Name">
+                                        @error('designation_name')
                                         <div class="alert alert-danger">{{ $message }}</div>
                                         @enderror
                                     </div>

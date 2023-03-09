@@ -59,12 +59,12 @@
                                 <form method="POST" class="form form-vertical" autocomplete="on" action="{{route('chartOfAccount.store')}}">
                                     @csrf
                                     <label class="form-label" for="">Account Name </label>
-                                    <input type="text"  name="account_name"  class="form-control @error('account') is-invalid @enderror" >
+                                    <input type="text"  name="account_name"  class="form-control @error('account_name') is-invalid @enderror" >
                                     @error('account_name')
                                     <div class="alert alert-danger">{{ $message }}</div>
                                     @enderror
                                     <label class="form-label mt-1"  for="">Account Number  </label>
-                                    <input type="text" class="form-control @error('account') is-invalid @enderror" name="account_number" > 
+                                    <input type="text" class="form-control @error('account_number') is-invalid @enderror" name="account_number" > 
                                     @error('account_number')
                                     <div class="alert alert-danger">{{ $message }}</div>
                                     @enderror

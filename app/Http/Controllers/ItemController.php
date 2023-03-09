@@ -57,6 +57,13 @@ class ItemController extends Controller
     public function store(Request $request)
     {
         //
+
+        $validated = $request->validate([
+            'name'=>'required',
+            'make'=>'required',
+            'model'=>'required',
+        ]);
+
         $props = CategoryProperty::where('cat_id',$request->category_id)->get();
        
         // dd($request->all());
