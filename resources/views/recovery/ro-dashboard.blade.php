@@ -14,7 +14,7 @@
             <div class="col-3">
                 <div class="card">
                     <div class="card-body">
-                       My Accounts
+                      <a  style="color: black" href="#">My Accounts</a> 
                     </div>
                     
                 </div>
@@ -22,7 +22,7 @@
             <div class="col-3">
                 <div class="card">
                     <div class="card-body">
-                      Upcomiing Instalments
+                        <a  style="color: black" href="#"> Upcomiing Instalments</a> 
                     </div>
                     
                 </div>
@@ -30,7 +30,7 @@
             <div class="col-3">
                 <div class="card">
                     <div class="card-body">
-                      Funds transfer
+                        <a  style="color: black" href="#">Funds Transfer</a> 
                     </div>
                     
                 </div>
@@ -38,15 +38,15 @@
             <div class="col-3">
                 <div class="card">
                     <div class="card-body">
-                     Recieve Installment
+                        <a  style="color: black" href="#"> Recieve Installment</a> 
                     </div>
-                    
                 </div>
             </div>
             <div class="col-3">
                 <div class="card">
                     <div class="card-body">
-                        Account Balances
+                        <a  style="color: black" href="#">  Account Balances</a> 
+                       
                     </div>
                     
                 </div>

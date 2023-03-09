@@ -34,16 +34,15 @@
                                         <th style="width: 2px !important">{{$count}}</th>
                                         <td>{{ $inv->scale_name }}</td>
                                         <td>{{ $inv->scale_pay }}</td>
-                                      
                                         <td>
                                             <div class="d-flex align-items-center">
 
-                                                <form class="" method="POST" autocomplete="on" action="#">
+                                                {{-- <form class="" method="POST" autocomplete="on" action="#">
                                                     @csrf
                                                     {{ method_field('DELETE') }}
-                                                    <button style="border:0ch;background-color:white !important;" id="btnDel{{$inv->id}}" type="submit" class=""><i data-feather='trash-2'></i></button>
-                                                </form>
-                                                <form class="" method="GET  " autocomplete="on" action="#">
+                                                    <button style="border:0ch;background-color:white !important;s" id="btnDel{{$inv->id}}" type="submit" class=""><i data-feather='trash-2'></i></button>
+                                                </form> --}}
+                                                <form class="" method="GET" autocomplete="on" action="#">
                                                     @csrf
                                                     {{ method_field('GET') }}
                                                     <button style="border:0ch;background-color:white !important;" id="btnDel{{$inv->id}}" type="submit" class=""><i data-feather='edit'></i></button>
@@ -97,7 +96,7 @@
                                 <div class=" ">
                                     <div class="mb-1">
                                         <label class="form-label" for="first-name-vertical">Scale Pay</label>
-                                        <input value="{{old('scale_pay',isset($scale)? $scale->scale_name  :'')}}" type="text" id="investorName" class=" @error('investor_name') is-invalid @enderror form-control" name="scale_pay" placeholder="Designation Name">
+                                        <input value="{{old('scale_pay',isset($scale)? $scale->scale_name  :'')}}" type="text" id="investorName" class=" @error('investor_name') is-invalid @enderror form-control" name="scale_pay" placeholder="Scale Pay">
                                         @error('scale_pay')
                                         <div class="alert alert-danger">{{ $message }}</div>
                                         @enderror

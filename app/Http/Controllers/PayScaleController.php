@@ -40,6 +40,11 @@ class PayScaleController extends Controller
     public function store(Request $request)
     {
         //
+       $validated = $request->validate([
+            'scale_name'=>'required',
+            'scale_pay'=>'required',
+
+       ]);
         $scale = new PayScale();
         $scale->scale_name = $request->scale_name;
         $scale->scale_pay = $request->scale_pay;
@@ -82,7 +87,7 @@ class PayScaleController extends Controller
      */
     public function update(Request $request, PayScale $payScale)
     {
-        //
+        
     }
 
     /**

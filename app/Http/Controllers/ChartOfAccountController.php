@@ -41,6 +41,13 @@ class ChartOfAccountController extends Controller
     public function store(Request $request)
     {
         //
+
+        $validated = $request->validate(
+            [
+                'account_name' => 'required',
+                'account_number' => 'required',
+            ]);
+
         $investor = Investor::where('investor_type', '=', 1)->first();
         $investor->charOfAccounts()->create([
             'account_name' => $request->account_name,
