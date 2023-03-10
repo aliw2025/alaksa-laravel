@@ -19,11 +19,13 @@ class ChartOfAccountController extends Controller
         //
     }
 
+
     /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
+
     public function create()
     {
         $accounts = ChartOfAccount::where('account_type',4)->get();
@@ -62,17 +64,34 @@ class ChartOfAccountController extends Controller
         return redirect()->route('chartOfAccount.create');
     }
 
+    public function userAccountsCreate(Request $request){
+
+            
+
+    }
+
+
+    public function userAccountsStore(Request $request){
+
+
+
+    }
+
+
     /**
      * Display the specified resource.
      *
      * @param  \App\Models\ChartOfAccount  $chartOfAccount
      * @return \Illuminate\Http\Response
      */
+
     public function show(ChartOfAccount $chartOfAccount)
     {
         //
+
     }
 
+    
     /**
      * Show the form for editing the specified resource.
      *
