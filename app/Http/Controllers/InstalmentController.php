@@ -118,21 +118,20 @@ class InstalmentController extends Controller
 
     }
 
-    public function showUpcomingInstalments(){
+    public function showUpcomingInstalments(Request $request){
     
         $instalments = Instalment::all();
-
         // // dd($request->all());
-        // $sales = Sale::SearchSale($request->from_date, $request->to_date, $request->customer_name, $request->customer_id, $request->invoice_no)->paginate(10);
-        // $sales->appends([
-        //     'from_date' => $request->from_date,
-        //     'to_date' => $request->to_date,
-        //     'customer_name' => $request->customer_name,
-        //     'customer_id' => $request->customer_id,
-        //     'invoice_no' => $request->invoice_no
-        // ]);
-
-        return view('recovery.ro-uc-instalments');
+        $sales = Instalment::SearchInstalment($request->from_date, $request->to_date, $request->customer_name, $request->customer_id, $request->instalment_paid)->paginate(10);
+        $sales->appends([
+            'from_date' => $request->from_date,
+            'to_date' => $request->to_date,
+            'customer_name' => $request->customer_name,
+            'customer_id' => $request->customer_id,
+            'invoice_no' => $request->invoice_no
+        ]);
+        
+        return view('recovery.ro-uc-instalments', compact('sales'));
     }
 
     /**

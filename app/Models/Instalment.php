@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Models;
+use Auth;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -25,7 +26,42 @@ class Instalment extends Model
         ]);
     }
 
-   
+    public function scopeSearchInstalment($query,$from_date,$to_date,$customer_name,$customer_id,$instalment_paid)
+    {   
+        // dd($commission);
+        
+        // if($invoice!=NULL){
+            
+        //     return $query->where('invoice_no','like','%'.$invoice);
+        // }
+        // else if($customer_id!= NULL){
+        //     return $query->where('customer_id',$customer_id);
+            
+        // }
+        // else if($customer_name!= NULL){
+
+        //     return $query->whereHas('customer', function ($cus)  use ($customer_name) {
+        //         $cus->where('customer_name','like','%'.$customer_name.'%');
+        //     });
+        
+        // }
+        
+        if($instalment_paid==2){
+            if($customer_name != Null){
+                
+            }
+            return $query->whereBetween('due_date',[$from_date,$to_date])->whereHas('sale', function($query){
+                $query->where('rec_of_id', Auth::user()->id);
+            })->with('sale');
+        }else{
+
+
+        }
+        return $query->whereBetween('due_date',[$from_date,$to_date])->where('instalment_paid',$instalment_paid)->whereHas('sale', function($query){
+            $query->where('rec_of_id', Auth::user()->id);
+        })->with('sale');
+    }
+
     public function sale(){
 
         return $this->belongsTo(Sale::class,'sale_id');

@@ -10,7 +10,7 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <form class="" method="GET" autocomplete="on" action="{{ route('search-sales-post') }}">
+                    <form class="" method="GET" autocomplete="on" action="{{ route('show-upcoming-instalments') }}">
                         @csrf
                         <div class="row d-flex align-items-center">
                             
@@ -40,10 +40,10 @@
                             </div>
                             <div class="col-2 ">
                                 <span class="title">status</span>
-                                <select name="instalment_status" id="" class="form-control">
-                                    <option value="">Paid</option>
-                                    <option value="">Pending</option>
-
+                                <select name="instalment_paid" id="" class="form-control">
+                                    <option value="1">Paid</option>
+                                    <option value="0">Pending</option>
+                                    <option value="2">All</option>
                                 </select>
                             </div>
                             
@@ -81,11 +81,14 @@
 
                                     <tr>
                                         <td>{{$count}}</td>
-                                        <td>{{$pur->customer->customer_name}}</td>
-                                        <td>{{$pur->invoice_no}}</td>
-                                        <td>{{$pur->transaction_status->desc}}</td>
+                                        <td>{{$pur->amount}}</td>
+                                        <td>{{$pur->due_date}}</td>
+                                        <td>{{$pur->sale->id}}</td>
+                                        <td>{{$pur->instalment_paid}}</td>
+                                        {{-- <td>{{$pur->invoice_no}}</td> --}}
+                                        {{-- <td>{{$pur->transaction_status->desc}}</td>
                                         <td> {{ number_format($pur->total) }}</td>
-                                        <td>{{date('d-m-Y', strtotime($pur->sale_date))}}</td>
+                                        <td>{{date('d-m-Y', strtotime($pur->sale_date))}}</td> --}}
                                         
                                         <td>
                                             <a style="text-decoration: none;color:black" href="{{route('sale.show',$pur->id)}}"><i data-feather='eye'></i></a>
