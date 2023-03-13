@@ -122,14 +122,11 @@ Route::get('/add-sub-exp-heads{id}' , [\App\Http\Controllers\ExpenseHeadControll
 Route::POST('/store-Subexp-Heads' , [\App\Http\Controllers\ExpenseHeadController::class,'storeSubexpHeads'])->name('storeSubexpHeads');
 
 Route::get('/ro-dashboard' , [\App\Http\Controllers\RecoveryController::class,'roDashboard'])->name('ro-dashboard');
-
 // public function userAccountsCreate(Request $request){
-
 Route::controller(ChartOfAccountController::class)->group(function () {
         Route::get('/', 'show');
         Route::post('/posts', 'store');
-     });           
-
+});           
 // }
 
 
