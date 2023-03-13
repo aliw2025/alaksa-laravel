@@ -46,5 +46,10 @@ class User extends Authenticatable
     public function designation(){
        return  $this->belongsTo(Designation::class,'designation_id');
     }
+    public function charOfAccounts(){
+
+        return $this->morphMany(ChartOfAccount::class,'owner');
+
+    }
 }
 

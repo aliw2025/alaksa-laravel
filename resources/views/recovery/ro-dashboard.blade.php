@@ -14,7 +14,7 @@
             <div class="col-3">
                 <div class="card">
                     <div class="card-body">
-                      <a  style="color: black" href="#">My Accounts</a> 
+                      <a  style="color: black" href="{{route('create-user-accounts')}}">My Accounts</a> 
                     </div>
                     
                 </div>
@@ -22,7 +22,7 @@
             <div class="col-3">
                 <div class="card">
                     <div class="card-body">
-                        <a  style="color: black" href="#"> Upcomiing Instalments</a> 
+                        <a  style="color: black" href="{{route('show-upcoming-instalments')}}"> Upcomiing Instalments</a> 
                     </div>
                     
                 </div>

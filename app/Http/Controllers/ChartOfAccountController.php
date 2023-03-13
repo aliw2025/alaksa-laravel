@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Auth;
 use App\Models\ChartOfAccount;
 use App\Models\Investor;
 use App\Http\Controllers\Controller;
@@ -16,7 +16,7 @@ class ChartOfAccountController extends Controller
      */
     public function index()
     {
-        //
+    //
     }
 
 
@@ -28,10 +28,10 @@ class ChartOfAccountController extends Controller
 
     public function create()
     {
-        $accounts = ChartOfAccount::where('account_type',4)->get();
-        return view('capital-investments.accounts',compact('accounts'));
+        $accounts = ChartOfAccount::where('account_type', 4)->get();
+        return view('capital-investments.accounts', compact('accounts'));
 
-        
+
     }
 
     /**
@@ -45,35 +45,53 @@ class ChartOfAccountController extends Controller
         //
 
         $validated = $request->validate(
-            [
-                'account_name' => 'required',
-                'account_number' => 'required',
-            ]);
+        [
+            'account_name' => 'required',
+            'account_number' => 'required',
+        ]);
 
         $investor = Investor::where('investor_type', '=', 1)->first();
         $investor->charOfAccounts()->create([
             'account_name' => $request->account_name,
             'account_type' => 4,
-            'account_number'=>$request->account_number,
+            'account_number' => $request->account_number,
             'opening_balance' => 0
         ]);
-      
-       
+
+
         // dd($request->all());
 
         return redirect()->route('chartOfAccount.create');
     }
 
-    public function userAccountsCreate(Request $request){
 
-            
+    public function userAccountsCreate(Request $request)
+    {
+        $user = $email = Auth::user();
+        $accounts = ChartOfAccount::where('owner_type', 'App\Models\User')->get();
+        return view('recovery.ro-accounts', compact('accounts','user'));
 
     }
 
 
-    public function userAccountsStore(Request $request){
+    public function userAccountsStore(Request $request)
+    {
 
+        $validated = $request->validate(
+        [
+            'account_name' => 'required',
+            'account_number' => 'required',
+        ]);
 
+        $user = $email = Auth::user();
+        $user->charOfAccounts()->create([
+            'account_name' => $request->account_name,
+            'account_type' => 4,
+            'account_number' => $request->account_number,
+            'opening_balance' => 0
+        ]);
+    
+        return redirect()->route('create-user-accounts');
 
     }
 
@@ -87,11 +105,11 @@ class ChartOfAccountController extends Controller
 
     public function show(ChartOfAccount $chartOfAccount)
     {
-        //
+    //
 
     }
 
-    
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -100,7 +118,7 @@ class ChartOfAccountController extends Controller
      */
     public function edit(ChartOfAccount $chartOfAccount)
     {
-        //
+    //
     }
 
     /**
@@ -112,7 +130,7 @@ class ChartOfAccountController extends Controller
      */
     public function update(Request $request, ChartOfAccount $chartOfAccount)
     {
-        //
+    //
     }
 
     /**
@@ -123,6 +141,6 @@ class ChartOfAccountController extends Controller
      */
     public function destroy(ChartOfAccount $chartOfAccount)
     {
-        //
+    //
     }
 }
