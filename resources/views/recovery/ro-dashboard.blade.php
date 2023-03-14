@@ -30,7 +30,7 @@
             <div class="col-3">
                 <div class="card">
                     <div class="card-body">
-                        <a  style="color: black" href="#">Funds Transfer</a> 
+                        <a  style="color: black" href="{{route('user-transfer-balances')}}">Funds Transfer</a> 
                     </div>
                     
                 </div>
@@ -45,7 +45,16 @@
             <div class="col-3">
                 <div class="card">
                     <div class="card-body">
-                        <a  style="color: black" href="#">  Account Balances</a> 
+                        <a  style="color: black" href="{{route('get-user-acc-balances')}}">  Account Balances</a> 
+                       
+                    </div>
+                    
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="card">
+                    <div class="card-body">
+                        <a  style="color: black" href="{{route('get-user-acc-balances')}}">  Pending Transfer Request</a> 
                        
                     </div>
                     

@@ -144,7 +144,7 @@
                         <div class="col-12 my-1 ">
                             <label> Account: </label>
                             <select class="form-control" name="account" id="">
-                                <option value="1"> Cash</option>
+                                {{-- <option value="1"> Cash</option> --}}
                                 @foreach ($bank_acc as $acc)
                                     <option value="{{ $acc->id }}">
                                         {{ $acc->account_name }}

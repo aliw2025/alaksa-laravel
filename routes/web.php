@@ -103,7 +103,15 @@ Route::get('/create-property/{id}', [\App\Http\Controllers\CategoryPropControlle
 Route::get('/get-properties/{id}', [\App\Http\Controllers\CategoryPropController::class , 'getProperties'])->name('get-properties');
 
 Route::get('/get-account-balances', [\App\Http\Controllers\GLController::class , 'AccountBalances'])->name('get-account-balances');
+Route::get('/get-user-acc-balances', [\App\Http\Controllers\GLController::class , 'userAccountBalances'])->name('get-user-acc-balances');
+
 Route::get('/transfer-balances', [\App\Http\Controllers\GLController::class , 'transferBalances'])->name('transfer-balances');
+Route::get('/user-transfer-balances', [\App\Http\Controllers\GLController::class , 'userTransferBalances'])->name('user-transfer-balances');
+Route::post('/add-transfer-request', [\App\Http\Controllers\GLController::class , 'addTransferRequest'])->name('add-transfer-request');
+Route::get('/investor-transfer-queue', [\App\Http\Controllers\GLController::class , 'investorApprovalQueue'])->name('investor-transfer-queue');
+
+
+
 Route::post('/bnk_transfer', [\App\Http\Controllers\GLController::class , 'bankTransfer'])->name('bnk_transfer');
 
 Route::get('/customer-files/{id}', [\App\Http\Controllers\CustomerController::class , 'customerFiles'])->name('customer-files');

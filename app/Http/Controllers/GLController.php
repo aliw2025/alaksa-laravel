@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use Auth;
 use App\Models\GLeadger;
 use App\Http\Controllers\Controller;
 use App\Models\ChartOfAccount;
 use App\Models\Investor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Models\TransferRequests;
 
 
 class GLController extends Controller
@@ -82,6 +84,39 @@ class GLController extends Controller
         $investors = Investor::all();
         return view('capital-investments.transfer-balances',compact('bank_accounts','investors'));
     }
+
+    public function userTransferBalances(Request $request){
+        $user = Auth::user();
+        $ro_bank_accounts = $user->charOfAccounts;
+        $bank_accounts = ChartOfAccount ::where('owner_type','App\Models\Investor')->where(function($query){
+            $query->where('account_type', 1)->orWhere('account_type', 4);
+        })->get();
+        $investors = Investor::all();
+        return view('recovery.ro-transfer-balances',compact('bank_accounts','investors','ro_bank_accounts'));
+    }
+    public function addTransferRequest(Request $request){
+
+        // dd($request->all());
+
+
+        $tr = new TransferRequests();
+        $tr->sender_account_id = $request->bnk_1;
+        $tr->reciever_account_id = $request->bnk_2;
+        $tr->amount = $request->amount;
+        $tr->status = 0;
+        $tr->owner_investor_id = $request->inv_1;
+        $tr->save();
+
+        return TransferRequests::all();
+    }
+
+    public function investorApprovalQueue(){
+
+        $tr = TransferRequests::all();
+        
+        return view('capital-investments.transfer-requests',compact('tr'));
+
+    }
     public function bankTransfer(Request $request)
     {   
         dd($request->all());
@@ -94,7 +129,9 @@ class GLController extends Controller
     public function AccountBalances(Request $request)
     {   
         $investors = Investor::all();
-        $bank_accounts = ChartOfAccount ::where('account_type', 1)->orWhere('account_type', 4)->get();
+        $bank_accounts = ChartOfAccount ::where('owner_type','App\Models\Investor')->where(function($query){
+            $query->where('account_type', 1)->orWhere('account_type', 4);
+        })->get();
         $transactions = GLeadger::select('investor_id','account_id', DB::raw('sum(value) as value'))->where('value','!=',0)->whereHas('account', function ($query) {
             $query->where(function ($query2) {
                 $query2->where('account_type', 1)->orWhere('account_type', 4);
@@ -102,6 +139,32 @@ class GLController extends Controller
         })->groupBy('account_id')->groupBy('investor_id')->with('account')->with('investor')->get();
         
         return view('capital-investments.account-balances',compact('transactions','investors','bank_accounts'));
+       
+        // return $transactions;
+        // // allbank accounts
+        // $bank_acc  = ChartOfAccount::where(function ($query) {
+        //     $query->where('account_type', 1)
+        //           ->orWhere('account_type', 4);
+        //         }
+        //     )->get();
+        // dd($bank_acc);
+        // foreach($investors as $inv){
+        //     foreach($bank_acc as $acc){
+        //     }
+
+    }
+    public function userAccountBalances(Request $request)
+    {   
+        $investors = Investor::all();
+        $user = Auth::user();
+        $bank_accounts = $user->charOfAccounts; 
+        $transactions = GLeadger::select('investor_id','account_id', DB::raw('sum(value) as value'))->where('value','!=',0)->whereHas('account', function ($query) {
+            $query->where(function ($query2) {
+                $query2->where('account_type', 1)->orWhere('account_type', 4);
+            });
+        })->groupBy('account_id')->groupBy('investor_id')->with('account')->with('investor')->get();
+        
+        return view('recovery.ro-account_balances',compact('transactions','investors','bank_accounts'));
        
         // return $transactions;
         // // allbank accounts

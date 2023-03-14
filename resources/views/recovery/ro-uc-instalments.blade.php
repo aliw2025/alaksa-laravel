@@ -64,10 +64,12 @@
                                     <tr style="background-color:red !important;">
                                         <th style="width: 2px !important">#</th>
                                         <th>Customer  Name</th>
+                                        <th>sale ID</th>
                                         <th scope="col">Sale invoice NO</th>  
                                         <th scope="col">Instalment #</th>  
+                                        <th>Instalment ID</th>
                                         <th>Staus</th>
-                                        <th scope="col">Total</th>
+                                        <th scope="col">Total Amount</th>
                                         <th scope="col">Due Date</th>
                                         <th scope="col">Action</th>
                                         {{-- <th scope="col">Action</th> --}}
@@ -79,12 +81,13 @@
                                     @endphp
                                     
                                     @foreach ($sales as $pur)
-
                                     <tr>
                                         <td>{{$count}}</td>
                                         <td>{{$pur->sale->customer->customer_name}}</td>
+                                        <td>{{$pur->sale->id}}</td>
                                         <td>{{$pur->sale->invoice_no}}</td>
                                         <td>{{$pur->instalment_no}}</td>
+                                        <td>{{$pur->id}}</td>
                                         <td>{{$pur->instalment_paid==0? 'Pending':'Paid'}}</td>
                                         <td>{{$pur->amount}}</td>
                                         <td>{{$pur->due_date}}</td>
@@ -94,7 +97,7 @@
                                         <td> {{ number_format($pur->total) }}</td>
                                         <td>{{date('d-m-Y', strtotime($pur->sale_date))}}</td> --}}
                                         <td>
-                                            <a style="text-decoration: none;color:black" href="{{url('get-sale-instalments')."?id=".$pur->id.'&ins_id='.$pur->id}}"><i data-feather='dollar-sign'></i></a>
+                                            <a style="text-decoration: none;color:black" href="{{url('get-sale-instalments')."?id=".$pur->sale->id.'&ins_id='.$pur->id}}"><i data-feather='dollar-sign'></i></a>
 
                                         </td>
                                     </tr>

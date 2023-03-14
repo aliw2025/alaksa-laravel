@@ -731,14 +731,18 @@ class SaleController extends Controller
     {
 
         if (isset($request->id)) {
-
+            // dd($request->id);
             $sale = Sale::find($request->id);
-            if(isset($request->ins_id)){
+            // dd($sale);
+            if(isset($request->ins_id)){    
                 $instalments = $sale->instalments->where('id',$request->ins_id);
             }else{
                 $instalments = $sale->instalments;
             }
-            $bank_acc = ChartOfAccount::where('account_type', 4)->get();
+            $user = Auth::user();
+
+            $bank_acc = $user->charOfAccounts;
+            // dd( $bank_acc);
             if (isset($request->user_exception)) {
                
                 $user_exception = $request->user_exception;

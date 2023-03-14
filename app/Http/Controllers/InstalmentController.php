@@ -144,7 +144,7 @@ class InstalmentController extends Controller
             $mytime = Carbon::now();   
             $mytime2 = Carbon::now();         
             $mytime2->day(1);
-            $mytime2->year(2021);
+            // $mytime2->year(2021);
             $mytime2->hour(0);
             $mytime2->minute(0);
             $mytime2->second(0);         

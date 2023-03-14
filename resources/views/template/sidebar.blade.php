@@ -70,6 +70,10 @@
                             <span class="menu-item text-truncate" data-i18n="eCommerce">Transfer Balances</span>
                         </a>
                     </li>
+                    <li class=" nav-item"><a href="{{ route('investor-transfer-queue') }}" class="d-flex align-items-center">
+                        <i data-feather="circle"></i>
+                        <span class=" menu-title text-truncate" data-i18n="comision">Funds Transfer Requests</span></a>
+                     </li>
                 </ul>
             </li>
             <!------------------------------------------- HRM --------------------------------------------------->
@@ -180,6 +184,7 @@
                             <i data-feather="circle"></i>
                             <span class=" menu-title text-truncate" data-i18n="comision">Dashbaard</span></a>
                     </li>
+                   
                     {{-- <li class=" nav-item"><a href="{{ route('customer-files') }}"
                             class="d-flex align-items-center">
                             <i data-feather="circle"></i>
