@@ -28,39 +28,59 @@ class Instalment extends Model
 
     public function scopeSearchInstalment($query,$from_date,$to_date,$customer_name,$customer_id,$instalment_paid)
     {   
-        // dd($commission);
-        
-        // if($invoice!=NULL){
-            
-        //     return $query->where('invoice_no','like','%'.$invoice);
-        // }
-        // else if($customer_id!= NULL){
-        //     return $query->where('customer_id',$customer_id);
-            
-        // }
-        // else if($customer_name!= NULL){
 
-        //     return $query->whereHas('customer', function ($cus)  use ($customer_name) {
-        //         $cus->where('customer_name','like','%'.$customer_name.'%');
-        //     });
-        
-        // }
-        
-        if($instalment_paid==2){
+        // in case of first request instalment paid is null
+        if($instalment_paid==2 || $instalment_paid==null){
+            // if customer name is provided
             if($customer_name != Null){
-                
+                return $query->whereBetween('due_date',[$from_date,$to_date])->whereHas('sale', function($query) use($customer_name){
+                    $query->where('rec_of_id', Auth::user()->id)->whereHas('customer',function($query2) use($customer_name) {
+                        $query2->where('customer_name','like','%'.$customer_name.'%');
+                    });
+                })->with('sale');
             }
+            // search by Id
+            if($customer_id != Null){
+                return $query->whereBetween('due_date',[$from_date,$to_date])->whereHas('sale', function($query) use($customer_id){
+                    $query->where('rec_of_id', Auth::user()->id)->whereHas('customer',function($query2) use($customer_id) {
+                        $query2->where('id',$customer_id);
+                    });
+                })->with('sale');
+            }
+            // if no parameter provided just search by date and return all statuses
             return $query->whereBetween('due_date',[$from_date,$to_date])->whereHas('sale', function($query){
                 $query->where('rec_of_id', Auth::user()->id);
             })->with('sale');
-        }else{
-
 
         }
-        return $query->whereBetween('due_date',[$from_date,$to_date])->where('instalment_paid',$instalment_paid)->whereHas('sale', function($query){
-            $query->where('rec_of_id', Auth::user()->id);
-        })->with('sale');
+        // if instalment status is provided 
+        else{
+           
+            if($customer_name != Null){
+                return $query->whereBetween('due_date',[$from_date,$to_date])->where('instalment_paid',$instalment_paid)->whereHas('sale', function($query) use($customer_name){
+                    $query->where('rec_of_id', Auth::user()->id)->whereHas('customer',function($query2) use($customer_name) {
+                        $query2->where('customer_name','like','%'.$customer_name.'%');
+                    });
+                })->with('sale');
+            }
+            // search by Id
+            if($customer_id != Null){
+                return $query->whereBetween('due_date',[$from_date,$to_date])->where('instalment_paid',$instalment_paid)->whereHas('sale', function($query) use($customer_id){
+                    $query->where('rec_of_id', Auth::user()->id)->whereHas('customer',function($query2) use($customer_id) {
+                        $query2->where('id',$customer_id);
+                    });
+                })->with('sale');
+            }
+
+            return $query->whereBetween('due_date',[$from_date,$to_date])->where('instalment_paid',$instalment_paid)->whereHas('sale', function($query){
+                $query->where('rec_of_id', Auth::user()->id);
+            })->with('sale');
+        }
+       
+
     }
+
+    
 
     public function sale(){
 

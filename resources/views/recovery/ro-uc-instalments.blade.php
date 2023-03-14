@@ -17,7 +17,7 @@
                             <div class="col-2">
                                 <div class="">
                                     <span class="title">From Date:</span>
-                                    <input name="from_date" type="text"
+                                    <input  name="from_date" type="text"
                                         class="form-control invoice-edit-input date-picker flatpickr-input"
                                         readonly="readonly">
                                 </div>
@@ -41,8 +41,8 @@
                             <div class="col-2 ">
                                 <span class="title">status</span>
                                 <select name="instalment_paid" id="" class="form-control">
-                                    <option value="1">Paid</option>
                                     <option value="0">Pending</option>
+                                    <option value="1">Paid</option>
                                     <option value="2">All</option>
                                 </select>
                             </div>
@@ -64,10 +64,11 @@
                                     <tr style="background-color:red !important;">
                                         <th style="width: 2px !important">#</th>
                                         <th>Customer  Name</th>
-                                        <th scope="col">invoice NO</th>  
+                                        <th scope="col">Sale invoice NO</th>  
+                                        <th scope="col">Instalment #</th>  
                                         <th>Staus</th>
                                         <th scope="col">Total</th>
-                                        <th scope="col">Date</th>
+                                        <th scope="col">Due Date</th>
                                         <th scope="col">Action</th>
                                         {{-- <th scope="col">Action</th> --}}
                                     </tr>
@@ -81,24 +82,19 @@
 
                                     <tr>
                                         <td>{{$count}}</td>
+                                        <td>{{$pur->sale->customer->customer_name}}</td>
+                                        <td>{{$pur->sale->invoice_no}}</td>
+                                        <td>{{$pur->instalment_no}}</td>
+                                        <td>{{$pur->instalment_paid==0? 'Pending':'Paid'}}</td>
                                         <td>{{$pur->amount}}</td>
                                         <td>{{$pur->due_date}}</td>
-                                        <td>{{$pur->sale->id}}</td>
-                                        <td>{{$pur->instalment_paid}}</td>
+                                        
                                         {{-- <td>{{$pur->invoice_no}}</td> --}}
                                         {{-- <td>{{$pur->transaction_status->desc}}</td>
                                         <td> {{ number_format($pur->total) }}</td>
                                         <td>{{date('d-m-Y', strtotime($pur->sale_date))}}</td> --}}
-                                        
                                         <td>
-                                            <a style="text-decoration: none;color:black" href="{{route('sale.show',$pur->id)}}"><i data-feather='eye'></i></a>
-                                            @if($pur->status==1)
-                                            <a style="text-decoration: none;color:black" href="{{route('sale.edit',$pur->id)}}"><i data-feather='edit'></i></a>
-                                            @endif
-                                            @if($pur->status==3)
-                                            <a style="text-decoration: none;color:black" href="{{url('sale-return')."?id=".$pur->id}}" ><i data-feather='rotate-ccw'></i></i></a>
-                                            <a style="text-decoration: none;color:black" href="{{url('get-sale-instalments')."?id=".$pur->id}}"><i data-feather='dollar-sign'></i></a>
-                                            @endif
+                                            <a style="text-decoration: none;color:black" href="{{url('get-sale-instalments')."?id=".$pur->id.'&ins_id='.$pur->id}}"><i data-feather='dollar-sign'></i></a>
 
                                         </td>
                                     </tr>
