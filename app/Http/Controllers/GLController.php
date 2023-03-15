@@ -106,15 +106,26 @@ class GLController extends Controller
         $tr->status = 0;
         $tr->owner_investor_id = $request->inv_1;
         $tr->save();
-
-        return TransferRequests::all();
+        
+        return redirect()->route('ro-dashboard');
     }
+
 
     public function investorApprovalQueue(){
 
         $tr = TransferRequests::all();
-        
+
         return view('capital-investments.transfer-requests',compact('tr'));
+
+    }
+
+    public function userApprovalQueue(){
+
+        $user = Auth::user();
+        $tr = TransferRequests::whereHas('sender_account',function($query) use($user){
+            $query->where('owner_type','App\Models\User')->where('owner_id',$user->id);
+        })->get();
+        return view('recovery.ro-pending-fund-requests',compact('tr'));
 
     }
     public function bankTransfer(Request $request)

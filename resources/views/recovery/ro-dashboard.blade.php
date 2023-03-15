@@ -54,8 +54,7 @@
             <div class="col-3">
                 <div class="card">
                     <div class="card-body">
-                        <a  style="color: black" href="{{route('get-user-acc-balances')}}">  Pending Transfer Request</a> 
-                       
+                        <a  style="color: black" href="{{route('ro-transfer-queue')}}">  Pending Transfer Request</a> 
                     </div>
                     
                 </div>

@@ -109,6 +109,7 @@ Route::get('/transfer-balances', [\App\Http\Controllers\GLController::class , 't
 Route::get('/user-transfer-balances', [\App\Http\Controllers\GLController::class , 'userTransferBalances'])->name('user-transfer-balances');
 Route::post('/add-transfer-request', [\App\Http\Controllers\GLController::class , 'addTransferRequest'])->name('add-transfer-request');
 Route::get('/investor-transfer-queue', [\App\Http\Controllers\GLController::class , 'investorApprovalQueue'])->name('investor-transfer-queue');
+Route::get('/ro-transfer-queue', [\App\Http\Controllers\GLController::class , 'userApprovalQueue'])->name('ro-transfer-queue');
 
 
 

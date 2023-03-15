@@ -28,9 +28,8 @@
                                     <th scope="col">name</th>
                                     <th>from Account</th>
                                     <th scope="col">Amount</th>
-                                    <th scope="col">To Account</th>
-                                    <th>status</th>
-                                    <th scope="col">Action</th>
+                                    <th scope="col">Reciver Account</th>
+                                    <th scope="col">status</th>
                                 </tr>
                             </thead>
                             <tbody class="inventory-iems-body" id="nventory-iems-body">
@@ -46,10 +45,8 @@
                                         <td>{{ number_format($t->amount) }} </td>
                                         <td>{{ $t->reciever_account->account_name }} |
                                             {{ $t->reciever_account->account_number }} </td>
+
                                         <td>{{$t->status}}</td>
-                                        <td> <button class="btn btn-primary">Approve </button>
-                                            <button class="btn btn-danger">Cancel </button>
-                                        </td>
                                     </tr>
                                     @php
                                         $count = $count + 1;
@@ -62,6 +59,9 @@
                     <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">...</div>
                     <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">...</div>
                 </div>
+
+
+
 
             </div>
         </div>
