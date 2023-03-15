@@ -47,8 +47,8 @@
                                         <td>{{ $t->reciever_account->account_name }} |
                                             {{ $t->reciever_account->account_number }} </td>
                                         <td>{{$t->status}}</td>
-                                        <td> <button class="btn btn-primary">Approve </button>
-                                            <button class="btn btn-danger">Cancel </button>
+                                        <td > <button type="submit" name="submit" value="submit"  class="btn btn-primary">Approve </button>
+                                            <button type="submit"   class="btn btn-danger">Cancel </button>
                                         </td>
                                     </tr>
                                     @php
