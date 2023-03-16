@@ -16,4 +16,5 @@ class ChartOfAccount extends Model
         return $this->morphTo();
     }
     
+    
 }

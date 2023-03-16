@@ -10,7 +10,7 @@ use App\Models\Investor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\TransferRequests;
-
+use Illuminate\Support\Facades\Input;
 
 class GLController extends Controller
 {
@@ -115,7 +115,10 @@ class GLController extends Controller
 
         $tr = TransferRequests::all();
 
-        return view('capital-investments.transfer-requests',compact('tr'));
+        $t_pending = TransferRequests::where('status',0)->get();
+        $t_appr = TransferRequests::where('status',1)->get();
+        $t_cancel = TransferRequests::where('status',2)->get();
+        return view('capital-investments.transfer-requests',compact('tr','$t_pending',,));
 
     }
 
@@ -128,6 +131,26 @@ class GLController extends Controller
         return view('recovery.ro-pending-fund-requests',compact('tr'));
 
     }
+
+    public function userApproval(Request $request){
+
+        $t = TransferRequests ::where('id',$request->tran_id)->first();
+        if($request->input('submit')=='approve'){
+
+               
+             $t->status = 1;
+             $t->save();
+        }else{
+
+
+            $t->status = 2;
+            $t->save();
+                
+        }
+        
+        return redirect()->route('investor-transfer-queue');
+    }
+
     public function bankTransfer(Request $request)
     {   
         dd($request->all());

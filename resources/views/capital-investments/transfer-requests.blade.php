@@ -46,9 +46,19 @@
                                         <td>{{ number_format($t->amount) }} </td>
                                         <td>{{ $t->reciever_account->account_name }} |
                                             {{ $t->reciever_account->account_number }} </td>
-                                        <td>{{$t->status}}</td>
-                                        <td > <button type="submit" name="submit" value="submit"  class="btn btn-primary">Approve </button>
-                                            <button type="submit"   class="btn btn-danger">Cancel </button>
+                                        <td>{{ $t->status }}</td>
+                                        <td>
+                                            @if($t->status ==0)
+                                            <form method="POST" class="form form-vertical" autocomplete="on" action="{{route('ro--transfer-approval')}}">
+                                                @csrf
+                                                <input type="hidden" name="tran_id" value="{{$t->id}}" id="">
+                                                <button type="submit" name="submit" value="approve"
+                                                    class="btn btn-primary">Approve </button>
+                                                <button type="submit" name="submit" value="cancel"
+                                                    class="btn btn-danger">Cancel </button>
+                                            </form>
+                                            @endif
+
                                         </td>
                                     </tr>
                                     @php

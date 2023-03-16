@@ -110,6 +110,7 @@ Route::get('/user-transfer-balances', [\App\Http\Controllers\GLController::class
 Route::post('/add-transfer-request', [\App\Http\Controllers\GLController::class , 'addTransferRequest'])->name('add-transfer-request');
 Route::get('/investor-transfer-queue', [\App\Http\Controllers\GLController::class , 'investorApprovalQueue'])->name('investor-transfer-queue');
 Route::get('/ro-transfer-queue', [\App\Http\Controllers\GLController::class , 'userApprovalQueue'])->name('ro-transfer-queue');
+Route::post('/ro--transfer-approval', [\App\Http\Controllers\GLController::class , 'userApproval'])->name('ro--transfer-approval');
 
 
 
@@ -123,6 +124,7 @@ Route::get('/add-sub-exp-heads{id}', [\App\Http\Controllers\ExpenseHeadControlle
 Route::POST('/store-Subexp-Heads', [\App\Http\Controllers\ExpenseHeadController::class , 'storeSubexpHeads'])->name('storeSubexpHeads');
 
 Route::get('/ro-dashboard', [\App\Http\Controllers\RecoveryController::class , 'roDashboard'])->name('ro-dashboard');
+
 
 // controller Instalment Controller
 Route::controller(InstalmentController::class)->prefix('instalment')->group( function () {
