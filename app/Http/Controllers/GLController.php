@@ -113,22 +113,33 @@ class GLController extends Controller
 
     public function investorApprovalQueue(){
 
-        $tr = TransferRequests::all();
+        // $tr = TransferRequests::all();
 
         $t_pending = TransferRequests::where('status',0)->get();
         $t_appr = TransferRequests::where('status',1)->get();
         $t_cancel = TransferRequests::where('status',2)->get();
-        return view('capital-investments.transfer-requests',compact('tr','$t_pending',,));
+        return view('capital-investments.transfer-requests',compact('t_pending','t_appr','t_cancel'));
 
     }
 
     public function userApprovalQueue(){
 
         $user = Auth::user();
-        $tr = TransferRequests::whereHas('sender_account',function($query) use($user){
+        
+        $t_pending = TransferRequests::whereHas('sender_account',function($query) use($user){
             $query->where('owner_type','App\Models\User')->where('owner_id',$user->id);
-        })->get();
-        return view('recovery.ro-pending-fund-requests',compact('tr'));
+        })->where('status',0)->get();
+
+        $t_appr = TransferRequests::whereHas('sender_account',function($query) use($user){
+            $query->where('owner_type','App\Models\User')->where('owner_id',$user->id);
+        })->where('status',1)->get();
+
+        $t_cancel = TransferRequests::whereHas('sender_account',function($query) use($user){
+            $query->where('owner_type','App\Models\User')->where('owner_id',$user->id);
+        })->where('status',2)->get();
+
+
+        return view('recovery.ro-pending-fund-requests',compact('t_pending','t_cancel','t_appr'));
 
     }
 
@@ -137,14 +148,18 @@ class GLController extends Controller
         $t = TransferRequests ::where('id',$request->tran_id)->first();
         if($request->input('submit')=='approve'){
 
-               
              $t->status = 1;
              $t->save();
+
+            //  make leadger entried
+
+
         }else{
 
 
             $t->status = 2;
             $t->save();
+
                 
         }
         
@@ -174,17 +189,7 @@ class GLController extends Controller
         
         return view('capital-investments.account-balances',compact('transactions','investors','bank_accounts'));
        
-        // return $transactions;
-        // // allbank accounts
-        // $bank_acc  = ChartOfAccount::where(function ($query) {
-        //     $query->where('account_type', 1)
-        //           ->orWhere('account_type', 4);
-        //         }
-        //     )->get();
-        // dd($bank_acc);
-        // foreach($investors as $inv){
-        //     foreach($bank_acc as $acc){
-        //     }
+    
 
     }
     public function userAccountBalances(Request $request)
@@ -200,17 +205,7 @@ class GLController extends Controller
         
         return view('recovery.ro-account_balances',compact('transactions','investors','bank_accounts'));
        
-        // return $transactions;
-        // // allbank accounts
-        // $bank_acc  = ChartOfAccount::where(function ($query) {
-        //     $query->where('account_type', 1)
-        //           ->orWhere('account_type', 4);
-        //         }
-        //     )->get();
-        // dd($bank_acc);
-        // foreach($investors as $inv){
-        //     foreach($bank_acc as $acc){
-        //     }
+       
 
     }
 
