@@ -65,7 +65,8 @@
                                                 <tr>
 
                                                     <td>{{ $count }}</td>
-                                                    <td>{{ $pur->due_date }}</td>
+                                                    <td> <input type="date" class="form-control" value="{{$pur->due_date}}">
+                                                        </td>
                                                     <td>{{ number_format($pur->amount) }}</td>
                                                     <td> {{ number_format($pur->amount_paid) }}</td>
                                                     @php
@@ -99,6 +100,10 @@
                                                         <a class=" abc btn btn-primary waves-effect waves-float waves-light"
                                                             href="{{ route('show-instalment-payments', $pur->id) }}">
                                                             Details
+                                                        </a>
+                                                        <a style="background-color: coral;color:white" class=" abc btn btn-alert waves-effect waves-float waves-light"
+                                                            href="#">
+                                                            Extend 
                                                         </a>
 
                                                         {{-- <a href="{{ route('recieve-instalment',$pur->id) }}" >pay</a> --}}
