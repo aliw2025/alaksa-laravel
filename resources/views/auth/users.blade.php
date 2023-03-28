@@ -30,7 +30,9 @@
                                         <td>{{$count}}</td>
                                         <td>{{$user->name}}</td>
                                         <td>{{$user->email}}</td>
+                                        @if(isset($user->designation))
                                         <td>{{$user->designation->Name}}</td>
+                                        @endif
                                         <td>
                                             <a style="text-decoration: none;color:black" href="{{route('edit-designation',$user->id)}}"><i data-feather='edit'></i></a>
              

@@ -1,5 +1,5 @@
-@extends('layouts.app')
-@section('content')
+@extends('template.header')
+@section('section')
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
@@ -9,7 +9,6 @@
                 <div class="card-body">
                     <form method="POST" action="{{ route('register') }}">
                         @csrf
-
                         <div class="row mb-3">
                             <label for="name" class="col-md-4 col-form-label text-md-end">{{ __('Name') }}</label>
 

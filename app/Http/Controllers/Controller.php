@@ -158,71 +158,71 @@ class Controller extends BaseController
     {
        /********************** Leadger Entries  ****************************/
         // //1- cash
-        // $type = new AccountType();
-        // $type->name = "cash";
-        // $type->category = "Assets";
-        // $type->save();
-        // //2- equipment  
-        // $type = new AccountType();
-        // $type->name = "Equipment";
-        // $type->category = "Assets";
-        // $type->save();
+        $type = new AccountType();
+        $type->name = "cash";
+        $type->category = "Assets";
+        $type->save();
+        //2- equipment  
+        $type = new AccountType();
+        $type->name = "Equipment";
+        $type->category = "Assets";
+        $type->save();
         // //3- inventory
-        // $type = new AccountType();
-        // $type->name = "inventory";
-        // $type->category = "Assets";
-        // $type->save();
+        $type = new AccountType();
+        $type->name = "inventory";
+        $type->category = "Assets";
+        $type->save();
         // //4- bank
-        // $type = new AccountType();
-        // $type->name = "Bank";
-        // $type->category = "Assets";
-        // $type->save();
+        $type = new AccountType();
+        $type->name = "Bank";
+        $type->category = "Assets";
+        $type->save();
         // //5- account receivable
-        // $type = new AccountType();
-        // $type->name = "Account Receivable";
-        // $type->category = "Assets";
-        // $type->save();
+        $type = new AccountType();
+        $type->name = "Account Receivable";
+        $type->category = "Assets";
+        $type->save();
         // //6- equity
-        // $type = new AccountType();
-        // $type->name = "equity";
-        // $type->category = "equity";
-        // $type->save();
+        $type = new AccountType();
+        $type->name = "equity";
+        $type->category = "equity";
+        $type->save();
         // //7- account payable
-        // $type = new AccountType();
-        // $type->name = "Account Payable";
-        // $type->category = "Liabilty";
-        // $type->save();
+        $type = new AccountType();
+        $type->name = "Account Payable";
+        $type->category = "Liabilty";
+        $type->save();
         // //8- expenses
-        // $type = new AccountType();
-        // $type->name = "Expenses";
-        // $type->category = "Expenses";
-        // $type->save();
+        $type = new AccountType();
+        $type->name = "Expenses";
+        $type->category = "Expenses";
+        $type->save();
         // //9-sale revenue
-        // $type = new AccountType();
-        // $type->name = "Sale Revenue";
-        // $type->category = "Revenue";
-        // $type->save();
+        $type = new AccountType();
+        $type->name = "Sale Revenue";
+        $type->category = "Revenue";
+        $type->save();
         // //10-trade discount revenue
-        // $type = new AccountType();
-        // $type->name = "Trade Discount Revenue";
-        // $type->category = "Revenue";
-        // $type->save();
+        $type = new AccountType();
+        $type->name = "Trade Discount Revenue";
+        $type->category = "Revenue";
+        $type->save();
 
-        // $transaction_type = new TransactionStatus();
-        // $transaction_type->desc = "entry";
-        // $transaction_type->save();
+        $transaction_type = new TransactionStatus();
+        $transaction_type->desc = "entry";
+        $transaction_type->save();
 
-        // $transaction_type = new TransactionStatus();
-        // $transaction_type->desc = "cancelled";
-        // $transaction_type->save();
+        $transaction_type = new TransactionStatus();
+        $transaction_type->desc = "cancelled";
+        $transaction_type->save();
 
-        // $transaction_type = new TransactionStatus();
-        // $transaction_type->desc = "posted";
-        // $transaction_type->save();
+        $transaction_type = new TransactionStatus();
+        $transaction_type->desc = "posted";
+        $transaction_type->save();
 
-        // $transaction_type = new TransactionStatus();
-        // $transaction_type->desc = "returned";
-        // $transaction_type->save();
+        $transaction_type = new TransactionStatus();
+        $transaction_type->desc = "returned";
+        $transaction_type->save();
 
 
         // dd('sdsds');
