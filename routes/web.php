@@ -43,10 +43,9 @@ Route::get('/get-recovery-off', [\App\Http\Controllers\Controller::class , 'getR
 Route::get('/get-marketing-off', [\App\Http\Controllers\Controller::class , 'getMarketingOff'])->name('get-marketing-off');
 Route::get('/get-inquiry-off', [\App\Http\Controllers\Controller::class , 'getInquiryOff'])->name('get-inquiry-off');
 Route::get('/capital-investments', [\App\Http\Controllers\Controller::class , 'showInvestments'])->name('capital-investments');
+
 // temporary routes
 // Route::get('/purchase' , [\App\Http\Controllers\Controller::class,'showPurchase'])->name('purchase');
-
-
 Route::get('/get-items', [\App\Http\Controllers\ItemController::class , 'getItems'])->name('get-items');
 Route::get('/get-item/{id}', [\App\Http\Controllers\ItemController::class , 'Itemdetail'])->name('get-item');
 
@@ -127,15 +126,13 @@ Route::get('/ro-dashboard', [\App\Http\Controllers\RecoveryController::class , '
 
 
 // controller Instalment Controller
-Route::controller(InstalmentController::class)->prefix('instalment')->group( function () {
-        
+Route::controller(InstalmentController::class)->prefix('instalment')->group( function () {        
         Route::get('/recieve-instalment/{instalment}', 'recieveInstalment')->name('recieve-instalment');
         Route::post('/pay-instalment', 'payInstalment')->name('pay-instalment');
         Route::get('/show-instalment-payments/{id}', 'showInstalmentDetails')->name('show-instalment-payments');
         Route::get('/show-instalment-payment/{id}', 'showInstalmentPayment')->name('show-instalment-payment');
         Route::get('/up-comming-instalments', 'showUpcomingInstalments')->name('show-upcoming-instalments');
         // Route::get('/search-comming-instalments', 'searchUpcomingInstalments')->name('show-upcoming-instalments');
-
 });
 
 // chartOfAccountController

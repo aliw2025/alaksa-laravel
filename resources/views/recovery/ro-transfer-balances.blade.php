@@ -30,13 +30,13 @@
                                                     <label for="">Account</label>
                                                     <select class="form-control" name="bnk_1" id="">
                                                         @foreach ($ro_bank_accounts as $bnk2)
-                                                        <option value="{{$bnk2->id}}">{{$bnk2->account_name}}</option>
-                                                    @endforeach
+                                                             <option value="{{$bnk2->id}}">{{$bnk2->account_name}}</option>
+                                                        @endforeach
                                                        
                                                     </select>
                                                     <label for="">Amount</label>
-                                                    <input type="text" name="amount" id=""
-                                                        class="form-control">
+                                                    <input  type="text" name="amount" id=""
+                                                        class="number-separator form-control">
                                                 </div>
                                             </div>
                                         </div>

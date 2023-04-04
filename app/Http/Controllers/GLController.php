@@ -21,7 +21,7 @@ class GLController extends Controller
      */
     public function index()
     {
-    //
+        //
     }
 
     /**
@@ -31,7 +31,7 @@ class GLController extends Controller
      */
     public function create()
     {
-    //
+        //
     }
 
     /**
@@ -42,7 +42,7 @@ class GLController extends Controller
      */
     public function store(Request $request)
     {
-    //
+        //
     }
 
     /**
@@ -53,7 +53,7 @@ class GLController extends Controller
      */
     public function show(GLeadger $gLeadger)
     {
-    //
+        //
     }
 
     /**
@@ -64,7 +64,7 @@ class GLController extends Controller
      */
     public function edit(GLeadger $gLeadger)
     {
-    //
+        //
     }
 
     /**
@@ -76,11 +76,12 @@ class GLController extends Controller
      */
     public function update(Request $request, GLeadger $gLeadger)
     {
-    //
+        //
     }
+
     public function transferBalances(Request $request)
     {
-
+        // getting all accounts     
         $bank_accounts = ChartOfAccount::where('account_type', 1)->orWhere('account_type', 4)->get();
         $investors = Investor::all();
         return view('capital-investments.transfer-balances', compact('bank_accounts', 'investors'));
@@ -101,11 +102,10 @@ class GLController extends Controller
 
         // dd($request->all());
 
-
         $tr = new TransferRequests();
         $tr->sender_account_id = $request->bnk_1;
         $tr->reciever_account_id = $request->bnk_2;
-        $tr->amount = $request->amount;
+        $tr->amount =  str_replace(',', '', $request->amount);
         $tr->status = 0;
         $tr->owner_investor_id = $request->inv_1;
         $tr->save();
@@ -118,12 +118,10 @@ class GLController extends Controller
     {
 
         // $tr = TransferRequests::all();
-
         $t_pending = TransferRequests::where('status', 0)->get();
         $t_appr = TransferRequests::where('status', 1)->get();
         $t_cancel = TransferRequests::where('status', 2)->get();
         return view('capital-investments.transfer-requests', compact('t_pending', 't_appr', 't_cancel'));
-
     }
 
     public function userApprovalQueue()
@@ -145,10 +143,9 @@ class GLController extends Controller
 
 
         return view('recovery.ro-pending-fund-requests', compact('t_pending', 't_cancel', 't_appr'));
-
     }
 
-    
+    // functino that runs after approving authority approves the request
     public function userApproval(Request $request)
     {
         $user = Auth::user();
@@ -161,29 +158,51 @@ class GLController extends Controller
             $t->createLeadgerEntry($t->reciever_account_id, $t->amount, $t->owner_investor_id, $t->created_at, $user->id);
             $t->createLeadgerEntry($t->sender_account_id, -$t->amount, $t->owner_investor_id, $t->created_at, $user->id);
             //  make leadger entried
-        }
-        else {
-
+        } else {
 
             $t->status = 2;
             $t->save();
-
-
         }
 
         return redirect()->route('investor-transfer-queue');
     }
 
+
+    /****
+     * function to transfer balance from one company account to other
+     *  company account
+     */
     public function bankTransfer(Request $request)
     {
-        dd($request->all());
+
+
+        $user  = Auth::user();
+
+        // if investor is same no payable will be created ,
+        // other wise payable will be created for different kind of investor
+
         if ($request->inv_1 == $request->inv_2) {
-        // $bnk_1 = ChartOfAccount ::where('account_id');
-        }
-        else {
+
+            $t = new TransferRequests();
+            $t->sender_account_id = $request->bnk_1;
+            $t->reciever_account_id = $request->bnk_2;
+            $t->amount =  str_replace(',', '', $request->amount);
+            $t->status = 2;
+            $t->owner_investor_id = $request->inv_1;
+            $t->save();
+            //leadger entry for debit cash/bank of investory
+            $t->createLeadgerEntry($t->reciever_account_id, $t->amount, $t->owner_investor_id, $t->created_at, $user->id);
+            $t->createLeadgerEntry($t->sender_account_id, -$t->amount, $t->owner_investor_id, $t->created_at, $user->id);
+        } else {
+
+            // create a method to deal with payables 
+
 
         }
+
+        return redirect()->route('index');
     }
+
     public function AccountBalances(Request $request)
     {
         $investors = Investor::all();
@@ -191,33 +210,31 @@ class GLController extends Controller
             $query->where('account_type', 1)->orWhere('account_type', 4);
         })->get();
         $transactions = GLeadger::select('investor_id', 'account_id', DB::raw('sum(value) as value'))->where('value', '!=', 0)->whereHas('account', function ($query) {
-            $query->where(function ($query2) {
+            $query->where(
+                function ($query2) {
                     $query2->where('account_type', 1)->orWhere('account_type', 4);
                 }
-                );
-            })->groupBy('account_id')->groupBy('investor_id')->with('account')->with('investor')->get();
+            );
+        })->groupBy('account_id')->groupBy('investor_id')->with('account')->with('investor')->get();
 
         return view('capital-investments.account-balances', compact('transactions', 'investors', 'bank_accounts'));
-
-
-
     }
+
+
     public function userAccountBalances(Request $request)
     {
         $investors = Investor::all();
         $user = Auth::user();
         $bank_accounts = $user->charOfAccounts;
         $transactions = GLeadger::select('investor_id', 'account_id', DB::raw('sum(value) as value'))->where('value', '!=', 0)->whereHas('account', function ($query) {
-            $query->where(function ($query2) {
+            $query->where(
+                function ($query2) {
                     $query2->where('account_type', 1)->orWhere('account_type', 4);
                 }
-                );
-            })->groupBy('account_id')->groupBy('investor_id')->with('account')->with('investor')->get();
+            );
+        })->groupBy('account_id')->groupBy('investor_id')->with('account')->with('investor')->get();
 
         return view('recovery.ro-account_balances', compact('transactions', 'investors', 'bank_accounts'));
-
-
-
     }
 
     /**
@@ -228,6 +245,6 @@ class GLController extends Controller
      */
     public function destroy(GLeadger $gLeadger)
     {
-    //
+        //
     }
 }

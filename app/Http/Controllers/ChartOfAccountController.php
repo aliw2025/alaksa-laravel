@@ -28,9 +28,8 @@ class ChartOfAccountController extends Controller
 
     public function create()
     {
-        $accounts = ChartOfAccount::where('account_type', 4)->get();
+        $accounts = ChartOfAccount::where('account_type', 4)->where('owner_type','App\Models\Investor')->get();
         return view('capital-investments.accounts', compact('accounts'));
-
 
     }
 
@@ -43,7 +42,6 @@ class ChartOfAccountController extends Controller
     public function store(Request $request)
     {
         //
-
         $validated = $request->validate(
         [
             'account_name' => 'required',
@@ -58,15 +56,14 @@ class ChartOfAccountController extends Controller
             'opening_balance' => 0
         ]);
 
-
         // dd($request->all());
-
         return redirect()->route('chartOfAccount.create');
     }
 
 
     public function userAccountsCreate(Request $request)
     {
+
         $user = $email = Auth::user();
         $accounts = ChartOfAccount::where('owner_type', 'App\Models\User')->get();
         return view('recovery.ro-accounts', compact('accounts','user'));

@@ -47,10 +47,10 @@
                     <li>
                         {{-- href="{{ route('investor.create') }}" --}}
                         {{-- href="{{ route('investor.create') }}" --}}
-                        <a class="d-flex align-items-center">
+                        <!-- <a class="d-flex align-items-center">
                             <i data-feather="circle"></i>
                             <span class="menu-item text-truncate" data-i18n="eCommerce">Capital Investments</span>
-                        </a>
+                        </a> -->
                     </li>
                     <li>
                         <a href="{{ route('chartOfAccount.create') }}" class="d-flex align-items-center">

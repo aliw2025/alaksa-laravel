@@ -37,7 +37,7 @@
                                                     </select>
                                                     <label for="">Amount</label>
                                                     <input type="text" name="amount" id=""
-                                                        class="form-control">
+                                                        class="number-separator form-control">
                                                 </div>
                                             </div>
                                         </div>
