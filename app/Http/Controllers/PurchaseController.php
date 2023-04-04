@@ -186,6 +186,7 @@ class PurchaseController extends Controller
             'date'=>$purchase->purchase_date,
             'user_id'=>$user->id               
         ]);  
+        
 
         //  getting supplier payable account of the supplier
         $purchase->leadgerEntries()->create([
