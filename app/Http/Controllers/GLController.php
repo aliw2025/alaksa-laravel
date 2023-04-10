@@ -101,7 +101,11 @@ class GLController extends Controller
     {
 
         // dd($request->all());
-
+        $validated = $request->validate(
+            [
+                'amount' => 'required',
+            ]
+        );  
         $tr = new TransferRequests();
         $tr->sender_account_id = $request->bnk_1;
         $tr->reciever_account_id = $request->bnk_2;
@@ -175,6 +179,13 @@ class GLController extends Controller
     public function bankTransfer(Request $request)
     {
 
+        // validate id amount is provided
+        $validated = $request->validate(
+            [
+                'amount' => 'required',
+            ]
+        );
+
 
         $user  = Auth::user();
 
@@ -187,15 +198,17 @@ class GLController extends Controller
             $t->sender_account_id = $request->bnk_1;
             $t->reciever_account_id = $request->bnk_2;
             $t->amount =  str_replace(',', '', $request->amount);
-            $t->status = 2;
+            $t->status = 0;
             $t->owner_investor_id = $request->inv_1;
             $t->save();
             //leadger entry for debit cash/bank of investory
-            $t->createLeadgerEntry($t->reciever_account_id, $t->amount, $t->owner_investor_id, $t->created_at, $user->id);
-            $t->createLeadgerEntry($t->sender_account_id, -$t->amount, $t->owner_investor_id, $t->created_at, $user->id);
+            // $t->createLeadgerEntry($t->reciever_account_id, $t->amount, $t->owner_investor_id, $t->created_at, $user->id);
+            // $t->createLeadgerEntry($t->sender_account_id, -$t->amount, $t->owner_investor_id, $t->created_at, $user->id);
         } else {
 
+
             // create a method to deal with payables 
+
 
 
         }

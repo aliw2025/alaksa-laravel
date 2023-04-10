@@ -33,14 +33,15 @@
                             </thead>
                             <tbody class="inventory-iems-body" id="nventory-iems-body">
                                 @php
-                                    $count = 1;
+                                    $count = 1; 
                                 @endphp
                                 
        
-                                @foreach ($t_pending as $t)
+                                @foreach ($t_pending as $t) 
                                     <tr>
+                                    <!--  -->
                                         <td>{{ $count }}</td>
-                                        <td>{{ $t->sender_account->owner->name }}</td>
+                                        <td>{{ $t->sender_account->owner->name }} {{ $t->sender_account->owner->investor_name }}</td>
                                         <td>{{ $t->sender_account->account_name }} |
                                             {{ $t->sender_account->account_number }} </td>
                                         <td>{{ number_format($t->amount) }} </td>
