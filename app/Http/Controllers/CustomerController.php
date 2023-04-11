@@ -105,9 +105,11 @@ class CustomerController extends Controller
      */
 
      public function CustomerFiles(Request $request){
+
         $files = File::all();
         $customer = Customer::find($request->id);
         return view('customer.files',compact('customer','files'));
+        
      }
      public function CustomerFileUpload(Request $request){
         // dd($request->all());

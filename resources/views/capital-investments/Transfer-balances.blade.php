@@ -93,7 +93,7 @@
         var promt = "";
         if (sender_id != rcv_id) {
 
-            promt = "Note : parites are different , transfer will be considered loan";
+            promt = "Note : parties are different , transfer will be considered loan";
 
         } else {
             promt = "";
