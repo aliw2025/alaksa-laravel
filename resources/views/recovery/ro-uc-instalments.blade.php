@@ -17,26 +17,27 @@
                             <div class="col-2">
                                 <div class="">
                                     <span class="title">From Date:</span>
-                                    <input  name="from_date" type="text"
-                                        class="form-control invoice-edit-input date-picker flatpickr-input"
-                                        readonly="readonly">
+                                    
+                                    <input  value="{{$from_date->format('Y-m-d')}}" name="from_date" type="date"
+                                        class="form-control"
+                                        >
                                 </div>
                             </div>
                             <div class="col-2">
                                 <div class="">
                                     <span class="title">To Date:</span>
-                                    <input name="to_date" type="text"
-                                        class="form-control invoice-edit-input date-picker flatpickr-input"
-                                        readonly="readonly">
+                                    
+                                    <input value="{{$to_date->format('Y-m-d')}}" name="to_date" type="date"
+                                        class="form-control">
                                 </div>
                             </div>
                             <div class="col-2 ">
                                 <span  class="title">Customer Name:</span>
-                                <input name="customer_name" type="text" class="form-control">
+                                <input @if(isset($customer_name)) value="{{$customer_name}}" @endif name="customer_name" type="text" class="form-control">
                             </div>
                             <div class="col-2 ">
                                 <span class="title">Customer ID:</span>
-                                <input name="customer_id" type="text" class="form-control">
+                                <input @if(isset($customer_id)) value="{{$customer_id}}" @endif name="customer_id" type="text" class="form-control">
                             </div>
                             <div class="col-2 ">
                                 <span class="title">status</span>
@@ -64,10 +65,10 @@
                                     <tr style="background-color:red !important;">
                                         <th style="width: 2px !important">#</th>
                                         <th>Customer  Name</th>
-                                        <th>sale ID</th>
+                                        <!-- <th>sale ID</th> -->
                                         <th scope="col">Sale invoice NO</th>  
                                         <th scope="col">Instalment #</th>  
-                                        <th>Instalment ID</th>
+                                        <!-- <th>Instalment ID</th> -->
                                         <th>Staus</th>
                                         <th scope="col">Total Amount</th>
                                         <th scope="col">Due Date</th>
@@ -84,10 +85,10 @@
                                     <tr>
                                         <td>{{$count}}</td>
                                         <td>{{$pur->sale->customer->customer_name}}</td>
-                                        <td>{{$pur->sale->id}}</td>
+                                        <!-- <td>{{$pur->sale->id}}</td> -->
                                         <td>{{$pur->sale->invoice_no}}</td>
                                         <td>{{$pur->instalment_no}}</td>
-                                        <td>{{$pur->id}}</td>
+                                        <!-- <td>{{$pur->id}}</td> -->
                                         <td>{{$pur->instalment_paid==0? 'Pending':'Paid'}}</td>
                                         <td>{{$pur->amount}}</td>
                                         <td>{{$pur->due_date}}</td>
@@ -97,7 +98,8 @@
                                         <td> {{ number_format($pur->total) }}</td>
                                         <td>{{date('d-m-Y', strtotime($pur->sale_date))}}</td> --}}
                                         <td>
-                                            <a style="text-decoration: none;color:black" href="{{url('get-sale-instalments')."?id=".$pur->sale->id.'&ins_id='.$pur->id}}"><i data-feather='dollar-sign'></i></a>
+                                            <!-- <i data-feather='dollar-sign'></i> -->
+                                            <a style="text-decoration: none;color:black" href="{{url('get-sale-instalments')."?id=".$pur->sale->id.'&ins_id='.$pur->id}}">Select</a>
 
                                         </td>
                                     </tr>

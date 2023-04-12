@@ -124,12 +124,20 @@ class InstalmentController extends Controller
     }
 
     public function showUpcomingInstalments(Request $request)
-    {
+    {   
+        // dd($request->all());
 
         // $instalments = Instalment::all();
-
+        $customer_name = $request->customer_name;
+        $customer_id = $request->customer_id;
         if (count($request->all()) > 0) {
-            $sales = Instalment::SearchInstalment($request->from_date, $request->to_date, $request->customer_name, $request->customer_id, $request->instalment_paid)->paginate(10);
+            
+            
+            $from_date = new Carbon($request->from_date); 
+            $to_date  = new Carbon ($request->to_date);
+           
+
+            $sales = Instalment::SearchInstalment($request->from_date, $request->to_date, $request->customer_name, $request->customer_id, $request->instalment_paid)->paginate(20);
             $sales->appends([
                 'from_date' => $request->from_date,
                 'to_date' => $request->to_date,
@@ -137,7 +145,7 @@ class InstalmentController extends Controller
                 'customer_id' => $request->customer_id,
                 'invoice_no' => $request->invoice_no
             ]);
-            return view('recovery.ro-uc-instalments', compact('sales'));
+            return view('recovery.ro-uc-instalments', compact('sales','from_date','to_date','customer_name','customer_id'));
         }
         else {
             // dd('request is empty');
@@ -150,7 +158,7 @@ class InstalmentController extends Controller
             $mytime2->second(0);         
             // echo ($mytime);
             // echo ($mytime2);
-
+            // dd($mytime2);
             // dd('ddff');
             $sales = Instalment::SearchInstalment($mytime2,$mytime, $request->customer_name, $request->customer_id, $request->instalment_paid)->paginate(10);
             $sales->appends([
@@ -160,7 +168,10 @@ class InstalmentController extends Controller
                 'customer_id' => $request->customer_id,
                 'invoice_no' => $request->invoice_no
             ]);
-            return view('recovery.ro-uc-instalments', compact('sales'));
+            $from_date = $mytime2;
+            $to_date = $mytime;
+            // dd($sales);
+            return view('recovery.ro-uc-instalments', compact('sales','from_date','to_date','customer_name','customer_id'));
         }
 
 

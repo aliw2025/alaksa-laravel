@@ -106,7 +106,7 @@ class GLController extends Controller
             [
                 'amount' => 'required',
             ]
-        );  
+        );
         $tr = new TransferRequests();
         $tr->sender_account_id = $request->bnk_1;
         $tr->reciever_account_id = $request->bnk_2;
@@ -207,22 +207,25 @@ class GLController extends Controller
             // $t->createLeadgerEntry($t->sender_account_id, -$t->amount, $t->owner_investor_id, $t->created_at, $user->id);
         } else {
 
-            // create a method to deal with payables 
-             $inv_loan = new InvestorLoan();
-             $inv_loan->inv1_id= $request->inv_1;
-             $inv_loan->inv1_account =  $request->bnk_1;
-             $inv_loan->inv2_account =  $request->bnk_2;
-             $inv_loan->amount = 0;
-             $inv_loan->inv1_id = $request->inv_2;
-             $inv_loan->save();
+            // create a method to deal with payables    
+            $inv_loan = new InvestorLoan();
+            $inv_loan->inv1_id = $request->inv_1;
+            $inv_loan->inv1_account =  $request->bnk_1;
+            $inv_loan->inv2_account =  $request->bnk_2;
+            $inv_loan->amount = $request->amount;
+            $inv_loan->inv2_id = $request->inv_2;
+            $inv_loan->save();
 
-             //   create leadger entries here.
-            $inv_loan->createLeadgerEntry($t->reciever_account_id, $t->amount, $t->owner_investor_id, $t->created_at, $user->id);
-            $inv_loan->createLeadgerEntry($t->sender_account_id, -$t->amount, $t->owner_investor_id, $t->created_at, $user->id);
+            //   create leadger entries here.
+            $inv_loan->createLeadgerEntry(5,  $inv_loan->amount,  $inv_loan->inv1_id,  $inv_loan->created_at, $user->id);
+            $inv_loan->createLeadgerEntry( $inv_loan->inv1_account, - $inv_loan->amount,  $inv_loan->inv1_id,  $inv_loan->created_at, $user->id);
+
+            $inv_loan->createLeadgerEntry( $inv_loan->inv1_account,  $inv_loan->amount,  $inv_loan->inv2_id,  $inv_loan->created_at, $user->id);
+            $inv_loan->createLeadgerEntry(7, - $inv_loan->amount,  $inv_loan->inv2_id,  $inv_loan->created_at, $user->id);
 
 
 
-          
+
         }
 
         return redirect()->route('index');

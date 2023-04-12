@@ -20,14 +20,15 @@ return new class extends Migration
             $table->double('amount')->nullable();
             $table->unsignedBigInteger('inv2_id')->nullable();
             $table->unsignedBigInteger('inv2_account')->nullable();
-            $table->date('date');
+            $table->date('date')->nullable();
             $table->timestamps();
-            
+
             $table->foreign('inv1_id')->references('id')->on('investors')->onDelete('cascade');
             $table->foreign('inv2_id')->references('id')->on('investors')->onDelete('cascade');
 
             $table->foreign('inv1_account')->references('id')->on('chart_of_accounts')->onDelete('cascade');
             $table->foreign('inv2_account')->references('id')->on('chart_of_accounts')->onDelete('cascade');
+
 
 
 
