@@ -16,18 +16,18 @@
                                 <form action="">
                                     <div class="row my-1">
                                         <div class="col-6">
-                                            <label class="mb-1">Invoice no</label>
+                                            <label class="mb-1">Sale Invoice no</label>
                                             <input readonly id="invoice_no" onkeyup="getInvoices()"
                                                 value="{{ isset($sale) ? $sale->invoice_no : '' }}" class="form-control"
                                                 type="text">
-                                            <div class="list-type" id="list" style="position: absolute; z-index: 1;"
+                                            <!-- <div class="list-type" id="list" style="position: absolute; z-index: 1;"
                                                 class="card mb-4">
                                                 <div style="
                                                     height:150px;
                                                     overflow-y: scroll;"
                                                     id="listBody" class="list-group ">
                                                 </div>
-                                            </div>
+                                            </div> -->
                                         </div>
                                     </div>
                                 </form>
@@ -57,7 +57,7 @@
                                         @php
                                             $count = 1;
                                             $total = 0;
-                                            $paid = 0;
+                                            $paid = 0;  
                                             $rem = 0;
                                         @endphp
                                         @if (isset($instalments))
@@ -89,8 +89,8 @@
                                                                     class="p-1 badge rounded-pill badge-light-danger">Pending</span>
                                                             </div>
                                                         @endif
-                                                    </td>
-                                                    <td>
+                                                    </td>   
+                                                    <td colspan="2">
                                                         <button @if ($pur->instalment_paid) disabled @endif
                                                             data-rem={{ $rem }} data-id="{{ $pur->id }}"
                                                             class=" abc btn btn-success waves-effect waves-float waves-light"
