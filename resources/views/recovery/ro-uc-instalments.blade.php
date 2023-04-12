@@ -94,6 +94,7 @@
                                         <td>{{$pur->due_date}}</td>
                                         
                                         {{-- <td>{{$pur->invoice_no}}</td> --}}
+                                        
                                         {{-- <td>{{$pur->transaction_status->desc}}</td>
                                         <td> {{ number_format($pur->total) }}</td>
                                         <td>{{date('d-m-Y', strtotime($pur->sale_date))}}</td> --}}
