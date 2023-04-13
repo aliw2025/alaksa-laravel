@@ -178,6 +178,13 @@ class InstalmentController extends Controller
 
     }
 
+    public function extendInstalment(Request $request){
+
+        dd($request->all());
+
+
+    }
+
     /**
      * Store a newly created resource in storage.
      *

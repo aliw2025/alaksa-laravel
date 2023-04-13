@@ -201,6 +201,7 @@ class PurchaseController extends Controller
     
     }
     
+    
 
     public function showPurchaseItems($id){
 

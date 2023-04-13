@@ -61,7 +61,7 @@ Route::get('/sale-return', [\App\Http\Controllers\SaleController::class , 'saleR
 Route::put('/sale-return-adjusment', [\App\Http\Controllers\SaleController::class , 'saleReturnAdjustment'])->name('sale-return-adjustment');
 Route::Post('/post-return-adjustment', [\App\Http\Controllers\SaleController::class , 'postReturnAdjustment'])->name('post-return-adjustment');
 Route::get('/get-sale-no', [\App\Http\Controllers\SaleController::class , 'getSaleNo'])->name('get-sale-no');
-Route::get('/get-sale-instalments', [\App\Http\Controllers\SaleController::class , 'showInstalments'])->name('get-sale-instalments');
+Route::get('/get-sale-instalments', [\App\Http\Controllers\SaleController::class , 'showInstalments'])->name('s');
 Route::get('/test-pdf', [\App\Http\Controllers\SaleController::class , 'testPdf'])->name('test-pdf');
 Route::get('/get-invoices', [\App\Http\Controllers\SaleController::class , 'getInvoices'])->name('get-invoices');
 
@@ -132,6 +132,7 @@ Route::controller(InstalmentController::class)->prefix('instalment')->group( fun
         Route::get('/show-instalment-payments/{id}', 'showInstalmentDetails')->name('show-instalment-payments');
         Route::get('/show-instalment-payment/{id}', 'showInstalmentPayment')->name('show-instalment-payment');
         Route::get('/up-comming-instalments', 'showUpcomingInstalments')->name('show-upcoming-instalments');
+        Route::post('/extend-instalment','extendInstalment')->name('extend-instalment');
         // Route::get('/search-comming-instalments', 'searchUpcomingInstalments')->name('show-upcoming-instalments');
 });
 
