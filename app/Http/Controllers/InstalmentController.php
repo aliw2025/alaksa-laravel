@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Instalment;
+use App\Models\InstalmentExtention;
 use App\Models\InstalmentPayment;
 use App\Models\Investor;
 
@@ -179,17 +180,33 @@ class InstalmentController extends Controller
     }
 
     public function extendInstalment(Request $request){
-
+        
         // dd($request->all());
+        $validated = $request->validate([
+            'new_date'=>'required',
+        ]);
+        
+        $user = Auth::user();
+
+        // changing instalment due date
         $instalment = Instalment::find($request->id);
+        $prev_due_date = $instalment->due_date;
         $instalment->due_date = $request->new_date;
         $instalment->save();
 
-        // dd($instalment);
-        // dd($request->all());
-        
-        return redirect('/get-sale-instalments?id='.$request->sale_id.'&ins_id='.$request->id);
+        // recording the history 
+        $instalmentExt = new InstalmentExtention();
+        $instalmentExt->note = $request->note;
+        $instalmentExt->user_id = $user->id;
+        $instalmentExt->note = $request->note;
+        $instalmentExt->instalment_id = $request->id;
+        $instalmentExt->previous_date =  $prev_due_date;
+        $instalmentExt->current_date =   $request->new_date;
+        $instalmentExt->save();
 
+
+
+        return redirect('/get-sale-instalments?id='.$request->sale_id.'&ins_id='.$request->id);
 
 
     }

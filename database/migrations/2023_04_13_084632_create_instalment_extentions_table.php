@@ -21,7 +21,7 @@ return new class extends Migration
             $table->unsignedBigInteger('instalment_id')->nullable();
             $table->date('previous_date')->nullable();
             $table->date('current_date')->nullable();
-            $table->string('note');
+            $table->string('note')->nullable();
             $table->timestamps();
             $table->foreign('instalment_id')->references('id')->on('instalments')->onDelete('cascade');
 

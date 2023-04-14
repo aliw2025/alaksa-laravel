@@ -203,14 +203,14 @@
     </div>
 </div>
 <!-- time card -->
-<div class="modal fade" id="timeCard" tabindex="-1" aria-labelledby="addNewCardTitle" aria-modal="true" role="dialog">
-    <div class="modal-dialog modal-dialog-centered">
+<div  class="modal fade" id="timeCard" tabindex="-1" aria-labelledby="addNewCardTitle" aria-modal="true" role="dialog">
+    <div style="height:100px" class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header bg-transparent">
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
-            <div class="row container">
+            <div class="row container" >
                 <h4 class="text-center">Instalment Extention</h4>
                 <form method="POST" action="{{ route('extend-instalment') }}">
                     @csrf
@@ -229,12 +229,13 @@
     
                     <div class="col-12 my-1">
                         <label> Note: </label>
-                        <textarea class="form-control" name="notes" id="" cols="30" rows="3"></textarea>
+                        <textarea class="form-control" name="note" id="" cols="30" rows="3"></textarea>
                     </div>
     
                     <div class="col-12 my-1 d-flex justify-content-end">
                         <button data-bs-dismiss="modal" type="submit" class="btn btn-primary">Submit</button>
                     </div>
+                    
                 </form>
             </div>
 
