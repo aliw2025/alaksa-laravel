@@ -17,6 +17,7 @@ return new class extends Migration
             
             $table->id();
             $table->integer('extention_number')->nullable();
+            $table->unsignedBigInteger('user_id')->nullable();
             $table->unsignedBigInteger('instalment_id')->nullable();
             $table->date('previous_date')->nullable();
             $table->date('current_date')->nullable();

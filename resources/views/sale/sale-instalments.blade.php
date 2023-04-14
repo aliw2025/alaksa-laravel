@@ -69,8 +69,9 @@
                                         <td>{{ $count }}</td>
                                         <td>{{$pur->instalment_no}}</td>
                                         <td>  
+                                           
                                             
-                                            <a id="change_time" data-date1="{{($pur->due_date) }}" data-bs-toggle="modal" data-bs-target="#timeCard" href="#">{{date("d-m-Y", strtotime($pur->due_date))}}</a>
+                                            <a id="change_time" data-date1="{{($pur->due_date)}}" data-id="{{$pur->id}}" data-saleid="{{$pur->sale_id}}" data-bs-toggle="modal" data-bs-target="#timeCard" href="#">{{date("d-m-Y", strtotime($pur->due_date))}}</a>
                                         </td>
                                         <!-- <td> <input type="date" class="form-control" value="{{$pur->due_date}}"> -->
                                         </td>
@@ -148,6 +149,7 @@
                 <h4 class="text-center">Instalment Payment</h4>
                 <form method="POST" action="{{ route('pay-instalment') }}">
                     @csrf
+                    
                     <input id="ins_id" type="hidden" name="id" type="text" class="form-control">
 
                     <div class="col-12 my-1 ">
@@ -212,11 +214,12 @@
                 <h4 class="text-center">Instalment Extention</h4>
                 <form method="POST" action="{{ route('extend-instalment') }}">
                     @csrf
-                    <input id="ins_id" type="hidden" name="id" type="text" class="form-control">
+                    <input id="ext_sale_id" type="hidden" name="sale_id" type="text" class="form-control">
+                    <input id="ext_ins_id" type="hidden" name="id" type="text" class="form-control">
 
                     <div class="col-12 my-1 ">
                         <label> Current Due Date</label>
-                        <input id="cur_date" name="rem_ammount" type="date" readonly class="number-separator form-control">
+                        <input id="cur_date" name="cur_date" type="date" readonly class="number-separator form-control">
                     </div>
 
                     <div class="col-12 my-1 ">
@@ -254,9 +257,13 @@
 
     $(document).on("click", "#change_time", function() {
         var date1 = $(this).data('date1');
+        var insId = $(this).data('id');
+        var saleId = $(this).data('saleid');
         // var rem_amount = $(this).data('rem');
-
+        
         // alert(insId);
+        $("#ext_sale_id").val(saleId);
+        $("#ext_ins_id").val(insId);
         $("#cur_date").val(date1);
         // $("#rem_amount").val(rem_amount.toLocaleString('en-US'));
 

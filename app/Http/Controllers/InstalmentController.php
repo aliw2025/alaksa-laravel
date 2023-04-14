@@ -180,7 +180,16 @@ class InstalmentController extends Controller
 
     public function extendInstalment(Request $request){
 
-        dd($request->all());
+        // dd($request->all());
+        $instalment = Instalment::find($request->id);
+        $instalment->due_date = $request->new_date;
+        $instalment->save();
+
+        // dd($instalment);
+        // dd($request->all());
+        
+        return redirect('/get-sale-instalments?id='.$request->sale_id.'&ins_id='.$request->id);
+
 
 
     }

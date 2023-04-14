@@ -730,6 +730,7 @@ class SaleController extends Controller
     public function showInstalments(Request $request)
     {
 
+    //    dd($request->all());
         if (isset($request->id)) {
             // dd($request->id);
             $sale = Sale::find($request->id);
