@@ -106,4 +106,9 @@ class Instalment extends Model
     public function instalmentPayments(){
         return $this->hasMany(InstalmentPayment::class,'instalment_id');
     }
+
+    
+    public function instalmentExtentions(){
+        return $this->hasMany(InstalmentPayment::class,'instalment_id');
+    }
 }

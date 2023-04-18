@@ -211,6 +211,15 @@ class InstalmentController extends Controller
 
     }
 
+    public function getInstalmentExt(Request $request){
+
+        $insExts = InstalmentExtention::where('instalment_id',$request->id)->get();
+        
+        return $insExts;
+
+
+    }
+
     /**
      * Store a newly created resource in storage.
      *

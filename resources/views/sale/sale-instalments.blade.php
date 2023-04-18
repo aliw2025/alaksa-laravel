@@ -68,9 +68,9 @@
 
                                         <td>{{ $count }}</td>
                                         <td>{{$pur->instalment_no}}</td>
-                                        <td>  
-                                           
-                                            
+                                        <td>
+
+
                                             <a id="change_time" data-date1="{{($pur->due_date)}}" data-id="{{$pur->id}}" data-saleid="{{$pur->sale_id}}" data-bs-toggle="modal" data-bs-target="#timeCard" href="#">{{date("d-m-Y", strtotime($pur->due_date))}}</a>
                                         </td>
                                         <!-- <td> <input type="date" class="form-control" value="{{$pur->due_date}}"> -->
@@ -104,12 +104,12 @@
                                                 data-bs-toggle="modal" data-bs-target="#addNewCard">
                                                 Pay
                                             </button>
-                                            <a class=" abc btn btn-primary waves-effect waves-float waves-light" href="{{ route('show-instalment-payments', $pur->id) }}">
+                                            <!-- <a class=" abc btn btn-primary waves-effect waves-float waves-light" href="{{ route('show-instalment-payments', $pur->id) }}">
                                                 Details
                                             </a>
                                             <a style="background-color: coral;color:white" class=" abc btn btn-alert waves-effect waves-float waves-light" href="#">
                                                 Extend
-                                            </a>
+                                            </a> -->
 
                                             {{-- <a href="{{ route('recieve-instalment',$pur->id) }}" >pay</a> --}}
                                         </td>
@@ -149,7 +149,7 @@
                 <h4 class="text-center">Instalment Payment</h4>
                 <form method="POST" action="{{ route('pay-instalment') }}">
                     @csrf
-                    
+
                     <input id="ins_id" type="hidden" name="id" type="text" class="form-control">
 
                     <div class="col-12 my-1 ">
@@ -195,7 +195,7 @@
                     <div class="col-12 my-1 d-flex justify-content-end">
                         <button data-bs-dismiss="modal" type="submit" class="btn btn-primary">Submit</button>
                     </div>
-                    
+
                 </form>
             </div>
 
@@ -203,14 +203,14 @@
     </div>
 </div>
 <!-- time card -->
-<div  class="modal fade" id="timeCard" tabindex="-1" aria-labelledby="addNewCardTitle" aria-modal="true" role="dialog">
-    <div style="height:100px" class="modal-dialog modal-dialog-centered">
+<div class="modal fade" id="timeCard" tabindex="-1" aria-labelledby="addNewCardTitle" aria-modal="true" role="dialog">
+    <div style="height:100px" class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header bg-transparent">
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
-            <div class="row container" >
+            <div class="row container">
                 <h4 class="text-center">Instalment Extention</h4>
                 <form method="POST" action="{{ route('extend-instalment') }}">
                     @csrf
@@ -226,17 +226,48 @@
                         <label> Updated Due Date: </label>
                         <input id="up_due_date" name="new_date" type="date" class="number-separator form-control">
                     </div>
-    
+
                     <div class="col-12 my-1">
                         <label> Note: </label>
                         <textarea class="form-control" name="note" id="" cols="30" rows="3"></textarea>
                     </div>
-    
+
                     <div class="col-12 my-1 d-flex justify-content-end">
                         <button data-bs-dismiss="modal" type="submit" class="btn btn-primary">Submit</button>
                     </div>
-                    
+
                 </form>
+               
+                <div class="accordion" id="accordionExample">
+                    
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingTwo">
+                            <button onclick="checkClick()" class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                Extention History
+                            </button>
+                        </h2>
+                        <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                            <table id="investor-table" class="table">
+                                <thead class="thead-dark">
+                                    <tr style="background-color:red !important;">
+                                        <th style="width: 2px !important">#</th>
+                                        <th scope="col">Due Date</th>
+                                        <th scope="col">Extented Date</th>
+                                        <th scope="col">Note</th>
+                                       
+                                    </tr>
+                                </thead>
+                                <tbody id="ext_hist_body" >
+                                   
+                                </tbody>
+                            </table>    
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+
             </div>
 
         </div>
@@ -256,12 +287,54 @@
 
     });
 
+    function checkClick(){
+         var insId = $('#ext_ins_id').val();
+        
+         
+         console.log("ssd : "+insId);
+        $.ajax({
+            url: "{{ route('get-instalment-extentions') }}",
+            type: "GET",
+            data: { 
+                id: insId,
+            },
+            success: function(dataResult) {
+               
+                console.log('recv');
+                console.log(dataResult);
+                var tbody = $("#ext_hist_body");
+                console.log(tbody);
+                tbody.empty();
+                var i;
+                for (i = 0; i < dataResult.length; i++) {
+                    var item = dataResult[i];
+                    console.log(item);
+                    var count = i+1;
+                    var markup = `<tr>
+                                        <td>`+count +` </td>
+                                        <td>`+item.previous_date +` </td>
+                                        <td>`+ item.current_date+`</td>
+                                        <td>`+ item.note+`</td>
+                                  </tr>`;
+                    console.log(markup);
+                    tbody.append(markup);
+                }
+              
+
+            },
+            error: function(xhr, status, error) {
+                
+            },
+        });
+        
+        console.log('exactly why');
+    }
     $(document).on("click", "#change_time", function() {
         var date1 = $(this).data('date1');
         var insId = $(this).data('id');
         var saleId = $(this).data('saleid');
         // var rem_amount = $(this).data('rem');
-        
+
         // alert(insId);
         $("#ext_sale_id").val(saleId);
         $("#ext_ins_id").val(insId);

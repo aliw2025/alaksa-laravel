@@ -133,6 +133,9 @@ Route::controller(InstalmentController::class)->prefix('instalment')->group( fun
         Route::get('/show-instalment-payment/{id}', 'showInstalmentPayment')->name('show-instalment-payment');
         Route::get('/up-comming-instalments', 'showUpcomingInstalments')->name('show-upcoming-instalments');
         Route::post('/extend-instalment','extendInstalment')->name('extend-instalment');
+        Route::get('/get-instalment-extentions','getInstalmentExt')->name('get-instalment-extentions');
+
+
         // Route::get('/search-comming-instalments', 'searchUpcomingInstalments')->name('show-upcoming-instalments');
 });
 
