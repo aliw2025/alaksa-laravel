@@ -310,9 +310,10 @@
                     var item = dataResult[i];
                     console.log(item);
                     var count = i+1;
+                    var date = Date.parse(item.previous_date);
                     var markup = `<tr>
                                         <td>`+count +` </td>
-                                        <td>`+item.previous_date +` </td>
+                                        <td>`+date.toLocaleDateString("en-US") +` </td>
                                         <td>`+ item.current_date+`</td>
                                         <td>`+ item.note+`</td>
                                   </tr>`;
