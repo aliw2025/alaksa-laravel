@@ -36,6 +36,11 @@ class Controller extends BaseController
 
     }
 
+    public function admin(){
+
+        
+        return view('admin.admin');
+    }
     public function setup()
     {
         // company investor has always type 1
