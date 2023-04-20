@@ -51,7 +51,6 @@ Route::controller(Controller::class)->group(function () {
 // controller Instalment Controller
 Route::controller(RolePermissionController::class)->group(function () {
         
-        $roles = ModelsRole::all();
 
         Route::get('/roles', 'roles')->name('roles');
 
