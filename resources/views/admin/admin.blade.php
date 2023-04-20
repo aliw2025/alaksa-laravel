@@ -14,7 +14,7 @@
             <div class="col-3">
                 <div class="card">
                     <div class="card-body">
-                      <a  style="color: black" href="{{route('create-user-accounts')}}">My Accounts</a> 
+                      <a  style="color: black" href="{{route('roles')}}">Define Roles</a> 
                     </div>
                     
                 </div>
@@ -22,7 +22,7 @@
             <div class="col-3">
                 <div class="card">
                     <div class="card-body">
-                        <a  style="color: black" href="{{route('show-upcoming-instalments')}}"> Upcomiing Instalments</a> 
+                        <a  style="color: black" href="{{route('show-upcoming-instalments')}}"> Define Permission</a> 
                     </div>
                     
                 </div>
@@ -30,35 +30,13 @@
             <div class="col-3">
                 <div class="card">
                     <div class="card-body">
-                        <a  style="color: black" href="{{route('user-transfer-balances')}}">Funds Transfer</a> 
+                        <a  style="color: black" href="{{route('user-transfer-balances')}}">Assgin Roles and permission</a> 
                     </div>
                     
                 </div>
             </div>
-            <div class="col-3">
-                <div class="card">
-                    <div class="card-body">
-                        <a  style="color: black" href="#"> Recieve Installment</a> 
-                    </div>
-                </div>
-            </div>
-            <div class="col-3">
-                <div class="card">
-                    <div class="card-body">
-                        <a  style="color: black" href="{{route('get-user-acc-balances')}}">  Account Balances</a> 
-                       
-                    </div>
-                    
-                </div>
-            </div>
-            <div class="col-3">
-                <div class="card">
-                    <div class="card-body">
-                        <a  style="color: black" href="{{route('ro-transfer-queue')}}">  Pending Transfer Request</a> 
-                    </div>
-                    
-                </div>
-            </div>
+          
+        
         </div>
     </div>
 @endsection

@@ -24,10 +24,10 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CategoryPropController;
 use App\Http\Controllers\ExpenseHeadController;
 use App\Http\Controllers\GLController;
-
-
-
+use App\Http\Controllers\RolePermissionController;
 use App\Models\Instalment;
+use Spatie\Permission\Contracts\Role;
+use Spatie\Permission\Models\Role as ModelsRole;
 
 /* |-------------------------------------------------------------------------- | Web Routes |-------------------------------------------------------------------------- | | Here is where you can register web routes for your application. These | routes are loaded by the RouteServiceProvider within a group which | contains the "web" middleware group. Now create something great! | */
 
@@ -46,6 +46,15 @@ Route::controller(Controller::class)->group(function () {
         Route::get('/get-inquiry-off',  'getInquiryOff')->name('get-inquiry-off');
         Route::get('/capital-investments',  'showInvestments')->name('capital-investments');
         Route::get('/admin',  'admin')->name('admin');
+});
+
+// controller Instalment Controller
+Route::controller(RolePermissionController::class)->group(function () {
+        
+        $roles = ModelsRole::all();
+
+        Route::get('/roles', 'roles')->name('roles');
+
 });
 
 // sale controller

@@ -26,7 +26,7 @@
         <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
              <!------------------------------------------- Admin tasks --------------------------------------------------->
              <li class=" nav-item">
-                <a class="d-flex align-items-center" href="#">
+                <a class="d-flex align-items-center" href="{{route('admin')}}">
                     <i data-feather="home"></i><span class="menu-title text-truncate" data-i18n="Dashboards">Admin</span>
                 </a>
             </li>
