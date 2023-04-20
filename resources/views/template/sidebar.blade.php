@@ -24,6 +24,12 @@
     <div class="shadow-bottom" style="display: none;"></div>
     <div class="main-menu-content ps ps--active-y" style="height: 806.625px;">
         <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
+             <!------------------------------------------- Admin tasks --------------------------------------------------->
+             <li class=" nav-item">
+                <a class="d-flex align-items-center" href="#">
+                    <i data-feather="home"></i><span class="menu-title text-truncate" data-i18n="Dashboards">Admin</span>
+                </a>
+            </li>
             <!------------------------------------------- Alpha Digital --------------------------------------------------->
             <li class=" nav-item">
                 <a class="d-flex align-items-center" href="#">
