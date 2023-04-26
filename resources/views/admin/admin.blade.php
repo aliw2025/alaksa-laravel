@@ -22,7 +22,7 @@
             <div class="col-3">
                 <div class="card">
                     <div class="card-body">
-                        <a  style="color: black" href="{{route('show-upcoming-instalments')}}"> Define Permission</a> 
+                        <a  style="color: black" href="{{route('permissions')}}"> Define Permission</a> 
                     </div>
                     
                 </div>
@@ -30,12 +30,20 @@
             <div class="col-3">
                 <div class="card">
                     <div class="card-body">
-                        <a  style="color: black" href="{{route('user-transfer-balances')}}">Assgin Roles and permission</a> 
+                        <a  style="color: black" href="{{route('roles-permissions')}}">Assgin permission to Roles</a> 
                     </div>
                     
                 </div>
             </div>
           
+            <div class="col-3">
+                <div class="card">
+                    <div class="card-body">
+                        <a  style="color: black" href="{{route('roles-permissions')}}">Assgin Roles to users</a> 
+                    </div>
+                    
+                </div>
+            </div>
         
         </div>
     </div>

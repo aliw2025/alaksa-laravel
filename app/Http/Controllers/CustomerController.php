@@ -127,7 +127,7 @@ class CustomerController extends Controller
             $fileModel->db_name  = $request->db_name;
             $fileName = $file->getClientOriginalName();
             $fileModel->customer_id = $request->customer_id;
-            $filePath = $request->file('file_name')->storeAs('uploads', $fileName, 'public');
+            $filePath = $request->file('file_name')->storeAs('uploads', $fileName,  'public');
             $fileModel->name = $file->getClientOriginalName();
             $fileModel->file_path = url('/').'/public/storage/' . $filePath;
             $fileModel->save();

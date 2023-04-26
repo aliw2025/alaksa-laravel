@@ -51,10 +51,21 @@ Route::controller(Controller::class)->group(function () {
 // controller Instalment Controller
 Route::controller(RolePermissionController::class)->group(function () {
         
-
+        // roles routes
         Route::get('/roles', 'roles')->name('roles');
+        Route::POST('/role', 'storeRole')->name('store-role');
+        Route::get('/role', function (){});
+        // permissions routes
+        Route::get('/permissions', 'permissions')->name('permissions');
+        Route::POST('/permission', 'storePermission')->name('store-permission');
+        Route::get('/permission', function (){});
+        // role permission mapping
+        Route::get('/roles-permissions', 'rolePermissions')->name('roles-permissions');
+        
+
 
 });
+
 
 // sale controller
 Route::controller(SaleController::class)->group(function () {

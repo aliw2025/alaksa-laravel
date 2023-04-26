@@ -9,7 +9,7 @@
                     <div class="card">
                     <div class="card-header d-flex ">
                         <div>
-                            <h4 class="text-center">Roles</h4>
+                            <h4 class="text-center">permissions</h4>
                         </div>
                     </div>
                         <div class="card-body">
@@ -24,17 +24,17 @@
                                     </tr>
                                 </thead>
                                 <tbody class="inventory-iems-body" id="nventory-iems-body">
-                                    @If(isset($roles))
+                                    @If(isset($permissions))
                                         @php
                                             $count = 1;
                                         @endphp
-                                        @foreach($roles as $role)
+                                        @foreach($permissions as $permission)
                                             <tr>
                                                 <td>
                                                     {{$count}}
                                                 </td>
                                                 <td>
-                                                    {{$role->name}}
+                                                    {{$permission->name}}
                                                 </td>
                                                 <td> Select</td>
                                             </tr>
@@ -53,12 +53,12 @@
                             <div class="card-body">
                                 <div class="card-header d-flex justify-content-center">
                                     <div>
-                                        <h4 class="text-center">Add New Role</h4>
+                                        <h4 class="text-center">Add New permission</h4>
                                     </div>
                                 </div>
-                                <form method="POST" class="form form-vertical" autocomplete="on" action="{{route('store-role')}}">
+                                <form method="POST" class="form form-vertical" autocomplete="on" action="{{route('store-permission')}}">
                                     @csrf
-                                    <label class="form-label" for="">Role Name </label>
+                                    <label class="form-label" for="">permission Name </label>
                                     <input type="text"  name="name"  class="form-control @error('account_name') is-invalid @enderror" >
                                     @error('name')
                                     <div class="alert alert-danger">{{ $message }}</div>
