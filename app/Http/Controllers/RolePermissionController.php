@@ -54,4 +54,25 @@ class RolePermissionController extends Controller
         return view('admin.roles-permissions',compact('roles','permissions'));
         
     }
+
+    public function storeRolePermission(Request $request){
+
+        // dd("just checking");
+        // dd($request->all());
+        $role = Role:: find($request->role);
+
+        $role->givePermissionTo($request->permission);
+
+        return redirect()->route('roles-permissions');
+
+        
+    }
+
+    public function getRolePermissions(Request $request){
+
+        $role = Role:: find($request->id);
+
+        return $role->permissions;
+
+    }
 }

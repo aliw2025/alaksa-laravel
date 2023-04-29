@@ -61,7 +61,11 @@ Route::controller(RolePermissionController::class)->group(function () {
         Route::get('/permission', function (){});
         // role permission mapping
         Route::get('/roles-permissions', 'rolePermissions')->name('roles-permissions');
-        
+        Route::post('/role-permissions', 'storeRolePermission')->name('role-permissions');
+
+        // get pesmissions of a role
+        Route::get('/get-role-permissions', 'getRolePermissions')->name('get-role-permissions');
+
 
 
 });

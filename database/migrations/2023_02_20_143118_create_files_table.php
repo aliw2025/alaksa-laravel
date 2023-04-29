@@ -14,16 +14,17 @@ return new class extends Migration
     public function up()
     {
         Schema::create('files', function (Blueprint $table) {
-            $table->id();
+                
+                $table->id();
                 $table->string('db_name')->nullable();
                 $table->unsignedBigInteger('customer_id');
                 $table->string('name')->nullable();
                 $table->string('file_path')->nullable();
                 $table->timestamps();
            
-            
         });
     }
+    
 
     /**
      * Reverse the migrations.
