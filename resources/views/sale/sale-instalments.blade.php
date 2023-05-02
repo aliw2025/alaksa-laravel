@@ -10,7 +10,6 @@
                     </div>
                 </div>
                 <div class="card-body">
-
                     <div class="row">
                         <div class="col-6">
                             <form action="">
@@ -27,7 +26,6 @@
                                                 </div>
                                             </div> -->
                                     </div>
-
                                 </div>
                             </form>
                         </div>
@@ -35,7 +33,6 @@
                             <a class="mt-2 me-2" style="text-decoration: none;" href="{{url('get-sale-instalments')."?id=".$sale->id}}">View All</a>
                         </div>
                     </div>
-
                     @if (isset($user_exception))
                     <div class="alert alert-danger"> {{ $user_exception }}</div>
                     @endif
@@ -65,12 +62,9 @@
                                     @if (isset($instalments))
                                     @foreach ($instalments as $pur)
                                     <tr>
-
                                         <td>{{ $count }}</td>
                                         <td>{{$pur->instalment_no}}</td>
                                         <td>
-
-
                                             <a id="change_time" data-date1="{{($pur->due_date)}}" data-id="{{$pur->id}}" data-saleid="{{$pur->sale_id}}" data-bs-toggle="modal" data-bs-target="#timeCard" href="#">{{date("d-m-Y", strtotime($pur->due_date))}}</a>
                                         </td>
                                         <!-- <td> <input type="date" class="form-control" value="{{$pur->due_date}}"> -->
@@ -140,16 +134,15 @@
 </div>
 <div class="modal fade" id="addNewCard" tabindex="-1" aria-labelledby="addNewCardTitle" aria-modal="true" role="dialog">
     <div class="modal-dialog modal-dialog-centered">
+        
         <div class="modal-content">
             <div class="modal-header bg-transparent">
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-
             <div class="row container">
                 <h4 class="text-center">Instalment Payment</h4>
                 <form method="POST" action="{{ route('pay-instalment') }}">
                     @csrf
-
                     <input id="ins_id" type="hidden" name="id" type="text" class="form-control">
 
                     <div class="col-12 my-1 ">
