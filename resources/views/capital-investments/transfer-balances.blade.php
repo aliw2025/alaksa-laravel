@@ -9,7 +9,7 @@
                     <div class="card">
                         <div class="card-header d-flex ">
                             <div>
-                                <h4 class="text-center">Transfer Balancessss ww </h4>
+                                <h4 class="text-center">Transfer Balancessss wws </h4>
                             </div>
                         </div>
                         <div class="card-body">
