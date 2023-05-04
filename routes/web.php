@@ -65,6 +65,11 @@ Route::controller(RolePermissionController::class)->group(function () {
         Route::get('/permissions', 'permissions')->name('permissions');
         Route::POST('/permission', 'storePermission')->name('store-permission');
         Route::get('/permission', function (){});
+        Route::get('/edit-permission/{id}', 'editPermission')->name('edit-permission');
+        Route::post('/update-permission/{id}', 'updatePermission')->name('update-permission');
+        Route::POST('/delete-permission/{id}', 'deletePermission')->name('delete-permission');
+
+
         // role permission mapping
         Route::get('/roles-permissions', 'rolePermissions')->name('roles-permissions');
         Route::post('/role-permissions', 'storeRolePermission')->name('role-permissions');

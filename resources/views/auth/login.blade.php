@@ -54,7 +54,7 @@
                             </div>
                             <button type="submit" class="btn btn-primary w-100" tabindex="4">Sign in</button>
                         </form>
-                        <p class="text-center mt-2"><a href="{{route('register')}}"><span>&nbsp;Create an account</span></a></p>
+                        <!-- <p class="text-center mt-2"><a href="{{route('register')}}"><span>&nbsp;Create an account</span></a></p> -->
                         <!-- <div class="divider my-2">
                             <div class="divider-text">or</div>
                         </div> -->

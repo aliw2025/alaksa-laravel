@@ -16,11 +16,19 @@ class RolePermissionController extends Controller
         return view('admin.roles',compact('roles'));
 
     }
+
     public function editRole($id)
     {
         $roles = Role::all();
         $role = Role::find($id);
         return view('admin.roles',compact('roles','role'));
+    }
+
+    public function editPermission($id)
+    {
+        $permissions = Permission::all();
+        $permission = Permission::find($id);
+        return view('admin.permissions',compact('permissions','permission'));
     }
 
     public function updateRole(Request $request,$id){
@@ -35,6 +43,17 @@ class RolePermissionController extends Controller
         return redirect()->route('roles');
     }
 
+    public function updatePermission(Request $request,$id){
+
+        $validated = $request->validate([
+            'name' =>'required',
+        ]);
+        // $role = Role::create($validated);        
+        $permission = Permission::find($id);
+        $permission->name = $request->name;
+        $permission->save();
+        return redirect()->route('permissions');
+    }
     public function storeRole(Request $request){
 
         $validated = $request->validate([
@@ -52,6 +71,16 @@ class RolePermissionController extends Controller
         $role->delete();
         return redirect()->route('roles');
     }
+
+        
+    public function  deletePermission($id)
+    {
+        
+        $role = Permission::find($id);
+        $role->delete();
+        return redirect()->route('permissions');
+    }
+   
 
     public function permissions (Request $request){
         // $roles = ModelsRole::all();
