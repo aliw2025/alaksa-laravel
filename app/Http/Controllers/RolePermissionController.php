@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\User;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 
@@ -61,9 +62,9 @@ class RolePermissionController extends Controller
         ]);
         // $role = Role::create($validated);        
         $role = Role::create(['name' => $request->name]);
-        
-        return redirect()->route('roles');
+        return redirect()->route('roles');  
     }
+
     public function deleteRole($id)
     {
         
@@ -72,7 +73,7 @@ class RolePermissionController extends Controller
         return redirect()->route('roles');
     }
 
-        
+
     public function  deletePermission($id)
     {
         
@@ -111,8 +112,7 @@ class RolePermissionController extends Controller
 
     public function storeRolePermission(Request $request){
 
-        // dd("just checking");
-        // dd($request->all());
+
         $role = Role:: find($request->role);
 
         $role->givePermissionTo($request->permission);
@@ -128,7 +128,7 @@ class RolePermissionController extends Controller
         return redirect()->route('roles-permissions');
 
     }
-
+    //  get role permissions ajax call
     public function getRolePermissions(Request $request){
 
         $role = Role:: find($request->id);
@@ -136,4 +136,37 @@ class RolePermissionController extends Controller
         return $role->permissions;
 
     }
+    //  get user roles ajax call
+    public function getUserRoles(Request $request){
+
+        $user = User:: find($request->id);
+        return $user->roles;
+    }
+   
+    //  user roles index page
+    public function userRoles(Request $request)
+    {
+        $users  = User::all();
+        $roles = Role ::all();
+        return view('admin.user-roles',compact('users','roles'));
+    }
+
+    // store user roles
+    public function storeUserRoles(Request $request)
+    {
+        // dd($request->all());
+        $user = User::find($request->user);
+        
+        $user->assignRole($request->role);
+        return redirect()->route('user-roles');
+        
+    }
+    public function unassignUserRoles(Request $request)
+    {
+        $user = User :: find($request->user_id);
+        $user->removeRole($request->role_id);
+        return redirect()->route('user-roles');
+
+    }
+    
 }

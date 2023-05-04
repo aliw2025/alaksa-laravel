@@ -50,39 +50,44 @@ Route::controller(Controller::class)->group(function () {
 
 // controller Instalment Controller
 Route::controller(RolePermissionController::class)->group(function () {
-        
-        // roles routes
-        Route::get('/roles', 'roles')->name('roles');
-        Route::POST('/role', 'storeRole')->name('store-role');
-        Route::get('/role', function (){});
-        Route::get('/edit-role/{id}', 'editRole')->name('edit-role');
-        Route::post('/update-role/{id}', 'updateRole')->name('update-role');
-        Route::POST('/delete-role/{id}', 'deleteRole')->name('delete-role');
+
+        // roles routes of admin
+        Route::group(['middleware' => ['role:admin']], function () {
+                Route::get('/roles', 'roles')->name('roles');
+                Route::POST('/role', 'storeRole')->name('store-role');
+                Route::get('/role', function () {
+                });
+                Route::get('/edit-role/{id}', 'editRole')->name('edit-role');
+                Route::post('/update-role/{id}', 'updateRole')->name('update-role');
+                Route::POST('/delete-role/{id}', 'deleteRole')->name('delete-role');
+
+                // permissions routes
+                Route::get('/permissions', 'permissions')->name('permissions');
+                Route::POST('/permission', 'storePermission')->name('store-permission');
+                Route::get('/permission', function () {
+                });
+                Route::get('/edit-permission/{id}', 'editPermission')->name('edit-permission');
+                Route::post('/update-permission/{id}', 'updatePermission')->name('update-permission');
+                Route::POST('/delete-permission/{id}', 'deletePermission')->name('delete-permission');
 
 
-        
-        // permissions routes
-        Route::get('/permissions', 'permissions')->name('permissions');
-        Route::POST('/permission', 'storePermission')->name('store-permission');
-        Route::get('/permission', function (){});
-        Route::get('/edit-permission/{id}', 'editPermission')->name('edit-permission');
-        Route::post('/update-permission/{id}', 'updatePermission')->name('update-permission');
-        Route::POST('/delete-permission/{id}', 'deletePermission')->name('delete-permission');
+                // role permission mapping
+                Route::get('/roles-permissions', 'rolePermissions')->name('roles-permissions');
+                Route::post('/role-permissions', 'storeRolePermission')->name('role-permissions');
+                Route::post('/unassign-role-permissions', 'unassignRolePermission')->name('unassign-role-permissions');
 
 
-        // role permission mapping
-        Route::get('/roles-permissions', 'rolePermissions')->name('roles-permissions');
-        Route::post('/role-permissions', 'storeRolePermission')->name('role-permissions');
+                // get pesmissions of a role
+                Route::get('/get-role-permissions', 'getRolePermissions')->name('get-role-permissions');
+                Route::get('/get-user-roles', 'getUserRoles')->name('get-user-roles');
 
-        // get pesmissions of a role
-        Route::get('/get-role-permissions', 'getRolePermissions')->name('get-role-permissions');
+                // unassing permsiion from role
 
-        // unassing permsiion from role
-        Route::post('/unassign-role-permissions', 'unassignRolePermission')->name('unassign-role-permissions');
-
-
-
-
+                // user roles
+                Route::get('/user-roles', 'userRoles')->name('user-roles');
+                Route::post('/user-roles', 'storeUserRoles')->name('store-user-roles');
+                Route::post('/unassign-user-roles', 'unassignUserRoles')->name('unassign-user-roles');
+        });
 });
 
 
@@ -137,8 +142,6 @@ Route::controller(GLController::class)->group(function () {
         Route::get('/ro-transfer-queue',  'userApprovalQueue')->name('ro-transfer-queue');
         Route::post('/ro--transfer-approval',  'userApproval')->name('ro--transfer-approval');
         Route::post('/bnk_transfer',  'bankTransfer')->name('bnk_transfer');
-        
- 
 });
 
 // Customer Controller
@@ -147,7 +150,6 @@ Route::controller(CustomerController::class)->group(function () {
         Route::get('/customer-files/{id}',  'customerFiles')->name('customer-files');
         Route::post('/customer-file-upload',  'customerFileUpload')->name('customer-file-upload');
         Route::get('/customer-by-name',  'customerByName')->name('customer-by-name');
-
 });
 
 // Item Controller
@@ -177,7 +179,8 @@ Route::controller(CommissionController::class)->group(function () {
         Route::post('/commission-report',  'commissionReport')->name('commission-report');
         Route::get('/commission-report',  'commissionReport')->name('commission-report2s');
 });
-Route::get('/pay-instalment', function () {});
+Route::get('/pay-instalment', function () {
+});
 
 
 
@@ -194,7 +197,6 @@ Route::controller(desingationContoller::class)->group(function () {
 
         Route::get('/edit-designation/{id}', 'editDesignation')->name('edit-designation');
         Route::Post('/change-designation', 'changeDesignation')->name('change-designation');
-        
 });
 
 // caategoryPropController
@@ -202,8 +204,6 @@ Route::controller(CategoryPropController::class)->group(function () {
 
         Route::get('/create-property/{id}', 'createProperty')->name('create-property');
         Route::get('/get-properties/{id}', 'getProperties')->name('get-properties');
-        
-        
 });
 
 // Expense Controller
@@ -211,7 +211,6 @@ Route::controller(ExpenseHeadController::class)->group(function () {
 
         Route::get('/add-sub-exp-heads{id}',  'addSubexpHeads')->name('add-sub-exp-head');
         Route::POST('/store-Subexp-Heads',  'storeSubexpHeads')->name('storeSubexpHeads');
-        
 });
 
 // chartOfAccountController
@@ -256,4 +255,3 @@ Route::resource('chartOfAccount', ChartOfAccountController::class);
 Route::resource('category', CategoryController::class);
 Route::resource('categoryProperty', CategoryPropController::class);
 Route::resource('expenseHead', ExpenseHeadController::class);
-

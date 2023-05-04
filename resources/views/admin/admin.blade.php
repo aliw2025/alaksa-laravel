@@ -39,7 +39,7 @@
             <div class="col-3">
                 <div class="card">
                     <div class="card-body">
-                        <a  style="color: black" href="{{route('roles-permissions')}}">Assgin Roles to users</a> 
+                        <a  style="color: black" href="{{route('user-roles')}}">Assgin Roles to users</a> 
                     </div>
                     
                 </div>

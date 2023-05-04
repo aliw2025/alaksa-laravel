@@ -25,11 +25,13 @@
     <div class="main-menu-content ps ps--active-y" style="height: 806.625px;">
         <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
              <!------------------------------------------- Admin tasks --------------------------------------------------->
+             @if(Auth::User()->hasRole('admin'))
              <li class=" nav-item">
                 <a class="d-flex align-items-center" href="{{route('admin')}}">
                     <i data-feather="home"></i><span class="menu-title text-truncate" data-i18n="Dashboards">Admin</span>
                 </a>
             </li>
+            @endif
             <!------------------------------------------- Alpha Digital --------------------------------------------------->
             <li class=" nav-item">
                 <a class="d-flex align-items-center" href="#">
