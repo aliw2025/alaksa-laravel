@@ -102,21 +102,18 @@
                             </div>
                             <div class="card-body">
 
-                                
-
-
                                 <div class="mt-2">
                                     <table id="investor-table" class="table">
                                         <thead class="thead-dark">
                                             <tr style="background-color:red !important;">
                                                 <th style="width: 2px !important">#</th>
                                                 <th scope="col">Role Name</th>
-                                                <th scope="col">Action</th>
+                                                <th scope="col">Actions</th>
                                             </tr>
                                         </thead>
                                         <tbody class="inventory-iems-body" id="role-permissions">
                                             
-                                            
+                                         
                                         </tbody>
                                     </table>
                                 </div>
@@ -143,7 +140,6 @@
             var roleId =$(this).attr('id');
             $('#role_id').val(roleId);
             
-
             $.ajax({
                 url: "{{ route('get-role-permissions') }}",
                 type: "GET",
@@ -167,7 +163,20 @@
                                         <td>
                                             `+item.name+`
                                         </td>
-                                    
+                                        <td>
+                                            <div class="">
+                                                <form class="" method="POST" autocomplete="on"
+                                                    action="{{route('unassign-role-permissions')}}">
+                                                    @csrf
+                                                    <input name="role_id" type="hidden" value="`+ roleId+`">
+                                                    <input name="permission_id" type="hidden" value="`+item.id +`">
+                                                    <button
+                                                       
+                                                         type="submit"
+                                                        class="btn btn-danger">Remove</button>
+                                                </form>
+                                            </div>
+                                        </td>
                                     </tr>`
                         $("#role-permissions").append(markup);
                     }

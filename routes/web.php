@@ -55,6 +55,12 @@ Route::controller(RolePermissionController::class)->group(function () {
         Route::get('/roles', 'roles')->name('roles');
         Route::POST('/role', 'storeRole')->name('store-role');
         Route::get('/role', function (){});
+        Route::get('/edit-role/{id}', 'editRole')->name('edit-role');
+        Route::post('/update-role/{id}', 'updateRole')->name('update-role');
+        Route::POST('/delete-role/{id}', 'deleteRole')->name('delete-role');
+
+
+        
         // permissions routes
         Route::get('/permissions', 'permissions')->name('permissions');
         Route::POST('/permission', 'storePermission')->name('store-permission');
@@ -65,6 +71,10 @@ Route::controller(RolePermissionController::class)->group(function () {
 
         // get pesmissions of a role
         Route::get('/get-role-permissions', 'getRolePermissions')->name('get-role-permissions');
+
+        // unassing permsiion from role
+        Route::post('/unassign-role-permissions', 'unassignRolePermission')->name('unassign-role-permissions');
+
 
 
 

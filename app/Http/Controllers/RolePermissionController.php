@@ -16,6 +16,24 @@ class RolePermissionController extends Controller
         return view('admin.roles',compact('roles'));
 
     }
+    public function editRole($id)
+    {
+        $roles = Role::all();
+        $role = Role::find($id);
+        return view('admin.roles',compact('roles','role'));
+    }
+
+    public function updateRole(Request $request,$id){
+
+        $validated = $request->validate([
+            'name' =>'required',
+        ]);
+        // $role = Role::create($validated);        
+        $role = Role::find($id);
+        $role->name = $request->name;
+        $role->save();
+        return redirect()->route('roles');
+    }
 
     public function storeRole(Request $request){
 
@@ -25,6 +43,13 @@ class RolePermissionController extends Controller
         // $role = Role::create($validated);        
         $role = Role::create(['name' => $request->name]);
         
+        return redirect()->route('roles');
+    }
+    public function deleteRole($id)
+    {
+        
+        $role = Role::find($id);
+        $role->delete();
         return redirect()->route('roles');
     }
 
@@ -66,6 +91,13 @@ class RolePermissionController extends Controller
         return redirect()->route('roles-permissions');
 
         
+    }
+    public function unassignRolePermission(Request $request){
+
+        $role = Role:: find($request->role_id);
+        $role->revokePermissionTo($request->permission_id);
+        return redirect()->route('roles-permissions');
+
     }
 
     public function getRolePermissions(Request $request){
