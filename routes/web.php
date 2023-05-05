@@ -35,8 +35,10 @@ use Spatie\Permission\Models\Role as ModelsRole;
 Route::controller(Controller::class)->group(function () {
         Route::get('/users', 'Users')->name('users');
         Route::get('/',  'index')->name('index');
-        Route::get('/setup',  'setup')->name('setup');
-        Route::get('/types',  'createAccountTypes')->name('types');
+        Route::group(['middleware' => ['role:admin']], function () {
+                Route::get('/setup',  'setup')->name('setup');
+                Route::get('/types',  'createAccountTypes')->name('types');
+        });
         Route::get('/test/{id}',  'testSql')->name('test');
         Route::get('/home/{id}',  'home')->name('home');
         Route::get('/calender',  'showCalender')->name('calender');

@@ -13,6 +13,7 @@
                             <p class="card-text font-small-2 me-25 mb-0">Updated 1 sec ago</p>
                         </div>
                     </div>
+                    @if(isset($investor))
                     <div class="card-body statistics-body">
                         <div class="row">
                             <div class="col-xl-3 col-sm-6 col-12 mb-2 mb-xl-0 card card p-2 @if($investor->id!=1) mt-1 @endif p-2 me-2 ">
@@ -266,6 +267,7 @@
                             </div>
                         </div>
                     </div>
+                    @endif
                 </div>
             </section>
 
