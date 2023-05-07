@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\TransferRequests;
 use Illuminate\Support\Facades\Input;
+use App\Models\InvestorPayment;
 
 class GLController extends Controller
 {
@@ -275,4 +276,53 @@ class GLController extends Controller
     {
         //
     }
+    public function investorPaymentCreate(Request $request)
+    {
+        $bank_accounts = ChartOfAccount::where('account_type', 1)->orWhere('account_type', 4)->get();
+        $investors = Investor::all();
+        return view('capital-investments.investors-payments', compact('bank_accounts', 'investors'));
+        
+    }
+
+    public function investorPaymentStore(Request $request)
+    {
+        // validate id amount is provided
+        $validated = $request->validate(
+            [
+                'amount' => 'required',
+            ]
+        );
+
+
+        $user  = Auth::user();
+
+       
+            // create a method to deal with payables    
+            $inv_loan = new InvestorPayment();
+            $inv_loan->inv1_id = $request->inv_1;
+            $inv_loan->inv1_account =  $request->bnk_1;
+            $inv_loan->inv2_account =  $request->bnk_2;
+            $inv_loan->amount = $request->amount;
+            $inv_loan->inv2_id = $request->inv_2;
+            $inv_loan->save();
+
+            //   create leadger entries here.
+            // debit payable 
+            $inv_loan->createLeadgerEntry(7,  $inv_loan->amount,  $inv_loan->inv1_id,  $inv_loan->created_at, $user->id);
+            // credit cash or bank
+            $inv_loan->createLeadgerEntry( $inv_loan->inv1_account, - $inv_loan->amount,  $inv_loan->inv1_id,  $inv_loan->created_at, $user->id);
+
+            // debit cash or bank
+            $inv_loan->createLeadgerEntry( $inv_loan->inv1_account,  $inv_loan->amount,  $inv_loan->inv2_id,  $inv_loan->created_at, $user->id);
+            // credit recievable
+            $inv_loan->createLeadgerEntry(5, - $inv_loan->amount,  $inv_loan->inv2_id,  $inv_loan->created_at, $user->id);
+
+
+                return redirect()->route('index');
+
+    }
+    
+
+
+    
 }
