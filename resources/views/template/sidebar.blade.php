@@ -82,6 +82,11 @@
                         <i data-feather="circle"></i>
                         <span class=" menu-title text-truncate" data-i18n="comision">Funds Transfer Requests</span></a>
                      </li>
+                     <li class=" nav-item"><a href="{{ route('investor-payment') }}" class="d-flex align-items-center">
+                        <i data-feather="circle"></i>
+                        <span class=" menu-title text-truncate" data-i18n="comision">Investors Payment</span></a>
+                     </li>
+                    
                 </ul>
             </li>
             <!------------------------------------------- HRM --------------------------------------------------->
