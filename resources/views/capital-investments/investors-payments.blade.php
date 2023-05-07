@@ -13,7 +13,7 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            <form action="{{route('investors-payments')}}" method="POST" autocomplete="on">
+                            <form action="{{route('investor-payment')}}" method="POST" autocomplete="on">
 
                                 <div class="row">
                                     @csrf
