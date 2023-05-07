@@ -136,66 +136,77 @@
                                 <div class=" ">
                                     <div class="mb-1">
                                         <label class="form-label" for="first-name-vertical">Customer Address</label>
-                                        <textarea value="{{old('customer_address',isset($customer)? $customer->customer_address  :'')}}" type="text" id="customerAddress" class=" @error('customer_address') is-invalid @enderror form-control" name="customer_address" placeholder="customer Address">
-                                        </textarea>
-                                        @error('customer_address')
+                                        <textarea value="" type="text" id="customerAddress" class=" @error('address') is-invalid @enderror form-control" name="address" placeholder="customer Address">{{old('address',isset($customer)? $customer->address  :'')}} </textarea>
+                                        @error('address')
                                         <div class="alert alert-danger">{{ $message }}</div>
                                         @enderror
                                     </div>
                                 </div>
                                 <div class="">
                                     <div class="mb-1">
-                                        <label class="form-label" for="contact-info-vertical">Garentier Name</label>
-                                        <input value="{{old('g_name',isset($customer)? $customer->g_name:'')}}" type="number" id="contact-info-vertical" class="@error('g_name') is-invalid @enderror form-control" name="g_name" placeholder="Garantier Name">
-                                        @error('g_names')
+                                        <label class="form-label" for="contact-info-vertical">Garentier1 Name</label>
+                                        <input value="{{old('g1_name',isset($customer)? $customer->g1_name:'')}}" type="text" id="contact-info-vertical" class="@error('g1_name') is-invalid @enderror form-control" name="g1_name" placeholder="Garantier Name">
+                                        @error('g1_name')
                                         <div class="alert alert-danger">{{ $message }}</div>
                                         @enderror
                                     </div>
                                 </div>
                                 <div class="">
                                     <div class="mb-1">
-                                        <label class="form-label" for="contact-info-vertical">Garentier CNIC</label>
-                                        <input value="{{old('g_CNIC',isset($customer)? $customer->g_CNIC:'')}}" type="number" id="contact-info-vertical" class="@error('g_CNIC') is-invalid @enderror form-control" name="g_CNIC" placeholder="Garentier CNIC">
-                                        @error('g_CNIC')
+                                        <label class="form-label" for="contact-info-vertical">Garentier1 CNIC</label>
+                                        <input value="{{old('g1_CNIC',isset($customer)? $customer->g1_CNIC:'')}}" type="text" id="contact-info-vertical" class="@error('g1_CNIC') is-invalid @enderror form-control" name="g1_CNIC" placeholder="Garentier CNIC">
+                                        @error('g1_CNIC')
                                         <div class="alert alert-danger">{{ $message }}</div>
                                         @enderror
                                     </div>
                                 </div>
                                 <div class=" ">
                                     <div class="mb-1">
-                                        <label class="form-label" for="first-name-vertical">Garentier Address</label>
-                                        <textarea value="{{old('g_address',isset($customer)? $customer->g_address  :'')}}" type="text" id="gAddress" class=" @error('g_address') is-invalid @enderror form-control" name="g_address" placeholder="Garentier Address">
-                                        </textarea>
-                                        @error('customer_address')
+                                        <label class="form-label" for="first-name-vertical">Garentier1 Address</label>
+                                        <textarea value="" type="text" id="gAddress" class=" @error('g1_address') is-invalid @enderror form-control" name="g1_address" placeholder="Garentier Address">{{old('g1_address',isset($customer)? $customer->g1_address  :'')}}</textarea>
+                                        @error('g1_address')
                                         <div class="alert alert-danger">{{ $message }}</div>
                                         @enderror
                                     </div>
                                 </div>
-
-                                <!-- <div class=" ">
+                                {{-- 2nd garentier --}}
+                                <div class="">
                                     <div class="mb-1">
-                                        <label class="form-label" for="first-name-vertical">customer Short Name</label>
-                                        <input value="{{old('prefix',isset($customer)? $customer->prefix:'')}}" type="text" id="prefix" class=" @error('prefix') is-invalid @enderror form-control" name="prefix" placeholder="Short Name">
-                                        @error('prefix')
-                                        <div class="alert alert-danger">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-                                </div> -->
-                                <!-- @if (!isset($customer)) -->
-                                <!-- <div class=" "> -->
-                                    <!-- <input id="customerName" name="customer_name" class="@error('customer_name') is-invalid @enderror form-control" autocomplete="off" id="exampleDataList" placeholder="Enter customer Name"> -->
-                                    <!-- <div class="mb-1">
-                                        <label class="form-label" for="first-name-vertical">Opening Balances</label>
-                                        <input type="number" id="opening_balance" class=" @error('prefix') is-invalid @enderror form-control" name="opening_balance" value="0" placeholder="Opening Balance">
-                                        @error('opening_balance')
+                                        <label class="form-label" for="contact-info-vertical">Garentier2 Name</label>
+                                        <input value="{{old('g2_name',isset($customer)? $customer->g2_name:'')}}" type="text" id="contact-info-vertical" class="@error('g2_name') is-invalid @enderror form-control" name="g2_name" placeholder="Garantier Name">
+                                        @error('g2_name')
                                         <div class="alert alert-danger">{{ $message }}</div>
                                         @enderror
                                     </div>
                                 </div>
-                                
-                                @endif -->
-                               
-
+                                <div class="">
+                                    <div class="mb-1">
+                                        <label class="form-label" for="contact-info-vertical">Garentier2 CNIC</label>
+                                        <input value="{{old('g2_CNIC',isset($customer)? $customer->g2_CNIC:'')}}" type="text" id="contact-info-vertical" class="@error('g2_CNIC') is-invalid @enderror form-control" name="g2_CNIC" placeholder="Garentier CNIC">
+                                        @error('g2_CNIC')
+                                        <div class="alert alert-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class=" ">
+                                    <div class="mb-1">
+                                        <label class="form-label" for="first-name-vertical">Garentier2 Address</label>
+                                        <textarea value="" type="text" id="gAddress" class=" @error('g2_address') is-invalid @enderror form-control" name="g2_address" placeholder="Garentier Address">{{old('g2_address',isset($customer)? $customer->g2_address  :'')}}</textarea>
+                                        @error('g2_address')
+                                        <div class="alert alert-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class=" ">
+                                    <div class="mb-1">
+                                        <label class="form-label" for="first-name-vertical">note</label>
+                                        <textarea value="" type="text" id="gAddress" class=" @error('note') is-invalid @enderror form-control" name="note" placeholder="Garentier Address">{{old('note',isset($customer)? $customer->note:'')}}</textarea>
+                                        @error('note')
+                                        <div class="alert alert-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                </div>
+                            
                                 <div class="">
                                     @if (isset($customer))
                                     {{ method_field('PUT') }}
