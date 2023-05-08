@@ -9,11 +9,11 @@
                     <div class="card">
                         <div class="card-header d-flex ">
                             <div>
-                                <h4 class="text-center">Transfer Balances</h4>
+                                <h4 class="text-center">Investors Payments</h4>
                             </div>
                         </div>
                         <div class="card-body">
-                            <form action="{{route('bnk_transfer')}}" method="POST" autocomplete="on">
+                            <form action="{{route('investor-payment')}}" method="POST" autocomplete="on">
 
                                 <div class="row">
                                     @csrf
@@ -88,19 +88,19 @@
 </div>
 <script>
     function promtMsg() {
-        var sender_id = $('#sender_id').val();
-        var rcv_id = $('#rcv_id').val();
-        var promt = "";
-        if (sender_id != rcv_id) {
+        // var sender_id = $('#sender_id').val();
+        // var rcv_id = $('#rcv_id').val();
+        // var promt = "";
+        // if (sender_id != rcv_id) {
 
-            promt = "Note : parties are different , transfer will be considered loan";
+        //     promt = "Note : parties are different , transfer will be considered loan";
 
-        } else {
-            promt = "";
-        }
+        // } else {
+        //     promt = "";
+        // }
 
-        $('#prompt_msg_box').text(promt);
-        console.log("i am change");
+        // $('#prompt_msg_box').text(promt);
+        // console.log("i am change");
     }
 </script>
 @endsection

@@ -63,6 +63,14 @@ class CustomerController extends Controller
         $customer->email = $request->email;
         $customer->phone = $request->phone;
         $customer->CNIC = $request->CNIC;
+        $customer->address = $request->address;
+        $customer->g1_name = $request->g1_name;
+        $customer->g1_address = $request->g1_address;
+        $customer->g1_CNIC = $request->g1_CNIC;
+        $customer->g2_name = $request->g2_name;
+        $customer->g2_address = $request->g2_address;
+        $customer->g2_CNIC = $request->g2_CNIC;
+        $customer->note = $request->note;
         $customer->save();
 
         return redirect()->route('customer.create');
@@ -160,7 +168,16 @@ class CustomerController extends Controller
         $customer->email = $request->email;
         $customer->phone = $request->phone;
         $customer->CNIC = $request->CNIC;
+        $customer->address = $request->address;
+        $customer->g1_name = $request->g1_name;
+        $customer->g1_address = $request->g1_address;
+        $customer->g1_CNIC = $request->g1_CNIC;
+        $customer->g2_name = $request->g2_name;
+        $customer->g2_address = $request->g2_address;
+        $customer->g2_CNIC = $request->g2_CNIC;
+        $customer->note = $request->note;
         $customer->save();
+       
 
         return redirect()->route('customer.create');
     }

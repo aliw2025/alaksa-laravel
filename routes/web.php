@@ -144,6 +144,11 @@ Route::controller(GLController::class)->group(function () {
         Route::get('/ro-transfer-queue',  'userApprovalQueue')->name('ro-transfer-queue');
         Route::post('/ro--transfer-approval',  'userApproval')->name('ro--transfer-approval');
         Route::post('/bnk_transfer',  'bankTransfer')->name('bnk_transfer');
+        Route::get('/investor-payment',  'investorPaymentCreate')->name('investor-payment');
+        Route::post('/investor-payment',  'investorPaymentStore')->name('investor-payment');
+
+
+       
 });
 
 // Customer Controller
