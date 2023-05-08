@@ -47,7 +47,7 @@ class ExpenseHeadController extends Controller
 
         return redirect()->route('expenseHead.create');
     }
-
+    
     function addSubexpHeads($id){
         $expensehead = ExpenseHead::find($id);
         $subHeads = SubExpenseHead::where('head_id',$id)->get();
