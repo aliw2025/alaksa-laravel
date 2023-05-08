@@ -8,6 +8,7 @@ use App\Models\SubExpensehead;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
+
 class ExpenseHeadController extends Controller
 {
     /**
