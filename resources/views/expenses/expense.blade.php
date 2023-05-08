@@ -35,6 +35,7 @@
                                             @else
                                             <input name="date" type="text" class="form-control invoice-edit-input date-picker flatpickr-input" readonly="readonly">
                                             @endif
+                                            
 
                                         </div>
                                         <div class="d-flex align-items-center justify-content-between">
