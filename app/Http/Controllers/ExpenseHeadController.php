@@ -30,8 +30,8 @@ class ExpenseHeadController extends Controller
     public function create()
     {
         //
-        $heads = Expensehead::all();
-        return view('expenses.expense_heads',compact('heads'));
+        // $heads = Expensehead::all();
+        // return view('expenses.expense_heads',compact('heads'));
     }
 
     /**
