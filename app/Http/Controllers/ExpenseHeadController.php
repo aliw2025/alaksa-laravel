@@ -54,8 +54,18 @@ class ExpenseHeadController extends Controller
         // dd($subHeads);  
         return view('expenses.add-sub-heads',compact('subHeads','expensehead'));
 
+    }
+
+    function getSubHeads(Request $request){
+
+        $expensehead = ExpenseHead::find($request->id);
+        $subHeads = SubExpenseHead::where('head_id',$request->id)->get();
+        // dd($subHeads);  
+        return $subHeads;
+
 
     }
+    
     function storeSubexpHeads(Request $request){
         
         $subHead = new SubExpenseHead();

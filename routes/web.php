@@ -213,6 +213,8 @@ Route::controller(ExpenseHeadController::class)->group(function () {
 
         Route::get('/add-sub-exp-heads{id}',  'addSubexpHeads')->name('add-sub-exp-head');
         Route::POST('/store-Subexp-Heads',  'storeSubexpHeads')->name('storeSubexpHeads');
+        Route::get('/get-sub-heads',  'getSubHeads')->name('get-sub-heads');
+
 });
 
 // chartOfAccountController

@@ -64,7 +64,15 @@ class PurchaseController extends Controller
     
 
     public function store(Request $request)
-    {
+    {   
+        // dd(($request->item_id));
+        // if(!isset($request->item_id[0])){
+        //     dd('no item found');
+        // }
+        $validated = $request->validate([
+            'supplier'=>'required',
+            'item_id.*'=>'required'
+        ]);
 
         $user = Auth::user();
         $investor = Investor::find($request->investor_id);
@@ -92,6 +100,7 @@ class PurchaseController extends Controller
         $purchase->save();
 
         //  saving each item of the purchase transaction
+        
         for ($a=0 ; $a<count($request->qty); $a++) {
             echo $a.'<br>';
             // saving purchase items

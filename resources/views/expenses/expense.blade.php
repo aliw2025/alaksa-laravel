@@ -98,13 +98,15 @@
                                                    
                                                         <select name="head_id"
                                                             class=" select2 select2-hidden-accessible form-control invoice-edit-input"
-                                                            id="select2-basic" data-select2-id="select2-basic"
+                                                            id="head_id" data-select2-id="select2-basic"
                                                             tabindex="-1" aria-hidden="true">
-                                                            @foreach ($heads as $h)
+                                                            @if(isset($heads)
+)                                                            @foreach ($heads as $h)
                                                                 <option value="{{ $h->id }}">
                                                                     {{ $h->name }}
                                                                 </option>
                                                             @endforeach
+                                                            @endif
                                                         </select>
                                                    
 
@@ -115,18 +117,19 @@
                                                 <div style="width: 11.21rem; max-width:11.21rem; "
                                                     class="align-items-center">
                                                    
-                                                        <select name="head_id"
-                                                            class=" select2 select2-hidden-accessible form-control invoice-edit-input"
-                                                            id="select2-basic" data-select2-id="select2-basic"
-                                                            tabindex="-1" aria-hidden="true">
+                                                        <select name="shead_id"
+                                                            class="form-control"
+                                                            id="shead_id" 
+                                                             aria-hidden="true">
+                                                            <!-- @if(isset($sheads))
                                                             @foreach ($sheads as $sh)
                                                                 <option value="{{ $sh->id }}">
                                                                     {{ $sh->sub_head_name }}
                                                                 </option>
                                                             @endforeach
+                                                            @endif -->
                                                         </select>
-                                                   
-
+                                    
                                                 </div>
                                             </div>
                                             @if (!isset($expense))
@@ -241,6 +244,44 @@
         $(document).ready(function() {
 
             $('.select2-selection__arrow').hide();
+
+        });
+
+        $(document).on('change','#head_id',function(){
+
+            console.log('i am waseem ali khan');
+            var headId =$(this).val();
+            console.log(headId);
+            $('#role_id').val(headId);
+
+            $.ajax({
+                url: "{{ route('get-sub-heads') }}",
+                type: "GET",
+                data: {
+                    id: headId,
+                },
+                success: function(dataResult) {
+                    
+                    $("#shead_id").empty();
+                    console.log('recv');
+                    console.log(dataResult);
+                    var i;
+                    for (i = 0; i < dataResult.length; i++) {
+                        var item = dataResult[i];
+                        var count = i+1;
+                        console.log(item);
+                        markup = `<option value=''>`+item.sub_head_name +`</option>`
+                        $("#shead_id").append(markup);
+                    }
+                },
+                error: function(xhr, status, error) {
+
+                    var err = eval("(" + xhr.responseText + ")");
+                    console.log(err);
+                    alert(err);
+                },
+            });
+        
         });
     </script>
 @endsection
