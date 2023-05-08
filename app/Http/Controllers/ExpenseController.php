@@ -55,6 +55,8 @@ class ExpenseController extends Controller
         $expense->amount = str_replace(',','',$request->amount);
         $expense->date = $request->date;
         $expense->investor_id = $request->investor_id;
+        $expense->head_id = $request->head_id;
+        $expense->sub_head_id = $request->sub_head_id;
         $expense->save();
         $user = Auth::user();
         $expense->createLeadgerEntry($request->acc_type,$expense->amount,$request->investor_id,$request->date,$user->id);

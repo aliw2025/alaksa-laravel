@@ -18,8 +18,14 @@ return new class extends Migration
             $table->string('description');
             $table->unsignedBigInteger('user_id')->nullable();  
             $table->double('amount'); 
+            $table->unsignedBigInteger('investor_id')->nullable();  
+            $table->unsignedBigInteger('head_id')->nullable();
+            $table->unsignedBigInteger('sub_head_id')->nullable();
             $table->date('date');
             $table->timestamps();
+
+            $table->foreign('head_id')->references('id')->on('expense_heads')->onDelete('cascade');
+            $table->foreign('sub_head_id')->references('id')->on('sub_expense_heads')->onDelete('cascade');
         });
     }
 

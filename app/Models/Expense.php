@@ -24,6 +24,15 @@ class Expense extends Model
             'user_id'=>$user_id
         ]);
     }
+    public function head(){
+
+      return  $this->belongsTo(ExpenseHead::class,'head_id','id');
+    }
+    public function subHead(){
+
+        return  $this->belongsTo(SubExpenseHead::class,'sub_head_id','id');
+    }
+
     public function investor(){
         return $this->belongsTo(Investor::class,'investor_id');
     }
