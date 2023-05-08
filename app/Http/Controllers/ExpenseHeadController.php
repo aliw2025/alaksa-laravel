@@ -3,12 +3,11 @@
 namespace App\Http\Controllers;
 
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 
 use App\Models\Expensehead;
 use App\Models\SubExpensehead;
 
+use Illuminate\Http\Request;
 
 class ExpenseHeadController extends Controller
 {
@@ -30,8 +29,8 @@ class ExpenseHeadController extends Controller
     public function create()
     {
         //
-        // $heads = Expensehead::all();
-        // return view('expenses.expense_heads',compact('heads'));
+        $heads = Expensehead::all();
+        return view('expenses.expense_heads',compact('heads'));
     }
 
     /**
