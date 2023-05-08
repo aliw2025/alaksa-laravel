@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Expensehead;
-use App\Models\SubExpensehead;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+
+use App\Models\Expensehead;
+use App\Models\SubExpensehead;
 
 
 class ExpenseHeadController extends Controller
