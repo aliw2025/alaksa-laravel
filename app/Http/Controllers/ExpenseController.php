@@ -49,7 +49,12 @@ class ExpenseController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        
+        $validated = $request->validate([
+            'amount'=>'required',
+            'description'=>'required'
+        ]);
+
         $expense = new Expense();
         $expense->description = $request->description;
         $expense->amount = str_replace(',','',$request->amount);

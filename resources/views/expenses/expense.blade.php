@@ -138,16 +138,22 @@
 
                                                         <div class="col-3 my-lg-0 my-2">
                                                             <p class="card-text col-title mb-md-2 mb-0">Amount</p>
-                                                            <input @if (isset($expense)) disabled value="{{ $expense->amount }}" @endif id="cost0" name="amount" class="number-separator form-control" placeholder="">
+                                                            <input @if (isset($expense)) disabled value="{{ $expense->amount }}" @endif id="cost0" name="amount" class="@error('amount') is-invalid @enderror number-separator form-control" placeholder="">
+                                                            @error('amount')
+                                                                <div class="alert alert-danger">{{$message}}</div>
+                                                            @enderror
                                                         </div>
                                                         <div class="col-9 my-lg-0 my-2">
                                                             <p class="card-text col-title mb-md-2 mb-0">Description</p>
 
-                                                            <textarea name="description" class="form-control" rows="1" id="note"> @if (isset($expense))
+                                                            <textarea name="description" class="@error('description') is-invalid @enderror form-control" rows="1" id="note"> @if (isset($expense))
 {{ $expense->description }}
 @endif 
                                                            
                                                             </textarea>
+                                                            @error('description')
+                                                                <div class="alert alert-danger">{{$message}}</div>
+                                                            @enderror
                                                         </div>
 
 

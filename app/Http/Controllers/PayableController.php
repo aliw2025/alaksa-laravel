@@ -72,6 +72,12 @@ class PayableController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request);
+
+        $validate = $request->validate([
+            'supplier'=>'required',
+            'amount'=>'required'
+        ]);
         $user = Auth::user();
         $id = Payable::max('id');
         if ($id == null) {
