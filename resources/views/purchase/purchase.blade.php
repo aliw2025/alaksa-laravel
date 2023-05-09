@@ -153,7 +153,7 @@
                                     
                                         <div class="repeater-wrapper" data-repeater-item="">
                                             @php
-                                            $row_count=1
+                                            $row_count=0
                                             @endphp
                                             @foreach($purchase->purchaseItems as $pitem)
                                             <div id="row{{$row_count}}" class="mt-3 row">
@@ -182,7 +182,7 @@
                                                         @if($type==2)
                                                             <div class="col-lg-2 col-12 my-lg-0 my-2">
                                                                 <p class="card-text col-title mb-md-2 mb-0">Curr Price</p>
-                                                                <input onkeyup="calLoss({{$row_count}})" id="cur_cost0" name="cost[]" class="number-separator form-control" value="" placeholder="">
+                                                                <input onkeyup="calLoss({{$row_count}})" id="cur_cost{{$row_count}}" name="cost[]" class="number-separator form-control" value="" placeholder="">
                                                             </div>
                                                         @endif
                                                         <div class="col-lg-1 col-12 my-lg-0 my-2">
@@ -192,7 +192,7 @@
                                                         @if($type==2)
                                                             <div class="col-lg-2 col-12 my-lg-0 my-2">
                                                                 <p class="card-text col-title mb-md-2 mb-0">Trade Loss</p>
-                                                                <input onkeyup="calRowTotal({{$row_count}})" id="td_loss0" name="td_loss[]" class="number-separator form-control" value="" placeholder="">
+                                                                <input onkeyup="calRowTotal({{$row_count}})" id="td_loss{{$row_count}}" name="td_loss[]" class="number-separator form-control" value="" placeholder="">
                                                             </div>
                                                         @endif
                                                         <div class="col-lg-2 col-12 mt-lg-0 mt-2">
@@ -233,7 +233,6 @@
                                             @endphp
                                             @endforeach
                                         </div>
-
 
                                         @else
                                         {{-- testing --}}
@@ -429,7 +428,11 @@
 
     $('#addNewBtn').click(function() {
         console.log('ad-new item');
-        rowId = rowId + 1;
+
+        var count = $(".repeater-wrapper > *").length;
+        console.log('count: '+count);
+
+        rowId = count;
         var maarkup = `<div id="row${rowId}" class="row">
                         <div class="mt-3 col-12 d-flex product-details-border position-relative pe-0">
                             <div class="row py-2">
