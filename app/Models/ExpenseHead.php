@@ -8,4 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class ExpenseHead extends Model
 {
     use HasFactory;
+
+    // just adding commetgs
 }
