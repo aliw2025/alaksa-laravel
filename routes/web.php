@@ -25,7 +25,9 @@ use App\Http\Controllers\CategoryPropController;
 use App\Http\Controllers\ExpenseHeadController;
 use App\Http\Controllers\GLController;
 use App\Http\Controllers\RolePermissionController;
+use App\Http\Controllers\SupplierPaymentController;
 use App\Models\Instalment;
+use App\Models\SupplierPayment;
 use Spatie\Permission\Contracts\Role;
 use Spatie\Permission\Models\Role as ModelsRole;
 
@@ -175,6 +177,11 @@ Route::controller(InventoryController::class)->group(function () {
 // payable Controller
 Route::controller(PayableController::class)->group(function () {
 
+      
+});
+
+Route::controller(SupplierPaymentController::class)->group(function(){
+
         Route::get('/get-payables/{id}',  'getPayables')->name('get-payables');
         Route::get('/get-payables-temp/{id}',  'payablesRepTem')->name('get-payables-temp');
 });
@@ -251,7 +258,9 @@ Route::resource('store', StoreController::class);
 Route::resource('inventory', InventoryController::class);
 Route::resource('purchase', PurchaseController::class);
 Route::resource('sale', SaleController::class);
+
 Route::resource('payable', PayableController::class);
+Route::resource('supplierPayment', SupplierPaymentController::class);
 Route::resource('supplier', SupplierController::class);
 Route::resource('commission', CommissionController::class);
 Route::resource('designation', desingationContoller::class);

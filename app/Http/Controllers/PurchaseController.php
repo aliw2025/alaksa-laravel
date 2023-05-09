@@ -294,7 +294,18 @@ class PurchaseController extends Controller
      */
     public function update(Request $request, Purchase $purchase)
     {
-        //
+        dd('i am update route');
+        if ($request->input('action') == "post") {
+            return redirect()->route('post-sale', $request->all());
+        } else if ($request->input('action') == "cancel") {
+            return redirect()->route('cancel-sale', $request->all());
+        }
+
+
+        if ($sale->status != 1) {
+
+            return "sale status other than entry  cannot be edited";
+        }
 
 
     }

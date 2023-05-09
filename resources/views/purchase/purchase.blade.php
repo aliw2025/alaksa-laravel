@@ -6,7 +6,7 @@
             <div class="row invoice-add">
                 <!-- Invoice Add Left starts -->
                 <div class="col-xl-12 col-md-12 col-12">
-                    <form class="" method="POST" autocomplete="on" action="{{ route('purchase.store') }}">
+                    <form class="" method="POST" autocomplete="on" action="{{ isset($purchase)? route('purchase.update',$purchase->id): route('purchase.store') }}">
                         <div class="card invoice-preview-card">
                             <!-- Header starts -->
                             @if($errors->any())
@@ -147,11 +147,10 @@
                                     </table>
 
                                     @else
-                                    {{-- --}}
+                                   
                                     <div id="test-section" data-repeater-list="group-a">
                                         @if(isset($purchase) )
-                                        {{-- --}}
-
+                                    
                                         <div class="repeater-wrapper" data-repeater-item="">
                                             @php
                                             $row_count=1
@@ -166,50 +165,39 @@
                                                             <input name="item_id[]" id="item_id{{$row_count}}" type="hidden" class="form-control" value="" placeholder="">
                                                         </div>
                                                         <div class="col-2">
-                                                            </p>
-                                                            <input value="{{$pitem->item->name}}" autocomplete="off" id="itemBox0" class="@error('item-id.0') is-invalid @enderror form-control" autocomplete="off" placeholder="Enter Item" @if($type==1) onkeyup="getItems({{$row_count}})" @else onkeyup="getInvItems(0)" @endif>
+                                                        <p class="card-text col-title mb-md-2 mb-0">Item Name</p>
+                                                            <input value="{{$pitem->item->name}}" autocomplete="off" id="itemBox{{$row_count}}" class=" form-control" autocomplete="off" placeholder="Enter Item" @if($type==1) onkeyup="getItems({{$row_count}})" @else onkeyup="getInvItems(0)" @endif>
                                                            
-                                            
-                                                            @error('item_id.0')
-                                                            <div class="alert alert-danger">{{ $message }}</div>
-                                                            @enderror
-                                                            <div class="list-type" id="list0" style="position: absolute; z-index: 1;" class="card mb-4">
-                                                                <div id="listBody0" class="list-group">
+                                                            <div class="list-type" id="list{{$row_count}}" style="position: absolute; z-index: 1;" class="card mb-4">
+                                                                <div id="listBody{{$row_count}}" class="list-group">
 
                                                                 </div>
                                                             </div>
 
-
                                                         </div>
                                                         <div class="col-lg-2 col-12 my-lg-0 my-2">
                                                             <p class="card-text col-title mb-md-2 mb-0">cost</p>
-                                                            <input value="{{$pitem->unit_cost}}" onkeyup="calRowTotal({{$row_count}})" id="cost0" name="cost[]" class="number-separator form-control" value="" placeholder="">
+                                                            <input value="{{$pitem->unit_cost}}" onkeyup="calRowTotal({{$row_count}})" id="cost{{$row_count}}" name="cost[]" class="number-separator form-control" value="" placeholder="">
                                                         </div>
                                                         @if($type==2)
-                                                        {{-- @dd("wwwwwww") --}}
-                                                        <div class="col-lg-2 col-12 my-lg-0 my-2">
-                                                            <p class="card-text col-title mb-md-2 mb-0">Curr Price</p>
-                                                            <input onkeyup="calLoss({{$row_count}})" id="cur_cost0" name="cost[]" class="number-separator form-control" value="" placeholder="">
-                                                        </div>
-
+                                                            <div class="col-lg-2 col-12 my-lg-0 my-2">
+                                                                <p class="card-text col-title mb-md-2 mb-0">Curr Price</p>
+                                                                <input onkeyup="calLoss({{$row_count}})" id="cur_cost0" name="cost[]" class="number-separator form-control" value="" placeholder="">
+                                                            </div>
                                                         @endif
-
                                                         <div class="col-lg-1 col-12 my-lg-0 my-2">
                                                             <p class="card-text col-title mb-md-2 mb-0">Qty</p>
-                                                            <input value="{{$pitem->quantity}}" pattern="[0-9]{10}" onkeyup="calRowTotal({{$row_count}})" id="qty0" name="qty[]" type="number" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13 || event.charCode == 45) ? null : event.charCode >= 48 && event.charCode <= 57" class="form-control" value="" placeholder="">
+                                                            <input value="{{$pitem->quantity}}" pattern="[0-9]{10}" onkeyup="calRowTotal({{$row_count}})" id="qty{{$row_count}}" name="qty[]" type="number" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13 || event.charCode == 45) ? null : event.charCode >= 48 && event.charCode <= 57" class="form-control" value="" placeholder="">
                                                         </div>
                                                         @if($type==2)
-
-                                                        <div class="col-lg-2 col-12 my-lg-0 my-2">
-                                                            <p class="card-text col-title mb-md-2 mb-0">Trade Loss</p>
-                                                            <input onkeyup="calRowTotal({{$row_count}})" id="td_loss0" name="td_loss[]" class="number-separator form-control" value="" placeholder="">
-                                                        </div>
-
+                                                            <div class="col-lg-2 col-12 my-lg-0 my-2">
+                                                                <p class="card-text col-title mb-md-2 mb-0">Trade Loss</p>
+                                                                <input onkeyup="calRowTotal({{$row_count}})" id="td_loss0" name="td_loss[]" class="number-separator form-control" value="" placeholder="">
+                                                            </div>
                                                         @endif
-
                                                         <div class="col-lg-2 col-12 mt-lg-0 mt-2">
                                                             <p class="card-text col-title mb-md-50 mb-0">Total</p>
-                                                            <input style=" border: none;background-color: transparent;resize: none;outline: none;" id="rowTotal0" name="rowTotal[]" class=" form-control" value="{{$pitem->unit_cost*$pitem->quantity}}" disabled>
+                                                            <input style=" border: none;background-color: transparent;resize: none;outline: none;" id="rowTotal{{$row_count}}" name="rowTotal[]" class=" form-control" value="{{$pitem->unit_cost*$pitem->quantity}}" >
                                                         </div>
                                                     </div>
                                                     <div class="d-flex flex-column align-items-center justify-content-between border-start invoice-product-actions py-50 px-25">
@@ -397,9 +385,14 @@
                             <div class="row p-2">
                                 <div class="col-12">
                                     @if (isset($purchase))
+                                    @if ($purchase->status == 1)
                                     <div class="d-flex justify-content-end">
-                                        <button onclick="rePrint()" type="reset" class="btn btn-primary">Reprint Invoice</button>
+
+                                        <button type="submit" name="action" value="post" class="btn btn-success me-2">Post</button>
+                                        <button type="submit" name="action" value="cancel" class="btn btn-danger me-2">Cancel</button>
+                                        <button type="submit" name="action" value="save" class="btn btn-primary me-2">Save</button>
                                     </div>
+                                    @endif
                                     @else
                                     <div class="d-flex justify-content-end">
                                         <button type="submit" class="btn btn-primary me-2">Save</button>

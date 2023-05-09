@@ -6,7 +6,7 @@
             <div class="row invoice-add">
                 <!-- Invoice Add Left starts -->
                 <div class="col-xl-12 col-md-12 col-12">
-                    <form class="" method="POST" autocomplete="on" action="{{ route('payable.store') }}">
+                    <form class="" method="POST" autocomplete="on" action="{{ route('supplierPayment.store') }}">
                         <div class="card invoice-preview-card">
                             <!-- Header starts -->
                             <div class="card-body invoice-padding pb-0">
@@ -43,14 +43,14 @@
                                                             </line>
                                                         </svg>
                                                     </div> --}}
-                                                <input style="font-size: 12px" @if (isset($payable)) disabled value="{{ $payable->payment_no }}" @endif name="purchaseId" type="text" class="form-control invoice-edit-input" placeholder="">
+                                                <input style="font-size: 12px" @if (isset($supplierPayment)) disabled value="{{ $supplierPayment->payment_no }}" @endif name="purchaseId" type="text" class="form-control invoice-edit-input" placeholder="">
                                             </div>
                                         </div>
 
                                         <div class="d-flex align-items-center justify-content-between mb-1">
                                             <span class="title">Date:</span>
-                                            @if (isset($payable))
-                                            <input value="{{ $payable->payment_date }}" disabled name="payment_date" type="text" class="form-control invoice-edit-input ">
+                                            @if (isset($supplierPayment))
+                                            <input value="{{ $supplierPayment->payment_date }}" disabled name="payment_date" type="text" class="form-control invoice-edit-input ">
                                             @else
                                             <input name="payment_date" type="text" class="form-control invoice-edit-input date-picker flatpickr-input" readonly="readonly">
                                             @endif
@@ -59,8 +59,8 @@
                                         <div class="d-flex align-items-center justify-content-between">
                                             <span class="title">Investor:</span>
                                             <div style="width: 11.21rem; max-width:11.21rem; " class="align-items-center">
-                                                @if (isset($payable))
-                                                <input disabled value="{{ $payable->investor->investor_name }}" name="payment_date" type="text" class="form-control invoice-edit-input ">
+                                                @if (isset($supplierPayment))
+                                                <input disabled value="{{ $supplierPayment->investor->investor_name }}" name="payment_date" type="text" class="form-control invoice-edit-input ">
                                                 @else
                                                 <select name="investor_id" class=" select2 select2-hidden-accessible form-control invoice-edit-input" id="select2-basic" data-select2-id="select2-basic" tabindex="-1" aria-hidden="true">
                                                     @foreach ($investors as $investor)
@@ -77,7 +77,7 @@
                                             <span class="title">Account</span>
                                             {{-- <select class="form-control" name="supplier" id=""></select> --}}
                                             <div style="width: 11.21rem; max-width:11.21rem; " class="align-items-center">
-                                                <select @if (isset($payable)) disabled value="{{ $payable->investor->investor_name }}" @endif name="acc_type" class="form-select" aria-label="Default select example">
+                                                <select @if (isset($supplierPayment)) disabled value="{{ $supplierPayment->investor->investor_name }}" @endif name="acc_type" class="form-select" aria-label="Default select example">
 
                                                     <option value="1"> Cash</option>
                                                     @foreach ($bank_acc as $acc)
@@ -96,8 +96,8 @@
                                             <span class="title">Supplier</span>
                                             {{-- <select class="form-control" name="supplier" id=""></select> --}}
                                             <div style="width: 11.21rem; max-width:11.21rem; " class="align-items-center">
-                                                @if (isset($payable))
-                                                <input value="{{ $payable->supplier_val->name }}" disabled name="payment_date" type="text" class="form-control invoice-edit-input ">
+                                                @if (isset($supplierPayment))
+                                                <input value="{{ $supplierPayment->supplier_val->name }}" disabled name="payment_date" type="text" class="form-control invoice-edit-input ">
                                                 @else
                                                 <select name="supplier" class="@error('supplier') is-invalid @enderror form-select" aria-label="Default select example">
 
@@ -133,7 +133,7 @@
 
                                                         <div class="col-3 my-lg-0 my-2">
                                                             <p class="card-text col-title mb-md-2 mb-0">Amount</p>
-                                                            <input @if (isset($payable)) disabled value="{{ $payable->amount }}" @endif id="cost0" name="amount" class="@error('amount') is-invalid @enderror number-separator form-control" placeholder="">
+                                                            <input @if (isset($supplierPayment)) disabled value="{{ $supplierPayment->amount }}" @endif id="cost0" name="amount" class="@error('amount') is-invalid @enderror number-separator form-control" placeholder="">
                                                             @error('amount')
                                                             <div class="alert alert-danger"> {{$message}}</div>
                                                             @enderror
@@ -141,7 +141,7 @@
                                                         <div class="col-9 my-lg-0 my-2">
 
                                                             <p class="card-text col-title mb-md-2 mb-0">Note</p>
-                                                            <input @if (isset($payable)) disabled value="{{ $payable->note }}" @endif id="cost0" name="note" type="number" class="form-control" value="" placeholder="">
+                                                            <input @if (isset($supplierPayment)) disabled value="{{ $supplierPayment->note }}" @endif id="cost0" name="note" type="text" class="form-control" value="" placeholder="">
                                                             {{-- <textarea name="note" class="form-control" rows="1" id="note"></textarea> --}}
 
                                                         </div>
@@ -176,7 +176,7 @@
                             </div>
                             <div class="row p-2">
                                 <div class="col-12">
-                                    @if (isset($payable))
+                                    @if (isset($supplierPayment))
                                     <div class="d-flex justify-content-end">
                                         <button type="reset" class="btn btn-primary">Re Print</button>
                                     </div>
@@ -203,7 +203,7 @@
 <script>
     var rowId = 0;
     $(document).ready(function() {
-
+      
         $('.select2-selection__arrow').hide();
     });
 </script>
