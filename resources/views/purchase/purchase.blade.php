@@ -156,7 +156,7 @@
                                             $row_count=0
                                             @endphp
                                             @foreach($purchase->purchaseItems as $pitem)
-                                            <div id="row{{$row_count}}" class="mt-3 row">
+                                            <div id="{{$row_count}}" class="mt-3 row">
                                                 <div class="col-12 d-flex product-details-border position-relative pe-0">
                                                     <div class="row py-2">
                                                         <div class="col-lg-1 col-12 my-lg-0 my-2">
@@ -171,7 +171,7 @@
                                                             <div class="list-type" id="list{{$row_count}}" style="position: absolute; z-index: 1;" class="card mb-4">
                                                                 <div id="listBody{{$row_count}}" class="list-group">
 
-                                                                </div>
+                                                                </div>  
                                                             </div>
 
                                                         </div>
@@ -236,7 +236,7 @@
 
                                         @else
                                         {{-- testing --}}
-                                        <div class="repeater-wrapper" data-repeater-item="">
+                                        <div id="0" class="repeater-wrapper" data-repeater-item="">
 
                                             <div class="row">
                                                 <div class="col-12 d-flex product-details-border position-relative pe-0">
@@ -355,11 +355,9 @@
                                             <div class="invoice-total-item">
                                                 <input type="hidden" name="total_amount" id="amount_feild">
                                                 <p class="invoice-total-title">Total:</p>
-                                                @if (isset($purchase))
-                                                <p class="invoice-total-amount">{{number_format( $purchase->total )}}</p>
-                                                @else
-                                                <p id="totalAmount" class="invosice-total-amount">0 PKR</p>
-                                                @endif
+                                              
+                                                <p id="totalAmount" class="invosice-total-amount">{{ isset($purchase)? number_format( $purchase->total).' PKR' :'0 PKR'}}</p>
+
 
                                             </div>
                                         </div>
@@ -427,13 +425,23 @@
     });
 
     $('#addNewBtn').click(function() {
+
         console.log('ad-new item');
-
         var count = $(".repeater-wrapper > *").length;
-        console.log('count: '+count);
+        if(count>0){
+            var rows =  $(".repeater-wrapper > *");
+            var last = rows[count-1];
+            rowId = $(last).attr('id');
+            rowId = parseInt(rowId)+1;
+            console.log(rowId);
+            
+        }else{
+            rowId = 0;
+        }
+        // console.log('count: '+count);
 
-        rowId = count;
-        var maarkup = `<div id="row${rowId}" class="row">
+        // rowId = count;
+        var maarkup = `<div id="${rowId}" class="row">
                         <div class="mt-3 col-12 d-flex product-details-border position-relative pe-0">
                             <div class="row py-2">
                                     <div class="col-lg-1 col-12 my-lg-0 my-2">
@@ -548,6 +556,7 @@
     // var lastVall= 0;
     function calRowTotal(rowId) {
 
+       
         var qty = $('#qty' + rowId).val();
         var cost = ($('#cost' + rowId).val());
         var type = $('#tran_type').val();
@@ -564,7 +573,7 @@
         var sum = parseFloat(subTotal) + parseFloat(total) - parseFloat(Number(old));
         $("#totalAmount").text(sum.toLocaleString('en-US') + " PKR");
         $("#amount_feild").val(sum.toFixed(2));
-
+        console.log(sum);
         if (type == 2) {
             console.log(type);
             calLoss(rowId)
@@ -682,8 +691,24 @@
     }
 
     function deleteItem(id) {
+
         console.log("removing");
-        $('#row' + id).remove();
+        var rowId = id;
+      
+
+        var row_total = $("#rowTotal" + rowId).val();
+        row_total = Number(row_total.replace(/[^0-9.-]+/g, ""));
+       
+        var subTotal = $("#totalAmount").text();
+        subTotal = Number(subTotal.replace(/[^0-9.-]+/g, ""));
+        var sum = parseFloat(subTotal) - parseFloat(Number(row_total));
+        $("#totalAmount").text(sum.toLocaleString('en-US') + " PKR");
+        $("#amount_feild").val(sum.toFixed(2));
+
+        $('#'+id).remove();
+
+
+
     }
 
 
