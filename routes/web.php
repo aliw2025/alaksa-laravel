@@ -121,6 +121,8 @@ Route::controller(PurchaseController::class)->group(function () {
         Route::get('/get-purchases-post',  'showPurchasesPost')->name('get-purchases-post');
         Route::get('/purchase-return',  'purchaseReturn')->name('purchase-return');
         Route::get('/get-last-purchase',  'getLastPurchase')->name('get-last-purchase');
+        Route::get('/post-purchase',  'postPurchase')->name('post-purchase');
+        Route::get('/cancel-purchase',  'cancelPurchase')->name('cancel-purchase');    
 });
 
 // Instalment Controller

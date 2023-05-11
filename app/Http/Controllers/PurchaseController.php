@@ -65,13 +65,18 @@ class PurchaseController extends Controller
 
     public function store(Request $request)
     {   
-        // dd(($request->item_id));
-        // if(!isset($request->item_id[0])){
-        //     dd('no item found');
-        // }
-        $validated = $request->validate([
+        
+       $validated = $request->validate([
             'supplier'=>'required',
-            'item_id.*'=>'required'
+             'item_id'=>'required',
+            'item_id.*'=>'required',
+            'qty.*'=>'required',
+            'cost.*'=>'required'
+        ],[
+           
+            'item_id.*'=>'One or more item feild is left empty',
+            'qty.*'=> 'One or more Quantity feild is left empty',
+            'cost.*'=>'One or more Cost feild is left empty',
         ]);
 
         $user = Auth::user();
@@ -114,18 +119,19 @@ class PurchaseController extends Controller
 
         }   
         
-        return redirect()->route('get-purchases',$investor->id);   
+        return redirect()->route('purchase.show',$purchase);   
     }
 
 
     public function postPurchase(Request $request){
-      
+        
+        // dd($request->all());
         $user = Auth::user();
         $investor = Investor::find($request->investor_id);
         // creating purchase transactions
         $purchase = Purchase::find($request->purchase_id);
         
-
+        
         //  saving each item of the purchase transaction
         foreach ($purchase->purchaseItems as $purchase_item) {
             
@@ -166,50 +172,22 @@ class PurchaseController extends Controller
                 $expense->save();
                 $expense->investor_id = $investor->id;
                 // creating impact of expense on leadger
-                $expense->leadgerEntries()->create([
-                    'account_id'=> 8,
-                    'value'=> str_replace(',','',$request->td_loss[$a]),
-                    'investor_id'=>$investor->id,
-                    'date'=>$purchase->purchase_date,
-                    'user_id'=>$user->id       
-                ]);  
-
-                //  getting supplier payable account of the supplier
-                $expense->leadgerEntries()->create([
-                    'account_id'=> $sup_acc_id,
-                    'value'=> - str_replace(',','',$request->td_loss[$a]),
-                    'investor_id'=>$investor->id,
-                    'date'=>$purchase->purchase_date ,
-                    'user_id'=>$user->id             
-                ]);
-            
+                $purchase->createLeadgerEntry(8,str_replace(',','',$request->td_loss[$a]),$investor->id,$purchase->purchase_date,$user->id);
+                $purchase->createLeadgerEntry($sup_acc_id,-str_replace(',','',$request->td_loss[$a]),$investor->id,$purchase->purchase_date,$user->id);
             }
+
         }   
 
-        
+        $purchase->status = 3;
+        $purchase->save();
         /******************** Leadger Entries ******************/
-        $purchase->leadgerEntries()->create([
-            'account_id'=>  3,
-            'value'=> $request->total_amount,
-            'investor_id'=>$investor->id,
-            'date'=>$purchase->purchase_date,
-            'user_id'=>$user->id               
-        ]);  
-        
+        $purchase->createLeadgerEntry(3,$request->total_amount,$investor->id,$purchase->purchase_date,$user->id); 
+        $purchase->createLeadgerEntry($sup_acc_id,-$request->total_amount,$investor->id,$purchase->purchase_date,$user->id); 
 
-        //  getting supplier payable account of the supplier
-        $purchase->leadgerEntries()->create([
-            'account_id'=>  $sup_acc_id ,
-            'value'=> -$request->total_amount,
-            'investor_id'=>$investor->id,
-            'date'=>$purchase->purchase_date,
-            'user_id'=>$user->id              
-        ]);
         
         return redirect()->route('get-purchases',$investor->id);   
     
     }
-    
     
 
     public function showPurchaseItems($id){
@@ -239,7 +217,6 @@ class PurchaseController extends Controller
         ]);
 
         $investors = Investor::all();
-        
         return view('purchase.purchases-list',compact('purchases','investors'));
 
     }
@@ -256,6 +233,7 @@ class PurchaseController extends Controller
         $investors = Investor::all();
         $suppliers = Supplier::all();
         $type = $purchase->type;
+        // return $purchase->purchaseItems;
         return view('purchase.purchase',compact('purchase','investors','suppliers','type'));
     }
 
@@ -294,20 +272,61 @@ class PurchaseController extends Controller
      */
     public function update(Request $request, Purchase $purchase)
     {
-        dd('i am update route');
+        // dd('i am update route');
+
         if ($request->input('action') == "post") {
-            return redirect()->route('post-sale', $request->all());
+
+            return redirect()->route('post-purchase', $request->all());
         } else if ($request->input('action') == "cancel") {
             return redirect()->route('cancel-sale', $request->all());
         }
+        // dd($request->all());
+        $validated = $request->validate([
+            'supplier'=>'required',
+             'item_id'=>'required',
+            'item_id.*'=>'required',
+            'qty.*'=>'required',
+            'cost.*'=>'required'
+        ],[
+           
+            'item_id.*'=>'One or more item feild is left empty',
+            'qty.*'=> 'One or more Quantity feild is left empty',
+            'cost.*'=>'One or more Cost feild is left empty',
+        ]);
 
+        $user = Auth::user();
+        $investor = Investor::find($request->investor_id);
+        // creating purchase transactions
+       
+        $purchase->investor_id = $request->investor_id;
+        $purchase->store_id = 1;
+        $purchase->supplier = $request->supplier;
+        $purchase->total = str_replace(',','', $request->total_amount);
+        $purchase->type = $request->purchase_type;
+        $purchase->purchase_date = $request->purchase_date;
+        $purchase->tran_type = $request->tran_type;
+        $purchase->status = 1;
+        $purchase->save();
 
-        if ($sale->status != 1) {
+        //  saving each item of the purchase transaction
+        $pitems = $purchase->purchaseItems();
+        // dd($pitems);
+        $pitems->delete();
+        for ($a=0 ; $a<count($request->qty); $a++) {
+            echo $a.'<br>';
+            // saving purchase items
+            $purchase_item = new PurchaseItem();
+            $purchase_item->item_id = $request->item_id[$a];
+            $purchase_item->quantity = $request->qty[$a];
+            $purchase_item->unit_cost =  str_replace(',','',$request->cost[$a]); 
+            $purchase_item->trade_discount = 0;
+            $purchase_item->purchase_id = $purchase->id;
+            $purchase_item->save();
 
-            return "sale status other than entry  cannot be edited";
-        }
+        }   
+        
 
-
+        return redirect()->route('purchase.show',$purchase);
     }
 
     /**
@@ -318,6 +337,11 @@ class PurchaseController extends Controller
      */
     public function destroy(Purchase $purchase)
     {
-        //
+
+    }
+
+    public function cancelPurchase(Request $request)
+    {
+        
     }
 }
