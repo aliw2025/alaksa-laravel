@@ -85,13 +85,11 @@ class PurchaseController extends Controller
         $purchase = new Purchase();
         $id = Purchase::max('id');
 
+        $td_loss = 0;
         if($id ==null){
             $id = 0;
         }
-        if($request->purchase_type==2){
-            $request->total_amount = $request->total_amount * -1;
-            
-        }
+       
         $num = str_pad($id+1, 10, '0', STR_PAD_LEFT);
         $purchase->purchase_no = $investor->prefix.'22'.$num;
         $purchase->investor_id = $request->investor_id;
@@ -115,11 +113,12 @@ class PurchaseController extends Controller
             $purchase_item->unit_cost =  str_replace(',','',$request->cost[$a]); 
             $purchase_item->trade_discount = 0;
             $purchase_item->purchase_id = $purchase->id;
+            $purchase_item->td_loss = $request->td_loss[$a];
             $purchase_item->save();
 
         }   
         
-        return redirect()->route('purchase.show',$purchase);   
+        return redirect()->route('purchase.show',$purchase)->with('message','Record saved');;   
     }
 
 
@@ -171,15 +170,21 @@ class PurchaseController extends Controller
                 $expense->date = $purchase->purchase_date;
                 $expense->save();
                 $expense->investor_id = $investor->id;
+                
                 // creating impact of expense on leadger
-                $purchase->createLeadgerEntry(8,str_replace(',','',$request->td_loss[$a]),$investor->id,$purchase->purchase_date,$user->id);
-                $purchase->createLeadgerEntry($sup_acc_id,-str_replace(',','',$request->td_loss[$a]),$investor->id,$purchase->purchase_date,$user->id);
+                $purchase->createLeadgerEntry(8,str_replace(',','',$purchase_item->td_loss),$investor->id,$purchase->purchase_date,$user->id);
+                $purchase->createLeadgerEntry($sup_acc_id,-str_replace(',','',$purchase_item->td_loss),$investor->id,$purchase->purchase_date,$user->id);
             }
 
         }   
 
         $purchase->status = 3;
         $purchase->save();
+        if($request->purchase_type==2){
+            $request->total_amount = $request->total_amount * -1;
+            
+            
+        }
         /******************** Leadger Entries ******************/
         $purchase->createLeadgerEntry(3,$request->total_amount,$investor->id,$purchase->purchase_date,$user->id); 
         $purchase->createLeadgerEntry($sup_acc_id,-$request->total_amount,$investor->id,$purchase->purchase_date,$user->id); 
@@ -273,7 +278,7 @@ class PurchaseController extends Controller
     public function update(Request $request, Purchase $purchase)
     {
         // dd('i am update route');
-
+        // dd($request->all());    
         if ($request->input('action') == "post") {
 
             return redirect()->route('post-purchase', $request->all());
@@ -286,6 +291,7 @@ class PurchaseController extends Controller
              'item_id'=>'required',
             'item_id.*'=>'required',
             'qty.*'=>'required',
+            'purchase_date'=>'required',
             'cost.*'=>'required'
         ],[
            
@@ -321,12 +327,17 @@ class PurchaseController extends Controller
             $purchase_item->unit_cost =  str_replace(',','',$request->cost[$a]); 
             $purchase_item->trade_discount = 0;
             $purchase_item->purchase_id = $purchase->id;
+            $purchase_item->td_loss = $request->td_loss[$a];
             $purchase_item->save();
 
         }   
-        
+        $investors = Investor::all();
+        $suppliers = Supplier::all();
+        $type = $purchase->type;
+        // return $purchase->purchaseItems;
+        return view('purchase.purchase',compact('purchase','investors','suppliers','type'))->with('message','Record saved');
 
-        return redirect()->route('purchase.show',$purchase);
+        // return redirect()->route('purchase.show',$purchase)->with('message','Record saved');
     }
 
     /**

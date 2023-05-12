@@ -687,7 +687,9 @@
 
     <script>
         $(document).ready(function() {
+        
             @if(isset($message))
+            console.log('here');
             toastr.success(
                 "{{$message}}",
                 "Success!", {

@@ -38,7 +38,10 @@
                                         </div>
                                         <div class="d-flex align-items-center justify-content-between mb-1">
                                             <span class="title">Date:</span>
-                                            <input type="date" name="purchase_date" class="form-control" @if(isset($purchase)) value="{{$purchase->purchase_date}}" @endif @if(isset($purchase )) @if($purchase->status==3) disabled @endif @endif>
+                                            <input type="date" name="purchase_date" class="form-control" value="{{ isset($purchase)? $purchase->purchase_date: now()->format('Y-m-d')}}" @if(isset($purchase )) @if($purchase->status==3) disabled @endif @endif>
+                                            @error('purchase_date')
+                                                <div class="alert alert-danger">{{$message}}</div>
+                                            @enderror
                                         </div>
                                         <div class="d-flex align-items-center justify-content-between">
                                             <span class="title">Investor:</span>
@@ -57,7 +60,7 @@
                                             <div style="width: 11.21rem; max-width:11.21rem; " class="align-items-center">
                                                 <select @if (isset($purchase) && $purchase->status==3 ) disabled @endif id="supplier_id" name="supplier" class=" @error('supplier') is-invalid @enderror form-select" aria-label="Default select example">
                                                     @foreach ($suppliers as $sup)
-                                                         <option  @if(isset($purchase))  @if($purchase->supplier_id==$sup->id) selected @endif @endif value="{{ $sup->id }}">{{ $sup->name }} </option>
+                                                    <option @if(isset($purchase)) @if($purchase->supplier_id==$sup->id) selected @endif @endif value="{{ $sup->id }}">{{ $sup->name }} </option>
                                                     @endforeach
                                                 </select>
                                                 @error('supplier')
@@ -70,6 +73,11 @@
                             </div>
                             <!-- Header ends -->
                             <hr class="invoice-spacing">
+                                <!-- @If(isset($message))
+                                    <div class="alert alert-success">
+                                        {{$message}}
+                                    </div>
+                                @endif -->
                             @error('item_id')
                             <div class="alert alert-danger">
                                 {{$message}}
@@ -90,98 +98,98 @@
                                 {{$message}}
                             </div>
                             @enderror
-                             <!-- Product Details starts -->
+                            <!-- Product Details starts -->
                             <div class="card-body invoice-padding invoice-product-details">
-                                <form class="source-item">  
+                                <form class="source-item">
                                     <div id="test-section" data-repeater-list="group-a">
                                         <div class="repeater-wrapper" data-repeater-item="">
-                                        @if(isset($purchase) )
+                                            @if(isset($purchase) )
                                             <input type="hidden" value="{{$purchase->id}}" name="purchase_id">
                                             @php
-                                                $row_count=0
+                                            $row_count=0
                                             @endphp
                                             @foreach($purchase->purchaseItems as $pitem)
-                                                <div id="{{$row_count}}" class="mt-3 row">
-                                                    <div class="col-12 d-flex product-details-border position-relative pe-0">
-                                                        <div class="row py-2">
-                                                            <div class="col-lg-1 col-12 my-lg-0 my-2">
-                                                                <p class="card-text col-title mb-md-2 mb-0">Item Id</p>
-                                                                <input value="{{$pitem->item_id}}" id="passId{{$row_count}}" type="number" class="form-control" value="" placeholder="" disabled>
-                                                                <input value="{{$pitem->item_id}}" name="item_id[]" id="item_id{{$row_count}}" type="hidden" class="form-control" value="" placeholder="">
-                                                                <!-- <input type="hidden" value="{{$pitem->id}}" name="item_id[]"> -->
-                                                            </div>
-                                                            <div class="col-2">
-                                                                <p class="card-text col-title mb-md-2 mb-0">Item Name</p>
-                                                                <input value="{{$pitem->item->name}}" autocomplete="off" id="itemBox{{$row_count}}" class=" form-control" autocomplete="off" placeholder="Enter Item" @if($type==1) onkeyup="getItems({{$row_count}})" @else onkeyup="getInvItems(0)" @endif @if ($purchase->status==3 ) disabled @endif>
-                                                                <div class="list-type" id="list{{$row_count}}" style="position: absolute; z-index: 1;" class="card mb-4">
-                                                                    <div id="listBody{{$row_count}}" class="list-group">
+                                            <div id="{{$row_count}}" class="mt-3 row">
+                                                <div class="col-12 d-flex product-details-border position-relative pe-0">
+                                                    <div class="row py-2">
+                                                        <div class="col-lg-1 col-12 my-lg-0 my-2">
+                                                            <p class="card-text col-title mb-md-2 mb-0">Item Id</p>
+                                                            <input value="{{$pitem->item_id}}" id="passId{{$row_count}}" type="number" class="form-control" value="" placeholder="" disabled>
+                                                            <input value="{{$pitem->item_id}}" name="item_id[]" id="item_id{{$row_count}}" type="hidden" class="form-control" value="" placeholder="">
+                                                            <!-- <input type="hidden" value="{{$pitem->id}}" name="item_id[]"> -->
+                                                        </div>
+                                                        <div class="col-2">
+                                                            <p class="card-text col-title mb-md-2 mb-0">Item Name</p>
+                                                            <input value="{{$pitem->item->name}}" autocomplete="off" id="itemBox{{$row_count}}" class=" form-control" autocomplete="off" placeholder="Enter Item" @if($type==1) onkeyup="getItems({{$row_count}})" @else onkeyup="getInvItems(0)" @endif @if ($purchase->status==3 ) disabled @endif>
+                                                            <div class="list-type" id="list{{$row_count}}" style="position: absolute; z-index: 1;" class="card mb-4">
+                                                                <div id="listBody{{$row_count}}" class="list-group">
 
-                                                                    </div>
                                                                 </div>
                                                             </div>
-                                                            <div class="col-lg-2 col-12 my-lg-0 my-2">
-                                                                <p class="card-text col-title mb-md-2 mb-0">cost</p>
-                                                                <input value="{{$pitem->unit_cost}}" onkeyup="calRowTotal({{$row_count}})" id="cost{{$row_count}}" name="cost[]" class="number-separator form-control" value="" placeholder="" @if ($purchase->status==3 ) disabled @endif>
-                                                            </div>
-                                                            @if($type==2)
-                                                            <div class="col-lg-2 col-12 my-lg-0 my-2">
-                                                                <p class="card-text col-title mb-md-2 mb-0">Curr Price</p>
-                                                                 <input onkeyup="calLoss({{$row_count}})" id="cur_cost{{$row_count}}" name="cost[]" class="number-separator form-control" value="" placeholder="" @if ($purchase->status==3 ) disabled @endif>
-                                                            </div>
-                                                            @endif
-                                                            <div class="col-lg-1 col-12 my-lg-0 my-2">
-                                                                <p class="card-text col-title mb-md-2 mb-0">Qty</p>
-                                                                <input value="{{$pitem->quantity}}" pattern="[0-9]{10}" onkeyup="calRowTotal({{$row_count}})" id="qty{{$row_count}}" name="qty[]" type="number" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13 || event.charCode == 45) ? null : event.charCode >= 48 && event.charCode <= 57" class="form-control" value="" placeholder="" @if ($purchase->status==3 ) disabled @endif>
-                                                            </div>
-                                                            @if($type==2)
-                                                            <div class="col-lg-2 col-12 my-lg-0 my-2">
-                                                                <p class="card-text col-title mb-md-2 mb-0">Trade Loss</p>
-                                                                <input onkeyup="calRowTotal({{$row_count}})" id="td_loss{{$row_count}}" name="td_loss[]" class="number-separator form-control" value="" placeholder="" @if ($purchase->status==3 ) disabled @endif>
-                                                            </div>
-                                                            @endif
-                                                            <div class="col-lg-2 col-12 mt-lg-0 mt-2">
-                                                                <p class="card-text col-title mb-md-50 mb-0">Total</p>
-                                                                <input style=" border: none;background-color: transparent;resize: none;outline: none;" id="rowTotal{{$row_count}}" name="rowTotal[]" class=" form-control" value="{{$pitem->unit_cost*$pitem->quantity}}">
-                                                            </div>
                                                         </div>
-                                                        <div class="d-flex flex-column align-items-center justify-content-between border-start invoice-product-actions py-50 px-25">
-                                                            <svg onclick="deleteItem({{$row_count}})" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x cursor-pointer font-medium-3">
-                                                                <line x1="18" y1="6" x2="6" y2="18"></line>
-                                                                <line x1="6" y1="6" x2="18" y2="18"></line>
+                                                        <div class="col-lg-2 col-12 my-lg-0 my-2">
+                                                            <p class="card-text col-title mb-md-2 mb-0">cost</p>
+                                                            <input value="{{$pitem->unit_cost}}" onkeyup="calRowTotal({{$row_count}})" id="cost{{$row_count}}" name="cost[]" class="number-separator form-control" value="" placeholder="" @if ($purchase->status==3 ) disabled @endif>
+                                                        </div>
+                                                        @if($type==2)
+                                                        <div class="col-lg-2 col-12 my-lg-0 my-2">
+                                                            <p class="card-text col-title mb-md-2 mb-0">Curr Price</p>
+                                                            <input onkeyup="calLoss({{$row_count}})" id="cur_cost{{$row_count}}" name="curr_price[]" class="number-separator form-control" value="" placeholder="" @if ($purchase->status==3 ) disabled @endif>
+                                                        </div>
+                                                        @endif
+                                                        <div class="col-lg-1 col-12 my-lg-0 my-2">
+                                                            <p class="card-text col-title mb-md-2 mb-0">Qty</p>
+                                                            <input value="{{$pitem->quantity}}" pattern="[0-9]{10}" onkeyup="calRowTotal({{$row_count}})" id="qty{{$row_count}}" name="qty[]" type="number" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13 || event.charCode == 45) ? null : event.charCode >= 48 && event.charCode <= 57" class="form-control" value="" placeholder="" @if ($purchase->status==3 ) disabled @endif>
+                                                        </div>
+                                                        @if($type==2)
+                                                        <div class="col-lg-2 col-12 my-lg-0 my-2">
+                                                            <p class="card-text col-title mb-md-2 mb-0">Trade Loss</p>
+                                                            <input value="{{$pitem->td_loss}}" onkeyup="calRowTotal({{$row_count}})" id="td_loss{{$row_count}}" name="td_loss[]" class="number-separator form-control" value="" placeholder="" @if ($purchase->status==3 ) disabled @endif>
+                                                        </div>
+                                                        @endif
+                                                        <div class="col-lg-2 col-12 mt-lg-0 mt-2">
+                                                            <p class="card-text col-title mb-md-50 mb-0">Total</p>
+                                                            <input style=" border: none;background-color: transparent;resize: none;outline: none;" id="rowTotal{{$row_count}}" name="rowTotal[]" class=" form-control" value="{{$pitem->unit_cost*$pitem->quantity}} PKR">
+                                                        </div>
+                                                    </div>
+                                                    <div class="d-flex flex-column align-items-center justify-content-between border-start invoice-product-actions py-50 px-25">
+                                                        <svg onclick="deleteItem({{$row_count}})" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x cursor-pointer font-medium-3">
+                                                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                                                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                                                        </svg>
+                                                        <div class="dropdown">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-settings cursor-pointer more-options-dropdown me-0" id="dropdownMenuButton" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                                <circle cx="12" cy="12" r="3">
+                                                                </circle>
+                                                                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
+                                                                </path>
                                                             </svg>
-                                                            <div class="dropdown">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-settings cursor-pointer more-options-dropdown me-0" id="dropdownMenuButton" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                                    <circle cx="12" cy="12" r="3">
-                                                                    </circle>
-                                                                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
-                                                                    </path>
-                                                                </svg>
-                                                                <div class="dropdown-menu dropdown-menu-end item-options-menu p-50" aria-labelledby="dropdownMenuButton">
-                                                                    <div class="mb-1">
-                                                                        <label for="discount-input" class="form-label">Discount</label>
-                                                                        <input name="trade_dicount" type="number" class="form-control" id="discount-input">
-                                                                    </div>
-                                                                    <div class="form-row mt-50"></div>
-                                                                    <div class="dropdown-divider my-1"></div>
-                                                                    <div class="d-flex justify-content-between">
-                                                                        <button type="button" class="btn btn-outline-primary btn-apply-changes waves-effect">Apply</button>
-                                                                        <button type="button" class="btn btn-outline-secondary waves-effect">Cancel</button>
-                                                                    </div>
+                                                            <div class="dropdown-menu dropdown-menu-end item-options-menu p-50" aria-labelledby="dropdownMenuButton">
+                                                                <div class="mb-1">
+                                                                    <label for="discount-input" class="form-label">Discount</label>
+                                                                    <input name="trade_dicount" type="number" class="form-control" id="discount-input">
+                                                                </div>
+                                                                <div class="form-row mt-50"></div>
+                                                                <div class="dropdown-divider my-1"></div>
+                                                                <div class="d-flex justify-content-between">
+                                                                    <button type="button" class="btn btn-outline-primary btn-apply-changes waves-effect">Apply</button>
+                                                                    <button type="button" class="btn btn-outline-secondary waves-effect">Cancel</button>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                @php
-                                                    $row_count=$row_count+1
-                                                @endphp
+                                            </div>
+                                            @php
+                                            $row_count=$row_count+1
+                                            @endphp
                                             @endforeach
-                                        @endif
+                                            @endif
                                         </div>
                                     </div>
                                     <div id="itemRows" class="row mt-1">
                                         <div class="col-12 px-0">
-                                            <button @if (isset($purchase)) @if( $purchase->status==3 ) disabled @endif @endif  id="addNewBtn" type="button" class="btn btn-primary btn-sm btn-add-new waves-effect waves-float waves-light">
+                                            <button @if (isset($purchase)) @if( $purchase->status==3 ) disabled @endif @endif id="addNewBtn" type="button" class="btn btn-primary btn-sm btn-add-new waves-effect waves-float waves-light">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus me-25">
                                                     <line x1="12" y1="5" x2="12" y2="19">
                                                     </line>
@@ -192,7 +200,7 @@
                                             </button>
                                         </div>
                                     </div>
-                                      
+
                                 </form>
                             </div>
                             <!-- Product Details ends -->
@@ -207,7 +215,7 @@
                                         <div class="invoice-total-wrapper">
                                             <hr class="my-50">
                                             <div class="invoice-total-item">
-                                                <input type="hidden" name="total_amount" id="amount_feild" value="{{$purchase->total}}">
+                                                <input type="hidden" name="total_amount" id="amount_feild" @if(isset($purchase)) value="{{$purchase->total}}" @endif>
                                                 <p class="invoice-total-title">Total:</p>
                                                 <p id="totalAmount" class="invosice-total-amount">{{ isset($purchase)? number_format( $purchase->total).' PKR' :'0 PKR'}}</p>
                                             </div>
@@ -233,12 +241,12 @@
                             <div class="row p-2">
                                 <div class="col-12">
                                     @if (isset($purchase))
-                                        @if ($purchase->status == 1)
-                                        <div class="d-flex justify-content-end">
-                                            <button type="submit" name="action" value="post" class="btn btn-success me-2">Post</button>
-                                            <button type="submit" name="action" value="cancel" class="btn btn-danger me-2">Cancel</button>
-                                            <button type="submit" name="action" value="save" class="btn btn-primary me-2">Save</button>
-                                        </div>
+                                    @if ($purchase->status == 1)
+                                    <div class="d-flex justify-content-end">
+                                        <button type="submit" name="action" value="post" class="btn btn-success me-2">Post</button>
+                                        <button type="submit" name="action" value="cancel" class="btn btn-danger me-2">Cancel</button>
+                                        <button type="submit" name="action" value="save" class="btn btn-primary me-2">Save</button>
+                                    </div>
                                     @endif
                                     @else
                                     <div class="d-flex justify-content-end">
@@ -260,9 +268,23 @@
 <script src="{{ url('/resources/vendors/js/forms/select/select2.full.min.js') }}"></script>
 <script src="{{ url('/resources/js/scripts/forms/form-select2.min.js') }}"></script>
 <script src="{{ url('/resources/js/scripts/pages/app-invoice.min.js') }}"></script>
+{{-- <script src="http://localhost/cssd/resources/vendors/js/extensions/toastr.min.js"></script> --}}
+
 <script>
     var rowId = 0;
     $(document).ready(function() {
+        console.log('outside');
+        @if(isset($message))
+            console.log('here');
+            toastr.success(
+                "{{$message}}",
+                "Success!", {
+                    closeButton: !0,
+                    tapToDismiss: !1,
+                    rtl: false
+                }
+            );
+            @endif
         // $("span.numbers").digits();
         $('.select2-selection__arrow').hide();
     });
@@ -324,7 +346,7 @@
                                     <div class="col-lg-2 col-12 my-lg-0 my-2">
                                         <p class="card-text col-title mb-md-2 mb-0">Curr Price</p>
                                         <input  onkeyup="calLoss(${rowId})"  id="cur_cost${rowId}"
-                                            name="cost[]" 
+                                            name="curr_price[]" 
                                             class="number-separator form-control" value=""
                                             placeholder="">
                                     </div>

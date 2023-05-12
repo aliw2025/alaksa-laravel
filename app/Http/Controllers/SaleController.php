@@ -69,16 +69,7 @@ class SaleController extends Controller
             [
                 'customer_id' => 'required',
                 'item_id' => 'required',
-                // 'email' => 'required|email|unique:investors',
-                // 'phone' => 'required|min:8|max:11|unique:investors',
-                // 'prefix' => 'required|unique:investors',
-            ],
-            [
-
-                // 'investor_name.unique' => ' investor Name already exists',
-                // 'email.unique' => ' Email already exists',
-                // 'phone.unique' => ' Number already exists',
-                // 'prefix.unique' => ' prefix already exists'
+                
             ]
         );
         // dd($request->all());
