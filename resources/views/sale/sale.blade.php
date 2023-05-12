@@ -333,8 +333,14 @@
                                                                             name="selling_price"
                                                                             onkeyup="calculateInstallments()"
                                                                             id="selling_price"
-                                                                            class="number-separator form-control"
+                                                                            class=" @error('selling_price') is-invalid @enderror number-separator form-control"
                                                                             value="" placeholder="Selling Price">
+                                                                            @error('selling_price')
+                                                                                <div class="alert alert-danger">
+                                                                                  {{$message}}
+                                                                                </div>
+                                                                              
+                                                                            @enderror
                                                                     </div>
 
                                                                     <div id="plan_div" class="col-2 my-lg-0 my-2">
@@ -346,8 +352,14 @@
                                                                             name="plan"
                                                                             onkeyup="calculateInstallments()"
                                                                             id="plan" type="number"
-                                                                            class="form-control" value=""
+                                                                            class="@error('plan') is-invalid @enderror form-control" value=""
                                                                             placeholder="Months">
+                                                                            @error('plan')
+                                                                                <div class="alert alert-danger">
+                                                                                  {{$message}}
+                                                                                </div>
+                                                                              
+                                                                            @enderror
                                                                     </div>
 
                                                                     <div id="markup_div" class="col-2 my-lg-0 my-2">
@@ -358,8 +370,14 @@
                                                                             name="markup"
                                                                             onkeyup="calculateInstallments()"
                                                                             id="markup" type="number"
-                                                                            class="form-control" value=""
+                                                                            class="@error('markup') is-invalid @enderror form-control" value=""
                                                                             placeholder="%">
+                                                                            @error('markup')
+                                                                                <div class="alert alert-danger">
+                                                                                  {{$message}}
+                                                                                </div>
+                                                                              
+                                                                            @enderror
                                                                     </div>
                                                                 @endif
                                                                 <div id="discount_div" class="col-2 my-lg-0 my-2">

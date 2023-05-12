@@ -69,6 +69,9 @@ class SaleController extends Controller
             [
                 'customer_id' => 'required',
                 'item_id' => 'required',
+                'selling_price'=>'required',
+                'plan'=>'required',
+                'markup'=>'required'
                 
             ]
         );
