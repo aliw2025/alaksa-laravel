@@ -124,7 +124,7 @@ class PurchaseController extends Controller
 
     public function postPurchase(Request $request){
         
-        // dd($request->all());
+        // dd('correct post td loss isse');
         $user = Auth::user();
         $investor = Investor::find($request->investor_id);
         // creating purchase transactions
@@ -166,7 +166,7 @@ class PurchaseController extends Controller
                 // creating expene
                 $expense = new Expense();
                 $expense->description = $investor->investor_name." ".$inventory->item->name." return to ".$supplier->name." loss";
-                $expense->amount = str_replace(',','',$request->td_loss[$a]);
+                $expense->amount = str_replace(',','',$purchase_item->td_loss);
                 $expense->date = $purchase->purchase_date;
                 $expense->save();
                 $expense->investor_id = $investor->id;
@@ -179,6 +179,83 @@ class PurchaseController extends Controller
         }   
 
         $purchase->status = 3;
+        $purchase->save();
+        if($request->purchase_type==2){
+            $request->total_amount = $request->total_amount * -1;
+            
+            
+        }
+        /******************** Leadger Entries ******************/
+        $purchase->createLeadgerEntry(3,$request->total_amount,$investor->id,$purchase->purchase_date,$user->id); 
+        $purchase->createLeadgerEntry($sup_acc_id,-$request->total_amount,$investor->id,$purchase->purchase_date,$user->id); 
+
+        
+        return redirect()->route('get-purchases',$investor->id);   
+    
+    }
+
+    public function unpostPurchase(Request $request){
+        
+
+       
+        // dd($request->all());
+        $user = Auth::user();
+        $investor = Investor::find($request->investor_id);
+        // creating purchase transactions
+        $purchase = Purchase::find($request->purchase_id);
+        
+        if ($purchase->status == 3) {
+            return "purchase alreaddy posted";
+        }
+        //  saving each item of the purchase transaction
+        foreach ($purchase->purchaseItems as $purchase_item) {
+            
+            // updating inventory
+            $inventory = Inventory::where('investor_id','=',$purchase->investor_id)->where('item_id','=',$purchase_item->item_id)->first();
+          
+            if($inventory==null){
+
+                $inventory = new Inventory();
+                $inventory->store_id = $purchase->store_id;
+                $inventory->item_id = $purchase_item->item_id;
+                $inventory->investor_id = $purchase->investor_id;
+                $inventory->unit_cost = $purchase_item->unit_cost;
+                $inventory->quantity = $purchase_item->quantity;
+                $inventory->save();
+
+
+            }else{
+                if($request->tran_type==2){
+                    
+                    $inventory->quantity = $inventory->quantity +$purchase_item->quantity;
+                }else{
+                    $inventory->quantity = $inventory->quantity -$purchase_item->quantity;
+                    // averaging purchase price
+                    // $inventory->unit_cost =  ($inventory->unit_cost+$purchase_item->unit_cost)/2;
+                }
+                $inventory->save();
+                
+            }
+            $supplier = Supplier::find($request->supplier);
+            $sup_acc_id = $supplier->charOfAccounts->where('account_type',7)->first()->id;
+
+            if($request->tran_type==2){
+                // creating expene
+                $expense = new Expense();
+                $expense->description = $investor->investor_name." ".$inventory->item->name." return to ".$supplier->name." loss";
+                $expense->amount = str_replace(',','',$request->td_loss[$a]);
+                $expense->date = $purchase->purchase_date;
+                $expense->save();
+                $expense->investor_id = $investor->id;
+                
+                // creating impact of expense on leadger
+                $purchase->createLeadgerEntry(8,str_replace(',','',$purchase_item->td_loss),$investor->id,$purchase->purchase_date,$user->id);
+                $purchase->createLeadgerEntry($sup_acc_id,-str_replace(',','',$purchase_item->td_loss),$investor->id,$purchase->purchase_date,$user->id);
+            }
+
+        }   
+
+        $purchase->status = 1;
         $purchase->save();
         if($request->purchase_type==2){
             $request->total_amount = $request->total_amount * -1;
@@ -283,7 +360,7 @@ class PurchaseController extends Controller
 
             return redirect()->route('post-purchase', $request->all());
         } else if ($request->input('action') == "cancel") {
-            return redirect()->route('cancel-sale', $request->all());
+            return redirect()->route('cancel-purchase', $request->all());
         }
         // dd($request->all());
         $validated = $request->validate([
@@ -303,7 +380,7 @@ class PurchaseController extends Controller
         $user = Auth::user();
         $investor = Investor::find($request->investor_id);
         // creating purchase transactions
-       
+    
         $purchase->investor_id = $request->investor_id;
         $purchase->store_id = 1;
         $purchase->supplier = $request->supplier;
@@ -353,6 +430,14 @@ class PurchaseController extends Controller
 
     public function cancelPurchase(Request $request)
     {
+        $purchase = Purchase::find($request->purchase_id);
+        if ($purchase->status != 1) {
+            return "transaction with entry status can be cancelled only";
+        }
+        $purchase->status = 2;
+        $purchase->save();
+
+        return redirect()->route('purchase.show', $purchase->id);
         
     }
 }

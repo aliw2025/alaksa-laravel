@@ -25,6 +25,12 @@
                                     </div>
                                     <div class="mt-2">
                                         <h4 style="text-decoration: underline">{{ $type == 1 ? 'Purchase' : 'Purchase Return' }}</h4>
+                                            @if(isset($purchase))
+                                                @if(($purchase->status==2))
+                                                <h4 style="color:red">Cancelled</h4>
+                                                @endif
+                                            @endif
+
                                     </div>
                                     <div class="invoice-number-date mt-md-0 mt-2">
                                         <div class="d-flex align-items-center justify-content-between mb-1">
@@ -38,7 +44,7 @@
                                         </div>
                                         <div class="d-flex align-items-center justify-content-between mb-1">
                                             <span class="title">Date:</span>
-                                            <input type="date" name="purchase_date" class="form-control" value="{{ isset($purchase)? $purchase->purchase_date: now()->format('Y-m-d')}}" @if(isset($purchase )) @if($purchase->status==3) disabled @endif @endif>
+                                            <input type="date" name="purchase_date" class="form-control" value="{{ isset($purchase)? $purchase->purchase_date: now()->format('Y-m-d')}}" @if(isset($purchase )) @if(!($purchase->status==1)) disabled @endif @endif>
                                             @error('purchase_date')
                                                 <div class="alert alert-danger">{{$message}}</div>
                                             @enderror
@@ -46,7 +52,7 @@
                                         <div class="d-flex align-items-center justify-content-between">
                                             <span class="title">Investor:</span>
                                             <div style="width: 11.21rem; max-width:11.21rem; " class="align-items-center">
-                                                <select @if (isset($purchase) && $purchase->status==3 ) disabled @endif name="investor_id" class=" select2 select2-hidden-accessible form-control invoice-edit-input" id="select2-basic" data-select2-id="select2-basic" tabindex="-1" aria-hidden="true">
+                                                <select @if(isset($purchase )) @if(!($purchase->status==1)) disabled @endif @endif name="investor_id" class=" select2 select2-hidden-accessible form-control invoice-edit-input" id="select2-basic" data-select2-id="select2-basic" tabindex="-1" aria-hidden="true">
                                                     @foreach ($investors as $investor)
                                                     <option @if(isset($purchase)) @if($purchase->investor_id==$investor->id) selected @endif @endif value="{{ $investor->id }}">
                                                         {{ $investor->investor_name }}
@@ -58,7 +64,7 @@
                                         <div class="d-flex align-items-center justify-content-between mt-1">
                                             <span class="title">Supplier</span>
                                             <div style="width: 11.21rem; max-width:11.21rem; " class="align-items-center">
-                                                <select @if (isset($purchase) && $purchase->status==3 ) disabled @endif id="supplier_id" name="supplier" class=" @error('supplier') is-invalid @enderror form-select" aria-label="Default select example">
+                                                <select t @if(isset($purchase )) @if(!($purchase->status==1)) disabled @endif @endif id="supplier_id" name="supplier" class=" @error('supplier') is-invalid @enderror form-select" aria-label="Default select example">
                                                     @foreach ($suppliers as $sup)
                                                     <option @if(isset($purchase)) @if($purchase->supplier_id==$sup->id) selected @endif @endif value="{{ $sup->id }}">{{ $sup->name }} </option>
                                                     @endforeach
@@ -120,7 +126,7 @@
                                                         </div>
                                                         <div class="col-2">
                                                             <p class="card-text col-title mb-md-2 mb-0">Item Name</p>
-                                                            <input value="{{$pitem->item->name}}" autocomplete="off" id="itemBox{{$row_count}}" class=" form-control" autocomplete="off" placeholder="Enter Item" @if($type==1) onkeyup="getItems({{$row_count}})" @else onkeyup="getInvItems(0)" @endif @if ($purchase->status==3 ) disabled @endif>
+                                                            <input value="{{$pitem->item->name}}" autocomplete="off" id="itemBox{{$row_count}}" class=" form-control" autocomplete="off" placeholder="Enter Item" @if($type==1) onkeyup="getItems({{$row_count}})" @else onkeyup="getInvItems(0)" @endif @if(!($purchase->status==1)) disabled @endif>
                                                             <div class="list-type" id="list{{$row_count}}" style="position: absolute; z-index: 1;" class="card mb-4">
                                                                 <div id="listBody{{$row_count}}" class="list-group">
 
@@ -129,22 +135,22 @@
                                                         </div>
                                                         <div class="col-lg-2 col-12 my-lg-0 my-2">
                                                             <p class="card-text col-title mb-md-2 mb-0">cost</p>
-                                                            <input value="{{$pitem->unit_cost}}" onkeyup="calRowTotal({{$row_count}})" id="cost{{$row_count}}" name="cost[]" class="number-separator form-control" value="" placeholder="" @if ($purchase->status==3 ) disabled @endif>
+                                                            <input value="{{$pitem->unit_cost}}" onkeyup="calRowTotal({{$row_count}})" id="cost{{$row_count}}" name="cost[]" class="number-separator form-control" value="" placeholder=""  @if(!($purchase->status==1)) disabled @endif>
                                                         </div>
                                                         @if($type==2)
                                                         <div class="col-lg-2 col-12 my-lg-0 my-2">
                                                             <p class="card-text col-title mb-md-2 mb-0">Curr Price</p>
-                                                            <input onkeyup="calLoss({{$row_count}})" id="cur_cost{{$row_count}}" name="curr_price[]" class="number-separator form-control" value="" placeholder="" @if ($purchase->status==3 ) disabled @endif>
+                                                            <input onkeyup="calLoss({{$row_count}})" id="cur_cost{{$row_count}}" name="curr_price[]" class="number-separator form-control" value="" placeholder="" @if(!($purchase->status==1)) disabled @endif>
                                                         </div>
                                                         @endif
                                                         <div class="col-lg-1 col-12 my-lg-0 my-2">
                                                             <p class="card-text col-title mb-md-2 mb-0">Qty</p>
-                                                            <input value="{{$pitem->quantity}}" pattern="[0-9]{10}" onkeyup="calRowTotal({{$row_count}})" id="qty{{$row_count}}" name="qty[]" type="number" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13 || event.charCode == 45) ? null : event.charCode >= 48 && event.charCode <= 57" class="form-control" value="" placeholder="" @if ($purchase->status==3 ) disabled @endif>
+                                                            <input value="{{$pitem->quantity}}" pattern="[0-9]{10}" onkeyup="calRowTotal({{$row_count}})" id="qty{{$row_count}}" name="qty[]" type="number" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13 || event.charCode == 45) ? null : event.charCode >= 48 && event.charCode <= 57" class="form-control" value="" placeholder="" @if(!($purchase->status==1)) disabled @endif>
                                                         </div>
                                                         @if($type==2)
                                                         <div class="col-lg-2 col-12 my-lg-0 my-2">
                                                             <p class="card-text col-title mb-md-2 mb-0">Trade Loss</p>
-                                                            <input value="{{$pitem->td_loss}}" onkeyup="calRowTotal({{$row_count}})" id="td_loss{{$row_count}}" name="td_loss[]" class="number-separator form-control" value="" placeholder="" @if ($purchase->status==3 ) disabled @endif>
+                                                            <input value="{{$pitem->td_loss}}" onkeyup="calRowTotal({{$row_count}})" id="td_loss{{$row_count}}" name="td_loss[]" class="number-separator form-control" value="" placeholder="" @if(!($purchase->status==1)) disabled @endif>
                                                         </div>
                                                         @endif
                                                         <div class="col-lg-2 col-12 mt-lg-0 mt-2">
@@ -189,7 +195,7 @@
                                     </div>
                                     <div id="itemRows" class="row mt-1">
                                         <div class="col-12 px-0">
-                                            <button @if (isset($purchase)) @if( $purchase->status==3 ) disabled @endif @endif id="addNewBtn" type="button" class="btn btn-primary btn-sm btn-add-new waves-effect waves-float waves-light">
+                                            <button @if (isset($purchase)) @if(!($purchase->status==1)) disabled @endif @endif id="addNewBtn" type="button" class="btn btn-primary btn-sm btn-add-new waves-effect waves-float waves-light">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus me-25">
                                                     <line x1="12" y1="5" x2="12" y2="19">
                                                     </line>

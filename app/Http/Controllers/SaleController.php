@@ -668,6 +668,7 @@ class SaleController extends Controller
     public function cancelSale(Request $request)
     {
 
+        
         $sale = Sale::find($request->sale_id);
         if ($sale->status != 1) {
             return "transaction with entry status can be cancelled only";
