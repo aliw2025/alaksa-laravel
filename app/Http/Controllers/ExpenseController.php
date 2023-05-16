@@ -55,7 +55,8 @@ class ExpenseController extends Controller
     {
         $validated = $request->validate([
             'amount'=>'required',
-            'description'=>'required'
+            'description'=>'required',
+            'date'=>'required'
         ]);
         $expense = new Expense();
         $expense->description = $request->description;
@@ -150,7 +151,9 @@ class ExpenseController extends Controller
 
         $validated = $request->validate([
             'amount'=>'required',
-            'description'=>'required'
+            'description'=>'required',
+            'date'=>'required'
+            
         ]);
         $expense = Expense::find($request->expense_id);
         $expense->description = $request->description;

@@ -368,7 +368,7 @@
                                                     
                                     <div class="col-lg-2 col-12 my-lg-0 my-2">
                                         <p class="card-text col-title mb-md-2 mb-0">Trade Loss</p>
-                                        <input  onkeyup="calRowTotal(${rowId})" id="td_loss${rowId}"
+                                        <input value="0" onkeyup="calRowTotal(${rowId})" id="td_loss${rowId}"
                                             name="td_loss[]" 
                                             class="number-separator form-control" value=""
                                             placeholder="">

@@ -41,10 +41,11 @@
                                         </div>
 
                                         <div class="d-flex align-items-center justify-content-between mb-1">
-                                            <span class="title">Date:</span>
-                                           
-                                            <input @if(isset($expense)) value="{{ $expense->date }}" @endif  name="date" type="date" class="form-control" @if(isset($expense)) @if(!($expense->status==1)) disabled @endif @endif >
-
+                                            <span class="title">Date:</span>                                           
+                                            <input  value="{{isset($expense)?$expense->date :now()->format('Y-m-d') }}"  name="date" type="date" class="@error('date') is-invalid @enderror form-control" @if(isset($expense)) @if(!($expense->status==1)) disabled @endif @endif >
+                                            @error('date')
+                                                <div class="alert alert-danger">{{$message}}</div>
+                                            @enderror
                                         </div>
                                         <div class="d-flex align-items-center justify-content-between">
                                             <span class="title">Investor:</span>
