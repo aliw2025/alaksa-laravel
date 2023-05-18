@@ -31,7 +31,11 @@
                                             @if(isset($expense))
                                                 @if(($expense->status==2))
                                                 <h4 style="color:red">Cancelled</h4>
+                                                @elseif(($expense->status==3))
+                                                <h4 style="color:green">Posted</h4>
+                                              
                                                 @endif
+                                                
                                             @endif
                                        
                                     </div>
@@ -186,13 +190,17 @@
                                         <button type="submit" name="action" value="cancel" class="btn btn-danger me-2">Cancel</button>
                                         <button type="submit" name="action" value="save" class="btn btn-primary me-2">Save</button>
                                     </div>
-                                    @endif
-                                    @else
+                                    @elseif($expense->status == 3)
                                     <div class="d-flex justify-content-end">
-                                        <button type="submit" class="btn btn-primary me-2">Save</button>
-                                        <button type="reset" class="btn btn-danger">Reset</button>
+                                        <button type="submit" name="action" value="unpost" class="btn btn-danger me-2">Un Post</button>
                                     </div>
                                     @endif
+                                @else
+                                <div class="d-flex justify-content-end">
+                                    <button type="submit" class="btn btn-primary me-2">Save</button>
+                                    <button type="reset" class="btn btn-danger">Reset</button>
+                                </div>
+                                @endif
 
                                 </div>
                             </div>

@@ -28,6 +28,8 @@
                                             @if(isset($purchase))
                                                 @if(($purchase->status==2))
                                                 <h4 style="color:red">Cancelled</h4>
+                                                @elseif(($purchase->status==3))
+                                                <h4 style="color:green">Posted</h4>
                                                 @endif
                                             @endif
 

@@ -113,7 +113,8 @@ class PurchaseController extends Controller
             $purchase_item->unit_cost =  str_replace(',','',$request->cost[$a]); 
             $purchase_item->trade_discount = 0;
             $purchase_item->purchase_id = $purchase->id;
-            $purchase_item->td_loss = $request->td_loss[$a];
+            // $purchase_item->td_loss = $request->td_loss[$a];
+            $purchase_item->td_loss = isset($request->td_loss[$a]) ?$request->td_loss[$a]:0;
             $purchase_item->save();
 
         }   
@@ -190,9 +191,14 @@ class PurchaseController extends Controller
         $purchase->createLeadgerEntry($sup_acc_id,-$request->total_amount,$investor->id,$purchase->purchase_date,$user->id); 
 
         
-        return redirect()->route('get-purchases',$investor->id);   
+        $investors = Investor::all();
+        $suppliers = Supplier::all();
+        $type = $purchase->type;
+        // return $purchase->purchaseItems;
+        return view('purchase.purchase',compact('purchase','investors','suppliers','type'))->with('message','Purchase Posted');
     
     }
+    
 
     public function unpostPurchase(Request $request){
         
@@ -404,7 +410,7 @@ class PurchaseController extends Controller
             $purchase_item->unit_cost =  str_replace(',','',$request->cost[$a]); 
             $purchase_item->trade_discount = 0;
             $purchase_item->purchase_id = $purchase->id;
-            $purchase_item->td_loss = $request->td_loss[$a];
+            $purchase_item->td_loss = isset($request->td_loss[$a]) ?$request->td_loss[$a]:0;
             $purchase_item->save();
 
         }   

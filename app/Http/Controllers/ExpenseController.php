@@ -144,7 +144,11 @@ class ExpenseController extends Controller
 
             return redirect()->route('post-expense', $request->all());
         
-        } else if ($request->input('action') == "cancel") {
+        }else if ($request->input('action') == "unpost") {
+           
+            return redirect()->route('unpost-expense', $request->all());
+        }
+         else if ($request->input('action') == "cancel") {
            
             return redirect()->route('cancel-expense', $request->all());
         }
@@ -176,6 +180,7 @@ class ExpenseController extends Controller
         
 
     }
+
     public function postExpense(Request $request)
     {
         
@@ -193,6 +198,27 @@ class ExpenseController extends Controller
         $sheads = SubExpenseHead::all();
         $bank_acc = ChartOfAccount::where('account_type', '=', 1)->orWhere('account_type', '=', 4)->get();
         return view('expenses.expense',compact('investors','bank_acc','heads','sheads','expense'))->with('message','Record Posted');
+
+
+    }
+    public function UnpostExpense(Request $request)
+    {
+        
+        
+        $expense = Expense::find($request->expense_id);
+        if ($expense->status != 3) {
+            return "only posted expense can be unposted";
+        }
+        $user = Auth::user();
+        $expense->status = 1;
+        $expense->save();
+        $expense->leadgerEntries()->delete();
+        
+        $investors = Investor::all();
+        $heads  = ExpenseHead::all();
+        $sheads = SubExpenseHead::all();
+        $bank_acc = ChartOfAccount::where('account_type', '=', 1)->orWhere('account_type', '=', 4)->get();
+        return view('expenses.expense',compact('investors','bank_acc','heads','sheads','expense'))->with('message','Record Un Posted');
 
 
     }

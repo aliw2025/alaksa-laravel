@@ -206,6 +206,7 @@ Route::controller(ExpenseController::class)->group(function () {
         Route::get('/show-expenses-post',  'showExpensesPost')->name('show-expenses-post');
         Route::get('/show-expenses',  'showExpenses')->name('show-expenses');
         Route::get('/post-expense',  'postExpense')->name('post-expense');
+        Route::get('/unpost-expense',  'UnpostExpense')->name('unpost-expense');
         Route::get('/cancel-expense',  'cancelExpense')->name('cancel-expense');   
 });
 
