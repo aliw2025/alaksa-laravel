@@ -169,12 +169,14 @@ class PurchaseController extends Controller
                 $expense->description = $investor->investor_name." ".$inventory->item->name." return to ".$supplier->name." loss";
                 $expense->amount = str_replace(',','',$purchase_item->td_loss);
                 $expense->date = $purchase->purchase_date;
+                $expense->status = 3;
                 $expense->save();
                 $expense->investor_id = $investor->id;
-                
+                $purchase_item->expense = $expense->id;
+                $purchase_item->save();
                 // creating impact of expense on leadger
-                $purchase->createLeadgerEntry(8,str_replace(',','',$purchase_item->td_loss),$investor->id,$purchase->purchase_date,$user->id);
-                $purchase->createLeadgerEntry($sup_acc_id,-str_replace(',','',$purchase_item->td_loss),$investor->id,$purchase->purchase_date,$user->id);
+                $expense->createLeadgerEntry(8,str_replace(',','',$purchase_item->td_loss),$investor->id,$purchase->purchase_date,$user->id);
+                $expense->createLeadgerEntry($sup_acc_id,-str_replace(',','',$purchase_item->td_loss),$investor->id,$purchase->purchase_date,$user->id);
             }
 
         }   
@@ -210,70 +212,42 @@ class PurchaseController extends Controller
         // creating purchase transactions
         $purchase = Purchase::find($request->purchase_id);
         
-        if ($purchase->status == 3) {
-            return "purchase alreaddy posted";
+        if ($purchase->status != 3) {
+            return "purchase cannot be un posted";
         }
         //  saving each item of the purchase transaction
         foreach ($purchase->purchaseItems as $purchase_item) {
             
             // updating inventory
             $inventory = Inventory::where('investor_id','=',$purchase->investor_id)->where('item_id','=',$purchase_item->item_id)->first();
-          
-            if($inventory==null){
-
-                $inventory = new Inventory();
-                $inventory->store_id = $purchase->store_id;
-                $inventory->item_id = $purchase_item->item_id;
-                $inventory->investor_id = $purchase->investor_id;
-                $inventory->unit_cost = $purchase_item->unit_cost;
-                $inventory->quantity = $purchase_item->quantity;
-                $inventory->save();
-
+            if($request->tran_type==2){
+                
+                $expense = Expense::find($purchase_item->expense);
+                $expense->status = 2;
+                $expense->save();
+                $expense->leadgerEntires()->delete();
+                $inventory->quantity = $inventory->quantity +$purchase_item->quantity;
+                
 
             }else{
-                if($request->tran_type==2){
-                    
-                    $inventory->quantity = $inventory->quantity +$purchase_item->quantity;
-                }else{
-                    $inventory->quantity = $inventory->quantity -$purchase_item->quantity;
-                    // averaging purchase price
-                    // $inventory->unit_cost =  ($inventory->unit_cost+$purchase_item->unit_cost)/2;
-                }
-                $inventory->save();
-                
+                $inventory->quantity = $inventory->quantity -$purchase_item->quantity;
+               
             }
-            $supplier = Supplier::find($request->supplier);
-            $sup_acc_id = $supplier->charOfAccounts->where('account_type',7)->first()->id;
-
-            if($request->tran_type==2){
-                // creating expene
-                $expense = new Expense();
-                $expense->description = $investor->investor_name." ".$inventory->item->name." return to ".$supplier->name." loss";
-                $expense->amount = str_replace(',','',$request->td_loss[$a]);
-                $expense->date = $purchase->purchase_date;
-                $expense->save();
-                $expense->investor_id = $investor->id;
-                
-                // creating impact of expense on leadger
-                $purchase->createLeadgerEntry(8,str_replace(',','',$purchase_item->td_loss),$investor->id,$purchase->purchase_date,$user->id);
-                $purchase->createLeadgerEntry($sup_acc_id,-str_replace(',','',$purchase_item->td_loss),$investor->id,$purchase->purchase_date,$user->id);
-            }
-
+           
+            $inventory->save();
+            
         }   
 
         $purchase->status = 1;
         $purchase->save();
-        if($request->purchase_type==2){
-            $request->total_amount = $request->total_amount * -1;
-            
-            
-        }
-        /******************** Leadger Entries ******************/
-        $purchase->createLeadgerEntry(3,$request->total_amount,$investor->id,$purchase->purchase_date,$user->id); 
-        $purchase->createLeadgerEntry($sup_acc_id,-$request->total_amount,$investor->id,$purchase->purchase_date,$user->id); 
-
         
-        return redirect()->route('get-purchases',$investor->id);   
+        $purchase->leadgerEntries()->delete();
+        
+        $investors = Investor::all();
+        $suppliers = Supplier::all();
+        $type = $purchase->type;
+        // return $purchase->purchaseItems;
+        return view('purchase.purchase',compact('purchase','investors','suppliers','type'))->with('message','Purchase Un Posted');
     
     }
     
@@ -365,7 +339,10 @@ class PurchaseController extends Controller
         if ($request->input('action') == "post") {
 
             return redirect()->route('post-purchase', $request->all());
-        } else if ($request->input('action') == "cancel") {
+        }else if ($request->input('action') == "unpost"){
+            return redirect()->route('unpost-purchase', $request->all());
+        }
+         else if ($request->input('action') == "cancel") {
             return redirect()->route('cancel-purchase', $request->all());
         }
         // dd($request->all());

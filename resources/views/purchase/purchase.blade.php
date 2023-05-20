@@ -249,13 +249,18 @@
                             <div class="row p-2">
                                 <div class="col-12">
                                     @if (isset($purchase))
-                                    @if ($purchase->status == 1)
-                                    <div class="d-flex justify-content-end">
-                                        <button type="submit" name="action" value="post" class="btn btn-success me-2">Post</button>
-                                        <button type="submit" name="action" value="cancel" class="btn btn-danger me-2">Cancel</button>
-                                        <button type="submit" name="action" value="save" class="btn btn-primary me-2">Save</button>
-                                    </div>
-                                    @endif
+                                        @if ($purchase->status == 1)
+                                        <div class="d-flex justify-content-end">
+                                            <button type="submit" name="action" value="post" class="btn btn-success me-2">Post</button>
+                                            <button type="submit" name="action" value="cancel" class="btn btn-danger me-2">Cancel</button>
+                                            <button type="submit" name="action" value="save" class="btn btn-primary me-2">Save</button>
+                                        </div>
+                                        @elseif($purchase->status == 3)
+                                        <div class="d-flex justify-content-end">
+                                            <button type="submit" name="action" value="unpost" class="btn btn-danger me-2">Un Post</button>
+                                        </div>
+                                        @endif
+            
                                     @else
                                     <div class="d-flex justify-content-end">
                                         <button type="submit" class="btn btn-primary me-2">Save</button>
