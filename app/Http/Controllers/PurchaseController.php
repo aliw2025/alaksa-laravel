@@ -225,7 +225,8 @@ class PurchaseController extends Controller
                 $expense = Expense::find($purchase_item->expense);
                 $expense->status = 2;
                 $expense->save();
-                $expense->leadgerEntires()->delete();
+                
+                $expense->leadgerEntries()->delete();
                 $inventory->quantity = $inventory->quantity +$purchase_item->quantity;
                 
 
