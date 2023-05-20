@@ -46,7 +46,7 @@
 
                                         <div class="d-flex align-items-center justify-content-between mb-1">
                                             <span class="title">Date:</span>                                           
-                                            <input  value="{{isset($expense)?$expense->date :now()->format('Y-m-d') }}"  name="date" type="date" class="@error('date') is-invalid @enderror form-control" @if(isset($expense)) @if(!($expense->status==1)) disabled @endif @endif >
+                                            <input  value="{{isset($expense)?$expense->date :now()->format('Y-m-d') }}"  name="date" type="date" class="@error('date') is-invalid @enderror form-control invoice-edit-input" @if(isset($expense)) @if(!($expense->status==1)) disabled @endif @endif >
                                             @error('date')
                                                 <div class="alert alert-danger">{{$message}}</div>
                                             @enderror
@@ -86,9 +86,11 @@
 
                                                 <select @if(isset($expense)) @if(!($expense->status==1)) disabled @endif @endif name="sub_head_id" class="form-control" id="shead_id" aria-hidden="true">
                                                     @if(isset($expense))
-                                                    <option value="{{ $expense->head_id }}">
-                                                        {{ $expense->subHead->sub_head_name}}
-                                                    </option>
+                                                        @if(isset($expense->sub_head_id))
+                                                            <option value="{{ $expense->sub_head_id }}">
+                                                                {{ $expense->subHead->sub_head_name}}
+                                                            </option>
+                                                        @endif
                                                     @endif
                                                     <!-- @if(isset($sheads))
                                                             @foreach ($sheads as $sh)

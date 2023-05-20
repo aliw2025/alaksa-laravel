@@ -29,8 +29,8 @@ class SupplierPaymentController extends Controller
     public function index()
     {
         //
-        $supplierPayments = SupplierPayment::all();
-        return view('payable.payables', compact('supplierPayments'));
+        // $supplierPayments = SupplierPayment::all();
+        // return view('payable.payables', compact('supplierPayments'));
     }
 
     public function payablesRepTem($id){
@@ -64,7 +64,8 @@ class SupplierPaymentController extends Controller
         $investors = Investor::all();
         $suppliers = Supplier::all();
         // $bank_acoounts = ChartOfAccount::whereHas(' ')
-        $bank_acc = ChartOfAccount::where('account_type',4)->get();
+        $bank_acc = ChartOfAccount::where('account_type', '=', 1)->orWhere('account_type', '=', 4)->get();
+
         return view('payable.pay', compact('investors', 'suppliers','bank_acc'));
 
     }
@@ -98,23 +99,15 @@ class SupplierPaymentController extends Controller
         $supplierPayment->note = $request->note;
         $supplierPayment->payment_date = $request->payment_date;
         $supplierPayment->status = 1;
+        $supplierPayment->account_id = $request->acc_type;
         $supplierPayment->save();
 
-
-        //  getting investor asset account
-        $investor = Investor::find($request->investor_id);
-
-        // getting supplier supplierPayment account
-        $supplier = Supplier::find($request->supplier);
-        $sup_acc_id = $supplier->charOfAccounts->where('account_type', 7)->first()->id;
-
-
-        /************** Leadger Entries **********/
-        $supplierPayment->createLeadgerEntry($sup_acc_id,str_replace(',','',$request->amount),$investor->id,$request->payment_date,$user->id);
-        $supplierPayment->createLeadgerEntry($request->acc_type,-str_replace(',','',$request->amount),$investor->id,$request->payment_date,$user->id);
-
-
-        return redirect()->route('payable.create',compact('supplierPayment'))->with('message','Record saved');
+       
+        $investors = Investor::all();
+        $suppliers = Supplier::all();
+        // $bank_acoounts = ChartOfAccount::whereHas(' ')
+        $bank_acc = ChartOfAccount::where('account_type', '=', 1)->orWhere('account_type', '=', 4)->get();
+        return view('payable.pay',compact('supplierPayment','investors', 'suppliers','bank_acc'))->with('message','Record saved');
 
     }
 
@@ -128,9 +121,16 @@ class SupplierPaymentController extends Controller
     public function show(SupplierPayment $supplierPayment)
     {
         //
-        return view('payable.pay', compact('supplierPayment'));
+        $investors = Investor::all();
+        $suppliers = Supplier::all();
+        // $bank_acoounts = ChartOfAccount::whereHas(' ')
+        $bank_acc = ChartOfAccount::where('account_type', '=', 1)->orWhere('account_type', '=', 4)->get();
+
+        return view('payable.pay', compact('investors', 'suppliers','bank_acc','supplierPayment'));
+
 
     }
+
 
     /**
      * Show the form for editing the specified resource.
@@ -154,7 +154,117 @@ class SupplierPaymentController extends Controller
      */
     public function update(Request $request, SupplierPayment $supplierPayment)
     {
-        //
+
+        if ($request->input('action') == "post") {
+
+            return redirect()->route('post-supplierPayment', $request->all());
+        
+        }else if ($request->input('action') == "unpost") {
+           
+            return redirect()->route('unpost-supplierPayment', $request->all());
+        }
+         else if ($request->input('action') == "cancel") {
+           
+            return redirect()->route('cancel-supplierPayment', $request->all());
+        }
+
+
+        $validate = $request->validate([
+            'supplier'=>'required',
+            'amount'=>'required'
+        ]);
+        $user = Auth::user();
+        $id = SupplierPayment::max('id');
+        if ($id == null) {
+            $id = 0;
+        }
+        $num = str_pad($id + 1, 10, '0', STR_PAD_LEFT);
+        $investor = Investor::find($request->investor_id);
+
+        $supplierPayment->payment_no = $investor->prefix . '22' . $num;
+        $supplierPayment->investor_id = $request->investor_id;
+        $supplierPayment->store_id = 1;
+        $supplierPayment->supplier_id = $request->supplier;
+        $supplierPayment->amount = str_replace(',','',$request->amount); 
+        $supplierPayment->note = $request->note;
+        $supplierPayment->payment_date = $request->payment_date;
+        $supplierPayment->status = 1;
+        $supplierPayment->account_id = $request->acc_type;
+        $supplierPayment->save();
+
+
+        $investors = Investor::all();
+        $suppliers = Supplier::all();
+        // $bank_acoounts = ChartOfAccount::whereHas(' ')
+        $bank_acc = ChartOfAccount::where('account_type', '=', 1)->orWhere('account_type', '=', 4)->get();
+        return view('payable.pay',compact('supplierPayment','investors', 'suppliers','bank_acc'))->with('message','Record saved');
+
+
+    }
+    public function cancelSupplierPayment(Request $request){
+
+        $supplierPayment = SupplierPayment::find($request->supplierPayment_id);
+        if ($supplierPayment->status != 1) {
+            return "transaction with entry status can be cancelled only";
+        }
+        $supplierPayment->status = 2;
+        $supplierPayment->save();
+
+        return redirect()->route('supplierPayment.show', $supplierPayment->id);
+    }
+    public function postsupplierPayment(Request $request)
+    {
+        
+        $supplierPayment = SupplierPayment::find($request->supplierPayment_id);
+        if ($supplierPayment->status == 3) {
+            return "supplierPayment alreaddy posted";
+        }elseif ($supplierPayment->status == 2) {
+            return "supplierPayment cancelled cannot be posted";
+        }
+
+        $user = Auth::user();
+        $supplierPayment->status = 3;
+        $supplierPayment->save();
+       
+        // // getting supplier supplierPayment account
+        $supplier = Supplier::find($request->supplier);
+        $sup_acc_id = $supplier->charOfAccounts->where('account_type', 7)->first()->id;
+
+        // /************** Leadger Entries **********/
+        $supplierPayment->createLeadgerEntry($sup_acc_id,str_replace(',','',$request->amount),$supplierPayment->investor_id,$request->payment_date,$user->id);
+        $supplierPayment->createLeadgerEntry($request->acc_type,-str_replace(',','',$request->amount),$supplierPayment->investor_id,$request->payment_date,$user->id);
+
+        // return redirect()->back();
+
+
+        $investors = Investor::all();
+        $suppliers = Supplier::all();
+        // $bank_acoounts = ChartOfAccount::whereHas(' ')
+        $bank_acc = ChartOfAccount::where('account_type', '=', 1)->orWhere('account_type', '=', 4)->get();
+
+        return view('payable.pay',compact('supplierPayment','investors', 'suppliers','bank_acc'))->with('message','Record posted');
+
+    }
+    public function UnpostSupplierPayment(Request $request)
+    {
+        
+        
+        $supplierPayment = SupplierPayment::find($request->supplierPayment_id);
+        if ($supplierPayment->status != 3) {
+            return "only posted supplierPayment can be unposted";
+        }
+        $user = Auth::user();
+        $supplierPayment->status = 1;
+        $supplierPayment->save();
+        $supplierPayment->leadgerEntries()->delete();
+
+        
+        $investors = Investor::all();
+        $suppliers = Supplier::all();
+        // $bank_acoounts = ChartOfAccount::whereHas(' ')
+        $bank_acc = ChartOfAccount::where('account_type', '=', 1)->orWhere('account_type', '=', 4)->get();
+        return view('payable.pay',compact('supplierPayment','investors', 'suppliers','bank_acc'))->with('message','Record un posted');
+
     }
 
     /**

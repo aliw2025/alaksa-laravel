@@ -427,14 +427,14 @@
                     @php
                         $inv_sales = \App\Models\Investor::all();
                     @endphp
-                    <li class=" nav-item"><a href="{{ route('payable.create') }}" class="d-flex align-items-center">
+                    <li class=" nav-item"><a href="{{ route('supplierPayment.create') }}" class="d-flex align-items-center">
                             <i data-feather="circle"></i>
                             <span class=" menu-title text-truncate" data-i18n="comision">Pay Supplier Bills</span></a>
                     </li>
-                    <li class=" nav-item"><a href="{{ route('payable.create') }}" class="d-flex align-items-center">
+                    <!-- <li class=" nav-item"><a href="{{ route('supplierPayment.create') }}" class="d-flex align-items-center">
                             <i data-feather="circle"></i>
                             <span class=" menu-title text-truncate" data-i18n="comision">Pay Investors</span></a>
-                    </li>
+                    </li> -->
                     <li class=" nav-item">
                         <a class="d-flex align-items-center" href="#">
                             <i data-feather="circle"></i>

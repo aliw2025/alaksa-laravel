@@ -186,6 +186,10 @@ Route::controller(SupplierPaymentController::class)->group(function(){
 
         Route::get('/get-payables/{id}',  'getPayables')->name('get-payables');
         Route::get('/get-payables-temp/{id}',  'payablesRepTem')->name('get-payables-temp');
+        Route::get('/show-supplierPayments',  'showSupplierPayments')->name('show-supplierPayments');
+        Route::get('/post-supplierPayment',  'postSupplierPayment')->name('post-supplierPayment');
+        Route::get('/unpost-supplierPayment',  'UnpostSupplierPayment')->name('unpost-supplierPayment');
+        Route::get('/cancel-supplierPayment',  'cancelSupplierPayment')->name('cancel-supplierPayment');  
 });
 
 // CommsissionController
@@ -264,7 +268,7 @@ Route::resource('inventory', InventoryController::class);
 Route::resource('purchase', PurchaseController::class);
 Route::resource('sale', SaleController::class);
 
-Route::resource('payable', PayableController::class);
+// Route::resource('payable', PayableController::class);
 Route::resource('supplierPayment', SupplierPaymentController::class);
 Route::resource('supplier', SupplierController::class);
 Route::resource('commission', CommissionController::class);

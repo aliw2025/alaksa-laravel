@@ -75,8 +75,10 @@
                                     <tr>
                                         <td>{{$count}}</td>
                                         <td>{{$exp->description}}</td>
-                                        <td>{{$exp->amount}}</td>
-                                        <td>{{$exp->date}}</td>
+                                        <td>{{ number_format($exp->amount) }}</td>
+                                        <td>{{date('d-m-Y', strtotime($exp->date))}}</td>
+                                        
+                                        
                                         <td><a style="text-decoration: none;color:black" href="{{route('expense.show',$exp->id)}}"><i data-feather='eye'></i></a></td>
                                     </tr>
                                     @php

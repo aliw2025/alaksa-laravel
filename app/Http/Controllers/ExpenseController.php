@@ -91,7 +91,7 @@ class ExpenseController extends Controller
 
         $investors = Investor::all();
         
-        $expenses = Expense::ShowExpenses($request->from_date, $request->to_date, $request->investor_id)->paginate(2);
+        $expenses = Expense::ShowExpenses($request->from_date, $request->to_date, $request->investor_id)->paginate(25);
         $bank_acc = ChartOfAccount::where('account_type', '=', 1)->orWhere('account_type', '=', 4)->get();
         $expenses->appends([
             'from_date' => $request->from_date,
