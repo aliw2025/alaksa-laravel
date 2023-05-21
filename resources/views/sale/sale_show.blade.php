@@ -114,7 +114,7 @@
                                                 <th scope="col">Item Name</th>
                                                 <th scope="col">Selling Price</th>
                                                 <th scope="col">Plan</th>
-                                                <th scope="col">Marup</th>
+                                                <th scope="col">Markup</th>
                                             </tr>
                                         </thead>
                                         <tbody class="sale_body" id="sale_body">

@@ -126,7 +126,7 @@
                                                             <td>{{ number_format($pay->amount) }}</td>
                                                             <td>{{ $pay->payment_date }}</td>
                                                             <td><a style="text-decoration: none;color:black"
-                                                                    href="{{ route('payable.show', $pay->id) }}"><i
+                                                                    href="{{ route('supplierPayment.show', $pay->id) }}"><i
                                                                         data-feather='eye'></i></a></td>
                                                         </tr>
                                                         @php
