@@ -103,6 +103,37 @@ class InvestmentController extends Controller
     public function update(Request $request, Investment $investment)
     {
         //
+
+        if ($request->input('action') == "post") {
+
+            return redirect()->route('post-investment', $request->all());
+        
+        }else if ($request->input('action') == "unpost") {
+           
+            return redirect()->route('unpost-investment', $request->all());
+        }
+         else if ($request->input('action') == "cancel") {
+           
+            return redirect()->route('cancel-investment', $request->all());
+        }
+
+        $validated = $request->validate([
+            'amount'=>'required',
+            'description'=>'required',
+            'date'=>'required'
+        ]);
+    }
+    public function postInvestment(Request $request)
+    {
+        # code...
+    }
+    public function unPostInvestment(Request $request)
+    {
+        # code...
+    }
+    public function cancelInvestment(Request $request)
+    {
+        # code...
     }
 
     /**
@@ -116,3 +147,9 @@ class InvestmentController extends Controller
         //
     }
 }
+
+// Route::get('/show-investments-post',  'showInvestmentsPost')->name('show-investments-post');
+// Route::get('/show-investments',  'showInvestments')->name('show-investments');
+// Route::get('/post-investment',  'postInvestment')->name('post-investment');
+// Route::get('/unpost-investment',  'UnpostInvestment')->name('unpost-investment');
+// Route::get('/cancel-investment',  'cancelInvestment')->name('cancel-investment');

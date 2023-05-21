@@ -216,6 +216,16 @@ Route::controller(ExpenseController::class)->group(function () {
         Route::get('/unpost-expense',  'UnpostExpense')->name('unpost-expense');
         Route::get('/cancel-expense',  'cancelExpense')->name('cancel-expense');   
 });
+// investment Controller
+Route::controller(InvestmentController::class)->group(function () {
+
+        Route::get('/show-investments-post',  'showInvestmentsPost')->name('show-investments-post');
+        Route::get('/show-investments',  'showInvestments')->name('show-investments');
+        Route::get('/post-investment',  'postInvestment')->name('post-investment');
+        Route::get('/unpost-investment',  'UnpostInvestment')->name('unpost-investment');
+        Route::get('/cancel-investment',  'cancelInvestment')->name('cancel-investment');   
+});
+
 
 
 // Designation Controller
