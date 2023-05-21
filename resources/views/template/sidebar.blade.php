@@ -61,6 +61,12 @@
                         </a> -->
                     </li>
                     <li>
+                        <a href="{{ route('investment.create') }}" class="d-flex align-items-center">
+                            <i data-feather="circle"></i>
+                            <span class="menu-item text-truncate" data-i18n="eCommerce">Add Balance</span>
+                        </a>
+                    </li>
+                    <li>
                         <a href="{{ route('chartOfAccount.create') }}" class="d-flex align-items-center">
                             <i data-feather="circle"></i>
                             <span class="menu-item text-truncate" data-i18n="eCommerce">Accounts</span>

@@ -24,6 +24,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CategoryPropController;
 use App\Http\Controllers\ExpenseHeadController;
 use App\Http\Controllers\GLController;
+use App\Http\Controllers\InvestmentController;
 use App\Http\Controllers\RolePermissionController;
 use App\Http\Controllers\SupplierPaymentController;
 use App\Models\Instalment;
@@ -284,3 +285,5 @@ Route::resource('chartOfAccount', ChartOfAccountController::class);
 Route::resource('category', CategoryController::class);
 Route::resource('categoryProperty', CategoryPropController::class);
 Route::resource('expenseHead', ExpenseHeadController::class);
+Route::resource('investment', InvestmentController::class);
+
