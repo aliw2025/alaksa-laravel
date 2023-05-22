@@ -6,6 +6,8 @@ use App\Models\Investment;
 use App\Models\Investor;
 use App\Models\ChartOfAccount;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
 
 class InvestmentController extends Controller
 {
@@ -126,14 +128,53 @@ class InvestmentController extends Controller
     public function postInvestment(Request $request)
     {
         # code...
+
+      
+        $investment = Investment::find($request->investment_id);
+        
+        if($investment->status != 1){
+
+            return "only transaction with entry status can be posted";
+        }
+
+        $investment->status = 3;
+        $investment->save();
+     
+         $user = Auth::user();
+         $investment->createLeadgerEntry(  $investment->account_id,$investment->amount,$request->investor_id,$request->date,$user->id);
+         $investment->createLeadgerEntry(6,-$investment->amount,$request->investor_id,$request->date,$user->id);
+         return redirect()->route('investment.show',$investment->id);
+
     }
     public function unPostInvestment(Request $request)
     {
-        # code...
+        $investment = Investment::find($request->investment_id);
+        if($investment->status != 3){
+
+            return "only transaction with posted status can be unposted";
+        }
+
+        $investment->status = 1;
+        $investment->save();
+     
+         $user = Auth::user();
+         $investment->leadgerEntries()->delete();
+         return redirect()->route('investment.show',$investment->id);
     }
     public function cancelInvestment(Request $request)
     {
         # code...
+
+        $investment = Investment::find($request->investment_id);
+        if($investment->status != 1){
+
+            return "only transaction with entry status can be cancelled";
+        }
+
+        $investment->status = 2;
+        $investment->save();
+     
+         return redirect()->route('investment.show',$investment->id);
     }
 
     /**

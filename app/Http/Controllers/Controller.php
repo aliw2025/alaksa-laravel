@@ -125,14 +125,14 @@ class Controller extends BaseController
             $investor->leadgerEntries()->create([
                 'account_id' => $investor_cash->id,
                 'investor_id'=>$investor->id,
-                'value' => 120000,
+                'value' => 0,
                 'date' => $investor->created_at
             ]);
             // adding entries to leadger of opening bakance of equity
             $investor->leadgerEntries()->create([
                 'account_id' => $investor_eqt->id,
                 'investor_id'=>$investor->id,
-                'value' => -120000,
+                'value' => 0,
                 'date' => $investor->created_at
 
             ]);

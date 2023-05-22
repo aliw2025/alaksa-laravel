@@ -10,6 +10,8 @@ use App\Models\File;
 
 class CustomerController extends Controller
 {
+
+   
     /**
      * Display a listing of the resource.
      *
@@ -30,6 +32,7 @@ class CustomerController extends Controller
      */
     public function create()
     {
+        $this->authorize('customercreate');
         $customers = customer::all();
         return view('customer.customer', compact('customers'));
     }
@@ -42,7 +45,9 @@ class CustomerController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        
+        $this->authorize('customerstore');
+
         $validated = $request->validate(
             [
                 'customer_name' => 'required',
@@ -57,7 +62,7 @@ class CustomerController extends Controller
             ]
         );
 
-        
+
         $customer = new Customer();
         $customer->customer_name = $request->customer_name;
         $customer->email = $request->email;
@@ -74,7 +79,6 @@ class CustomerController extends Controller
         $customer->save();
 
         return redirect()->route('customer.create');
-
     }
 
     /**
@@ -86,6 +90,8 @@ class CustomerController extends Controller
     public function show(Customer $customer)
     {
         //
+        $this->authorize('customershow');
+
         return $customer;
     }
 
@@ -98,10 +104,11 @@ class CustomerController extends Controller
     public function edit(Customer $customer)
     {
         //
+        $this->authorize('customeredit');
+
         $customers = Customer::all();
 
         return view('customer.customer', compact('customers', 'customer'));
-        
     }
 
     /**
@@ -112,24 +119,25 @@ class CustomerController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-     public function CustomerFiles(Request $request){
+    public function CustomerFiles(Request $request)
+    {
 
         $files = File::all();
         $customer = Customer::find($request->id);
-        return view('customer.files',compact('customer','files'));
-        
-     }
-     public function CustomerFileUpload(Request $request){
+        return view('customer.files', compact('customer', 'files'));
+    }
+    public function CustomerFileUpload(Request $request)
+    {
         // dd($request->all());
         $request->validate([
             'file_name' => 'required'
         ]);
-       
+
         // dd($request->all());
         $fileModel = new File();
         // dd($request->all());
         // dd();
-        if($request->hasFile('file_name')) {
+        if ($request->hasFile('file_name')) {
             $file = $request->file('file_name');
             // dd($file);s
             $fileModel->db_name  = $request->db_name;
@@ -137,23 +145,23 @@ class CustomerController extends Controller
             $fileModel->customer_id = $request->customer_id;
             $filePath = $request->file('file_name')->storeAs('uploads', $fileName,  'public');
             $fileModel->name = $file->getClientOriginalName();
-            $fileModel->file_path = url('/').'/public/storage/' . $filePath;
+            $fileModel->file_path = url('/') . '/public/storage/' . $filePath;
             $fileModel->save();
-            
-            return redirect()->route('customer-files',$request->customer_id);
-        }
 
+            return redirect()->route('customer-files', $request->customer_id);
+        }
     }
 
     public function update(Request $request, Customer $customer)
     {
-        //
+        $this->authorize('customerupdate');
+
         $validated = $request->validate(
             [
                 'customer_name' => 'required',
-                'email' => 'required|email|unique:customers,email,'.$customer->id,
-                'phone' => 'required|min:8|max:11|unique:customers,phone,'.$customer->id,
-                'CNIC' => 'required|max:13|unique:customers,CNIC,'.$customer->id,
+                'email' => 'required|email|unique:customers,email,' . $customer->id,
+                'phone' => 'required|min:8|max:11|unique:customers,phone,' . $customer->id,
+                'CNIC' => 'required|max:13|unique:customers,CNIC,' . $customer->id,
             ],
             [
                 'email.unique' => ' Email already exists',
@@ -162,8 +170,8 @@ class CustomerController extends Controller
             ]
         );
 
-        
-       
+
+
         $customer->customer_name = $request->customer_name;
         $customer->email = $request->email;
         $customer->phone = $request->phone;
@@ -177,7 +185,7 @@ class CustomerController extends Controller
         $customer->g2_CNIC = $request->g2_CNIC;
         $customer->note = $request->note;
         $customer->save();
-       
+
 
         return redirect()->route('customer.create');
     }
@@ -191,14 +199,16 @@ class CustomerController extends Controller
     public function destroy(Customer $customer)
     {
         //
+        $this->authorize('customerdestroy');
+
         $customer->delete();
         return redirect()->route('customer.create');
     }
 
-    public function customerByName(Request $request){
+    public function customerByName(Request $request)
+    {
 
-        $customers = Customer::where('customer_name','like','%'.$request->key.'%')->get();
-        return  $customers; 
+        $customers = Customer::where('customer_name', 'like', '%' . $request->key . '%')->get();
+        return  $customers;
     }
-    
 }
