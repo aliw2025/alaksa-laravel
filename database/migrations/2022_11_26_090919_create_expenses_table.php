@@ -24,8 +24,8 @@ return new class extends Migration
             $table->date('date');
             $table->timestamps();
 
-            $table->foreign('head_id')->references('id')->on('expense_heads')->onDelete('cascade');
-            $table->foreign('sub_head_id')->references('id')->on('sub_expense_heads')->onDelete('cascade');
+            // $table->foreign('head_id')->references('id')->on('expense_heads')->onDelete('cascade');
+            // $table->foreign('sub_head_id')->references('id')->on('sub_expense_heads')->onDelete('cascade');
         });
     }
 
