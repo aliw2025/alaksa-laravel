@@ -71,7 +71,7 @@ Route::controller(Controller::class)->group(function () {
 Route::controller(RolePermissionController::class)->group(function () {
 
         // roles routes of admin
-        Route::group(['middleware' => ['role:admin']], function () {
+        // Route::group(['middleware' => ['role:admin']], function () {
                 Route::get('/roles', 'roles')->name('roles');
                 Route::POST('/role', 'storeRole')->name('store-role');
                 Route::get('/role', function () {
@@ -108,7 +108,7 @@ Route::controller(RolePermissionController::class)->group(function () {
                 Route::post('/unassign-user-roles', 'unassignUserRoles')->name('unassign-user-roles');
                 Route::get('/employee-dash/{id}',  'employeeDashboard')->name('employee-dash');
 
-        });
+        // });
 });
 
 
