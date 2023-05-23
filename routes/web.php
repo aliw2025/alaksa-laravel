@@ -22,6 +22,7 @@ use App\Http\Controllers\payScaleContoller;
 use App\Http\Controllers\PaySalaryController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CategoryPropController;
+use App\Http\Controllers\ChangePasswordController;
 use App\Http\Controllers\ExpenseHeadController;
 use App\Http\Controllers\GLController;
 use App\Http\Controllers\InvestmentController;
@@ -39,14 +40,14 @@ use Spatie\Permission\Models\Permission;
 // controller Instalment Controller
 Route::controller(Controller::class)->group(function () {
 
-        Route::get('/abc', function(){
-                $permissions = Permission::all();
-                // dd($permissions);
-                $role = Role::find(2);
-                // dd($role);
-                $role->givePermissionTo($permissions);
-                return $role->permissions;
-        })->name('users');
+        // Route::get('/abc', function(){
+        //         $permissions = Permission::all();
+        //         // dd($permissions);
+        //         $role = Role::find(2);
+        //         // dd($role);
+        //         $role->givePermissionTo($permissions);
+        //         return $role->permissions;
+        // })->name('users');
         
         Route::get('/users', 'Users')->name('users');
         Route::get('/',  'index')->name('index');
@@ -63,6 +64,7 @@ Route::controller(Controller::class)->group(function () {
         Route::get('/get-inquiry-off',  'getInquiryOff')->name('get-inquiry-off');
         Route::get('/capital-investments',  'showInvestments')->name('capital-investments');
         Route::get('/admin',  'admin')->name('admin');
+
 });
 
 // controller Instalment Controller
@@ -104,8 +106,12 @@ Route::controller(RolePermissionController::class)->group(function () {
                 Route::get('/user-roles', 'userRoles')->name('user-roles');
                 Route::post('/user-roles', 'storeUserRoles')->name('store-user-roles');
                 Route::post('/unassign-user-roles', 'unassignUserRoles')->name('unassign-user-roles');
+                Route::get('/employee-dash/{id}',  'employeeDashboard')->name('employee-dash');
+
         });
 });
+
+
 
 
 // sale controller
@@ -172,6 +178,20 @@ Route::controller(SaleController::class)->group(function () {
         // Route::get('/post-sale',  'postSale')->name('post-sale');
         // Route::post('/reprint-invoice',  'reprintInvoice')->name('reprint-invoice');
         // Route::get('/cancel-sale',  'cancelSale')->name('cancel-sale');
+});
+
+
+// sale controller
+Route::controller(ChangePasswordController::class)->group(function () {
+        
+        Route::get('/user-change-password', 'userPassCreate')->name('user-password-change');
+        Route::post('/user-change-password', 'userPassPost')->name('user-password-change');
+
+
+        Route::get('/admin-change-password/{id}', 'adminPassCreate')->name('admin-password-change.create');
+        Route::post('/admin-change-password', 'adminPassPost')->name('admin-password-change.post');
+
+
 });
 
 // purchase Controller
@@ -296,11 +316,11 @@ Route::controller(GLController::class)->group(function () {
         });
 
         Route::group(['middleware' => ['role_or_permission:admin|rotransferqueue']], function () {
-                Route::get('/ro-transfer-queue', 'userApprovalQueue')->name('ro-transfer-queue');
+                Route::get('/ro--transfer-queue', 'userApprovalQueue')->name('ro-transfer-queue');
         });
 
         Route::group(['middleware' => ['role_or_permission:admin|rotransferapproval']], function () {
-                Route::post('/ro--transfer-approval', 'userApproval')->name('ro-transfer-approval');
+                Route::post('/ro-transfer-approval', 'userApproval')->name('ro--transfer-approval');
         });
 
         Route::group(['middleware' => ['role_or_permission:admin|bnktransfer']], function () {
@@ -346,6 +366,8 @@ Route::controller(ItemController::class)->group(function () {
         Route::group(['middleware' => ['role_or_permission:admin|getitem']], function () {
                 Route::get('/get-item/{id}', 'Itemdetail')->name('get-item');
         });
+
+
 });
 
 // Inventory Controller

@@ -168,5 +168,13 @@ class RolePermissionController extends Controller
         return redirect()->route('user-roles');
 
     }
+
+    public function employeeDashboard($id)
+    {   
+        $user  = User::find($id);
+
+        return view('auth.employee_dashboard',compact('user'));
+        # code...
+    }
     
 }

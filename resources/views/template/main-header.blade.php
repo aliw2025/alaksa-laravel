@@ -142,27 +142,20 @@
                         <i class="me-50" data-feather="mail"></i>
                         Inbox
                     </a> --}}
-                    <a class="dropdown-item" href="app-todo.html">
+                    <!-- <a class="dropdown-item" href="app-todo.html">
                         <i class="me-50" data-feather="check-square"></i>
                         Task
-                    </a>
+                    </a> -->
                     {{-- <a class="dropdown-item" href="app-chat.html">
                         <i class="me-50" data-feather="message-square"></i>
                         Chats
                     </a> --}}
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="page-account-settings-account.html">
-                        <i class="me-50" data-feather="settings"></i>
-                        Settings
+                    <a class="dropdown-item" href="{{route('user-password-change')}}">
+                        <i class="" data-feather="settings"></i>
+                        change password
                     </a>
-                    {{-- <a class="dropdown-item" href="page-pricing.html">
-                        <i class="me-50" data-feather="credit-card"></i>
-                        Pricing
-                    </a> --}}
-                    {{-- <a class="dropdown-item" href="page-faq.html">
-                        <i class="me-50" data-feather="help-circle"></i>
-                        FAQ
-                    </a> --}}
+                    
                     <div>
                         <a onclick="
                         event.preventDefault();
@@ -176,6 +169,17 @@
                         </form>
 
                     </div>
+                    <!-- <div>
+                        <a class="dropdown-item"
+                            href="#">
+                            <i class="me-50" data-feather=""></i>
+                          change password
+                        </a>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                            @csrf
+                        </form>
+
+                    </div> -->
 
                 </div>
             </li>
