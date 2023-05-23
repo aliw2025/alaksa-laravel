@@ -40,21 +40,21 @@ use Spatie\Permission\Models\Permission;
 // controller Instalment Controller
 Route::controller(Controller::class)->group(function () {
 
-        Route::get('/abc', function(){
-                $permissions = Permission::all();
-                // dd($permissions);
-                $role = Role::find(1);
-                // dd($role);
-                $role->givePermissionTo($permissions);
-                return $role->permissions;
-        })->name('users');
+        // Route::get('/abc', function(){
+        //         $permissions = Permission::all();
+        //         // dd($permissions);
+        //         $role = Role::find(1);
+        //         // dd($role);
+        //         $role->givePermissionTo($permissions);
+        //         return $role->permissions;
+        // })->name('users');
         
         Route::get('/users', 'Users')->name('users');
         Route::get('/',  'index')->name('index');
-        Route::group(['middleware' => ['role:admin']], function () {
-                Route::get('/setup',  'setup')->name('setup');
-                Route::get('/types',  'createAccountTypes')->name('types');
-        });
+        // Route::group(['middleware' => ['role:admin']], function () {
+        //         Route::get('/setup',  'setup')->name('setup');
+        //         Route::get('/types',  'createAccountTypes')->name('types');
+        // });
         Route::get('/test/{id}',  'testSql')->name('test');
         Route::get('/home/{id}',  'home')->name('home');
         Route::get('/calender',  'showCalender')->name('calender');
@@ -71,7 +71,7 @@ Route::controller(Controller::class)->group(function () {
 Route::controller(RolePermissionController::class)->group(function () {
 
         // roles routes of admin
-        // Route::group(['middleware' => ['role:admin']], function () {
+        Route::group(['middleware' => ['role:admin']], function () {
                 Route::get('/roles', 'roles')->name('roles');
                 Route::POST('/role', 'storeRole')->name('store-role');
                 Route::get('/role', function () {
@@ -108,7 +108,7 @@ Route::controller(RolePermissionController::class)->group(function () {
                 Route::post('/unassign-user-roles', 'unassignUserRoles')->name('unassign-user-roles');
                 Route::get('/employee-dash/{id}',  'employeeDashboard')->name('employee-dash');
 
-        // });
+        });
 });
 
 
