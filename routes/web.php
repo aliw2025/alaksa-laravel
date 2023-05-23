@@ -43,7 +43,7 @@ Route::controller(Controller::class)->group(function () {
         Route::get('/abc', function(){
                 $permissions = Permission::all();
                 // dd($permissions);
-                $role = Role::find(2);
+                $role = Role::find(1);
                 // dd($role);
                 $role->givePermissionTo($permissions);
                 return $role->permissions;
