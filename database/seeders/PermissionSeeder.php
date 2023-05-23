@@ -26,6 +26,10 @@ class PermissionSeeder extends Seeder
               
                 $permission = trim(strtolower($permission));
                 $permission = preg_replace('/[\s.,-]+/', '' , $permission);
+                $check = Permission::where('name',$permission);
+                if(isset($check)){
+                    continue;
+                }
                 Permission::create([
                     'name' => $permission
                 ]);

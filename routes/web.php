@@ -40,14 +40,14 @@ use Spatie\Permission\Models\Permission;
 // controller Instalment Controller
 Route::controller(Controller::class)->group(function () {
 
-        // Route::get('/abc', function(){
-        //         $permissions = Permission::all();
-        //         // dd($permissions);
-        //         $role = Role::find(2);
-        //         // dd($role);
-        //         $role->givePermissionTo($permissions);
-        //         return $role->permissions;
-        // })->name('users');
+        Route::get('/abc', function(){
+                $permissions = Permission::all();
+                // dd($permissions);
+                $role = Role::find(2);
+                // dd($role);
+                $role->givePermissionTo($permissions);
+                return $role->permissions;
+        })->name('users');
         
         Route::get('/users', 'Users')->name('users');
         Route::get('/',  'index')->name('index');
