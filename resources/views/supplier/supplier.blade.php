@@ -17,6 +17,7 @@
                                     <tr style="background-color:red !important;">
                                         <th style="width: 2px !important">#</th>
                                         <th scope="col">Supplier name</th>
+                                        <th scope="col">Supplier business name</th>
                                         <th scope="col">Address</th>
                                         <th scope="col">Phone</th>
                                         <th scope="col">Date Created</th>
@@ -31,6 +32,7 @@
                                     <tr>
                                         <th style="width: 2px !important">{{$count}}</th>
                                         <td>{{ $inv->name }}</td>
+                                        <td>{{ $inv->business_name }}</td>
                                         <td>{{ $inv->email }}</td>
                                         <td>{{ $inv->phone }}</td>
                                         <td>{{ $inv->address }}</td>
@@ -92,6 +94,16 @@
                                         @enderror
                                     </div>
                                 </div>
+                                <div class=" ">
+                                    <div class="mb-1">
+                                        <label class="form-label" for="first-name-vertical">supplier business Name</label>
+                                        <input value="{{old('business_name',isset($supplier)? $supplier->business_name  :'')}}" type="text" id="supplierbusiness_name" class=" @error('business_name') is-invalid @enderror form-control" name="business_name" placeholder="supplier business name">
+                                        @error('business_name')
+                                        <div class="alert alert-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                </div>
+                                
 
                                 <div class="">
                                     <div class="mb-1">

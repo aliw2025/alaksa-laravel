@@ -45,6 +45,7 @@ class SupplierController extends Controller
                 'name' => 'required',
                 'email' => 'required|email|unique:suppliers',
                 'phone' => 'required|min:8|max:11|unique:suppliers',
+                 'business_name'=>'required'
                 
             ],[
                 
@@ -59,8 +60,10 @@ class SupplierController extends Controller
         $supplier->name = $request->name;
         $supplier->email = $request->email;
         $supplier->phone = $request->phone;
+        $supplier->business_name= $request->business_name;
         $supplier->address = $request->address;
         $supplier->save();
+
 
         $supplier_pay= $supplier->charOfAccounts()->create([
             'account_name' => $supplier->name . '_payable',
@@ -72,9 +75,9 @@ class SupplierController extends Controller
             'account_id'=> $supplier_pay->id ,
             'value'=> 0,
             'date'=>$supplier->created_at
-
         ]);        
         return redirect()->route('supplier.index');
+
     }
 
 
@@ -99,7 +102,6 @@ class SupplierController extends Controller
     {
         //
         $suppliers = Supplier ::all();
-        
         return view('supplier.supplier',compact('suppliers','supplier'));
     }
 
@@ -118,6 +120,7 @@ class SupplierController extends Controller
                'name' => 'required',
                 'email' => 'required|email|unique:suppliers,email,'.$supplier->id,
                 'phone' => 'required|min:8|max:11|unique:suppliers,phone,'.$supplier->id,
+                'business_name'=>'required'
                 
             ],[
                 
@@ -132,6 +135,7 @@ class SupplierController extends Controller
         $supplier->email = $request->email;
         $supplier->phone = $request->phone;
         $supplier->address = $request->address;
+        $supplier->business_name= $request->business_name;
         $supplier->save();
         return redirect()->route('supplier.index');
     }
