@@ -40,6 +40,7 @@ use Spatie\Permission\Models\Permission;
 // controller Instalment Controller
 Route::controller(Controller::class)->group(function () {
 
+
         // Route::get('/abc', function(){
         //         $permissions = Permission::all();
         //         // dd($permissions);
@@ -48,7 +49,7 @@ Route::controller(Controller::class)->group(function () {
         //         $role->givePermissionTo($permissions);
         //         return $role->permissions;
         // })->name('users');
-        
+
         Route::get('/users', 'Users')->name('users');
         Route::get('/',  'index')->name('index');
         // Route::group(['middleware' => ['role:admin']], function () {
@@ -64,7 +65,6 @@ Route::controller(Controller::class)->group(function () {
         Route::get('/get-inquiry-off',  'getInquiryOff')->name('get-inquiry-off');
         Route::get('/capital-investments',  'showInvestments')->name('capital-investments');
         Route::get('/admin',  'admin')->name('admin');
-
 });
 
 // controller Instalment Controller
@@ -107,7 +107,6 @@ Route::controller(RolePermissionController::class)->group(function () {
                 Route::post('/user-roles', 'storeUserRoles')->name('store-user-roles');
                 Route::post('/unassign-user-roles', 'unassignUserRoles')->name('unassign-user-roles');
                 Route::get('/employee-dash/{id}',  'employeeDashboard')->name('employee-dash');
-
         });
 });
 
@@ -183,15 +182,13 @@ Route::controller(SaleController::class)->group(function () {
 
 // sale controller
 Route::controller(ChangePasswordController::class)->group(function () {
-        
+
         Route::get('/user-change-password', 'userPassCreate')->name('user-password-change');
         Route::post('/user-change-password', 'userPassPost')->name('user-password-change');
 
 
         Route::get('/admin-change-password/{id}', 'adminPassCreate')->name('admin-password-change.create');
         Route::post('/admin-change-password', 'adminPassPost')->name('admin-password-change.post');
-
-
 });
 
 // purchase Controller
@@ -366,8 +363,6 @@ Route::controller(ItemController::class)->group(function () {
         Route::group(['middleware' => ['role_or_permission:admin|getitem']], function () {
                 Route::get('/get-item/{id}', 'Itemdetail')->name('get-item');
         });
-
-
 });
 
 // Inventory Controller

@@ -20,29 +20,22 @@ class PermissionSeeder extends Seeder
     {
         $routeCollection = Route::getRoutes()->get();
         foreach ($routeCollection as $item) {
-        $name = $item->action;
-            if(!empty($name['as'])) {
-                $permission = $name['as'];
-              
-                $permission = trim(strtolower($permission));
-                $permission = preg_replace('/[\s.,-]+/', '' , $permission);
-                $check = Permission::where('name',$permission);
-                if(($check!=null)){
-                    continue;
+                $name = $item->action;
+                if (!empty($name['as'])) {
+                        $permission = $name['as'];
+
+                        $permission = trim(strtolower($permission));
+                        $permission = preg_replace('/[\s.,-]+/', '', $permission);
+                        $check = Permission::where('name', $permission);
+
+                        if (($check->count() != 0)) {
+                                continue;
+                        }
+                        Permission::create([
+                                'name' => $permission
+                        ]);
                 }
-                Permission::create([
-                    'name' => $permission
-                ]);
-                // try {
-                //     $a_role = Permission::findByName($permission);
-                // } catch (Exception $e) {
-                    
-                // }
-                
-               
-            }
         }
-       
         
     }
 
