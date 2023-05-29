@@ -124,7 +124,7 @@ class PurchaseController extends Controller
         $purchase->trade_discount = $total_td;
         $purchase->save();
 
-        return redirect()->route('purchase.show',$purchase)->with('message','Record saved');;   
+        return redirect()->route('purchase.show',$purchase)->with('message','Record Saved');;   
     }
 
 

@@ -164,12 +164,19 @@ class SaleController extends Controller
             $instalment->amount_paid = $down_payment ? str_replace(',', '', $request->down_payment) : 0;
             $instalment->save();
 
+            
+            $alp_share = 0.5;
+            $inv_share = 1-$alp_share;
+
+
+
             //**************  creating inventory and markup share  *****************/
             $inv_per = floatval($selling_price) / $sale->total;
             // item price recovery
             $ins_mon = str_replace(',', '', $request->down_payment) * $inv_per;
             // each investor share in markup profit
-            $share = (str_replace(',', '', $request->down_payment) - $ins_mon) * 0.50;
+            $share1 = (str_replace(',', '', $request->down_payment) - $ins_mon) * $inv_share;
+            $share2 = (str_replace(',', '', $request->down_payment) - $ins_mon) * $alp_share;
 
             if ($down_payment) {
                 $payment = new InstalmentPayment();
@@ -179,17 +186,17 @@ class SaleController extends Controller
                 $payment->save();
 
                 // debit cash of investor for inventory recovery
-                $payment->createLeadgerEntry($request->acc_type, $ins_mon, $investor->id, $sale->sale_date, $user->id);
+                $payment->createLeadgerEntry($request->acc_type, $ins_mon+$share1, $investor->id, $sale->sale_date, $user->id);
                 //*  credit recievable of inventory recovery
-                $payment->createLeadgerEntry(5, -$ins_mon, $investor->id, $sale->sale_date, $user->id);
+                $payment->createLeadgerEntry(5, -$ins_mon-$share1, $investor->id, $sale->sale_date, $user->id);
                 // debit investor cash  of markup
-                $payment->createLeadgerEntry($request->acc_type, $share, $investor->id, $sale->sale_date, $user->id);
+                // $payment->createLeadgerEntry($request->acc_type, $share1, $investor->id, $sale->sale_date, $user->id);
                 //* credit investor recievable of markup
-                $payment->createLeadgerEntry(5, -$share, $investor->id, $sale->sale_date, $user->id);
+                // $payment->createLeadgerEntry(5, -$share1, $investor->id, $sale->sale_date, $user->id);
                 // debit company cash of markup
-                $payment->createLeadgerEntry($request->acc_type, $share, 1, $sale->sale_date, $user->id);
+                $payment->createLeadgerEntry($request->acc_type, $share2, 1, $sale->sale_date, $user->id);
                 //*  credit company  recievable of markup
-                $payment->createLeadgerEntry(5, -$share, 1, $sale->sale_date, $user->id);
+                $payment->createLeadgerEntry(5, -$share2, 1, $sale->sale_date, $user->id);
             }
 
 
@@ -228,36 +235,42 @@ class SaleController extends Controller
             $trade_discount = $selling_price - $item_price;
             if($trade_discount<0){
                 // now to be adjusted in leadger
-                $loss = $item_price - $selling_price+$p_discount;
+                $loss = $item_price - $selling_price;
             }
+
         } else {
             $trade_discount = $request->trade_discount;
         }
         $sale->trade_discount = $trade_discount;
         //**************  LEADGER *****************/
         if ($request->sale_type == 1) {
-
+            $alp_share = 0.5;
+            $inv_share = 1-$alp_share;
+             // calculating profit share of investor and company
+             $inv_mark_pft1 = (str_replace(',', '', $request->total_sum) - str_replace(',', '', $request->selling_price)) * $inv_share;
+             $inv_mark_pft2 = (str_replace(',', '', $request->total_sum) - str_replace(',', '', $request->selling_price)) * $alp_share;
+ 
             //  leadger entry for debit recievable of inventory
-            $sale->createLeadgerEntry(5, $selling_price, $investor->id, $sale->sale_date, $user->id);
+            $sale->createLeadgerEntry(5, $selling_price+$inv_mark_pft1, $investor->id, $sale->sale_date, $user->id);
             //* leadger entry for credit inventory for actual price of item
-            $sale->createLeadgerEntry(3, -$item_price, $investor->id, $sale->sale_date, $user->id);
-            //* leadger entry for credit cash of investor bank account for trade profit ??
-            $sale->createLeadgerEntry(4, -$trade_discount, $investor->id, $sale->sale_date, $user->id);
-            // calculating profit share of investor and company
-            $inv_mark_pft = (str_replace(',', '', $request->total_sum) - str_replace(',', '', $request->selling_price)) * 0.50;
-            // leadger entry for investor debit recievable of markup 
-            $sale->createLeadgerEntry(5, $inv_mark_pft, $investor->id, $sale->sale_date, $user->id);
-            //* leadger entry for credit markup profit
-            $sale->createLeadgerEntry(9, -$inv_mark_pft, $investor->id, $sale->sale_date, $user->id);
-
+            $sale->createLeadgerEntry(3, -$item_price, $investor->id, $sale->sale_date, $user->id);  
+             //* leadger entry for credit markup profit
+             $sale->createLeadgerEntry(9, -$inv_mark_pft1, $investor->id, $sale->sale_date, $user->id);         
+                //*** change this entry too ****/
+             if($trade_discount>0) {
+                //* leadger entry for credit cash of investor bank account for trade profit ??
+                $sale->createLeadgerEntry(7, -$trade_discount, $investor->id, $sale->sale_date, $user->id);
+             }else{
+                // temp expense account for loss
+                $sale->createLeadgerEntry(8, $loss, $investor->id, $sale->sale_date, $user->id);
+             }  
+            
             // leadger entry for company debit recievable of markup
-            $sale->createLeadgerEntry(5, $inv_mark_pft, 1, $sale->sale_date, $user->id);
-            // *leadger entry for credit markup profit
-            $sale->createLeadgerEntry(9, -$inv_mark_pft, 1, $sale->sale_date, $user->id);
-            // leadger entry for company debit cash of trade profit ??
-            $sale->createLeadgerEntry(4, $trade_discount, 1, $sale->sale_date, $user->id);
-            //* leadger entry for credit trade discount profit
-            $sale->createLeadgerEntry(10, -$trade_discount, 1, $sale->sale_date, $user->id);
+            $sale->createLeadgerEntry(5, $inv_mark_pft2, 1, $sale->sale_date, $user->id);
+            //*leadger entry for credit markup profit
+            $sale->createLeadgerEntry(9, -$inv_mark_pft2, 1, $sale->sale_date, $user->id);
+                //****  need to change these ttwo values ***/
+          
         } else {
 
             //  leadger entry for debit cash/bank of investory
@@ -265,20 +278,22 @@ class SaleController extends Controller
             //* leadger entry for credit inventory for actual price of item
             $sale->createLeadgerEntry(3, -$item_price, $investor->id, $sale->sale_date, $user->id);
             // calculating profit share of investor and company
-            $inv_pft = ($selling_price -  $trade_discount - $item_price) * 0.50;
+            $inv_pft1 = ($selling_price -  $trade_discount - $item_price) * $inv_share;
+            $inv_pft2 = ($selling_price -  $trade_discount - $item_price) * $alp_share;
 
             // leadger entry for investor debit cash/bank for profit money 
-            $sale->createLeadgerEntry($request->acc_type, $inv_pft, $investor->id, $sale->sale_date, $user->id);
+            $sale->createLeadgerEntry($request->acc_type, $inv_pft1, $investor->id, $sale->sale_date, $user->id);
             //* leadger entry for credit markup profit
-            $sale->createLeadgerEntry(9, -$inv_pft, $investor->id, $sale->sale_date, $user->id);
+            $sale->createLeadgerEntry(9, -$inv_pft1, $investor->id, $sale->sale_date, $user->id);
             // leadger entry for company debit  of 
-            $sale->createLeadgerEntry($request->acc_type, $inv_pft, 1, $sale->sale_date, $user->id);
+            $sale->createLeadgerEntry($request->acc_type, $inv_pft2, 1, $sale->sale_date, $user->id);
             // *leadger entry for credit markup profit
-            $sale->createLeadgerEntry(9, -$inv_pft, 1, $sale->sale_date, $user->id);
+            $sale->createLeadgerEntry(9, -$inv_pft2, 1, $sale->sale_date, $user->id);
             // leadger entry for company debit cash of trade profit
             $sale->createLeadgerEntry($request->acc_type, $trade_discount, 1, $sale->sale_date, $user->id);
             //* leadger entry for credit trade discount profit
             $sale->createLeadgerEntry(10, -$trade_discount, 1, $sale->sale_date, $user->id);
+
         }
 
         //************** INVOICE *****************/
@@ -305,160 +320,8 @@ class SaleController extends Controller
     public function unpostSale(Request $request)
     {
 
-        $sale = Sale::find($request->sale_id);
-        if ($sale->status != 3) {
-            return "sale  cannot be un posted";
-        }
-        $sale->status = 1;
-        $down_payment = false;
-        $investor = Investor::find($request->investor_id);
-        $user = Auth::user();
-        if ($request->input('down_payment_paid') != NULL) {
-            $down_payment = true;
-        }
-        $selling_price = floatval(str_replace(',', '', $request->selling_price));
-        //**************  creating instalments  *****************/
-        // if its an instalments sale
-        if ($request->sale_type == 1) {
-            // creating down payment
-            $instalment = new Instalment();
-            $instalment->sale_id = $sale->id;
-            $instalment->amount = str_replace(',', '', $request->down_payment);
-            // if down payment is paid $down_payment is true
-            $instalment->instalment_paid = $down_payment;
-            $instalment->due_date = $request->sale_date;
-            $instalment->instalment_no = 0;
-            $instalment->amount_paid = $down_payment ? str_replace(',', '', $request->down_payment) : 0;
-            $instalment->save();
 
-            //**************  creating inventory and markup share  *****************/
-            $inv_per = floatval($selling_price) / $sale->total;
-            // item price recovery
-            $ins_mon = str_replace(',', '', $request->down_payment) * $inv_per;
-            // each investor share in markup profit
-            $share = (str_replace(',', '', $request->down_payment) - $ins_mon) * 0.50;
-
-            if ($down_payment) {
-                $payment = new InstalmentPayment();
-                $payment->instalment_id = $instalment->id;
-                $payment->amount =   $ins_mon;
-                $payment->payment_date = $request->sale_date;
-                $payment->save();
-
-                // debit cash of investor for inventory recovery
-                $payment->createLeadgerEntry($request->acc_type, $ins_mon, $investor->id, $sale->sale_date, $user->id);
-                //*  credit recievable of inventory recovery
-                $payment->createLeadgerEntry(5, -$ins_mon, $investor->id, $sale->sale_date, $user->id);
-                // debit investor cash  of markup
-                $payment->createLeadgerEntry($request->acc_type, $share, $investor->id, $sale->sale_date, $user->id);
-                //* credit investor recievable of markup
-                $payment->createLeadgerEntry(5, -$share, $investor->id, $sale->sale_date, $user->id);
-                // debit company cash of markup
-                $payment->createLeadgerEntry($request->acc_type, $share, 1, $sale->sale_date, $user->id);
-                //*  credit company  recievable of markup
-                $payment->createLeadgerEntry(5, -$share, 1, $sale->sale_date, $user->id);
-            }
-
-
-            $temp =  new Carbon($request->sale_date);
-            // creatting the instalments for the sale
-            for ($i = 0; $i < $request->plan; $i++) {
-                $next = $temp->addMonth();
-                $instalment = new Instalment();
-                $instalment->sale_id = $sale->id;
-                $instalment->amount = str_replace(',', '', $request->instalment_per_month);
-                $instalment->instalment_paid = false;
-                $instalment->due_date = $next;
-                $instalment->instalment_no = $i + 1;
-                $instalment->save();
-                $temp = $next;
-            }
-        }
-
-        //************** inventory update  *****************/
-        // updating inventory 
-        $inventory = Inventory::where('investor_id', '=', $sale->investor_id)->where('item_id', '=', $sale->item_id)->first();
-        $inventory->quantity =  $inventory->quantity - 1;
-        $inventory->save();
-
-        //**************  creating sale comission  *****************/
-        $sale->createSaleComision($sale, $user->id);
-
-        //**************  calculating trade discount  *****************/
-        $item_price = $investor->inventories()->where('item_id', '=', $request->item_id)->first()->unit_cost;
-
-        $trade_discount = 0;
-        if ($request->sale_type == 1) {
-            $trade_discount = $selling_price - $item_price;
-        } else {
-            $trade_discount = $request->trade_discount;
-        }
-        $sale->trade_discount = $trade_discount;
-        //**************  LEADGER *****************/
-        if ($request->sale_type == 1) {
-
-            //  leadger entry for debit recievable of inventory
-            $sale->createLeadgerEntry(5, $selling_price, $investor->id, $sale->sale_date, $user->id);
-            //* leadger entry for credit inventory for actual price of item
-            $sale->createLeadgerEntry(3, -$item_price, $investor->id, $sale->sale_date, $user->id);
-            //* leadger entry for credit cash of investor bank account for trade profit ??
-            $sale->createLeadgerEntry(4, -$trade_discount, $investor->id, $sale->sale_date, $user->id);
-            // calculating profit share of investor and company
-            $inv_mark_pft = (str_replace(',', '', $request->total_sum) - str_replace(',', '', $request->selling_price)) * 0.50;
-            // leadger entry for investor debit recievable of markup 
-            $sale->createLeadgerEntry(5, $inv_mark_pft, $investor->id, $sale->sale_date, $user->id);
-            //* leadger entry for credit markup profit
-            $sale->createLeadgerEntry(9, -$inv_mark_pft, $investor->id, $sale->sale_date, $user->id);
-
-            // leadger entry for company debit recievable of markup
-            $sale->createLeadgerEntry(5, $inv_mark_pft, 1, $sale->sale_date, $user->id);
-            // *leadger entry for credit markup profit
-            $sale->createLeadgerEntry(9, -$inv_mark_pft, 1, $sale->sale_date, $user->id);
-            // leadger entry for company debit cash of trade profit ??
-            $sale->createLeadgerEntry(4, $trade_discount, 1, $sale->sale_date, $user->id);
-            //* leadger entry for credit trade discount profit
-            $sale->createLeadgerEntry(10, -$trade_discount, 1, $sale->sale_date, $user->id);
-        } else {
-
-            //  leadger entry for debit cash/bank of investory
-            $sale->createLeadgerEntry($request->acc_type, $item_price, $investor->id, $sale->sale_date, $user->id);
-            //* leadger entry for credit inventory for actual price of item
-            $sale->createLeadgerEntry(3, -$item_price, $investor->id, $sale->sale_date, $user->id);
-            // calculating profit share of investor and company
-            $inv_pft = ($selling_price -  $trade_discount - $item_price) * 0.50;
-
-            // leadger entry for investor debit cash/bank for profit money 
-            $sale->createLeadgerEntry($request->acc_type, $inv_pft, $investor->id, $sale->sale_date, $user->id);
-            //* leadger entry for credit markup profit
-            $sale->createLeadgerEntry(9, -$inv_pft, $investor->id, $sale->sale_date, $user->id);
-            // leadger entry for company debit  of 
-            $sale->createLeadgerEntry($request->acc_type, $inv_pft, 1, $sale->sale_date, $user->id);
-            // *leadger entry for credit markup profit
-            $sale->createLeadgerEntry(9, -$inv_pft, 1, $sale->sale_date, $user->id);
-            // leadger entry for company debit cash of trade profit
-            $sale->createLeadgerEntry($request->acc_type, $trade_discount, 1, $sale->sale_date, $user->id);
-            //* leadger entry for credit trade discount profit
-            $sale->createLeadgerEntry(10, -$trade_discount, 1, $sale->sale_date, $user->id);
-        }
-
-        //************** INVOICE *****************/
-
-        $sale_detail = null;
-        $data = [
-            'title' => 'Welcome to ItSolutionStuff.com',
-            'date' => date('m/d/Y'),
-            'sale' => $sale,
-            'sale_detail' => $sale_detail,
-            'payment_type' => $sale->pay_type_name->name,
-            'selling_price' => str_replace(',', '', $request->selling_price),
-            'markup' => $request->mark_up,
-            'plan' => $request->plan,
-            'user_id' => $user->id
-
-        ];
-        $sale->save();
-        $pdf = PDF::loadView('sale.sale_invoice_pdf', $data);
-        return $pdf->stream('my.pdf', array('Attachment' => 0));
+        
     }
 
     public function saleReturnAdjustment(Request $request)
