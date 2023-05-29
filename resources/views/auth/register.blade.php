@@ -1,3 +1,4 @@
+<!-- @extends('template.header') -->
 @extends('template.header')
 @section('section')
 <div class="container">

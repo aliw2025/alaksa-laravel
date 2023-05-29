@@ -38,7 +38,6 @@
                                         <td>{{ $inv->address }}</td>
                                         <td>
                                             <div class="d-flex align-items-center">
-
                                                 <form class="" method="POST" autocomplete="on" action="{{ route('supplier.destroy',$inv->id)}}">
                                                     @csrf
                                                     {{ method_field('DELETE') }}

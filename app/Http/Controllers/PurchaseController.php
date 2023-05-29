@@ -66,6 +66,8 @@ class PurchaseController extends Controller
     public function store(Request $request)
     {   
         
+        dd($request->all());
+        
        $validated = $request->validate([
             'supplier'=>'required',
              'item_id'=>'required',
@@ -111,7 +113,7 @@ class PurchaseController extends Controller
             $purchase_item->item_id = $request->item_id[$a];
             $purchase_item->quantity = $request->qty[$a];
             $purchase_item->unit_cost =  str_replace(',','',$request->cost[$a]); 
-            $purchase_item->trade_discount = 0;
+            $purchase_item->trade_discount = $request->trade_discount[$a];
             $purchase_item->purchase_id = $purchase->id;
             // $purchase_item->td_loss = $request->td_loss[$a];
             $purchase_item->td_loss = isset($request->td_loss[$a]) ?$request->td_loss[$a]:0;
@@ -251,6 +253,7 @@ class PurchaseController extends Controller
         return view('purchase.purchase',compact('purchase','investors','suppliers','type'))->with('message','Purchase Un Posted');
     
     }
+    
     
 
     public function showPurchaseItems($id){

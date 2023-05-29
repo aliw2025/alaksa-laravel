@@ -175,7 +175,7 @@
                                                             <div class="dropdown-menu dropdown-menu-end item-options-menu p-50" aria-labelledby="dropdownMenuButton">
                                                                 <div class="mb-1">
                                                                     <label for="discount-input" class="form-label">Discount</label>
-                                                                    <input name="trade_dicount" type="number" class="form-control" id="discount-input">
+                                                                    <input name="trade_discount[]" type="number" class="form-control" id="discount-input" value="0">
                                                                 </div>
                                                                 <div class="form-row mt-50"></div>
                                                                 <div class="dropdown-divider my-1"></div>
@@ -419,8 +419,8 @@
                                         <div class="mb-1">
                                             <label for="discount-input"
                                                 class="form-label">Discount</label>
-                                            <input name="trade_discount" type="number" class="form-control"
-                                                id="discount-input">
+                                            <input name="trade_discount[]" type="number" class="form-control"
+                                                id="discount-input" value="0">
                                         </div>
                                         <div class="form-row mt-50"></div>
                                         <div class="dropdown-divider my-1"></div>
