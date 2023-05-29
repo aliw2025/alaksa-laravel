@@ -46,7 +46,7 @@
                                         </div>
                                         <div class="d-flex align-items-center justify-content-between mb-1">
                                             <span class="title">Date:</span>
-                                            <input type="date" name="purchase_date" class="form-control" value="{{ isset($purchase)? $purchase->purchase_date: now()->format('Y-m-d')}}" @if(isset($purchase )) @if(!($purchase->status==1)) disabled @endif @endif>
+                                            <input type="date" name="purchase_date" class="invoice-edit-input form-control" value="{{ isset($purchase)? $purchase->purchase_date: now()->format('Y-m-d')}}" @if(isset($purchase )) @if(!($purchase->status==1)) disabled @endif @endif>
                                             @error('purchase_date')
                                                 <div class="alert alert-danger">{{$message}}</div>
                                             @enderror

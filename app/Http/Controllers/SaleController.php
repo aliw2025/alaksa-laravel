@@ -219,10 +219,17 @@ class SaleController extends Controller
 
         //**************  calculating trade discount  *****************/
         $item_price = $investor->inventories()->where('item_id', '=', $request->item_id)->first()->unit_cost;
+        //** new **/
+        $p_discount = $investor->inventories()->where('item_id', '=', $request->item_id)->first()->trade_discount;
 
         $trade_discount = 0;
         if ($request->sale_type == 1) {
+            // trade discount is now provit over cost
             $trade_discount = $selling_price - $item_price;
+            if($trade_discount<0){
+                // now to be adjusted in leadger
+                $loss = $item_price - $selling_price+$p_discount;
+            }
         } else {
             $trade_discount = $request->trade_discount;
         }

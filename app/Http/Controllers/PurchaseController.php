@@ -105,22 +105,25 @@ class PurchaseController extends Controller
         $purchase->save();
 
         //  saving each item of the purchase transaction
-        
+        $total_td = 0;
         for ($a=0 ; $a<count($request->qty); $a++) {
             echo $a.'<br>';
             // saving purchase items
+            $total_td += $request->trade_discount[$a] * $request->qty[$a]; 
             $purchase_item = new PurchaseItem();
             $purchase_item->item_id = $request->item_id[$a];
             $purchase_item->quantity = $request->qty[$a];
             $purchase_item->unit_cost =  str_replace(',','',$request->cost[$a]); 
-            $purchase_item->trade_discount = $request->trade_discount[$a];
+            $purchase_item->trade_discount = $request->trade_discount[$a] *$request->qty[$a];
             $purchase_item->purchase_id = $purchase->id;
             // $purchase_item->td_loss = $request->td_loss[$a];
             $purchase_item->td_loss = isset($request->td_loss[$a]) ?$request->td_loss[$a]:0;
             $purchase_item->save();
 
         }   
-        
+        $purchase->trade_discount = $total_td;
+        $purchase->save();
+
         return redirect()->route('purchase.show',$purchase)->with('message','Record saved');;   
     }
 
@@ -133,13 +136,17 @@ class PurchaseController extends Controller
         // creating purchase transactions
         $purchase = Purchase::find($request->purchase_id);
         
-        
+        $totalDiscount  = 0;
         //  saving each item of the purchase transaction
         foreach ($purchase->purchaseItems as $purchase_item) {
+
+            $totalDiscount += $purchase_item->trade_discount;
             
             // updating inventory
             $inventory = Inventory::where('investor_id','=',$purchase->investor_id)->where('item_id','=',$purchase_item->item_id)->first();
-          
+
+
+
             if($inventory==null){
 
                 $inventory = new Inventory();
@@ -148,7 +155,9 @@ class PurchaseController extends Controller
                 $inventory->investor_id = $purchase->investor_id;
                 $inventory->unit_cost = $purchase_item->unit_cost;
                 $inventory->quantity = $purchase_item->quantity;
+                $inventory->discount = $purchase_item->discount;
                 $inventory->save();
+
 
             }else{
                 if($request->tran_type==2){
