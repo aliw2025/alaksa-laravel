@@ -258,8 +258,15 @@ class SaleController extends Controller
              $sale->createLeadgerEntry(9, -$inv_mark_pft1, $investor->id, $sale->sale_date, $user->id);         
                 //*** change this entry too ****/
              if($trade_discount>0) {
+                if($investor->id==1){
+                    // ad trade profit  
+                    $sale->createLeadgerEntry(10, -$trade_discount, $investor->id, $sale->sale_date, $user->id);
+                }else{
+
+                    $sale->createLeadgerEntry(7, -$trade_discount, $investor->id, $sale->sale_date, $user->id);
+                }
                 //* leadger entry for credit cash of investor bank account for trade profit ??
-                $sale->createLeadgerEntry(7, -$trade_discount, $investor->id, $sale->sale_date, $user->id);
+               
              }else{
                 // temp expense account for loss
                 $sale->createLeadgerEntry(8, $loss, $investor->id, $sale->sale_date, $user->id);
@@ -269,7 +276,6 @@ class SaleController extends Controller
             $sale->createLeadgerEntry(5, $inv_mark_pft2, 1, $sale->sale_date, $user->id);
             //*leadger entry for credit markup profit
             $sale->createLeadgerEntry(9, -$inv_mark_pft2, 1, $sale->sale_date, $user->id);
-                //****  need to change these ttwo values ***/
           
         } else {
 
@@ -278,8 +284,10 @@ class SaleController extends Controller
             //* leadger entry for credit inventory for actual price of item
             $sale->createLeadgerEntry(3, -$item_price, $investor->id, $sale->sale_date, $user->id);
             // calculating profit share of investor and company
-            $inv_pft1 = ($selling_price -  $trade_discount - $item_price) * $inv_share;
-            $inv_pft2 = ($selling_price -  $trade_discount - $item_price) * $alp_share;
+            // $inv_pft1 = ($selling_price -  $trade_discount - $item_price) * $inv_share;
+            // $inv_pft2 = ($selling_price -  $trade_discount - $item_price) * $alp_share;
+            $inv_pft1 = ($selling_price -   $item_price) * $inv_share;
+            $inv_pft2 = ($selling_price -   $item_price) * $alp_share;
 
             // leadger entry for investor debit cash/bank for profit money 
             $sale->createLeadgerEntry($request->acc_type, $inv_pft1, $investor->id, $sale->sale_date, $user->id);
@@ -293,7 +301,8 @@ class SaleController extends Controller
             $sale->createLeadgerEntry($request->acc_type, $trade_discount, 1, $sale->sale_date, $user->id);
             //* leadger entry for credit trade discount profit
             $sale->createLeadgerEntry(10, -$trade_discount, 1, $sale->sale_date, $user->id);
-
+            
+            
         }
 
         //************** INVOICE *****************/
