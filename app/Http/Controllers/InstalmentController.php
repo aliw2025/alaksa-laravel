@@ -86,25 +86,27 @@ class InstalmentController extends Controller
         // item price recovry
         $ins_mon = str_replace(',', '', $request->amount_paid) * $inv_per;
         // each investor share in markup profit
-        $share = (str_replace(',', '', $request->amount_paid) - $ins_mon) * 0.50;
+       
+        $alp_share = 0.5;
+        $inv_share = 1-$alp_share;
+        $share1 = (str_replace(',', '', $request->amount_paid) - $ins_mon) * $inv_share;
+        $share2 = (str_replace(',', '', $request->amount_paid) - $ins_mon) * $alp_share;
 
         //*********************** Leadger  *********************/
         // debit cash of investor for inventory recovery
-        $payment->createLeadgerEntry($request->account, $ins_mon, $investor->id, $request->pay_date, $user->id);
+        $payment->createLeadgerEntry($request->account, $ins_mon+$share1, $investor->id, $request->pay_date, $user->id);
         //  * credit recievable of inventory recovery
-        $payment->createLeadgerEntry(5, -$ins_mon, $investor->id, $request->pay_date, $user->id);
+        $payment->createLeadgerEntry(5, -$ins_mon-$share1, $investor->id, $request->pay_date, $user->id);
         // debit company cash of markup
-        $payment->createLeadgerEntry($request->account, $share, 1, $request->pay_date, $user->id);
+        $payment->createLeadgerEntry($request->account, $share2, 1, $request->pay_date, $user->id);
         // * credit  company  recievable of markup
-        $payment->createLeadgerEntry(5, -$share, 1, $request->pay_date, $user->id);
-        // debit investor cash  of markup
-        $payment->createLeadgerEntry($request->account, $share, $investor->id, $request->pay_date, $user->id);
-        // * credit  investor  recievable of markup
-        $payment->createLeadgerEntry(5, -$share, $investor->id, $request->pay_date, $user->id);
-
+        $payment->createLeadgerEntry(5, -$share2, 1, $request->pay_date, $user->id);
+       
         //*********************** Instalment Commission  *********************/
         $instalment->createInstalmentComision($sale, $user->id, $payment);
         return redirect()->route('get-sale-instalments', ['id' => $sale->id]);
+        
+        
 
     }
 
@@ -157,10 +159,7 @@ class InstalmentController extends Controller
             $mytime2->hour(0);
             $mytime2->minute(0);
             $mytime2->second(0);         
-            // echo ($mytime);
-            // echo ($mytime2);
-            // dd($mytime2);
-            // dd('ddff');
+            
             $sales = Instalment::SearchInstalment($mytime2,$mytime, $request->customer_name, $request->customer_id, $request->instalment_paid)->paginate(10);
             $sales->appends([
                 'from_date' => $request->from_date,

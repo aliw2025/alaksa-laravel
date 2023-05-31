@@ -188,11 +188,6 @@ class SaleController extends Controller
                 // debit cash of investor for inventory recovery
                 $payment->createLeadgerEntry($request->acc_type, $ins_mon+$share1, $investor->id, $sale->sale_date, $user->id);
                 //*  credit recievable of inventory recovery
-                $payment->createLeadgerEntry(5, -$ins_mon-$share1, $investor->id, $sale->sale_date, $user->id);
-                // debit investor cash  of markup
-                // $payment->createLeadgerEntry($request->acc_type, $share1, $investor->id, $sale->sale_date, $user->id);
-                //* credit investor recievable of markup
-                // $payment->createLeadgerEntry(5, -$share1, $investor->id, $sale->sale_date, $user->id);
                 // debit company cash of markup
                 $payment->createLeadgerEntry($request->acc_type, $share2, 1, $sale->sale_date, $user->id);
                 //*  credit company  recievable of markup
@@ -265,7 +260,6 @@ class SaleController extends Controller
 
                     $sale->createLeadgerEntry(7, -$trade_discount, $investor->id, $sale->sale_date, $user->id);
                 }
-                //* leadger entry for credit cash of investor bank account for trade profit ??
                
              }else{
                 // temp expense account for loss
@@ -284,8 +278,7 @@ class SaleController extends Controller
             //* leadger entry for credit inventory for actual price of item
             $sale->createLeadgerEntry(3, -$item_price, $investor->id, $sale->sale_date, $user->id);
             // calculating profit share of investor and company
-            // $inv_pft1 = ($selling_price -  $trade_discount - $item_price) * $inv_share;
-            // $inv_pft2 = ($selling_price -  $trade_discount - $item_price) * $alp_share;
+            
             $inv_pft1 = ($selling_price -   $item_price) * $inv_share;
             $inv_pft2 = ($selling_price -   $item_price) * $alp_share;
 
