@@ -295,7 +295,6 @@ class SaleController extends Controller
             //* leadger entry for credit trade discount profit
             $sale->createLeadgerEntry(10, -$trade_discount, 1, $sale->sale_date, $user->id);
             
-            
         }
 
         //************** INVOICE *****************/

@@ -17,36 +17,52 @@
                             <div class="col-2">
                                 <div class="">
                                     <span class="title">From Date:</span>
-                                    <input name="from_date" type="text"
-                                        class="form-control invoice-edit-input date-picker flatpickr-input"
-                                        readonly="readonly">
+                                    <input @if(isset($from_date)) value="{{$from_date}}" @endif name="from_date" type="date"
+                                        class="form-control invoice-edit-input "
+                                        >
                                 </div>
                             </div>
                             <div class="col-2">
                                 <div class="">
                                     <span class="title">To Date:</span>
-                                    <input name="to_date" type="text"
-                                        class="form-control invoice-edit-input date-picker flatpickr-input"
-                                        readonly="readonly">
+                                    <input @if(isset($to_date)) value="{{$to_date}}" @endif name="to_date" type="date"
+                                        class="form-control invoice-edit-input "
+                                        >
                                 </div>
                             </div>
                             <div class="col-2">
                                 <div class="">
                                     <span class="title">Investor</span>
                                     <select class="form-select" name="investor_id" id="">
+                                    <option></option>   
                                         @foreach($investors as $inv)
                                         <option value="{{$inv->id}}">{{$inv->investor_name}}</option>
                                         @endforeach
+                                       
+
                                     </select>   
                                 </div>
                             </div>
+                            <div class="col-2">
+                                <div class="">
+                                    <span class="title">supplier</span>
+                                    <select class="form-select" name="supplier_id" id="">
+                                     <option></option>
+                                        @foreach($suppliers as $sup)
+                                        <option value="{{$sup->id}}">{{$sup->name}}</option>
+                                        @endforeach
+                                       
 
-
+                                    </select>   
+                                </div>
+                            </div>
                            
                             <div class="col-2 ">
-                                <Button type="submit" class="mt-1 btn btn-relief-primary">Report</Button>
-                            </div>
+                                <Button type="submit" name="action" value="report" class="mt-1 btn btn-relief-primary">Report</Button>
+                                <Button type="submit" name="action" value="pdf" class="mt-1 btn btn-relief-secondary">PDF</Button>
 
+                            </div>
+                            
                         </div>
 
 
@@ -59,9 +75,11 @@
                                 <thead class="thead-dark">
                                     <tr style="background-color:red !important;">
                                         <th style="width: 2px !important">#</th>
-                                        <th scope="col">Purchase NO</th>  
+                                        <th scope="col">Purchase NO</th>
+                                        <th>Investor</th>  
                                         <th scope="col">Supplier</th>
                                         <th>Total</th>
+                                        <th>Discount</th>
                                         <th scope="col">Date</th>
                                         <th scope="col">Action</th>
                                         
@@ -70,32 +88,50 @@
                                 </thead>
                                 <tbody class="inventory-iems-body" id="inventory-iems-body">
                                     @php
-                                        $count = 1
+                                        $count = 1;
+                                        $p_total = 0;
+                                        $discount_total=0;
                                     @endphp
                                     @foreach ($purchases as $pur)
 
                                     <tr>
                                         <td>{{$count}}</td>
                                         <td>{{$pur->purchase_no}}</td>
+                                        <td>{{$pur->investor->investor_name}}</td>
                                         <td>{{$pur->psupplier->name}}</td>
                                         <td>{{$pur->total}}</td>
+                                        @php
+                                            $td = $pur->purchaseItems->sum('trade_discount');
+                                        @endphp
+                                        <td>{{$td}}</td>
                                         <td>{{$pur->purchase_date}}</td>
                                         <td><a style="text-decoration: none;color:black" href="{{route('purchase.show',$pur->id)}}"><i data-feather='eye'></i></a></td>
                                        
                                       
                                     </tr>
                                     @php
-                                        $count = $count+1
+                                        $count = $count+1;
+                                        $p_total+=$pur->total;
+                                        $discount_total+=$td;
                                     @endphp
 
                                     @endforeach
                                  
-                            
                                 </tbody>
                             </table>
-                            {{$purchases->links()}}
+                            <div class="mt-4">
+                                
+                            </div>
+                           
                             @endif
                         </div>
+
+                        <div class="mt-4">
+                                <p>purchase total : {{$p_total}}</p>
+                                <p>discount total : {{$discount_total}}   </p>
+                                                                
+                            </div>
+                          
                     </div>
                 </div>
             </div>

@@ -277,22 +277,47 @@ class PurchaseController extends Controller
 
 
         $investors = Investor::all();
+        $suppliers = Supplier::all();
       
-        return view('purchase.purchases-list',compact('investors'));
+        return view('purchase.purchases-list',compact('investors','suppliers'));
 
     }
     public function showPurchasesPost(Request $request){
 
-        $purchases = Purchase::showPurchases($request->from_date, $request->to_date, $request->investor_id)->paginate(20);
-        $purchases->appends([
-            'from_date' => $request->from_date,
-            'to_date' => $request->to_date,
-            'investor_id' => $request->investor_id,
+        $purchases = Purchase::showPurchases($request->from_date, $request->to_date, $request->investor_id,$request->supplier_id)->get();
+        // ->paginate(2);
+        // $purchases->appends([
+        //     'from_date' => $request->from_date,
+        //     'to_date' => $request->to_date,
+        //     'investor_id' => $request->investor_id,
+        //     'supplier_id'=>$request->supplier_id
            
-        ]);
-
+        // ]);
+        
+    
         $investors = Investor::all();
-        return view('purchase.purchases-list',compact('purchases','investors'));
+        $suppliers = Supplier::all();
+        $from_date = $request->from_date;
+        $to_date = $request->to_date;
+
+        $purchae_total = $purchases->sum('total');
+        // $totalDiscount = $purchases->whereHas('')
+
+        if ($request->input('action') == "report") {
+
+            return view('purchase.purchases-list',compact('purchases','investors','suppliers','from_date','to_date'));
+        }else if ($request->input('action') == "pdf"){
+            
+            return view('purchase.purchase_reports',compact('purchases','investors','suppliers','from_date','to_date'));
+
+        }
+     
+
+        // $investors = Investor::all();
+        // $suppliers = Supplier::all();
+        // $from_date = $request->from_date;
+        // $to_date = $request->to_date;
+        return view('purchase.purchases-list',compact('purchases','investors','suppliers','from_date','to_date'));
 
     }
     

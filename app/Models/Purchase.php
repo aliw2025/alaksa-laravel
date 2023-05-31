@@ -58,13 +58,23 @@ class Purchase extends Model
         return $this->belongsTo(Supplier::class,'supplier');
     }
     
-    public function scopeShowPurchases($query,$from_date,$to_date,$investor_id)
+    public function scopeShowPurchases($query,$from_date,$to_date,$investor_id,$supplier_id)
     {   
-        
-        return $query->whereBetween('purchase_date',[$from_date,$to_date])->where('investor_id',$investor_id);
-
-        
+        if(isset($investor_id)){
+            if(isset($supplier_id)){
+                return $query->whereBetween('purchase_date',[$from_date,$to_date])->where('investor_id',$investor_id)->where('supplier',$supplier_id);
+            }else{
+                return $query->whereBetween('purchase_date',[$from_date,$to_date])->where('investor_id',$investor_id);
+            }
+        }else{
+            if(isset($supplier_id)){
+                return $query->whereBetween('purchase_date',[$from_date,$to_date])->where('supplier',$supplier_id);
+            }else{
+                return $query->whereBetween('purchase_date',[$from_date,$to_date]);
+            }
+        }   
     }
+    
     public function transaction_status(){
         
         return $this->belongsTo(TransactionStatus::class,'status');
