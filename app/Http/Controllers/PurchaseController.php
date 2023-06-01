@@ -12,6 +12,7 @@ use App\Models\Item;
 use App\Models\PurchaseItem;
 use App\Models\Payable;
 use App\Models\Supplier;
+use App\Models\TransactionStatus;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -275,16 +276,16 @@ class PurchaseController extends Controller
 
     public function showPurchases(Request $request){
 
-
+        $statuses = TransactionStatus::all();
         $investors = Investor::all();
         $suppliers = Supplier::all();
       
-        return view('purchase.purchases-list',compact('investors','suppliers'));
+        return view('purchase.purchases-list',compact('investors','suppliers','statuses'));
 
     }
     public function showPurchasesPost(Request $request){
 
-        $purchases = Purchase::showPurchases($request->from_date, $request->to_date, $request->investor_id,$request->supplier_id)->get();
+        $purchases = Purchase::showPurchases($request->from_date, $request->to_date, $request->investor_id,$request->supplier_id,$request->status_id)->get();
         // ->paginate(2);
         // $purchases->appends([
         //     'from_date' => $request->from_date,
@@ -297,18 +298,24 @@ class PurchaseController extends Controller
     
         $investors = Investor::all();
         $suppliers = Supplier::all();
+        $statuses = TransactionStatus::all();
+
         $from_date = $request->from_date;
         $to_date = $request->to_date;
 
         $purchae_total = $purchases->sum('total');
+        // // $totalDiscount = Purchase::with(['purchaseItems'function($query){
+        // //     // $query->sum('trade_discount');
+        // //     $query->selectRaw('sum(trade_discount) as value, purchase_id')->groupBy('purchase_id');
+        // //     // $query->groupBy('purchase_id')->sum('trade_discount');
+        // // })->get();
+        // return ($totalDiscount);
+
         // $totalDiscount = $purchases->whereHas('')
-
-        if ($request->input('action') == "report") {
-
-            return view('purchase.purchases-list',compact('purchases','investors','suppliers','from_date','to_date'));
-        }else if ($request->input('action') == "pdf"){
+        
+        if ($request->input('action') == "pdf"){
             
-            return view('purchase.purchase_reports',compact('purchases','investors','suppliers','from_date','to_date'));
+            return view('purchase.purchase_reports',compact('purchases','investors','suppliers','from_date','to_date','statuses'));
 
         }
      
@@ -317,7 +324,7 @@ class PurchaseController extends Controller
         // $suppliers = Supplier::all();
         // $from_date = $request->from_date;
         // $to_date = $request->to_date;
-        return view('purchase.purchases-list',compact('purchases','investors','suppliers','from_date','to_date'));
+        return view('purchase.purchases-list',compact('purchases','investors','suppliers','from_date','to_date','statuses'));
 
     }
     

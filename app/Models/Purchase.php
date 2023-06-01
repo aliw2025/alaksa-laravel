@@ -58,21 +58,36 @@ class Purchase extends Model
         return $this->belongsTo(Supplier::class,'supplier');
     }
     
-    public function scopeShowPurchases($query,$from_date,$to_date,$investor_id,$supplier_id)
+    public function scopeShowPurchases($query,$from_date,$to_date,$investor_id,$supplier_id,$status_id)
     {   
-        if(isset($investor_id)){
-            if(isset($supplier_id)){
-                return $query->whereBetween('purchase_date',[$from_date,$to_date])->where('investor_id',$investor_id)->where('supplier',$supplier_id);
-            }else{
-                return $query->whereBetween('purchase_date',[$from_date,$to_date])->where('investor_id',$investor_id);
-            }
-        }else{
-            if(isset($supplier_id)){
-                return $query->whereBetween('purchase_date',[$from_date,$to_date])->where('supplier',$supplier_id);
-            }else{
-                return $query->whereBetween('purchase_date',[$from_date,$to_date]);
-            }
-        }   
+        // if(isset($investor_id)){
+        //     if(isset($supplier_id)){
+        //         return $query->whereBetween('purchase_date',[$from_date,$to_date])->where('investor_id',$investor_id)->where('supplier',$supplier_id);
+        //     }else{
+        //         return $query->whereBetween('purchase_date',[$from_date,$to_date])->where('investor_id',$investor_id);
+        //     }
+        // }else{
+        //     if(isset($supplier_id)){
+        //         return $query->whereBetween('purchase_date',[$from_date,$to_date])->where('supplier',$supplier_id);
+        //     }else{
+        //         return $query->whereBetween('purchase_date',[$from_date,$to_date]);
+        //     }
+        // }   
+        // dd('dfdfdfsdsdsdsdsdsds');
+         $query->whereBetween('purchase_date',[$from_date,$to_date]);
+         if(isset($investor_id)){
+           
+           $query=$query->where('investor_id',$investor_id);
+         }
+         if(isset($supplier_id)){
+            $query=$query->where('supplier',$supplier_id);
+         }
+         if(isset($status_id)){
+            $query=$query->where('status',$status_id);
+         }
+
+         return $query;
+
     }
     
     public function transaction_status(){

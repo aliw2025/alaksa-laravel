@@ -45,6 +45,19 @@
                             </div>
                             <div class="col-2">
                                 <div class="">
+                                    <span class="title">status</span>
+                                    <select class="form-select" name="status_id" id="">
+                                    <option></option>   
+                                        @foreach($statuses as $st)
+                                        <option value="{{$st->id}}">{{$st->desc}}</option>
+                                        @endforeach
+                                       
+
+                                    </select>   
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <div class="">
                                     <span class="title">supplier</span>
                                     <select class="form-select" name="supplier_id" id="">
                                      <option></option>
@@ -126,11 +139,14 @@
                             @endif
                         </div>
 
+                        @if(isset($p_total)&& isset($discount_total))
                         <div class="mt-4">
+                                
                                 <p>purchase total : {{$p_total}}</p>
                                 <p>discount total : {{$discount_total}}   </p>
                                                                 
                             </div>
+                            @endif
                           
                     </div>
                 </div>
