@@ -93,6 +93,7 @@
                                         <th scope="col">Supplier</th>
                                         <th>Total</th>
                                         <th>Discount</th>
+                                        <th>Status</th>
                                         <th scope="col">Date</th>
                                         <th scope="col">Action</th>
                                         
@@ -117,6 +118,7 @@
                                             $td = $pur->purchaseItems->sum('trade_discount');
                                         @endphp
                                         <td>{{$td}}</td>
+                                        <td>{{$pur->transaction_status->desc}}</td>
                                         <td>{{$pur->purchase_date}}</td>
                                         <td><a style="text-decoration: none;color:black" href="{{route('purchase.show',$pur->id)}}"><i data-feather='eye'></i></a></td>
                                        

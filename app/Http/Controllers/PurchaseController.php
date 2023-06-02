@@ -15,6 +15,8 @@ use App\Models\Supplier;
 use App\Models\TransactionStatus;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+
 
 
 
@@ -286,6 +288,16 @@ class PurchaseController extends Controller
     public function showPurchasesPost(Request $request){
 
         $purchases = Purchase::showPurchases($request->from_date, $request->to_date, $request->investor_id,$request->supplier_id,$request->status_id)->get();
+
+        $p = DB::table('purchases')
+            ->join('purchase_items', 'purchases.id', '=', 'purchase_items.purchase_id')
+            // ->select('purchases.id', 'purchase_items.trade_discount')    
+            ->select( DB::raw('sum(purchase_items.trade_discount) as sum'))
+            // ->groupBy('purchases.id')
+            ->get();
+        return $p;
+        
+
         // ->paginate(2);
         // $purchases->appends([
         //     'from_date' => $request->from_date,
@@ -294,8 +306,7 @@ class PurchaseController extends Controller
         //     'supplier_id'=>$request->supplier_id
            
         // ]);
-        
-    
+       
         $investors = Investor::all();
         $suppliers = Supplier::all();
         $statuses = TransactionStatus::all();
@@ -304,6 +315,8 @@ class PurchaseController extends Controller
         $to_date = $request->to_date;
 
         $purchae_total = $purchases->sum('total');
+
+        
         // // $totalDiscount = Purchase::with(['purchaseItems'function($query){
         // //     // $query->sum('trade_discount');
         // //     $query->selectRaw('sum(trade_discount) as value, purchase_id')->groupBy('purchase_id');

@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
+
 
 class Purchase extends Model
 {
@@ -74,7 +76,10 @@ class Purchase extends Model
         //     }
         // }   
         // dd('dfdfdfsdsdsdsdsdsds');
-         $query->whereBetween('purchase_date',[$from_date,$to_date]);
+         $query->whereBetween('purchase_date',[$from_date,$to_date])->with(['PurchaseItems'=>function($query){
+            // 'purchase_id',->groupBy('purchase_id')
+            $query->sum(('trade_discount'));
+         }]);
          if(isset($investor_id)){
            
            $query=$query->where('investor_id',$investor_id);
