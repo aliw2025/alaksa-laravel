@@ -68,9 +68,10 @@
                                             <div style="width: 11.21rem; max-width:11.21rem; " class="align-items-center">
                                                 <select t @if(isset($purchase )) @if(!($purchase->status==1)) disabled @endif @endif id="supplier_id" name="supplier" class=" @error('supplier') is-invalid @enderror form-select" aria-label="Default select example">
                                                     @foreach ($suppliers as $sup)
-                                                    <option @if(isset($purchase)) @if($purchase->supplier_id==$sup->id) selected @endif @endif value="{{ $sup->id }}">{{ $sup->name }} </option>
+                                                    <option @if(isset($purchase)) @if($purchase->supplier==$sup->id) selected @endif @endif value="{{ $sup->id }}">{{ $sup->name }} </option>
                                                     @endforeach
                                                 </select>
+                                                
                                                 @error('supplier')
                                                 <div class="alert alert-danger">{{ $message }}</div>
                                                 @enderror

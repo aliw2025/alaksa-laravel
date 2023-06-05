@@ -103,8 +103,7 @@
                                 <tbody class="inventory-iems-body" id="inventory-iems-body">
                                     @php
                                         $count = 1;
-                                        $p_total = 0;
-                                        $discount_total=0;
+                                      
                                     @endphp
                                     @foreach ($purchases as $pur)
 
@@ -113,21 +112,21 @@
                                         <td>{{$pur->purchase_no}}</td>
                                         <td>{{$pur->investor->investor_name}}</td>
                                         <td>{{$pur->psupplier->name}}</td>
-                                        <td>{{$pur->total}}</td>
+                                        <td>{{ number_format( $pur->total)}}</td>
                                         @php
                                             $td = $pur->purchaseItems->sum('trade_discount');
                                         @endphp
-                                        <td>{{$td}}</td>
+                                        <td>{{ number_format($td )}}</td>
                                         <td>{{$pur->transaction_status->desc}}</td>
-                                        <td>{{$pur->purchase_date}}</td>
+                                        <td>{{date('d-m-Y', strtotime($pur->purchase_date))}}</td>
+                                       
                                         <td><a style="text-decoration: none;color:black" href="{{route('purchase.show',$pur->id)}}"><i data-feather='eye'></i></a></td>
                                        
                                       
                                     </tr>
                                     @php
                                         $count = $count+1;
-                                        $p_total+=$pur->total;
-                                        $discount_total+=$td;
+                                        
                                     @endphp
 
                                     @endforeach
@@ -135,17 +134,22 @@
                                 </tbody>
                             </table>
                             <div class="mt-4">
-                                
+
+                            </div>
+                            
+                        <div class="mt-4">
+                                {{$purchases->links()}}
                             </div>
                            
                             @endif
                         </div>
 
-                        @if(isset($p_total)&& isset($discount_total))
+
+                        @if(isset($sum))
                         <div class="mt-4">
                                 
-                                <p>purchase total : {{$p_total}}</p>
-                                <p>discount total : {{$discount_total}}   </p>
+                                <p>purchase total : {{number_format( $sum[0]->total)}}</p>
+                                <p>discount total : {{ number_format( $sum[0]->discount)}} </p>
                                                                 
                             </div>
                             @endif

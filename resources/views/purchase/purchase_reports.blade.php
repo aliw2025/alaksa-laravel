@@ -57,6 +57,7 @@
                     <th scope="col">Supplier</th>
                     <th>Total</th>
                     <th>Discount</th>
+                    <th>status</th>
                     <th scope="col">Date</th>
                    
                 </tr>
@@ -72,9 +73,10 @@
                 <td>{{$pur->purchase_no}}</td>
                 <td>{{$pur->investor->investor_name}}</td>
                 <td>{{$pur->psupplier->name}}</td>
-                <td>{{$pur->total}}</td>
-                <td>{{$pur->purchaseItems->sum('trade_discount')}}</td>
-                <td>{{$pur->purchase_date}}</td>
+                <td>{{ number_format( $pur->total)}}</td>
+                <td>{{ number_format( $pur->purchaseItems->sum('trade_discount'))}}</td>
+                <td>{{$pur->transaction_status->desc}}</td>
+                <td>{{date('d-m-Y', strtotime($pur->purchase_date))}}</td>
                 <td><a style="text-decoration: none;color:black" href="{{route('purchase.show',$pur->id)}}"><i data-feather='eye'></i></a></td>
             </tr>
             @php
@@ -82,6 +84,12 @@
             @endphp
 
             @endforeach
+            <tr>
+                <td colspan="4"></td>
+                <td> <span style="font-weight: bold;">Total Purchases :</span>  {{number_format( $sum[0]->total)}}</td>
+                <td> <span style="font-weight: bold;">Total Discount  :</span>  {{number_format( $sum[0]->discount)}}</td>
+
+            </tr>
             
     
         </tbody>

@@ -285,60 +285,54 @@ class PurchaseController extends Controller
         return view('purchase.purchases-list',compact('investors','suppliers','statuses'));
 
     }
+
     public function showPurchasesPost(Request $request){
 
-        $purchases = Purchase::showPurchases($request->from_date, $request->to_date, $request->investor_id,$request->supplier_id,$request->status_id)->get();
-
-        $p = DB::table('purchases')
-            ->join('purchase_items', 'purchases.id', '=', 'purchase_items.purchase_id')
-            // ->select('purchases.id', 'purchase_items.trade_discount')    
-            ->select( DB::raw('sum(purchase_items.trade_discount) as sum'))
-            // ->groupBy('purchases.id')
-            ->get();
-        return $p;
+        $request->validate([
+            'from_date'=>'required',
+            'to_date'=>'required'   
+        ]);
         
+        $purchases = Purchase::showPurchases($request->from_date, $request->to_date, $request->investor_id,$request->supplier_id,$request->status_id);
 
-        // ->paginate(2);
-        // $purchases->appends([
-        //     'from_date' => $request->from_date,
-        //     'to_date' => $request->to_date,
-        //     'investor_id' => $request->investor_id,
-        //     'supplier_id'=>$request->supplier_id
-           
-        // ]);
-       
         $investors = Investor::all();
         $suppliers = Supplier::all();
         $statuses = TransactionStatus::all();
-
         $from_date = $request->from_date;
         $to_date = $request->to_date;
 
-        $purchae_total = $purchases->sum('total');
+       
 
-        
-        // // $totalDiscount = Purchase::with(['purchaseItems'function($query){
-        // //     // $query->sum('trade_discount');
-        // //     $query->selectRaw('sum(trade_discount) as value, purchase_id')->groupBy('purchase_id');
-        // //     // $query->groupBy('purchase_id')->sum('trade_discount');
-        // // })->get();
-        // return ($totalDiscount);
-
-        // $totalDiscount = $purchases->whereHas('')
-        
+        $sum = DB::table('purchases')
+            ->join('purchase_items', 'purchases.id', '=', 'purchase_items.purchase_id')
+            ->select(DB::raw('sum(purchase_items.trade_discount) as discount'),DB::raw('sum(purchases.total) as total'))    
+            ->whereBetween('purchases.purchase_date',[$from_date,$to_date]);
+            if(isset($request->investor_id))
+            $sum = $sum->where('purchases.investor_id',$request->investor_id);
+            if(isset($request->supplier_id))
+            $sum = $sum->where('purchases.supplier_id',$request->supplier_id);
+            if(isset($request->status_id))
+            $sum = $sum->where('purchases.status',$request->status_id);
+            
+            $sum=$sum->get();
+                    
         if ($request->input('action') == "pdf"){
             
-            return view('purchase.purchase_reports',compact('purchases','investors','suppliers','from_date','to_date','statuses'));
+            $purchases = $purchases->get();
+            return view('purchase.purchase_reports',compact('purchases','investors','suppliers','from_date','to_date','statuses','sum'));
 
         }
-     
 
-        // $investors = Investor::all();
-        // $suppliers = Supplier::all();
-        // $from_date = $request->from_date;
-        // $to_date = $request->to_date;
-        return view('purchase.purchases-list',compact('purchases','investors','suppliers','from_date','to_date','statuses'));
-
+        $purchases = $purchases->paginate(10);
+        $purchases->appends([
+            'from_date' => $request->from_date,
+            'to_date' => $request->to_date,
+            'investor_id' => $request->investor_id,
+            'supplier_id'=>$request->supplier_id
+           
+        ]);
+        return view('purchase.purchases-list',compact('purchases','investors','suppliers','from_date','to_date','statuses','sum'));
+       
     }
     
 

@@ -22,7 +22,7 @@ class Supplier extends Model
    
 
     public function payments(){
-        return $this->hasMany(Payable::class,'supplier');
+        return $this->hasMany(SupplierPayment::class,'supplier_id');
     }
 
 
