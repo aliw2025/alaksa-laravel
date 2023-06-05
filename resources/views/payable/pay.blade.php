@@ -103,7 +103,7 @@
                                                 
                                                 <select name="supplier" class="@error('supplier') is-invalid @enderror form-select" aria-label="Default select example"  @if(isset($supplierPayment)) @if($supplierPayment->status!=1) disabled @endif @endif>
                                                     @foreach ($suppliers as $sup)
-                                                    <option @if(isset($supplierPayment)) @if($supplierPayment->supplier!=$sup->id) selected @endif @endif value="{{ $sup->id }}">{{ $sup->name }}</option>
+                                                    <option @if(isset($supplierPayment)) @if($supplierPayment->supplier_id==$sup->id) selected @endif @endif value="{{ $sup->id }}">{{ $sup->name }}</option>
                                                     @endforeach
                                                 </select>
                                                 @error('supplier')
