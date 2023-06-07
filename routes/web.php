@@ -414,6 +414,12 @@ Route::controller(SupplierPaymentController::class)->group(function () {
         Route::group(['middleware' => ['role_or_permission:admin|cancelsupplierpayment']], function () {
                 Route::get('/cancel-supplierPayment', 'cancelSupplierPayment')->name('cancel-supplierPayment');
         });
+
+        Route::get('/search-payables', 'searchPayables')->name('search-payables');
+        Route::get('/search-payables-post', 'searchPayablesPost')->name('search-payables-post');
+
+
+
 });
 
 // CommsissionController

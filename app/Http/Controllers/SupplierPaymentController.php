@@ -15,6 +15,7 @@ use App\Models\Investor;
 use App\Models\InvestorLeadger;
 use App\Models\Item;
 use App\Models\PurchaseItem;
+use App\Models\TransactionStatus;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -67,6 +68,58 @@ class SupplierPaymentController extends Controller
         $bank_acc = ChartOfAccount::where('account_type', '=', 1)->orWhere('account_type', '=', 4)->get();
 
         return view('payable.pay', compact('investors', 'suppliers','bank_acc'));
+
+    }
+
+    public function searchPayables(Request $request){
+
+
+        $statuses = TransactionStatus::all();
+        $investors = Investor::all();
+        $suppliers = Supplier::all();
+      
+       
+        return view('payable.search-payables',compact('investors','suppliers','statuses'));
+
+
+    }
+
+    //  search payables
+    public function searchPayablesPost(Request $request){
+
+        $request->validate([
+            'from_date'=>'required',
+            'to_date'=>'required'
+        ]);
+
+        $gl = GLeadger::whereBetween('date',[$request->from_date,$request->to_date])->wherehas('account',function($query){
+            $query->where('owner_type','like','%supplier%');
+        })->where('value','<',0);
+        if(isset($request->investor_id)){
+            $gl = $gl->where('investor_id',$request->investor_id);
+        }
+        if(isset($request->supplier_id)){
+            $gl = $gl->where('account_id',$request->supplier_id);
+        }
+        $sum = $gl->sum('value');
+        ;
+
+
+
+        $statuses =  TransactionStatus::all();
+        $investors = Investor::all();
+        $suppliers = Supplier::all();
+        $from_date  = $request->from_date;
+        $to_date = $request->to_date;
+        if ($request->input('action') == "pdf"){
+            
+            $gl = $gl->get();
+            return view('payable.search_payables_report',compact('investors','suppliers','statuses','gl',  'from_date','to_date','sum'));
+
+        }
+        $gl = $gl->paginate(25);
+
+        return view('payable.search-payables',compact('investors','suppliers','statuses','gl',  'from_date','to_date','sum'));
 
     }
 

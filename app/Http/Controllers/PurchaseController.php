@@ -323,7 +323,7 @@ class PurchaseController extends Controller
 
         }
 
-        $purchases = $purchases->paginate(10);
+        $purchases = $purchases->paginate(20);
         $purchases->appends([
             'from_date' => $request->from_date,
             'to_date' => $request->to_date,
