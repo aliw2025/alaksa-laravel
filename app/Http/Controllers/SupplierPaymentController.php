@@ -65,8 +65,11 @@ class SupplierPaymentController extends Controller
         $investors = Investor::all();
         $suppliers = Supplier::all();
         // $bank_acoounts = ChartOfAccount::whereHas(' ')
-        $bank_acc = ChartOfAccount::where('account_type', '=', 1)->orWhere('account_type', '=', 4)->get();
-
+        $bank_acc = ChartOfAccount::where('owner_type','App\Models\Investor')->where(
+            function($query) {
+              return 
+              $query->where('account_type', '=', 1)->orWhere('account_type', '=', 4);
+             })->get();
         return view('payable.pay', compact('investors', 'suppliers','bank_acc'));
 
     }
@@ -177,7 +180,11 @@ class SupplierPaymentController extends Controller
         $investors = Investor::all();
         $suppliers = Supplier::all();
         // $bank_acoounts = ChartOfAccount::whereHas(' ')
-        $bank_acc = ChartOfAccount::where('account_type', '=', 1)->orWhere('account_type', '=', 4)->get();
+        $bank_acc = ChartOfAccount::where('owner_type','App\Models\Investor')->where(
+            function($query) {
+              return 
+              $query->where('account_type', '=', 1)->orWhere('account_type', '=', 4);
+             })->get();
 
         return view('payable.pay', compact('investors', 'suppliers','bank_acc','supplierPayment'));
 
