@@ -10,7 +10,7 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <form class=""  method="GET" autocomplete="on" action="{{route('get-purchases-post')}}">
+                    <form class=""  method="GET" autocomplete="on" action="{{route('show-supplier-payments-post')}}">
                         @csrf
                         <div class="row d-flex align-items-center">
                             
@@ -83,7 +83,7 @@
                     <div class="row ">
                         
                         <div  class=" mt-2 col-12 table-responsive ">
-                            @if(isset($purchases))
+                            @if(isset($supplierPayments))
                             <table  class="table">
                                 <thead class="thead-dark">
                                     <tr style="background-color:red !important;">
@@ -105,7 +105,7 @@
                                         $count = 1;
                                       
                                     @endphp
-                                    @foreach ($purchases as $pur)
+                                    @foreach ($supplierPayments as $pur)
 
                                     <tr>
                                         <td>{{$count}}</td>

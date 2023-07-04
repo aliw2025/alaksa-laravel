@@ -34,4 +34,24 @@ class SupplierPayment extends Model
             'user_id'=>$user_id
         ]);
     }
+
+    public function scopeShowSupplierPayments($query,$from_date,$to_date,$investor_id,$supplier_id,$status_id)
+    {   
+     
+         $query->whereBetween('payment_date',[$from_date,$to_date]);
+    
+         if(isset($investor_id)){
+           
+           $query=$query->where('investor_id',$investor_id);
+         }
+         if(isset($supplier_id)){
+            $query=$query->where('supplier',$supplier_id);
+         }
+         if(isset($status_id)){
+            $query=$query->where('status',$status_id);
+         }
+
+         return $query;
+
+    }
 }

@@ -337,7 +337,46 @@ class SupplierPaymentController extends Controller
 
     public function showSupplierPaymentsPost(Request $request){
 
+        $request->validate([
+            'from_date'=>'required',
+            'to_date'=>'required'   
+        ]);
         
+        $supplierPayments = SupplierPayment::showSupplierPayments($request->from_date, $request->to_date, $request->investor_id,$request->supplier_id,$request->status_id);
+
+        $investors = Investor::all();
+        $suppliers = Supplier::all();
+        $statuses = TransactionStatus::all();
+        $from_date = $request->from_date;
+        $to_date = $request->to_date;
+
+       
+
+            $sum = SupplierPayment::whereBetween('payment_date',[$from_date,$to_date]);
+            if(isset($request->investor_id))
+            $sum = $sum->where('purchases.investor_id',$request->investor_id);
+            if(isset($request->supplier_id))
+            $sum = $sum->where('purchases.supplier_id',$request->supplier_id);
+            if(isset($request->status_id))
+            $sum = $sum->where('purchases.status',$request->status_id);
+            
+            $sum=$sum->sum('amount');
+                    
+        if ($request->input('action') == "pdf"){
+            
+            $supplierPayments = $supplierPayments->get();
+            return view('purchase.purchase_reports',compact('purchases','investors','suppliers','from_date','to_date','statuses','sum'));
+
+        }
+
+        $supplierPayments = $supplierPayments->paginate(20);
+        $supplierPayments->appends([
+            'from_date' => $request->from_date,
+            'to_date' => $request->to_date,
+            'investor_id' => $request->investor_id,
+            'supplier_id'=>$request->supplier_id
+           
+        ]);
        
     }
 
