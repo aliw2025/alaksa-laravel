@@ -418,6 +418,8 @@ Route::controller(SupplierPaymentController::class)->group(function () {
         Route::get('/search-payables', 'searchPayables')->name('search-payables');
         Route::get('/search-payables-post', 'searchPayablesPost')->name('search-payables-post');
 
+        Route::get('/show-supplier-payments', 'showSupplierPayments')->name('show-supplier-payments');
+        Route::get('/show-supplier-payments-post', 'showSupplierPaymentsPost')->name('show-supplier-payments-post');
 
 
 });

@@ -464,26 +464,11 @@
                             <i data-feather="circle"></i>
                             <span class=" menu-title text-truncate" data-i18n="comision"> search payables</span></a>
                     </li>
-                   
-                    <li class=" nav-item">
-                        <a class="d-flex align-items-center" href="#">
+                    <li class=" nav-item"><a href="{{ route('show-supplier-payments') }}" class="d-flex align-items-center">
                             <i data-feather="circle"></i>
-                            <span class="menu-title text-truncate" data-i18n="Dashboards">Investor Payables</span>
-                        </a>
-                        <ul class="menu-content">
-
-                            @foreach ($inv_sales as $investor)
-                                <li>
-                                    <a href="{{ route('get-payables', $investor->id) }}"
-                                        class="d-flex align-items-center ">
-                                        <i data-feather="circle"></i>
-                                        <span class="menu-item text-truncate"
-                                            data-i18n="eCommerce">{{ $investor->prefix }}</span>
-                                    </a>
-                                </li>
-                            @endforeach
-                        </ul>
+                            <span class=" menu-title text-truncate" data-i18n="comision">show Supplier Payments</span></a>
                     </li>
+                   
                 </ul>
             </li>
             <li class=" nav-item"><a class="d-flex align-items-center">

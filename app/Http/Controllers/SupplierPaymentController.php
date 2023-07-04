@@ -326,6 +326,20 @@ class SupplierPaymentController extends Controller
         return view('payable.pay',compact('supplierPayment','investors', 'suppliers','bank_acc'))->with('message','Record un posted');
 
     }
+    public function showSupplierPayments(Request $request){
+
+        $statuses = TransactionStatus::all();
+        $investors = Investor::all();
+        $suppliers = Supplier::all();
+      
+        return view('payable.supplier-payments',compact('investors','suppliers','statuses'));
+    }
+
+    public function showSupplierPaymentsPost(Request $request){
+
+        
+       
+    }
 
     /**
      * Remove the specified resource from storage.
