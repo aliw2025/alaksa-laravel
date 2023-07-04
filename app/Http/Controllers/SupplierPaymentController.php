@@ -354,11 +354,11 @@ class SupplierPaymentController extends Controller
 
             $sum = SupplierPayment::whereBetween('payment_date',[$from_date,$to_date]);
             if(isset($request->investor_id))
-            $sum = $sum->where('purchases.investor_id',$request->investor_id);
+            $sum = $sum->where('investor_id',$request->investor_id);
             if(isset($request->supplier_id))
-            $sum = $sum->where('purchases.supplier_id',$request->supplier_id);
+            $sum = $sum->where('supplier_id',$request->supplier_id);
             if(isset($request->status_id))
-            $sum = $sum->where('purchases.status',$request->status_id);
+            $sum = $sum->where('status',$request->status_id);
             
             $sum=$sum->sum('amount');
                     
@@ -378,6 +378,8 @@ class SupplierPaymentController extends Controller
            
         ]);
        
+        return view('payable.supplier-payments',compact('supplierPayments','investors','suppliers','from_date','to_date','statuses','sum'));
+
     }
 
     /**

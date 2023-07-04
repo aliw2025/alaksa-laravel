@@ -13,6 +13,17 @@ class SupplierPayment extends Model
             return $this->belongsTo(Investor::class,'investor_id');
     }
 
+   
+    
+    public function leadgerValue(){
+        return ($this->leadgerEntries());
+        return $this->leadgerEntries()->first()->get();
+    }
+    public function psupplier(){
+      
+        return $this->belongsTo(Supplier::class,'supplier_id');
+    }
+
     public function supplier_val()
     {       
         
@@ -34,7 +45,11 @@ class SupplierPayment extends Model
             'user_id'=>$user_id
         ]);
     }
-
+    public function transaction_status(){
+        
+        return $this->belongsTo(TransactionStatus::class,'status');
+ 
+    }
     public function scopeShowSupplierPayments($query,$from_date,$to_date,$investor_id,$supplier_id,$status_id)
     {   
      
@@ -45,7 +60,7 @@ class SupplierPayment extends Model
            $query=$query->where('investor_id',$investor_id);
          }
          if(isset($supplier_id)){
-            $query=$query->where('supplier',$supplier_id);
+            $query=$query->where('supplier_id',$supplier_id);
          }
          if(isset($status_id)){
             $query=$query->where('status',$status_id);

@@ -109,18 +109,16 @@
 
                                     <tr>
                                         <td>{{$count}}</td>
-                                        <td>{{$pur->purchase_no}}</td>
+                                        <td>{{$pur->payment_no}}</td>
                                         <td>{{$pur->investor->investor_name}}</td>
                                         <td>{{$pur->psupplier->name}}</td>
-                                        <td>{{ number_format( $pur->total)}}</td>
-                                        @php
-                                            $td = $pur->purchaseItems->sum('trade_discount');
-                                        @endphp
-                                        <td>{{ number_format($td )}}</td>
-                                        <td>{{$pur->transaction_status->desc}}</td>
-                                        <td>{{date('d-m-Y', strtotime($pur->purchase_date))}}</td>
+                                        <td>{{ number_format( $pur->amount)}}</td>
                                        
-                                        <td><a style="text-decoration: none;color:black" href="{{route('purchase.show',$pur->id)}}"><i data-feather='eye'></i></a></td>
+                                        <td> </td>
+                                        <td>{{$pur->transaction_status->desc}}</td>
+                                        <td>{{date('d-m-Y', strtotime($pur->payment_date))}}</td>
+                                       
+                                        <td><a style="text-decoration: none;color:black" href="{{route('supplierPayment.show',$pur->id)}}"><i data-feather='eye'></i></a></td>
                                        
                                       
                                     </tr>
@@ -138,7 +136,7 @@
                             </div>
                             
                         <div class="mt-4">
-                                {{$purchases->links()}}
+                                {{$supplierPayments->links()}}
                             </div>
                            
                             @endif
@@ -148,8 +146,7 @@
                         @if(isset($sum))
                         <div class="mt-4">
                                 
-                                <p>purchase total : {{number_format( $sum[0]->total)}}</p>
-                                <p>discount total : {{ number_format( $sum[0]->discount)}} </p>
+                                <p>purchase total : {{number_format( $sum)}}</p>
                                                                 
                             </div>
                             @endif
