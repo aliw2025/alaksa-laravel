@@ -205,13 +205,8 @@ class PurchaseController extends Controller
         /******************** Leadger Entries ******************/
         $purchase->createLeadgerEntry(3,$request->total_amount,$investor->id,$purchase->purchase_date,$user->id); 
         $purchase->createLeadgerEntry($sup_acc_id,-$request->total_amount,$investor->id,$purchase->purchase_date,$user->id); 
-
-        
-        $investors = Investor::all();
-        $suppliers = Supplier::all();
-        $type = $purchase->type;
-        // return $purchase->purchaseItems;
-        return view('purchase.purchase',compact('purchase','investors','suppliers','type'))->with('message','Purchase Posted');
+       
+        return redirect()->back()->with('message','Purchase Posted');
     
     }
     
@@ -258,11 +253,8 @@ class PurchaseController extends Controller
         
         $purchase->leadgerEntries()->delete();
         
-        $investors = Investor::all();
-        $suppliers = Supplier::all();
-        $type = $purchase->type;
-        // return $purchase->purchaseItems;
-        return view('purchase.purchase',compact('purchase','investors','suppliers','type'))->with('message','Purchase Un Posted');
+        return redirect()->back()->with('message','Purchase Un Posted');
+
     
     }
     
@@ -443,13 +435,10 @@ class PurchaseController extends Controller
             $purchase_item->save();
 
         }   
-        $investors = Investor::all();
-        $suppliers = Supplier::all();
-        $type = $purchase->type;
-        // return $purchase->purchaseItems;
-        return view('purchase.purchase',compact('purchase','investors','suppliers','type'))->with('message','Record saved');
+       
 
-        // return redirect()->route('purchase.show',$purchase)->with('message','Record saved');
+        return redirect()->back()->with('message','Record saved');
+
     }
 
     /**
@@ -472,7 +461,7 @@ class PurchaseController extends Controller
         $purchase->status = 2;
         $purchase->save();
 
-        return redirect()->route('purchase.show', $purchase->id);
+        return redirect()->back()->with('message','Puchase Cancelled');
         
     }
 }

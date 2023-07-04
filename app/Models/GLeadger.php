@@ -30,6 +30,7 @@ class GLeadger extends Model
     {
         return $this->belongsTo(investor::class,'investor_id');
     }
+  
     
     public function transaction()
     {

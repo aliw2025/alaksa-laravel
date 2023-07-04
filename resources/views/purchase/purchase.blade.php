@@ -25,13 +25,13 @@
                                     </div>
                                     <div class="mt-2">
                                         <h4 style="text-decoration: underline">{{ $type == 1 ? 'Purchase' : 'Purchase Return' }}</h4>
-                                            @if(isset($purchase))
-                                                @if(($purchase->status==2))
-                                                <h4 style="color:red">Cancelled</h4>
-                                                @elseif(($purchase->status==3))
-                                                <h4 style="color:green">Posted</h4>
-                                                @endif
-                                            @endif
+                                        @if(isset($purchase))
+                                        @if(($purchase->status==2))
+                                        <h4 style="color:red">Cancelled</h4>
+                                        @elseif(($purchase->status==3))
+                                        <h4 style="color:green">Posted</h4>
+                                        @endif
+                                        @endif
 
                                     </div>
                                     <div class="invoice-number-date mt-md-0 mt-2">
@@ -48,7 +48,7 @@
                                             <span class="title">Date:</span>
                                             <input type="date" name="purchase_date" class="invoice-edit-input form-control" value="{{ isset($purchase)? $purchase->purchase_date: now()->format('Y-m-d')}}" @if(isset($purchase )) @if(!($purchase->status==1)) disabled @endif @endif>
                                             @error('purchase_date')
-                                                <div class="alert alert-danger">{{$message}}</div>
+                                            <div class="alert alert-danger">{{$message}}</div>
                                             @enderror
                                         </div>
                                         <div class="d-flex align-items-center justify-content-between">
@@ -71,7 +71,7 @@
                                                     <option @if(isset($purchase)) @if($purchase->supplier==$sup->id) selected @endif @endif value="{{ $sup->id }}">{{ $sup->name }} </option>
                                                     @endforeach
                                                 </select>
-                                                
+
                                                 @error('supplier')
                                                 <div class="alert alert-danger">{{ $message }}</div>
                                                 @enderror
@@ -82,7 +82,7 @@
                             </div>
                             <!-- Header ends -->
                             <hr class="invoice-spacing">
-                                <!-- @If(isset($message))
+                            <!-- @If(isset($message))
                                     <div class="alert alert-success">
                                         {{$message}}
                                     </div>
@@ -138,7 +138,7 @@
                                                         </div>
                                                         <div class="col-lg-2 col-12 my-lg-0 my-2">
                                                             <p class="card-text col-title mb-md-2 mb-0">cost</p>
-                                                            <input value="{{$pitem->unit_cost}}" onkeyup="calRowTotal({{$row_count}})" id="cost{{$row_count}}" name="cost[]" class="number-separator form-control" value="" placeholder=""  @if(!($purchase->status==1)) disabled @endif>
+                                                            <input value="{{$pitem->unit_cost}}" onkeyup="calRowTotal({{$row_count}})" id="cost{{$row_count}}" name="cost[]" class="number-separator form-control" value="" placeholder="" @if(!($purchase->status==1)) disabled @endif>
                                                         </div>
                                                         @if($type==2)
                                                         <div class="col-lg-2 col-12 my-lg-0 my-2">
@@ -176,7 +176,7 @@
                                                             <div class="dropdown-menu dropdown-menu-end item-options-menu p-50" aria-labelledby="dropdownMenuButton">
                                                                 <div class="mb-1">
                                                                     <label for="discount-input" class="form-label">Discount</label>
-                                                                    <input  value="{{$pitem->trade_discount}}" name="trade_discount[]" type="number" class="form-control" id="discount-input" value="0">
+                                                                    <input value="{{$pitem->trade_discount}}" name="trade_discount[]" type="number" class="form-control" id="discount-input" value="0">
                                                                 </div>
                                                                 <div class="form-row mt-50"></div>
                                                                 <div class="dropdown-divider my-1"></div>
@@ -250,18 +250,18 @@
                             <div class="row p-2">
                                 <div class="col-12">
                                     @if (isset($purchase))
-                                        @if ($purchase->status == 1)
-                                        <div class="d-flex justify-content-end">
-                                            <button type="submit" name="action" value="post" class="btn btn-success me-2">Post</button>
-                                            <button type="submit" name="action" value="cancel" class="btn btn-danger me-2">Cancel</button>
-                                            <button type="submit" name="action" value="save" class="btn btn-primary me-2">Save</button>
-                                        </div>
-                                        @elseif($purchase->status == 3)
-                                        <div class="d-flex justify-content-end">
-                                            <button type="submit" name="action" value="unpost" class="btn btn-danger me-2">Un Post</button>
-                                        </div>
-                                        @endif
-            
+                                    @if ($purchase->status == 1)
+                                    <div class="d-flex justify-content-end">
+                                        <button type="submit" name="action" value="post" class="btn btn-success me-2">Post</button>
+                                        <button type="submit" name="action" value="cancel" class="btn btn-danger me-2">Cancel</button>
+                                        <button type="submit" name="action" value="save" class="btn btn-primary me-2">Save</button>
+                                    </div>
+                                    @elseif($purchase->status == 3)
+                                    <div class="d-flex justify-content-end">
+                                        <button type="submit" name="action" value="unpost" class="btn btn-danger me-2">Un Post</button>
+                                    </div>
+                                    @endif
+
                                     @else
                                     <div class="d-flex justify-content-end">
                                         <button type="submit" class="btn btn-primary me-2">Save</button>
@@ -284,22 +284,23 @@
 <script src="{{ url('/resources/js/scripts/pages/app-invoice.min.js') }}"></script>
 {{-- <script src="http://localhost/cssd/resources/vendors/js/extensions/toastr.min.js"></script> --}}
 
+
+@if(Session::has('message'))
+<script>
+    $(document).ready(function() {
+        toastr.success("{{Session::get('message')}}", "Success!", {
+            closeButton: !0,
+            tapToDismiss: !1,
+            rtl: false
+        });
+    });
+</script>
+@endif
+
 <script>
     var rowId = 0;
     $(document).ready(function() {
-        console.log('outside');
-        @if(isset($message))
-            console.log('here');
-            toastr.success(
-                "{{$message}}",
-                "Success!", {
-                    closeButton: !0,
-                    tapToDismiss: !1,
-                    rtl: false
-                }
-            );
-            @endif
-        // $("span.numbers").digits();
+
         $('.select2-selection__arrow').hide();
     });
 
