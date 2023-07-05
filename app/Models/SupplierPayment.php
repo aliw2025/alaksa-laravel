@@ -8,13 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class SupplierPayment extends Model
 {
     use HasFactory;
+    
     public function investor()
     {
             return $this->belongsTo(Investor::class,'investor_id');
     }
 
-   
-    
     public function leadgerValue(){
         return ($this->leadgerEntries());
         return $this->leadgerEntries()->first()->get();

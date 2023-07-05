@@ -217,23 +217,22 @@
 <script src="{{ url('/resources/vendors/js/forms/select/select2.full.min.js') }}"></script>
 <script src="{{ url('/resources/js/scripts/forms/form-select2.min.js') }}"></script>
 <script src="{{ url('/resources/js/scripts/pages/app-invoice.min.js') }}"></script>
-
+@if(Session::has('message'))
+<script>
+    $(document).ready(function() {
+        toastr.success("{{Session::get('message')}}", "Success!", {
+            closeButton: !0,
+            tapToDismiss: !1,
+            rtl: false
+        });
+    });
+</script>
+@endif
 <script>
     var rowId = 0;
     $(document).ready(function() {
 
-        console.log('outside');
-        @if(isset($message))
-            console.log('here');
-            toastr.success(
-                "{{$message}}",
-                "Success!", {
-                    closeButton: !0,
-                    tapToDismiss: !1,
-                    rtl: false
-                }
-            );
-            @endif
+        
         $('.select2-selection__arrow').hide();
         var headId = $('#head_id').val();
         getSubHeads(headId);

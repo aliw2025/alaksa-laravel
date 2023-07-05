@@ -29,30 +29,26 @@ class SupplierPaymentController extends Controller
      */
     public function index()
     {
-        //
-        // $supplierPayments = SupplierPayment::all();
-        // return view('payable.payables', compact('supplierPayments'));
+      
     }
 
     public function payablesRepTem($id){
         
-
         $leadger = GLeadger::where('investor_id',$id)->whereHas('account',function ($query)  {
             $query->where('account_type',7);
         })->orderBy('account_id')->get()  ;
         $total = $leadger->sum('value');
-
-        // where('transaction_type','like',"%purchase%")
         return  view('payable.payables2', compact('leadger','total'));
     }
 
+
     public function getPayables($id)
     {
-        // dd('sdsd');
         $suppliers = Supplier::whereIn('id', Purchase::select('supplier')->distinct()->pluck('supplier'))->get();
         return view('payable.payables', compact('suppliers', 'id'));
         
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -61,10 +57,9 @@ class SupplierPaymentController extends Controller
      */
     public function create()
     {
-        //
+        
         $investors = Investor::all();
         $suppliers = Supplier::all();
-        // $bank_acoounts = ChartOfAccount::whereHas(' ')
         $bank_acc = ChartOfAccount::where('owner_type','App\Models\Investor')->where(
             function($query) {
               return 
@@ -74,57 +69,7 @@ class SupplierPaymentController extends Controller
 
     }
 
-    public function searchPayables(Request $request){
-
-
-        $statuses = TransactionStatus::all();
-        $investors = Investor::all();
-        $suppliers = Supplier::all();
-      
-       
-        return view('payable.search-payables',compact('investors','suppliers','statuses'));
-
-
-    }
-
-    //  search payables
-    public function searchPayablesPost(Request $request){
-
-        $request->validate([
-            'from_date'=>'required',
-            'to_date'=>'required'
-        ]);
-
-        $gl = GLeadger::whereBetween('date',[$request->from_date,$request->to_date])->wherehas('account',function($query){
-            $query->where('owner_type','like','%supplier%');
-        })->where('value','<',0);
-        if(isset($request->investor_id)){
-            $gl = $gl->where('investor_id',$request->investor_id);
-        }
-        if(isset($request->supplier_id)){
-            $gl = $gl->where('account_id',$request->supplier_id);
-        }
-        $sum = $gl->sum('value');
-        ;
-
-
-
-        $statuses =  TransactionStatus::all();
-        $investors = Investor::all();
-        $suppliers = Supplier::all();
-        $from_date  = $request->from_date;
-        $to_date = $request->to_date;
-        if ($request->input('action') == "pdf"){
-            
-            $gl = $gl->get();
-            return view('payable.search_payables_report',compact('investors','suppliers','statuses','gl',  'from_date','to_date','sum'));
-
-        }
-        $gl = $gl->paginate(25);
-
-        return view('payable.search-payables',compact('investors','suppliers','statuses','gl',  'from_date','to_date','sum'));
-
-    }
+    
 
     /**
      * Store a newly created resource in storage.
@@ -158,12 +103,7 @@ class SupplierPaymentController extends Controller
         $supplierPayment->account_id = $request->acc_type;
         $supplierPayment->save();
 
-       
-        $investors = Investor::all();
-        $suppliers = Supplier::all();
-        // $bank_acoounts = ChartOfAccount::whereHas(' ')
-        $bank_acc = ChartOfAccount::where('account_type', '=', 1)->orWhere('account_type', '=', 4)->get();
-        return view('payable.pay',compact('supplierPayment','investors', 'suppliers','bank_acc'))->with('message','Record saved');
+        return redirect()->route('supplierPayment.show')->with('message','Record saved');
 
     }
 
@@ -176,10 +116,9 @@ class SupplierPaymentController extends Controller
      */
     public function show(SupplierPayment $supplierPayment)
     {
-        //
+    
         $investors = Investor::all();
         $suppliers = Supplier::all();
-        // $bank_acoounts = ChartOfAccount::whereHas(' ')
         $bank_acc = ChartOfAccount::where('owner_type','App\Models\Investor')->where(
             function($query) {
               return 
@@ -252,15 +191,57 @@ class SupplierPaymentController extends Controller
         $supplierPayment->account_id = $request->acc_type;
         $supplierPayment->save();
 
+        return redirect()->back()->with('message','Record Saved');
 
+    }
+
+    public function searchPayables(Request $request){
+
+
+        $statuses = TransactionStatus::all();
         $investors = Investor::all();
-        $suppliers = Supplier::all();
-        // $bank_acoounts = ChartOfAccount::whereHas(' ')
-        $bank_acc = ChartOfAccount::where('account_type', '=', 1)->orWhere('account_type', '=', 4)->get();
-        return view('payable.pay',compact('supplierPayment','investors', 'suppliers','bank_acc'))->with('message','Record saved');
+        $suppliers = Supplier::all(); 
+        return view('payable.search-payables',compact('investors','suppliers','statuses'));
 
 
     }
+
+    //  search payables
+    public function searchPayablesPost(Request $request){
+
+        $request->validate([
+            'from_date'=>'required',
+            'to_date'=>'required'
+        ]);
+
+        $gl = GLeadger::whereBetween('date',[$request->from_date,$request->to_date])->wherehas('account',function($query){
+            $query->where('owner_type','like','%supplier%');
+        })->where('value','<',0);
+        if(isset($request->investor_id)){
+            $gl = $gl->where('investor_id',$request->investor_id);
+        }
+        if(isset($request->supplier_id)){
+            $gl = $gl->where('account_id',$request->supplier_id);
+        }
+        $sum = $gl->sum('value');
+        
+        $statuses =  TransactionStatus::all();
+        $investors = Investor::all();
+        $suppliers = Supplier::all();
+        $from_date  = $request->from_date;
+        $to_date = $request->to_date;
+        if ($request->input('action') == "pdf"){
+            
+            $gl = $gl->get();
+            return view('payable.search_payables_report',compact('investors','suppliers','statuses','gl',  'from_date','to_date','sum'));
+
+        }
+        $gl = $gl->paginate(25);
+
+        return view('payable.search-payables',compact('investors','suppliers','statuses','gl',  'from_date','to_date','sum'));
+
+    }
+
     public function cancelSupplierPayment(Request $request){
 
         $supplierPayment = SupplierPayment::find($request->supplierPayment_id);
@@ -270,8 +251,9 @@ class SupplierPaymentController extends Controller
         $supplierPayment->status = 2;
         $supplierPayment->save();
 
-        return redirect()->route('supplierPayment.show', $supplierPayment->id);
+        return redirect()->back()->with('message','Record Cancelled');
     }
+
     public function postsupplierPayment(Request $request)
     {
         
@@ -294,21 +276,14 @@ class SupplierPaymentController extends Controller
         $supplierPayment->createLeadgerEntry($sup_acc_id,str_replace(',','',$request->amount),$supplierPayment->investor_id,$request->payment_date,$user->id);
         $supplierPayment->createLeadgerEntry($request->acc_type,-str_replace(',','',$request->amount),$supplierPayment->investor_id,$request->payment_date,$user->id);
 
-        // return redirect()->back();
+        
+       
 
-
-        $investors = Investor::all();
-        $suppliers = Supplier::all();
-        // $bank_acoounts = ChartOfAccount::whereHas(' ')
-        $bank_acc = ChartOfAccount::where('account_type', '=', 1)->orWhere('account_type', '=', 4)->get();
-
-        return view('payable.pay',compact('supplierPayment','investors', 'suppliers','bank_acc'))->with('message','Record posted');
-
+        return redirect()->back()->with('message','Record Posted');
     }
+
     public function UnpostSupplierPayment(Request $request)
     {
-        
-        
         $supplierPayment = SupplierPayment::find($request->supplierPayment_id);
         if ($supplierPayment->status != 3) {
             return "only posted supplierPayment can be unposted";
@@ -318,14 +293,10 @@ class SupplierPaymentController extends Controller
         $supplierPayment->save();
         $supplierPayment->leadgerEntries()->delete();
 
-        
-        $investors = Investor::all();
-        $suppliers = Supplier::all();
-        // $bank_acoounts = ChartOfAccount::whereHas(' ')
-        $bank_acc = ChartOfAccount::where('account_type', '=', 1)->orWhere('account_type', '=', 4)->get();
-        return view('payable.pay',compact('supplierPayment','investors', 'suppliers','bank_acc'))->with('message','Record un posted');
-
+       
+        return redirect()->back()->with('message','Record Un Posted');
     }
+
     public function showSupplierPayments(Request $request){
 
         $statuses = TransactionStatus::all();

@@ -38,11 +38,14 @@ class ExpenseController extends Controller
         $investors = Investor::all();
         $heads  = ExpenseHead::all();
         $sheads = SubExpenseHead::all();
-        // $bank_acc = ChartOfAccount::where(function ($query) {
-        //     $query->where('account_type', '=', 1)->orWhere('account_type', '=', 4);})->get();
-        $bank_acc = ChartOfAccount::where('account_type', '=', 1)->orWhere('account_type', '=', 4)->get();
-        // dd($bank_acc);   
-        return view('expenses.expense',compact('investors','bank_acc','heads','sheads'));
+
+        $bank_acc = ChartOfAccount::where('owner_type', 'App\Models\Investor')->where(
+            function ($query) {
+                return
+                    $query->where('account_type', '=', 1)->orWhere('account_type', '=', 4);
+            }
+        )->get();
+        return view('expenses.expense', compact('investors', 'bank_acc', 'heads', 'sheads'));
     }
 
     /**
@@ -54,13 +57,13 @@ class ExpenseController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'amount'=>'required',
-            'description'=>'required',
-            'date'=>'required'
+            'amount' => 'required',
+            'description' => 'required',
+            'date' => 'required'
         ]);
         $expense = new Expense();
         $expense->description = $request->description;
-        $expense->amount = str_replace(',','',$request->amount);
+        $expense->amount = str_replace(',', '', $request->amount);
         $expense->date = $request->date;
         $expense->investor_id = $request->investor_id;
         $expense->head_id = $request->head_id;
@@ -68,39 +71,30 @@ class ExpenseController extends Controller
         $expense->status = 1;
         $expense->account_id = $request->acc_type;
         $expense->save();
-        // $user = Auth::user();
-        // $expense->createLeadgerEntry($request->acc_type,$expense->amount,$request->investor_id,$request->date,$user->id);
-        // $expense->createLeadgerEntry(8,-$expense->amount,$request->investor_id,$request->date,$user->id);
-        $investors = Investor::all();
-        $heads  = ExpenseHead::all();
-        $sheads = SubExpenseHead::all();
-        $bank_acc = ChartOfAccount::where('account_type', '=', 1)->orWhere('account_type', '=', 4)->get();
-        return view('expenses.expense',compact('investors','bank_acc','heads','sheads','expense'))->with('message','Record Saved');
-
+        return redirect()->route('expense.show', $expense)->with('message', 'Record Saved');
     }
 
-    public function showExpenses(Request $request){
-        
+    public function showExpenses(Request $request)
+    {
+
         $investors = Investor::all();
-        
-        return view('expenses.expenses_all',compact('investors'));
+
+        return view('expenses.expenses_all', compact('investors'));
     }
 
 
-    public function showExpensesPost(Request $request){
+    public function showExpensesPost(Request $request)
+    {
 
         $investors = Investor::all();
-        
+
         $expenses = Expense::ShowExpenses($request->from_date, $request->to_date, $request->investor_id)->paginate(25);
-        $bank_acc = ChartOfAccount::where('account_type', '=', 1)->orWhere('account_type', '=', 4)->get();
         $expenses->appends([
             'from_date' => $request->from_date,
             'to_date' => $request->to_date,
             'investor_id' => $request->investor_id,
-           
         ]);
-        // return $expenses;
-        return view('expenses.expenses_all',compact('expenses','investors','bank_acc'));
+        return view('expenses.expenses_all', compact('expenses', 'investors'));
     }
 
     /**
@@ -111,12 +105,17 @@ class ExpenseController extends Controller
      */
     public function show(Expense $expense)
     {
-        //
+
         $investors = Investor::all();
         $heads  = ExpenseHead::all();
         $sheads = SubExpenseHead::all();
-        $bank_acc = ChartOfAccount::where('account_type', '=', 1)->orWhere('account_type', '=', 4)->get();
-        return view('expenses.expense',compact('investors','bank_acc','heads','sheads','expense'));
+        $bank_acc = ChartOfAccount::where('owner_type', 'App\Models\Investor')->where(
+            function ($query) {
+                return
+                    $query->where('account_type', '=', 1)->orWhere('account_type', '=', 4);
+            }
+        )->get();
+        return view('expenses.expense', compact('investors', 'bank_acc', 'heads', 'sheads', 'expense'));
     }
 
     /**
@@ -143,25 +142,23 @@ class ExpenseController extends Controller
         if ($request->input('action') == "post") {
 
             return redirect()->route('post-expense', $request->all());
-        
-        }else if ($request->input('action') == "unpost") {
-           
+        } else if ($request->input('action') == "unpost") {
+
             return redirect()->route('unpost-expense', $request->all());
-        }
-         else if ($request->input('action') == "cancel") {
-           
+        } else if ($request->input('action') == "cancel") {
+
             return redirect()->route('cancel-expense', $request->all());
         }
 
         $validated = $request->validate([
-            'amount'=>'required',
-            'description'=>'required',
-            'date'=>'required'
-            
+            'amount' => 'required',
+            'description' => 'required',
+            'date' => 'required'
+
         ]);
         $expense = Expense::find($request->expense_id);
         $expense->description = $request->description;
-        $expense->amount = str_replace(',','',$request->amount);
+        $expense->amount = str_replace(',', '', $request->amount);
         $expense->date = $request->date;
         $expense->investor_id = $request->investor_id;
         $expense->head_id = $request->head_id;
@@ -169,21 +166,14 @@ class ExpenseController extends Controller
         $expense->status = 1;
         $expense->account_id = $request->acc_type;
         $expense->save();
-        // $user = Auth::user();
-        // $expense->createLeadgerEntry($request->acc_type,$expense->amount,$request->investor_id,$request->date,$user->id);
-        // $expense->createLeadgerEntry(8,-$expense->amount,$request->investor_id,$request->date,$user->id);
-        $investors = Investor::all();
-        $heads  = ExpenseHead::all();
-        $sheads = SubExpenseHead::all();
-        $bank_acc = ChartOfAccount::where('account_type', '=', 1)->orWhere('account_type', '=', 4)->get();
-        return view('expenses.expense',compact('investors','bank_acc','heads','sheads','expense'))->with('message','Record Saved');
-        
 
+
+        return redirect()->back()->with('message', 'Record Saved');
     }
 
     public function postExpense(Request $request)
     {
-        
+
         $expense = Expense::find($request->expense_id);
         if ($expense->status == 3) {
             return "expense alreaddy postedd";
@@ -191,20 +181,13 @@ class ExpenseController extends Controller
         $user = Auth::user();
         $expense->status = 3;
         $expense->save();
-        $expense->createLeadgerEntry($request->acc_type,$expense->amount,$request->investor_id,$request->date,$user->id);
-        $expense->createLeadgerEntry(8,-$expense->amount,$request->investor_id,$request->date,$user->id);
-        $investors = Investor::all();
-        $heads  = ExpenseHead::all();
-        $sheads = SubExpenseHead::all();
-        $bank_acc = ChartOfAccount::where('account_type', '=', 1)->orWhere('account_type', '=', 4)->get();
-        return view('expenses.expense',compact('investors','bank_acc','heads','sheads','expense'))->with('message','Record Posted');
-
-
+        $expense->createLeadgerEntry($request->acc_type, $expense->amount, $request->investor_id, $request->date, $user->id);
+        $expense->createLeadgerEntry(8, -$expense->amount, $request->investor_id, $request->date, $user->id);
+        return redirect()->back()->with('message', 'Record Posted');
     }
+
     public function UnpostExpense(Request $request)
     {
-        
-        
         $expense = Expense::find($request->expense_id);
         if ($expense->status != 3) {
             return "only posted expense can be unposted";
@@ -213,18 +196,11 @@ class ExpenseController extends Controller
         $expense->status = 1;
         $expense->save();
         $expense->leadgerEntries()->delete();
-        
-        $investors = Investor::all();
-        $heads  = ExpenseHead::all();
-        $sheads = SubExpenseHead::all();
-        $bank_acc = ChartOfAccount::where('account_type', '=', 1)->orWhere('account_type', '=', 4)->get();
-        return view('expenses.expense',compact('investors','bank_acc','heads','sheads','expense'))->with('message','Record Un Posted');
-
-
+        return redirect()->back()->with('message', 'Record Un Posted');
     }
-    
+
     public function cancelExpense(Request $request)
-    {   
+    {
 
         $expense = Expense::find($request->expense_id);
         if ($expense->status != 1) {
@@ -232,8 +208,7 @@ class ExpenseController extends Controller
         }
         $expense->status = 2;
         $expense->save();
-
-        return redirect()->route('expense.show', $expense->id);
+        return redirect()->back()->with('message', 'Record Cancelled');
     }
 
     /**
