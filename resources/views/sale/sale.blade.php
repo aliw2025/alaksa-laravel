@@ -5,7 +5,6 @@
             @if($errors->any())
             {!! implode('', $errors->all('<div>:message</div>')) !!}
             @endif
-          
             <section class="invoice-add-wrapper">   
                 <div class="row invoice-add">
                     <!-- Invoice Add Left starts -->
@@ -33,8 +32,7 @@
 
                                             <div class="mt-2 d-flex align-items-center justify-content-between">
                                                 <span class="title me-1">Marketing Officer: </span>
-                                                {{-- if its new sale --}}
-                                                @if ($type == 1)
+                                                
                                                     <div style="width: 11.21rem; max-width:11.21rem;"
                                                         class="align-items-center">
                                                         <input
@@ -44,7 +42,7 @@
                                                         <input
                                                             @if (isset($sale)) value="{{ $sale->marketingOfficer->name }}" @endif
                                                             name="mar_of_name" onkeyup="getMUserByName()" id="mar_of_name"
-                                                            class="form-control" placeholder="Name" type="text">
+                                                            class="form-control" placeholder="Name" type="text" @if (isset($sale)) @if(($sale->status!=1)) disabled @endif @endif>
                                                         <div class="list-type" id="mar_list"
                                                             style="position: absolute; z-index: 1;" class="card mb-4">
                                                             <div id="mar_list_body" class="list-group">
@@ -52,16 +50,11 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                @else
-                                                    <input value="{{ $sale->marketingOfficer->name }}" id="mar_of_name"
-                                                        name="purchase_date" type="text"
-                                                        class="form-control invoice-edit-input" readonly="readonly">
-                                                @endif
 
                                             </div>
                                             <div class="mt-1 d-flex align-items-center justify-content-between">
                                                 <span class="title">Recovery Officer: </span>
-                                                @if ($type == 1)
+            
                                                     <div style="width: 11.21rem; max-width:11.21rem;"
                                                         class="align-items-center">
                                                         <input
@@ -71,7 +64,7 @@
                                                         <input
                                                             @if (isset($sale)) value="{{ $sale->recoveryOfficer->name }}" @endif
                                                             name="rec_of_name" onkeyup="getRUserByName()" id="rec_of_name"
-                                                            class="form-control" placeholder="Name" type="text">
+                                                            class="form-control" placeholder="Name" type="text" @if (isset($sale)) @if(($sale->status!=1)) disabled @endif @endif>
                                                         <div class="list-type" id="rec_list"
                                                             style="position: absolute; z-index: 1;" class="card mb-4">
                                                             <div id="rec_list_body" class="list-group">
@@ -79,16 +72,12 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                @else
-                                                    <input value="{{ $sale->recoveryOfficer->name }}" id="rec_of_name"
-                                                        name="purchase_date" type="text"
-                                                        class="form-control invoice-edit-input" readonly="readonly">
-                                                @endif
+                                              
 
                                             </div>
                                             <div class="mt-1 d-flex align-items-center justify-content-between">
                                                 <span class="title">Inquiry Officer: </span>
-                                                @if ($type == 1)
+                                                
                                                     <div style="width: 11.21rem; max-width:11.21rem;"
                                                         class="align-items-center">
                                                         <input
@@ -98,7 +87,7 @@
                                                         <input
                                                             @if (isset($sale)) value="{{ $sale->inquiryOfficer->name }}" @endif
                                                             name="inq_of_name" onkeyup="getInUserByName()" id="inq_of_name"
-                                                            class="form-control" placeholder="Name" type="text">
+                                                            class="form-control" placeholder="Name" type="text" @if (isset($sale)) @if(($sale->status!=1)) disabled @endif @endif>
                                                         <div class="list-type" id="inq_list"
                                                             style="position: absolute; z-index: 1;" class="card mb-4">
                                                             <div id="inq_list_body" class="list-group">
@@ -106,41 +95,20 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                @else
-                                                    <input id="rec_of_name" name="purchase_date" type="text"
-                                                        class="form-control invoice-edit-input" readonly="readonly">
-                                                @endif
-
                                             </div>
 
                                             <div class="d-flex align-items-center justify-content-between mt-1">
-                                                <span class="title">Sale Type:</span>
-                                                @if ($type == 1)
+                                                    <span class="title">Sale Type:</span>
                                                     <div style="width: 11.21rem; max-width:11.21rem; "
                                                         class="align-items-center">
 
-
                                                         <select id="sale_type" name="sale_type" class="form-select"
-                                                            aria-label="Default select example">
-                                                            @if (isset($sale))
-                                                                @if ($sale->payment_type == 1)
-                                                                    <option selected value="1">Instalments</option>
-                                                                    <option value="2">Cash</option>
-                                                                @else
-                                                                    <option value="1">Instalments</option>
-                                                                    <option selected value="2">Cash</option>
-                                                                @endif
-                                                            @else
-                                                                <option value="1">Instalments</option>
-                                                                <option value="2">Cash</option>
-                                                            @endif
+                                                            aria-label="Default select example" @if (isset($sale)) @if(($sale->status!=1)) disabled @endif @endif>                                                           
+                                                                    <option @if(isset($sale)) @if($sale->payment_type == 1) selected  @endif @endif value="1">Instalments</option>
+                                                                    <option @if(isset($sale)) @if($sale->payment_type == 2) selected  @endif @endif value="2">Cash</option>                               
                                                         </select>
                                                     </div>
-                                                @else
-                                                    <input value="{{ $sale->payment_type == 1 ? 'instaments' : 'Cash' }}"
-                                                        id="sale_type" name="sale_type" type="text"
-                                                        class="form-control invoice-edit-input" readonly="readonly">
-                                                @endif
+                                                
                                             </div>
                                         </div>
                                         <div class="mt-2">
