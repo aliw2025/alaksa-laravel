@@ -336,7 +336,7 @@ class SupplierPaymentController extends Controller
         if ($request->input('action') == "pdf"){
             
             $supplierPayments = $supplierPayments->get();
-            return view('purchase.purchase_reports',compact('purchases','investors','suppliers','from_date','to_date','statuses','sum'));
+            return view('payable.supplier_payment_report',compact('supplierPayments','investors','suppliers','from_date','to_date','statuses','sum'));
 
         }
 
