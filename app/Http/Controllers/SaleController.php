@@ -456,6 +456,7 @@ class SaleController extends Controller
     public function saleReturn(Request $request)
     {
         $type = 2;
+        return "to be implemented";
         $investors = Investor::all();
         $suppliers = Supplier::all();
         $bank_acc = ChartOfAccount::where('account_type', 4)->get();
@@ -655,6 +656,9 @@ class SaleController extends Controller
             return redirect()->route('cancel-sale', $request->all());
         }else if ($request->input('action') == "reprint") {
             return redirect()->route('reprint-invoice', $request->all());
+
+        }else if ($request->input('action') == "return") {
+            return redirect()->route('sale-return', $request->all());
 
         }
 
