@@ -115,7 +115,7 @@
 
                                         <div class="d-flex align-items-center justify-content-between mb-1">
                                             <span class="title">Date:</span>
-                                            <input @if (isset($sale)) value="{{ $sale->sale_date }}" @endif id="sale_date" name="sale_date" type="sdate" class="form-control invoice-edit-input" @if (isset($sale)) @if(($sale->status!=1)) disabled @endif @endif>
+                                            <input @if (isset($sale)) value="{{ $sale->sale_date }}" @endif id="sale_date" name="sale_date" type="date" class="form-control invoice-edit-input" @if (isset($sale)) @if(($sale->status!=1)) disabled @endif @endif>
                                         </div>
 
                                         @if (!isset($sale))

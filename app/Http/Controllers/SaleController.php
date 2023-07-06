@@ -318,6 +318,7 @@ class SaleController extends Controller
         return $pdf->stream('my.pdf', array('Attachment' => 0));
     }
 
+
     // unpost sale
     public function unpostSale(Request $request)
     {
@@ -456,39 +457,34 @@ class SaleController extends Controller
     public function saleReturn(Request $request)
     {
         $type = 2;
-        return "to be implemented";
+        // return "to be implemented";
         $investors = Investor::all();
         $suppliers = Supplier::all();
         $bank_acc = ChartOfAccount::where('account_type', 4)->get();
-        // dd($request->id);
-        if (isset($request->id)) {
+        
+        $sale = Sale::find($request->sale_id);
+        $investor = Investor::find($sale->investor_id);
+        $item_price = $investor->inventories()->where('item_id', '=', $sale->item_id)->first()->unit_cost;
+        $inv_per = $sale->selling_price  / $sale->total;
+        $markup_per = 1 - $inv_per;
 
-            $sale = Sale::find($request->id);
-            $investor = Investor::find($sale->investor_id);
-            $item_price = $investor->inventories()->where('item_id', '=', $sale->item_id)->first()->unit_cost;
-            $inv_per = $sale->selling_price  / $sale->total;
-            $markup_per = 1 - $inv_per;
+        if ($sale->type == 1) {
+            $total_amount_paid = $sale->instalments->sum('amount_paid');
+            // dd($total_amount_paid);
+            $inventory_money = $total_amount_paid * $inv_per;
+            // each investor share in markup profit
+            $share = ($total_amount_paid - $inventory_money) * 0.50;
+        } else {
 
-            if ($sale->type == 1) {
-                $total_amount_paid = $sale->instalments->sum('amount_paid');
-                // dd($total_amount_paid);
-                $inventory_money = $total_amount_paid * $inv_per;
-                // each investor share in markup profit
-                $share = ($total_amount_paid - $inventory_money) * 0.50;
-            } else {
-
-                $total_amount_paid = $sale->total;
-                $inventory_money = $item_price;
-                // dd(   $inventory_money );
-                // each investor share in markup profit
-                $share = ($sale->total - $inventory_money - $sale->trade_discount) * 0.50;
-            }
-
-            return view('sale.sale', compact('investors', 'suppliers', 'type', 'sale', 'total_amount_paid', 'inventory_money', 'share'));
+            $total_amount_paid = $sale->total;
+            $inventory_money = $item_price;
+            // dd(   $inventory_money );
+            // each investor share in markup profit
+            $share = ($sale->total - $inventory_money - $sale->trade_discount) * 0.50;
         }
-        // for purchase return
 
-        return view('sale.sale', compact('investors', 'suppliers', 'type', 'bank_acc'));
+        return view('sale.sale_temp', compact('investors', 'suppliers', 'type', 'sale', 'total_amount_paid', 'inventory_money', 'share'));
+        
     }
 
 
