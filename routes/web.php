@@ -160,7 +160,7 @@ Route::controller(SaleController::class)->group(function () {
         });
 
         Route::group(['middleware' => ['role_or_permission:admin|reprintinvoice']], function () {
-                Route::post('/reprint-invoice', 'reprintInvoice')->name('reprint-invoice');
+                Route::get('/reprint-invoice', 'reprintInvoice')->name('reprint-invoice');
         });
 
         Route::group(['middleware' => ['role_or_permission:admin|cancelsale']], function () {

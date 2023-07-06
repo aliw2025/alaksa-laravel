@@ -135,6 +135,7 @@ class SaleController extends Controller
         // return redirect()->route('get-sales', $request->investor_id);
     }
 
+
     public function postSale(Request $request)
     {
 
@@ -611,8 +612,12 @@ class SaleController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show(Sale $sale)
-    {
-        return view('sale.sale_show', compact('sale'));
+    {   
+        $investors = Investor::all();
+        $suppliers = Supplier::all();
+        $bank_acc = ChartOfAccount::where('account_type', 4)->get();
+ 
+        return view('sale.sale', compact('sale','investors','suppliers','bank_acc'));
     }
 
     /**
@@ -648,7 +653,11 @@ class SaleController extends Controller
             return redirect()->route('post-sale', $request->all());
         } else if ($request->input('action') == "cancel") {
             return redirect()->route('cancel-sale', $request->all());
+        }else if ($request->input('action') == "reprint") {
+            return redirect()->route('reprint-invoice', $request->all());
+
         }
+
 
 
         if ($sale->status != 1) {
@@ -688,12 +697,10 @@ class SaleController extends Controller
         $sale->sale_date = $request->sale_date;
         $sale->save();
         $type=1;
-        // Session::push('message','record saved');
-        $bank_acc = ChartOfAccount::where('account_type', 4)->get();
-        $investors = Investor::all();
-        return view('sale.sale', compact('sale','type','bank_acc','investors'))->with('message','Record saved');
-        // return redirect()->route('sale.edit', $sale->id);
+        return redirect()->back()->with('message','Record Saved');
+
     }
+
     public function cancelSale(Request $request)
     {
 
@@ -705,7 +712,7 @@ class SaleController extends Controller
         $sale->status = 2;
         $sale->save();
 
-        return redirect()->route('sale.show', $sale->id);
+        return redirect()->back()->with('message','Record Cancelled');;
     }
 
     // function to reprint invoice
