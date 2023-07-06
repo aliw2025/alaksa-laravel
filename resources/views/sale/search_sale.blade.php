@@ -42,8 +42,23 @@
                                 <span class="title">Invoice No:</span>
                                 <input name="invoice_no" type="text" class="form-control">
                             </div>
+                            <div class="col-2">
+                                <div class="">
+                                    <span class="title">status</span>
+                                    <select class="form-select" name="status_id" id="">
+                                    <option></option>   
+                                        @foreach($statuses as $st)
+                                        <option value="{{$st->id}}">{{$st->desc}}</option>
+                                        @endforeach
+                                       
+
+                                    </select>   
+                                </div>
+                            </div>
                             <div class="col-2 ">
-                                <Button type="submit" class="mt-1 btn btn-relief-primary">Report</Button>
+                                <Button type="submit" name="action" value="report" class="mt-1 btn btn-relief-primary">Report</Button>
+                                <Button type="submit" name="action" value="pdf" class="mt-1 btn btn-relief-secondary">PDF</Button>
+
                             </div>
 
                         </div>
@@ -84,14 +99,6 @@
                                         
                                         <td>
                                             <a style="text-decoration: none;color:black" href="{{route('sale.show',$pur->id)}}"><i data-feather='eye'></i></a>
-                                            @if($pur->status==1)
-                                            <a style="text-decoration: none;color:black" href="{{route('sale.edit',$pur->id)}}"><i data-feather='edit'></i></a>
-                                            @endif
-                                            @if($pur->status==3)
-                                            <a style="text-decoration: none;color:black" href="{{url('sale-return')."?id=".$pur->id}}" ><i data-feather='rotate-ccw'></i></i></a>
-                                            <a style="text-decoration: none;color:black" href="{{url('get-sale-instalments')."?id=".$pur->id}}"><i data-feather='dollar-sign'></i></a>
-                                            @endif
-
                                         </td>
                                     </tr>
                                     @php

@@ -89,27 +89,31 @@ class Sale extends Model
         return $this->belongsTo(SaleStatus::class,'stauts');
     }
 
-    public function scopeSearchSale($query,$from_date,$to_date,$customer_name,$customer_id,$invoice)
+    public function scopeSearchSale($query,$from_date,$to_date,$customer_name,$customer_id,$invoice,$status_id)
     {   
         // dd($commission);
-        
-        if($invoice!=NULL){
-            
-            return $query->where('invoice_no','like','%'.$invoice);
-        }
-        else if($customer_id!= NULL){
-            return $query->where('customer_id',$customer_id);
-            
-        }
-        else if($customer_name!= NULL){
-
-            return $query->whereHas('customer', function ($cus)  use ($customer_name) {
+        $query->whereBetween('sale_date',[$from_date,$to_date]);
+    
+         if(isset($customer_id)){
+           
+           $query=$query->where('investor_id',$customer_id);
+         }
+         if(isset($customer_name)){
+            $query= $query->whereHas('customer', function ($cus)  use ($customer_name) {
                 $cus->where('customer_name','like','%'.$customer_name.'%');
             });
+         }
+         if(isset($status_id)){
+            $query=$query->where('status',$status_id);
+         }
+         if(isset($invoice)){
+            $query=$query->where('invoice_no','like','%'.$invoice);
+         }
+
+         return $query;
+
         
         
-        }
-        return $query->whereBetween('sale_date',[$from_date,$to_date]);
     }
    
 }

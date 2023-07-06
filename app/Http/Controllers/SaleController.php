@@ -18,6 +18,7 @@ use App\Models\Payable;
 use App\Models\Supplier;
 use App\Models\Commission;
 use App\Models\GLeadger;
+use App\Models\TransactionStatus;
 use Illuminate\Http\Request;
 use Session;
 
@@ -47,7 +48,7 @@ class SaleController extends Controller
      */
     public function create()
     {
-        
+
         $investors = Investor::all();
         $suppliers = Supplier::all();
         $bank_acc = ChartOfAccount::where('account_type', 4)->get();
@@ -69,10 +70,10 @@ class SaleController extends Controller
             [
                 'customer_id' => 'required',
                 'item_id' => 'required',
-                'selling_price'=>'required',
-                'plan'=>'required',
-                'markup'=>'required'
-                
+                'selling_price' => 'required',
+                'plan' => 'required',
+                'markup' => 'required'
+
             ]
         );
         // dd($request->all());
@@ -125,12 +126,12 @@ class SaleController extends Controller
         }
         $sale->sale_date = $request->sale_date;
         $sale->save();
-        $type = 1 ;
+        $type = 1;
         $investors = Investor::all();
         // $suppliers = Supplier::all();
         $bank_acc = ChartOfAccount::where('account_type', 4)->get();
-        return view('sale.sale', compact('sale','type','bank_acc','investors'))->with('message','Record saved');
-        
+        return view('sale.sale', compact('sale', 'type', 'bank_acc', 'investors'))->with('message', 'Record saved');
+
         // return redirect()->route('sale.edit', $sale->id,$message);
         // return redirect()->route('get-sales', $request->investor_id);
     }
@@ -165,9 +166,9 @@ class SaleController extends Controller
             $instalment->amount_paid = $down_payment ? str_replace(',', '', $request->down_payment) : 0;
             $instalment->save();
 
-            
+
             $alp_share = 0.5;
-            $inv_share = 1-$alp_share;
+            $inv_share = 1 - $alp_share;
 
 
 
@@ -187,7 +188,7 @@ class SaleController extends Controller
                 $payment->save();
 
                 // debit cash of investor for inventory recovery
-                $payment->createLeadgerEntry($request->acc_type, $ins_mon+$share1, $investor->id, $sale->sale_date, $user->id);
+                $payment->createLeadgerEntry($request->acc_type, $ins_mon + $share1, $investor->id, $sale->sale_date, $user->id);
                 //*  credit recievable of inventory recovery
                 // debit company cash of markup
                 $payment->createLeadgerEntry($request->acc_type, $share2, 1, $sale->sale_date, $user->id);
@@ -229,11 +230,10 @@ class SaleController extends Controller
         if ($request->sale_type == 1) {
             // trade discount is now provit over cost
             $trade_discount = $selling_price - $item_price;
-            if($trade_discount<0){
+            if ($trade_discount < 0) {
                 // now to be adjusted in leadger
                 $loss = $item_price - $selling_price;
             }
-
         } else {
             $trade_discount = $request->trade_discount;
         }
@@ -241,37 +241,35 @@ class SaleController extends Controller
         //**************  LEADGER *****************/
         if ($request->sale_type == 1) {
             $alp_share = 0.5;
-            $inv_share = 1-$alp_share;
-             // calculating profit share of investor and company
-             $inv_mark_pft1 = (str_replace(',', '', $request->total_sum) - str_replace(',', '', $request->selling_price)) * $inv_share;
-             $inv_mark_pft2 = (str_replace(',', '', $request->total_sum) - str_replace(',', '', $request->selling_price)) * $alp_share;
- 
+            $inv_share = 1 - $alp_share;
+            // calculating profit share of investor and company
+            $inv_mark_pft1 = (str_replace(',', '', $request->total_sum) - str_replace(',', '', $request->selling_price)) * $inv_share;
+            $inv_mark_pft2 = (str_replace(',', '', $request->total_sum) - str_replace(',', '', $request->selling_price)) * $alp_share;
+
             //  leadger entry for debit recievable of inventory
-            $sale->createLeadgerEntry(5, $selling_price+$inv_mark_pft1, $investor->id, $sale->sale_date, $user->id);
+            $sale->createLeadgerEntry(5, $selling_price + $inv_mark_pft1, $investor->id, $sale->sale_date, $user->id);
             //* leadger entry for credit inventory for actual price of item
-            $sale->createLeadgerEntry(3, -$item_price, $investor->id, $sale->sale_date, $user->id);  
-             //* leadger entry for credit markup profit
-             $sale->createLeadgerEntry(9, -$inv_mark_pft1, $investor->id, $sale->sale_date, $user->id);         
-                //*** change this entry too ****/
-             if($trade_discount>0) {
-                if($investor->id==1){
+            $sale->createLeadgerEntry(3, -$item_price, $investor->id, $sale->sale_date, $user->id);
+            //* leadger entry for credit markup profit
+            $sale->createLeadgerEntry(9, -$inv_mark_pft1, $investor->id, $sale->sale_date, $user->id);
+            //*** change this entry too ****/
+            if ($trade_discount > 0) {
+                if ($investor->id == 1) {
                     // ad trade profit  
                     $sale->createLeadgerEntry(10, -$trade_discount, $investor->id, $sale->sale_date, $user->id);
-                }else{
+                } else {
 
                     $sale->createLeadgerEntry(7, -$trade_discount, $investor->id, $sale->sale_date, $user->id);
                 }
-               
-             }else{
+            } else {
                 // temp expense account for loss
                 $sale->createLeadgerEntry(8, $loss, $investor->id, $sale->sale_date, $user->id);
-             }  
-            
+            }
+
             // leadger entry for company debit recievable of markup
             $sale->createLeadgerEntry(5, $inv_mark_pft2, 1, $sale->sale_date, $user->id);
             //*leadger entry for credit markup profit
             $sale->createLeadgerEntry(9, -$inv_mark_pft2, 1, $sale->sale_date, $user->id);
-          
         } else {
 
             //  leadger entry for debit cash/bank of investory
@@ -279,7 +277,7 @@ class SaleController extends Controller
             //* leadger entry for credit inventory for actual price of item
             $sale->createLeadgerEntry(3, -$item_price, $investor->id, $sale->sale_date, $user->id);
             // calculating profit share of investor and company
-            
+
             $inv_pft1 = ($selling_price -   $item_price) * $inv_share;
             $inv_pft2 = ($selling_price -   $item_price) * $alp_share;
 
@@ -295,7 +293,6 @@ class SaleController extends Controller
             $sale->createLeadgerEntry($request->acc_type, $trade_discount, 1, $sale->sale_date, $user->id);
             //* leadger entry for credit trade discount profit
             $sale->createLeadgerEntry(10, -$trade_discount, 1, $sale->sale_date, $user->id);
-            
         }
 
         //************** INVOICE *****************/
@@ -322,9 +319,6 @@ class SaleController extends Controller
     // unpost sale
     public function unpostSale(Request $request)
     {
-
-
-        
     }
 
     public function saleReturnAdjustment(Request $request)
@@ -346,8 +340,8 @@ class SaleController extends Controller
 
     public function postReturnAdjustment(Request $request)
     {
-        $mytime =date('Y-m-d'); // 
-       
+        $mytime = date('Y-m-d'); // 
+
         // dd($request->all());
         $sale = Sale::find($request->sale_id);
         $sale->status = 4;
@@ -461,7 +455,7 @@ class SaleController extends Controller
         $investors = Investor::all();
         $suppliers = Supplier::all();
         $bank_acc = ChartOfAccount::where('account_type', 4)->get();
-        
+
         $sale = Sale::find($request->sale_id);
         $investor = Investor::find($sale->investor_id);
         $item_price = $investor->inventories()->where('item_id', '=', $sale->item_id)->first()->unit_cost;
@@ -484,7 +478,6 @@ class SaleController extends Controller
         }
 
         return view('sale.sale_temp', compact('investors', 'suppliers', 'type', 'sale', 'total_amount_paid', 'inventory_money', 'share'));
-        
     }
 
 
@@ -521,7 +514,7 @@ class SaleController extends Controller
         // return $transactions;
         return view('sale.sale_close_user', compact('user', 'transactions', 'bank_sum', 'cash_sum', 'cash_sum_all', 'bank_sum_all'));
     }
-    
+
 
     public function saleClose2()
     {
@@ -609,12 +602,12 @@ class SaleController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show(Sale $sale)
-    {   
+    {
         $investors = Investor::all();
         $suppliers = Supplier::all();
         $bank_acc = ChartOfAccount::where('account_type', 4)->get();
- 
-        return view('sale.sale', compact('sale','investors','suppliers','bank_acc'));
+
+        return view('sale.sale', compact('sale', 'investors', 'suppliers', 'bank_acc'));
     }
 
     /**
@@ -624,8 +617,8 @@ class SaleController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit(Sale $sale)
-    {   
-        
+    {
+
         $investors = Investor::all();
         $suppliers = Supplier::all();
         $bank_acc = ChartOfAccount::where('account_type', 4)->get();
@@ -650,12 +643,10 @@ class SaleController extends Controller
             return redirect()->route('post-sale', $request->all());
         } else if ($request->input('action') == "cancel") {
             return redirect()->route('cancel-sale', $request->all());
-        }else if ($request->input('action') == "reprint") {
+        } else if ($request->input('action') == "reprint") {
             return redirect()->route('reprint-invoice', $request->all());
-
-        }else if ($request->input('action') == "return") {
+        } else if ($request->input('action') == "return") {
             return redirect()->route('sale-return', $request->all());
-
         }
 
 
@@ -696,15 +687,14 @@ class SaleController extends Controller
         }
         $sale->sale_date = $request->sale_date;
         $sale->save();
-        $type=1;
-        return redirect()->back()->with('message','Record Saved');
-
+        $type = 1;
+        return redirect()->back()->with('message', 'Record Saved');
     }
 
     public function cancelSale(Request $request)
     {
 
-        
+
         $sale = Sale::find($request->sale_id);
         if ($sale->status != 1) {
             return "transaction with entry status can be cancelled only";
@@ -712,7 +702,7 @@ class SaleController extends Controller
         $sale->status = 2;
         $sale->save();
 
-        return redirect()->back()->with('message','Record Cancelled');;
+        return redirect()->back()->with('message', 'Record Cancelled');;
     }
 
     // function to reprint invoice
@@ -761,14 +751,14 @@ class SaleController extends Controller
     public function showInstalments(Request $request)
     {
 
-    //    dd($request->all());
+        //    dd($request->all());
         if (isset($request->id)) {
             // dd($request->id);
             $sale = Sale::find($request->id);
             // dd($sale);
-            if(isset($request->ins_id)){    
-                $instalments = $sale->instalments->where('id',$request->ins_id);
-            }else{
+            if (isset($request->ins_id)) {
+                $instalments = $sale->instalments->where('id', $request->ins_id);
+            } else {
                 $instalments = $sale->instalments;
             }
             $user = Auth::user();
@@ -776,11 +766,11 @@ class SaleController extends Controller
             $bank_acc = $user->charOfAccounts;
             // dd( $bank_acc);
             if (isset($request->user_exception)) {
-               
+
                 $user_exception = $request->user_exception;
                 return view('sale.sale-instalments', compact('sale', 'instalments', 'user_exception', 'bank_acc'));
             } else {
-                
+
                 return view('sale.sale-instalments', compact('sale', 'instalments', 'bank_acc'));
             }
         }
@@ -818,14 +808,52 @@ class SaleController extends Controller
     public function searchSales(Request $request)
     {
 
+        $statuses = TransactionStatus::all();
 
-        return view('sale.search_sale');
+
+        return view('sale.search_sale', compact('statuses'));
     }
 
     public function searchSalesPost(Request $request)
     {
-        // dd($request->all());
-        $sales = Sale::SearchSale($request->from_date, $request->to_date, $request->customer_name, $request->customer_id, $request->invoice_no)->paginate(10);
+        $request->validate([
+            'from_date' => 'required',
+            'to_date' => 'required'
+        ]);
+
+
+        $sales = Sale::SearchSale($request->from_date, $request->to_date, $request->customer_name, $request->customer_id, $request->invoice_no, $request->status_id);
+        $statuses = TransactionStatus::all();
+        $investors = Investor::all();
+        $suppliers = Supplier::all();
+        $statuses = TransactionStatus::all();
+        $from_date = $request->from_date;
+        $to_date = $request->to_date;
+
+
+        $sum = Sale::whereBetween('sale_date', [$from_date, $to_date]);
+
+
+        if (isset($customer_id))
+            $sum = $sum->where('investor_id', $customer_id);
+        if (isset($customer_name)) {
+            $sum = $sum->whereHas('customer', function ($cus)  use ($customer_name) {
+                $cus->where('customer_name', 'like', '%' . $customer_name . '%');
+            });
+        }
+        if (isset($status_id))
+            $sum = $sum->where('status', $status_id);
+        if (isset($invoice))
+            $sum = $sum->where('invoice_no', 'like', '%' . $invoice);
+        $sum = $sum->sum('selling_price');
+
+
+        if ($request->input('action') == "pdf") {
+
+            $supplierPayments = $sales->get();
+            return view('sale.sale_report', compact('sales', 'from_date', 'to_date', 'statuses', 'sum'));
+        }
+        $sales = $sales->paginate(20);
         $sales->appends([
             'from_date' => $request->from_date,
             'to_date' => $request->to_date,
@@ -833,7 +861,7 @@ class SaleController extends Controller
             'customer_id' => $request->customer_id,
             'invoice_no' => $request->invoice_no
         ]);
-        // dd($sales);
-        return view('sale.search_sale', compact('sales'));
+
+        return view('sale.search_sale', compact('sales', 'statuses','from_date', 'to_date', 'statuses', 'sum'));
     }
 }
