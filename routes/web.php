@@ -146,9 +146,13 @@ Route::controller(SaleController::class)->group(function () {
         Route::group(['middleware' => ['role_or_permission:admin|getinvoices']], function () {
                 Route::get('/get-invoices', 'getInvoices')->name('get-invoices');
         });
-
+        
         Route::group(['middleware' => ['role_or_permission:admin|searchsalespost']], function () {
-                Route::get('/search-sales', 'searchSalesPost')->name('search-sales-post');
+                Route::get('/search-sales-post', 'searchSalesPost')->name('search-sales-post');
+        });
+
+        Route::group(['middleware' => ['role_or_permission:admin|searchsales']], function () {
+                Route::get('/search-sales', 'searchSales')->name('search-sales');
         });
 
         Route::group(['middleware' => ['role_or_permission:admin|saleclose']], function () {

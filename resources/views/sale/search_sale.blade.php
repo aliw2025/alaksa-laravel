@@ -17,30 +17,30 @@
                             <div class="col-2">
                                 <div class="">
                                     <span class="title">From Date:</span>
-                                    <input name="from_date" type="text"
-                                        class="form-control invoice-edit-input date-picker flatpickr-input"
-                                        readonly="readonly">
+                                    <input value="{{isset($from_date)? $from_date:date('Y-m-d')}}" name="from_date" type="date"
+                                        class="form-control invoice-edit-input  "
+                                        >
                                 </div>
                             </div>
                             <div class="col-2">
                                 <div class="">
                                     <span class="title">To Date:</span>
-                                    <input name="to_date" type="text"
-                                        class="form-control invoice-edit-input date-picker flatpickr-input"
-                                        readonly="readonly">
+                                    <input value="{{isset($to_date)? $to_date:date('Y-m-d')}}" name="to_date" type="date"
+                                        class="form-control invoice-edit-input "
+                                       >
                                 </div>
                             </div>
                             <div class="col-2 ">
                                 <span  class="title">Customer Name:</span>
-                                <input name="customer_name" type="text" class="form-control">
+                                <input @if(isset($customer_name)) value="{{$customer_name}}" @endif name="customer_name" type="text" class="form-control">
                             </div>
                             <div class="col-2 ">
                                 <span class="title">Customer ID:</span>
-                                <input name="customer_id" type="text" class="form-control">
+                                <input @if(isset($customer_id)) value="{{$customer_id}}" @endif name="customer_id" type="text" class="form-control">
                             </div>
                             <div class="col-2 ">
                                 <span class="title">Invoice No:</span>
-                                <input name="invoice_no" type="text" class="form-control">
+                                <input @if(isset($invoice_no)) value="{{$invoice_no}}" @endif name="invoice_no" type="text" class="form-control">
                             </div>
                             <div class="col-2">
                                 <div class="">

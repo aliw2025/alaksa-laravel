@@ -52,9 +52,7 @@
             
                 <tr style="background-color:#e4e6eb;">
                     <th style="width: 2px !important">#</th>
-                    <th scope="col">Payment NO</th>
-                    <th>Investor</th>  
-                    <th scope="col">Supplier</th>
+                    <th scope="col">sale No</th>
                     <th>Total</th>
                     <th>status</th>
                     <th scope="col">Date</th>
@@ -69,10 +67,8 @@
 
             <tr>
                 <td>{{$count}}</td>
-                <td>{{$pur->sale_no}}</td>
-                <td></td>
-                <td></td>
-                <td>{{ number_format( $pur->amount)}}</td>
+                <td>{{$pur->invoice_no}}</td>
+                <td>{{ number_format( $pur->total)}}</td>
                 <td>{{$pur->transaction_status->desc}}</td>
                 <td>{{date('d-m-Y', strtotime($pur->sale_date))}}</td>
                 <td><a style="text-decoration: none;color:black" href="{{route('purchase.show',$pur->id)}}"><i data-feather='eye'></i></a></td>
@@ -83,8 +79,8 @@
 
             @endforeach
             <tr>
-                <td colspan="4"></td>
-                <td> <span style="font-weight: bold;">Total Supplier Payments :</span>  {{number_format( $sum)}}</td>
+                <td colspan="2"></td>
+                <td> <span style="font-weight: bold;">Total  :</span>  {{number_format( $sum)}}</td>
 
             </tr>
             

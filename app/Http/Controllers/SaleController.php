@@ -821,47 +821,38 @@ class SaleController extends Controller
             'to_date' => 'required'
         ]);
 
+        // dd($request->all());
 
-        $sales = Sale::SearchSale($request->from_date, $request->to_date, $request->customer_name, $request->customer_id, $request->invoice_no, $request->status_id);
-        $statuses = TransactionStatus::all();
-        $investors = Investor::all();
-        $suppliers = Supplier::all();
+        $sales = Sale::SearchSale($request->from_date, $request->to_date, $request->customer_name, $request->customer_id, $request->invoice_no, $request->status_id);       
         $statuses = TransactionStatus::all();
         $from_date = $request->from_date;
         $to_date = $request->to_date;
+        $customer_name = $request->customer_name;
+        $customer_id = $request->customer_id;
+        $invoice_no = $request->invoice_no;
+
 
 
         $sum = Sale::whereBetween('sale_date', [$from_date, $to_date]);
 
-
-        if (isset($customer_id))
-            $sum = $sum->where('investor_id', $customer_id);
-        if (isset($customer_name)) {
-            $sum = $sum->whereHas('customer', function ($cus)  use ($customer_name) {
-                $cus->where('customer_name', 'like', '%' . $customer_name . '%');
-            });
-        }
-        if (isset($status_id))
-            $sum = $sum->where('status', $status_id);
-        if (isset($invoice))
-            $sum = $sum->where('invoice_no', 'like', '%' . $invoice);
-        $sum = $sum->sum('selling_price');
-
-
+        $sum = $sales->sum('total');
         if ($request->input('action') == "pdf") {
 
-            $supplierPayments = $sales->get();
+            $sales = $sales->get();
             return view('sale.sale_report', compact('sales', 'from_date', 'to_date', 'statuses', 'sum'));
         }
+
         $sales = $sales->paginate(20);
         $sales->appends([
             'from_date' => $request->from_date,
             'to_date' => $request->to_date,
             'customer_name' => $request->customer_name,
             'customer_id' => $request->customer_id,
-            'invoice_no' => $request->invoice_no
+            'invoice_no' => $request->invoice_no,
+            'status_id'=>$request->status_id
+            
         ]);
 
-        return view('sale.search_sale', compact('sales', 'statuses','from_date', 'to_date', 'statuses', 'sum'));
+        return view('sale.search_sale', compact('sales', 'statuses','from_date', 'to_date', 'statuses', 'sum','customer_name','customer_id','invoice_no'));
     }
 }
