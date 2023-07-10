@@ -337,6 +337,115 @@ class SaleController extends Controller
         return view('sale.return_final', compact('cash_back_investor', 'cash_back_company', 'give_to_investor', 'give_to_company', 'bank_acc', 'sale'));
     }
 
+    public function postReturnAdjustmentSimpe(Request $request){
+
+        $mytime = date('Y-m-d'); // 
+
+        // dd($request->all());
+        $sale = Sale::find($request->sale_id);
+        $sale->status = 4;
+        $down_payment = false;
+        $investor = Investor::find($sale->investor_id);
+        $user = Auth::user();
+        $selling_price = str_replace(',', '', $sale->selling_price);
+        // dd($investor->inventories()->where('item_id', '=', $request->item_id)->first());
+        $item_price = $investor->inventories()->where('item_id', '=', $sale->item_id)->first()->unit_cost;
+        //************** inventory update  *****************/
+        // updating inventory 
+        $inventory = Inventory::where('investor_id', '=', $sale->investor_id)->where('item_id', '=', $sale->item_id)->first();
+        $inventory->quantity =  $inventory->quantity + 1;
+        $inventory->save();
+        //**************  calculating trade discount  *****************/
+        $trade_discount = $sale->trade_discount;
+
+        //**************  LEADGER *****************/
+        if ($sale->payment_type == 1) {
+            //  leadger entry for debit recievable of inventory
+            $sale->createLeadgerEntry(5, -$selling_price, $investor->id, $mytime, $user->id);
+            //* leadger entry for credit inventory for actual price of item
+            $sale->createLeadgerEntry(3, $item_price, $investor->id, $mytime, $user->id);
+            //* leadger entry for credit cash of investor bank account for trade profit ??
+            // $sale->createLeadgerEntry(4, $trade_discount, $investor->id, $mytime, $user->id);
+            // calculating profit share of investor and company
+            $inv_mark_pft = ($sale->total_sum - $sale->selling_price) * 0.50;
+            // leadger entry for investor debit recievable of markup 
+            $sale->createLeadgerEntry(5, -$inv_mark_pft, $investor->id, $mytime, $user->id);
+            //* leadger entry for credit markup profit
+            $sale->createLeadgerEntry(9, $inv_mark_pft, $investor->id, $mytime, $user->id);
+            // leadger entry for company debit recievable of markup
+            $sale->createLeadgerEntry(5, -$inv_mark_pft, 1, $mytime, $user->id);
+            // *leadger entry for credit markup profit
+            $sale->createLeadgerEntry(9, $inv_mark_pft, 1, $mytime, $user->id);
+            // leadger entry for company debit cash of trade profit ??
+            // $sale->createLeadgerEntry(4, -$trade_discount, 1, $mytime, $user->id);
+            //* leadger entry for credit trade discount profit
+            // $sale->createLeadgerEntry(10, $trade_discount, 1, $mytime, $user->id);
+
+            //*** Adjustments****/ 
+            // 1 - debit reciveable investor
+            $sale->createLeadgerEntry(5, str_replace(',', '', $request->take_back_inv), $sale->investor_id, $mytime, $user->id);
+            //* credit selected_acc
+            $sale->createLeadgerEntry($request->take_back_inv_acc, -str_replace(',', '', $request->take_back_inv), $sale->investor_id, $mytime, $user->id);
+            // 2- debit recv alp
+            $sale->createLeadgerEntry(5, str_replace(',', '', $request->take_back_alp), 1, $mytime, $user->id);
+            //* credit selected_acc alp
+            $sale->createLeadgerEntry($request->take_back_alp_acc, -str_replace(',', '', $request->take_back_inv), 1, $mytime, $user->id);
+
+            // 3 - debit investor selected_acc
+            $sale->createLeadgerEntry($request->give_back_inv_acc, str_replace(',', '', $request->give_back_inv), $sale->investor_id, $mytime, $user->id);
+            //* credit pft
+            $sale->createLeadgerEntry(9, -str_replace(',', '', $request->give_back_inv), $sale->investor_id, $mytime, $user->id);
+            // 4 - debit investor selected_acc
+            $sale->createLeadgerEntry($request->give_back_alp_acc, str_replace(',', '', $request->give_back_alp), 1, $mytime, $user->id);
+            //* credit pft
+            $sale->createLeadgerEntry(9, -str_replace(',', '', $request->take_back_alp), 1, $mytime, $user->id);
+            //5 - debit td pft
+            $sale->createLeadgerEntry(10, str_replace(',', '', $request->take_back_td), 1, $mytime, $user->id);
+            //* credit alp selected
+            $sale->createLeadgerEntry($request->take_back_td_acc, -str_replace(',', '', $request->take_back_td), 1, $mytime, $user->id);
+            //5 - debit td to inv
+            $sale->createLeadgerEntry($request->take_back_td_acc, str_replace(',', '', $request->take_back_td), $sale->investor_id, $mytime, $user->id);
+        } else {
+
+            //  leadger entry for debit cash/bank of investory
+            $sale->createLeadgerEntry($request->take_back_inv_acc, -$item_price, $investor->id, $mytime, $user->id);
+            //* leadger entry for credit inventory for actual price of item
+            $sale->createLeadgerEntry(3, $item_price, $investor->id, $mytime, $user->id);
+            // calculating profit share of investor and company
+            $inv_pft = ($selling_price - $trade_discount - $item_price) * 0.50;
+            // leadger entry for investor debit cash/bank for profit money 
+            $sale->createLeadgerEntry($request->take_back_inv_acc, -$inv_pft, $investor->id, $mytime, $user->id);
+            //* leadger entry for credit markup profit
+            $sale->createLeadgerEntry(9, $inv_pft, $investor->id, $mytime, $user->id);
+            // leadger entry for company debit  of 
+            $sale->createLeadgerEntry($request->take_back_alp_acc, -$inv_pft, 1, $mytime, $user->id);
+            // *leadger entry for credit markup profit
+            $sale->createLeadgerEntry(9, $inv_pft, 1, $mytime, $user->id);
+            // leadger entry for company debit cash of trade profit
+            $sale->createLeadgerEntry($request->take_back_td_acc, -$trade_discount, 1, $mytime, $user->id);
+            //* leadger entry for credit trade discount profit
+            $sale->createLeadgerEntry(10, $trade_discount, 1, $mytime, $user->id);
+            // adjustments
+            // 3 - debit investor selected_acc
+            $sale->createLeadgerEntry($request->give_back_inv_acc, str_replace(',', '', $request->give_back_inv), $sale->investor_id, $mytime, $user->id);
+            //* credit pft
+            $sale->createLeadgerEntry(9, -str_replace(',', '', $request->give_back_inv), $sale->investor_id, $mytime, $user->id);
+            // 4 - debit investor selected_acc
+            $sale->createLeadgerEntry($request->give_back_alp_acc, str_replace(',', '', $request->give_back_alp), 1, $mytime, $user->id);
+            //* credit pft
+            $sale->createLeadgerEntry(9, -str_replace(',', '', $request->take_back_alp), 1, $mytime, $user->id);
+
+            //* credit alp selected
+            $sale->createLeadgerEntry($request->take_back_td_acc, -str_replace(',', '', $request->take_back_td), 1, $mytime, $user->id);
+            //5 - debit td to inv
+            $sale->createLeadgerEntry($request->take_back_td_acc, str_replace(',', '', $request->take_back_td), $sale->investor_id, $mytime, $user->id);
+        }
+
+        $sale->save();
+
+        return redirect()->route('sale.show', $sale->id);
+
+    }
 
     public function postReturnAdjustment(Request $request)
     {
@@ -467,17 +576,25 @@ class SaleController extends Controller
             // dd($total_amount_paid);
             $inventory_money = $total_amount_paid * $inv_per;
             // each investor share in markup profit
-            $share = ($total_amount_paid - $inventory_money) * 0.50;
+            $alp_share = 0.5;
+            $inv_share = 1 - $alp_share;
+            
+            $share_alp = ($total_amount_paid - $inventory_money) * $alp_share;
+            $share_inv = ($total_amount_paid - $inventory_money) * $inv_share;
+
         } else {
 
             $total_amount_paid = $sale->total;
             $inventory_money = $item_price;
+            $alp_share = 0.5;
+            $inv_share = 1 - $alp_share;
             // dd(   $inventory_money );
             // each investor share in markup profit
-            $share = ($sale->total - $inventory_money - $sale->trade_discount) * 0.50;
+            $share_alp = ($sale->total - $inventory_money - $sale->trade_discount) * $alp_share;
+            $share_inv =  ($sale->total - $inventory_money - $sale->trade_discount) * $inv_share;
         }
 
-        return view('sale.sale_temp', compact('investors', 'suppliers', 'type', 'sale', 'total_amount_paid', 'inventory_money', 'share'));
+        return view('sale.sale_temp', compact('investors', 'suppliers', 'type', 'sale', 'total_amount_paid', 'inventory_money', 'share_alp','share_inv'));
     }
 
 
@@ -821,7 +938,6 @@ class SaleController extends Controller
             'to_date' => 'required'
         ]);
 
-        // dd($request->all());
 
         $sales = Sale::SearchSale($request->from_date, $request->to_date, $request->customer_name, $request->customer_id, $request->invoice_no, $request->status_id);       
         $statuses = TransactionStatus::all();

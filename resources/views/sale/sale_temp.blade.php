@@ -217,13 +217,13 @@
                                                         value="{{ $inventory_money }}">
                                                 </div>
                                                 <div class="col-12 mt-1">
-                                                    Investor Mark up Recieved: {{ number_format($share) }}
+                                                    Investor Mark up Recieved: {{ number_format($share_inv) }}
                                                     <input type="hidden" name="investor_share"
-                                                        value="{{ $share }}">
+                                                        value="{{ $share_alp }}">
                                                 </div>
                                                 <div class="col-12 mt-1">
-                                                    Company Mark up Recieved: {{ number_format($share) }}
-                                                    <input type="hidden" name="company" value="{{ $share }}">
+                                                    Company Mark up Recieved: {{ number_format($share_alp) }}
+                                                    <input type="hidden" name="company" value="{{ $share_inv }}">
                                                 </div>
                                             </div>
                                 
