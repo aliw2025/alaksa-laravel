@@ -256,6 +256,12 @@ Route::controller(InstalmentController::class)->prefix('instalment')->group(func
         Route::group(['middleware' => ['role_or_permission:admin|payinstalment']], function () {
                 Route::post('/pay-instalment', 'payInstalment')->name('pay-instalment');
         });
+        // testing route for instalment payment
+        Route::get('/pay-instalment-new', 'payInstalmentNew')->name('pay-instalment-new');
+        Route::post('/pay-instalment-new-post', 'payInstalmentNewPost')->name('pay-instalment-new-post');
+
+
+
 
         Route::group(['middleware' => ['role_or_permission:admin|showinstalmentpayments']], function () {
                 Route::get('/show-instalment-payments/{id}', 'showInstalmentDetails')->name('show-instalment-payments');

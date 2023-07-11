@@ -29,11 +29,12 @@ class InvestmentController extends Controller
     public function create()
     {
         $investors = Investor::all();
-        
-        // $bank_acc = ChartOfAccount::where(function ($query) {
-        //     $query->where('account_type', '=', 1)->orWhere('account_type', '=', 4);})->get();
-        $bank_acc = ChartOfAccount::where('account_type', '=', 1)->orWhere('account_type', '=', 4)->get();
-        // dd($bank_acc);   
+        $bank_acc = ChartOfAccount::where('owner_type', 'App\Models\Investor')->where(
+            function ($query) {
+                return
+                    $query->where('account_type', '=', 1)->orWhere('account_type', '=', 4);
+            }
+        )->get();
         return view('capital-investments.add_balance',compact('investors','bank_acc'));
     }
 
@@ -60,12 +61,7 @@ class InvestmentController extends Controller
         $investment->status = 1;
         $investment->account_id = $request->acc_type;
         $investment->save();
-        // $user = Auth::user();
-        // $investment->createLeadgerEntry($request->acc_type,$investment->amount,$request->investor_id,$request->date,$user->id);
-        // $investment->createLeadgerEntry(8,-$investment->amount,$request->investor_id,$request->date,$user->id);
-        $investors = Investor::all();
-       
-        $bank_acc = ChartOfAccount::where('account_type', '=', 1)->orWhere('account_type', '=', 4)->get();
+    
         return redirect()->route('investment.show',$investment->id)->with('message','Record Saved');
     }
 
@@ -78,8 +74,13 @@ class InvestmentController extends Controller
     public function show(Investment $investment)
     {
         $investors = Investor::all();
+        $bank_acc = ChartOfAccount::where('owner_type', 'App\Models\Investor')->where(
+            function ($query) {
+                return
+                    $query->where('account_type', '=', 1)->orWhere('account_type', '=', 4);
+            }
+        )->get();
        
-        $bank_acc = ChartOfAccount::where('account_type', '=', 1)->orWhere('account_type', '=', 4)->get();
         return view('capital-investments.add_balance',compact('investors','bank_acc','investment'));
 
     }
@@ -202,9 +203,3 @@ class InvestmentController extends Controller
         //
     }
 }
-
-// Route::get('/show-investments-post',  'showInvestmentsPost')->name('show-investments-post');
-// Route::get('/show-investments',  'showInvestments')->name('show-investments');
-// Route::get('/post-investment',  'postInvestment')->name('post-investment');
-// Route::get('/unpost-investment',  'UnpostInvestment')->name('unpost-investment');
-// Route::get('/cancel-investment',  'cancelInvestment')->name('cancel-investment');

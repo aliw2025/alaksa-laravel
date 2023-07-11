@@ -84,7 +84,13 @@ class GLController extends Controller
     public function transferBalances(Request $request)
     {
         // getting all accounts     
-        $bank_accounts = ChartOfAccount::where('account_type', 1)->orWhere('account_type', 4)->get();
+        $bank_accounts = ChartOfAccount::where('owner_type', 'App\Models\Investor')->where(
+            function ($query) {
+                return
+                    $query->where('account_type', '=', 1)->orWhere('account_type', '=', 4);
+            }
+        )->get();
+        
         $investors = Investor::all();
         return view('capital-investments.transfer-balances', compact('bank_accounts', 'investors'));
     }
@@ -285,7 +291,13 @@ class GLController extends Controller
     }
     public function investorPaymentCreate(Request $request)
     {
-        $bank_accounts = ChartOfAccount::where('account_type', 1)->orWhere('account_type', 4)->get();
+
+        $bank_accounts = ChartOfAccount::where('owner_type', 'App\Models\Investor')->where(
+            function ($query) {
+                return
+                    $query->where('account_type', '=', 1)->orWhere('account_type', '=', 4);
+            }
+        )->get();
         $investors = Investor::all();
         return view('capital-investments.investors-payments', compact('bank_accounts', 'investors'));
         

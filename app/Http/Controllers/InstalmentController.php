@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ChartOfAccount;
 use App\Models\Instalment;
 use App\Models\InstalmentExtention;
 use App\Models\InstalmentPayment;
@@ -11,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 use Carbon\Carbon;
+use Carbon\Cli\Invoker;
 
 class InstalmentController extends Controller
 {
@@ -38,6 +40,28 @@ class InstalmentController extends Controller
     {
 
         return view('sale.recieve_instalment', compact('instalment'));
+    }
+
+    public function payInstalmentNew(Request $request){
+        
+        $instalment = Instalment::find($request->id);
+        $investors = Investor::all();
+        // where('owner_type','App\Models\Investor')->
+        $bank_acc = ChartOfAccount::where(
+            function($query) {
+              return 
+              $query->where('account_type', '=', 1)->orWhere('account_type', '=', 4);
+             })->get();
+                            
+        return view('sale.pay-instalment',compact('bank_acc','instalment','investors'));
+        
+    }
+
+    
+    public function payInstalmentNewPost(Request $request){
+       
+        dd($request->all());
+        dd('hello maan');
     }
 
     public function payInstalment(Request $request)
