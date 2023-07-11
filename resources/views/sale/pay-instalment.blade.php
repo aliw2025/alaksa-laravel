@@ -6,7 +6,7 @@
             <div class="row invoice-add">
                 <!-- Invoice Add Left starts -->
                 <div class="col-xl-12 col-md-12 col-12">
-                    <form class="" method="POST" autocomplete="on" action="{{ isset($instalmentPayment)? route('#',$instalmentPayment->id):route('pay-instalment-new-post') }}">
+                    <form class="" method="POST" autocomplete="on" action="{{ isset($instalmentPayment)? route('#',$instalmentPayment->id):route('pay-instalment') }}">
                         <div class="card invoice-preview-card">
                             <!-- Header starts -->
                             @if(isset($instalmentPayment))
@@ -42,12 +42,12 @@
                                            
                                         </div>
                                         @if(isset($instalment))
-                                            <input type="hidden" name="instalment_id" value="{{$instalment->id}}">
+                                            <input type="hidden" name="id" value="{{$instalment->id}}">
                                         @endif
                                         <div class="d-flex align-items-center justify-content-between mb-1">
                                             <span class="title">Date:</span>
                                             
-                                            <input  value="{{ isset($instalmentPayment)? $instalmentPayment->date :now()->format('Y-m-d') }}"  name="date" type="date" class="form-control invoice-edit-input" @if(isset($instalmentPayment)) @if($instalmentPayment->status!=1) disabled @endif @endif>
+                                            <input  value="{{ isset($instalmentPayment)? $instalmentPayment->date :now()->format('Y-m-d') }}"  name="pay_date" type="date" class="form-control invoice-edit-input" @if(isset($instalmentPayment)) @if($instalmentPayment->status!=1) disabled @endif @endif>
                                             
                                         </div>
                                         <div class="d-flex align-items-center justify-content-between mb-1">
@@ -61,7 +61,7 @@
                                             <span class="title">Account</span>
                                            
                                             <div style="width: 11.21rem; max-width:11.21rem; " class="align-items-center">
-                                                <select name="acc_type" class="form-select" aria-label="Default select example"  @if(isset($instalmentPayment)) @if($instalmentPayment->status!=1) disabled @endif @endif>
+                                                <select name="account" class="form-select" aria-label="Default select example"  @if(isset($instalmentPayment)) @if($instalmentPayment->status!=1) disabled @endif @endif>
                                                     @foreach ($bank_acc as $acc)
                                                     <option @if(isset($instalmentPayment)) @if($instalmentPayment->account_id==$acc->id) selected @endif @endif value="{{ $acc->id }}">
                                                         {{ $acc->account_name }}
@@ -85,14 +85,28 @@
                                             <div class="row">
                                                 <div class="col-12  product-details-border position-relative pe-0">
                                                     <div class="row py-2">
-                                                        <div class="col-3 my-lg-0 my-2">
-                                                            <p class="card-text col-title mb-md-2 mb-0">Amount</p>
-                                                            <input @if (isset($instalmentPayment))  value="{{ $instalmentPayment->amount }}" @endif id="cost0" name="amount" class="@error('amount') is-invalid @enderror number-separator form-control" placeholder="" @if(isset($instalmentPayment)) @if($instalmentPayment->status!=1) disabled @endif @endif>
+                                                        <div class="col-2 my-lg-0 my-2">
+                                                            <p class="card-text col-title mb-md-2 mb-0">Remaining Amount</p>
+                                                            <input @if (isset($instalment))  value="{{ $instalment->amount-$instalment->amount_paid }}" @endif id="rem_amount" name="amount" class="@error('amount') is-invalid @enderror number-separator form-control" placeholder="" @if(isset($instalmentPayment)) @if($instalmentPayment->status!=1) disabled @endif @endif>
                                                             @error('amount')
                                                             <div class="alert alert-danger"> {{$message}}</div>
                                                             @enderror
                                                         </div>
-                                                        <div class="col-9 my-lg-0 my-2">
+                                                        <div class="col-2 my-lg-0 my-2">
+                                                            <p class="card-text col-title mb-md-2 mb-0">Amount to be paid</p>
+                                                            <input value="0" @if (isset($instalmentPayment))  value="0" @endif id="amount" name="amount_paid" class="@error('amount') is-invalid @enderror number-separator form-control" placeholder="" @if(isset($instalmentPayment)) @if($instalmentPayment->status!=1) disabled @endif @endif>
+                                                            @error('amount')
+                                                            <div class="alert alert-danger"> {{$message}}</div>
+                                                            @enderror
+                                                        </div>
+                                                        <div class="col-2 my-lg-0 my-2">
+                                                            <p class="card-text col-title mb-md-2 mb-0">add to next instalment</p>
+                                                            <input name="move_to_next   " class="ms-1 form-check-input" type="checkbox" value="1" id="move_to_next">
+                                                            @error('amount')
+                                                            <div class="alert alert-danger"> {{$message}}</div>
+                                                            @enderror
+                                                        </div>
+                                                        <div class="col-6 my-lg-0 my-2">
                                                             <p class="card-text col-title mb-md-2 mb-0">Note</p>
                                                             <input @if (isset($instalmentPayment))  value="{{ $instalmentPayment->description }}" @endif id="cost0" name="description" type="text" class="form-control" value="" placeholder="" @if(isset($instalmentPayment)) @if($instalmentPayment->status!=1) disabled @endif @endif>
                                                         </div>
@@ -182,6 +196,23 @@
       
         
         $('.select2-selection__arrow').hide();
+    });
+
+    $(document).on('keyup', '#amount', function() {
+        console.log('dfdfdf');
+        var rem_amount = ($("#rem_amount").val());
+        var rem_amount = Number(rem_amount.replace(/[^0-9.-]+/g, ""));
+
+        var amount = ($(this).val());
+        amount = Number(amount.replace(/[^0-9.-]+/g, ""));
+        if (amount > rem_amount) {
+            $(this).val("");
+        } else if (amount < rem_amount) {
+            $('#move_to_next').attr('disabled', false);
+        } else {
+            $('#move_to_next').attr('disabled', true);
+        }
+
     });
 </script>
 @endsection

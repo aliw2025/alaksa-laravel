@@ -60,8 +60,68 @@ class InstalmentController extends Controller
     
     public function payInstalmentNewPost(Request $request){
        
-        dd($request->all());
-        dd('hello maan');
+        $user = Auth::user();
+        // dd($requssest->all());
+        $instalment = Instalment::find($request->id);
+        $sale = $instalment->sale;
+        $instalments = $sale->instalments;
+        $instalment->amount_paid = $instalment->amount_paid + str_replace(',', '', $request->amount_paid);
+
+        if (isset($request->move_to_next)) {
+            $next_instalment = Instalment::find($request->id + 1);
+            if ($next_instalment == NULL || $next_instalment->sale_id != $sale->id) {
+
+                return redirect()->route('get-sale-instalments', ["id" => $sale->id, "user_exception" => "next instalment not found"]);
+            }
+            $next_instalment->amount = $next_instalment->amount + ($instalment->amount - $instalment->amount_paid);
+            $instalment->amount = $instalment->amount_paid;
+            $next_instalment->save();
+
+        }
+
+        if ($instalment->amount_paid > $instalment->amount) {
+            $user_exception = "amount cannot be greater than due amount";
+            return redirect()->route('get-sale-instalments', ["id" => $sale->id, "user_exception" => $user_exception]);
+
+        }
+
+        // add payment transaction here
+        $payment = new InstalmentPayment();
+        $payment->instalment_id = $instalment->id;
+        $payment->amount = str_replace(',', '', $request->amount_paid);
+        $payment->payment_date = $request->pay_date;
+        $payment->notes = $request->notes;
+        $payment->save();
+
+        if ($instalment->amount_paid == $instalment->amount) {
+            $instalment->instalment_paid = 1;
+        }
+        $instalment->save();
+        // calculate commisions 
+        $investor = Investor::find($sale->investor_id);
+        $inv_per = $sale->selling_price / $sale->total;
+        // item price recovry
+        $ins_mon = str_replace(',', '', $request->amount_paid) * $inv_per;
+        // each investor share in markup profit
+       
+        $alp_share = 0.5;
+        $inv_share = 1-$alp_share;
+        $share1 = (str_replace(',', '', $request->amount_paid) - $ins_mon) * $inv_share;
+        $share2 = (str_replace(',', '', $request->amount_paid) - $ins_mon) * $alp_share;
+
+        //*********************** Leadger  *********************/
+        // debit cash of investor for inventory recovery
+        $payment->createLeadgerEntry($request->account, $ins_mon+$share1, $investor->id, $request->pay_date, $user->id);
+        //  * credit recievable of inventory recovery
+        $payment->createLeadgerEntry(5, -$ins_mon-$share1, $investor->id, $request->pay_date, $user->id);
+        // debit company cash of markup
+        $payment->createLeadgerEntry($request->account, $share2, 1, $request->pay_date, $user->id);
+        // * credit  company  recievable of markup
+        $payment->createLeadgerEntry(5, -$share2, 1, $request->pay_date, $user->id);
+       
+        //*********************** Instalment Commission  *********************/
+        $instalment->createInstalmentComision($sale, $user->id, $payment);
+        return redirect()->route('get-sale-instalments', ['id' => $sale->id]);
     }
 
     public function payInstalment(Request $request)
