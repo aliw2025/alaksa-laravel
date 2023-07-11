@@ -13,6 +13,7 @@
                             </div>
                         </div>
                         <div class="card-body">
+                            
                             <form action="{{route('add-transfer-request')}}" method="POST" autocomplete="on">
 
                                 <div class="row">
@@ -78,4 +79,26 @@
         </div>
     </div>
 </div>
+@if(Session::has('message'))
+<script>
+    $(document).ready(function() {
+        toastr.success("{{Session::get('message')}}", "Success!", {
+            closeButton: !0,
+            tapToDismiss: !1,
+            rtl: false
+        });
+    });
+</script>
+@endif
+@if(Session::has('error_m'))
+<script>
+    $(document).ready(function() {
+        toastr.error("{{Session::get('error_m')}}", "Failed!", {
+            closeButton: !0,
+            tapToDismiss: !1,
+            rtl: false
+        });
+    });
+</script>
+@endif  
 @endsection

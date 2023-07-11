@@ -22,6 +22,7 @@ class TransferRequests extends Model
 
         return $this->morphMany(GLeadger::class,'transaction');
     }
+    
     public function createLeadgerEntry($accound_id,$value,$investor_id,$date,$user_id ){
 
         $this->leadgerEntries()->create([
@@ -31,6 +32,18 @@ class TransferRequests extends Model
             'date' => $date,
             'user_id'=>$user_id
         ]);
+    }
+
+    public function scopeNegativeCheck($query,$account,$amount,$investor){
+
+        $query = GLeadger::where('account_id','=',$account)->where('investor_id','=',$investor);
+        
+        $sum= $query->sum('value');
+        if(($sum-$amount)<0){
+            return false;
+        }else{
+            return true;
+        }
     }
 
 }

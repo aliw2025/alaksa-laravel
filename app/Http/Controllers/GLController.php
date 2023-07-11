@@ -114,9 +114,12 @@ class GLController extends Controller
         $tr->amount =  str_replace(',', '', $request->amount);
         $tr->status = 0;
         $tr->owner_investor_id = $request->inv_1;
+        if(!TransferRequests:: NegativeCheck($request->bnk_1,str_replace(',', '', $request->amount),$request->inv_1)){
+            return redirect()->back()->with('error_m', 'Balance insufficient');
+        }
         $tr->save();
 
-        return redirect()->route('ro-dashboard');
+        return redirect()->back()->with('message','Request Added');
     }
 
 
@@ -202,6 +205,9 @@ class GLController extends Controller
             $t->amount =  str_replace(',', '', $request->amount);
             $t->status = 0;
             $t->owner_investor_id = $request->inv_1;
+            if(!TransferRequests:: NegativeCheck($request->bnk_1,str_replace(',', '', $request->amount),$request->inv_1)){
+                return redirect()->back()->with('error_m', 'Balance insufficient');
+            }
             $t->save();
             //leadger entry for debit cash/bank of investory
             // $t->createLeadgerEntry($t->reciever_account_id, $t->amount, $t->owner_investor_id, $t->created_at, $user->id);
@@ -215,6 +221,9 @@ class GLController extends Controller
             $inv_loan->inv2_account =  $request->bnk_2;
             $inv_loan->amount = $request->amount;
             $inv_loan->inv2_id = $request->inv_2;
+            if(!TransferRequests:: NegativeCheck($request->bnk_1,str_replace(',', '', $request->amount),$request->inv_1)){
+                return redirect()->back()->with('error_m', 'Balance insufficient');
+            }
             $inv_loan->save();
 
             //   create leadger entries here.
@@ -225,11 +234,9 @@ class GLController extends Controller
             $inv_loan->createLeadgerEntry(7, - $inv_loan->amount,  $inv_loan->inv2_id,  $inv_loan->created_at, $user->id);
 
 
-
-
         }
 
-        return redirect()->route('index');
+        return redirect()->back()->with('message','Request Added');
     }
 
     public function AccountBalances(Request $request)
@@ -286,6 +293,7 @@ class GLController extends Controller
 
     public function investorPaymentStore(Request $request)
     {
+
         // validate id amount is provided
         $validated = $request->validate(
             [
@@ -293,32 +301,31 @@ class GLController extends Controller
             ]
         );
 
-
         $user  = Auth::user();
+        // create a method to deal with payables    
+        $inv_loan = new InvestorPayment();
+        $inv_loan->inv1_id = $request->inv_1;
+        $inv_loan->inv1_account =  $request->bnk_1;
+        $inv_loan->inv2_account =  $request->bnk_2;
+        $inv_loan->amount = str_replace(',', '', $request->amount);
+        $inv_loan->inv2_id = $request->inv_2;
+        $inv_loan->save();
 
-       
-            // create a method to deal with payables    
-            $inv_loan = new InvestorPayment();
-            $inv_loan->inv1_id = $request->inv_1;
-            $inv_loan->inv1_account =  $request->bnk_1;
-            $inv_loan->inv2_account =  $request->bnk_2;
-            $inv_loan->amount = $request->amount;
-            $inv_loan->inv2_id = $request->inv_2;
-            $inv_loan->save();
+        if(!TransferRequests:: NegativeCheck($request->bnk_1,str_replace(',', '', $request->amount),$request->inv_1)){
+            return redirect()->back()->with('error_m', 'Balance insufficient');
+        }
 
-            //   create leadger entries here.
-            // debit payable 
-            $inv_loan->createLeadgerEntry(7,  $inv_loan->amount,  $inv_loan->inv1_id,  $inv_loan->created_at, $user->id);
-            // credit cash or bank
-            $inv_loan->createLeadgerEntry( $inv_loan->inv1_account, - $inv_loan->amount,  $inv_loan->inv1_id,  $inv_loan->created_at, $user->id);
+        //   create leadger entries here.
+        // debit payable 
+        $inv_loan->createLeadgerEntry(7,  $inv_loan->amount,  $inv_loan->inv1_id,  $inv_loan->created_at, $user->id);
+        // credit cash or bank
+        $inv_loan->createLeadgerEntry( $inv_loan->inv1_account, - $inv_loan->amount,  $inv_loan->inv1_id,  $inv_loan->created_at, $user->id);
+        // debit cash or bank
+        $inv_loan->createLeadgerEntry( $inv_loan->inv1_account,  $inv_loan->amount,  $inv_loan->inv2_id,  $inv_loan->created_at, $user->id);
+        // credit recievable
+        $inv_loan->createLeadgerEntry(5, - $inv_loan->amount,  $inv_loan->inv2_id,  $inv_loan->created_at, $user->id);
 
-            // debit cash or bank
-            $inv_loan->createLeadgerEntry( $inv_loan->inv1_account,  $inv_loan->amount,  $inv_loan->inv2_id,  $inv_loan->created_at, $user->id);
-            // credit recievable
-            $inv_loan->createLeadgerEntry(5, - $inv_loan->amount,  $inv_loan->inv2_id,  $inv_loan->created_at, $user->id);
-
-
-                return redirect()->route('index');
+        return redirect()->back()->with('message','Loan Paid');
 
     }
     
