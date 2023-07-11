@@ -68,4 +68,15 @@ class SupplierPayment extends Model
          return $query;
 
     }
+    public function scopeNegativeCheck($query,$account,$amount,$investor){
+
+        $query = GLeadger::where('account_id','=',$account)->where('investor_id','=',$investor);
+        
+        $sum= $query->sum('value');
+        if(($sum-$amount)<0){
+            return false;
+        }else{
+            return true;
+        }
+    }
 }

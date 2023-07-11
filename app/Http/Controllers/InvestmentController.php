@@ -66,7 +66,7 @@ class InvestmentController extends Controller
         $investors = Investor::all();
        
         $bank_acc = ChartOfAccount::where('account_type', '=', 1)->orWhere('account_type', '=', 4)->get();
-        return redirect()->route('investment.show',$investment->id);
+        return redirect()->route('investment.show',$investment->id)->with('message','Record Saved');
     }
 
     /**
@@ -104,8 +104,7 @@ class InvestmentController extends Controller
      */
     public function update(Request $request, Investment $investment)
     {
-        //
-
+        
         if ($request->input('action') == "post") {
 
             return redirect()->route('post-investment', $request->all());
@@ -119,11 +118,25 @@ class InvestmentController extends Controller
             return redirect()->route('cancel-investment', $request->all());
         }
 
+
         $validated = $request->validate([
             'amount'=>'required',
             'description'=>'required',
             'date'=>'required'
         ]);
+
+        $investment->description = $request->description;
+        $investment->amount = str_replace(',','',$request->amount);
+        $investment->date = $request->date;
+        $investment->investor_id = $request->investor_id;
+        $investment->account_id = $request->acc_type;
+        $investment->save();
+
+        return redirect()->back()->with('message', 'Record Saved');
+
+       
+
+
     }
     public function postInvestment(Request $request)
     {
@@ -143,7 +156,7 @@ class InvestmentController extends Controller
          $user = Auth::user();
          $investment->createLeadgerEntry(  $investment->account_id,$investment->amount,$request->investor_id,$request->date,$user->id);
          $investment->createLeadgerEntry(6,-$investment->amount,$request->investor_id,$request->date,$user->id);
-         return redirect()->route('investment.show',$investment->id);
+         return redirect()->back()->with('message', 'Record Posted');
 
     }
     public function unPostInvestment(Request $request)
@@ -159,8 +172,9 @@ class InvestmentController extends Controller
      
          $user = Auth::user();
          $investment->leadgerEntries()->delete();
-         return redirect()->route('investment.show',$investment->id);
-    }
+         return redirect()->back()->with('message', 'Record Un Posted');
+        }
+
     public function cancelInvestment(Request $request)
     {
         # code...
@@ -174,7 +188,7 @@ class InvestmentController extends Controller
         $investment->status = 2;
         $investment->save();
      
-         return redirect()->route('investment.show',$investment->id);
+        return redirect()->back()->with('message', 'Record Cancelled');
     }
 
     /**

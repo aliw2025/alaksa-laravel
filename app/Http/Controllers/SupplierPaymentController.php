@@ -103,7 +103,7 @@ class SupplierPaymentController extends Controller
         $supplierPayment->account_id = $request->acc_type;
         $supplierPayment->save();
 
-        return redirect()->route('supplierPayment.show')->with('message','Record saved');
+        return redirect()->route('supplierPayment.show',$supplierPayment)->with('message','Record saved');
 
     }
 
@@ -265,6 +265,9 @@ class SupplierPaymentController extends Controller
         }
 
         $user = Auth::user();
+        if(!SupplierPayment:: NegativeCheck($request->acc_type,$supplierPayment->amount,$request->investor_id)){
+            return redirect()->back()->with('error_m', 'Balance insufficient');
+        }
         $supplierPayment->status = 3;
         $supplierPayment->save();
        
@@ -273,8 +276,8 @@ class SupplierPaymentController extends Controller
         $sup_acc_id = $supplier->charOfAccounts->where('account_type', 7)->first()->id;
 
         // /************** Leadger Entries **********/
-        $supplierPayment->createLeadgerEntry($sup_acc_id,str_replace(',','',$request->amount),$supplierPayment->investor_id,$request->payment_date,$user->id);
-        $supplierPayment->createLeadgerEntry($request->acc_type,-str_replace(',','',$request->amount),$supplierPayment->investor_id,$request->payment_date,$user->id);
+        $supplierPayment->createLeadgerEntry($sup_acc_id,str_replace(',','',$supplierPayment->amount),$supplierPayment->investor_id,$supplierPayment->payment_date,$user->id);
+        $supplierPayment->createLeadgerEntry($request->acc_type,-str_replace(',','',$supplierPayment->amount),$supplierPayment->investor_id,$supplierPayment->payment_date,$user->id);
 
         
        

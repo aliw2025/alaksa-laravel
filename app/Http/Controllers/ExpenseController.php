@@ -179,6 +179,9 @@ class ExpenseController extends Controller
             return "expense alreaddy postedd";
         }
         $user = Auth::user();
+        if(!Expense:: NegativeCheck($request->acc_type,$expense->amount,$request->investor_id)){
+            return redirect()->back()->with('error_m', 'Balance insufficient');
+        }
         $expense->status = 3;
         $expense->save();
         $expense->createLeadgerEntry($request->acc_type, $expense->amount, $request->investor_id, $request->date, $user->id);

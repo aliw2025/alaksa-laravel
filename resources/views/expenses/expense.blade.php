@@ -228,6 +228,17 @@
     });
 </script>
 @endif
+@if(Session::has('error_m'))
+<script>
+    $(document).ready(function() {
+        toastr.error("{{Session::get('error_m')}}", "Failed!", {
+            closeButton: !0,
+            tapToDismiss: !1,
+            rtl: false
+        });
+    });
+</script>
+@endif
 <script>
     var rowId = 0;
     $(document).ready(function() {
