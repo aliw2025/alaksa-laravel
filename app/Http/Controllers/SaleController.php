@@ -258,7 +258,7 @@ class SaleController extends Controller
                     // ad trade profit  
                     $sale->createLeadgerEntry(10, -$trade_discount, $investor->id, $sale->sale_date, $user->id);
                 } else {
-
+                    //ad payable
                     $sale->createLeadgerEntry(7, -$trade_discount, $investor->id, $sale->sale_date, $user->id);
                 }
             } else {
@@ -337,7 +337,8 @@ class SaleController extends Controller
         return view('sale.return_final', compact('cash_back_investor', 'cash_back_company', 'give_to_investor', 'give_to_company', 'bank_acc', 'sale'));
     }
 
-    public function postReturnAdjustmentSimpe(Request $request){
+    public function postReturnAdjustmentSimple(Request $request)
+    {
 
         $mytime = date('Y-m-d'); // 
 
@@ -357,6 +358,7 @@ class SaleController extends Controller
         $inventory->save();
         //**************  calculating trade discount  *****************/
         $trade_discount = $sale->trade_discount;
+
 
         //**************  LEADGER *****************/
         if ($sale->payment_type == 1) {
@@ -399,12 +401,24 @@ class SaleController extends Controller
             $sale->createLeadgerEntry($request->give_back_alp_acc, str_replace(',', '', $request->give_back_alp), 1, $mytime, $user->id);
             //* credit pft
             $sale->createLeadgerEntry(9, -str_replace(',', '', $request->take_back_alp), 1, $mytime, $user->id);
+            
+            // debit profit if positive profit
+            if ($sale->trade_discount > 0) {
+                if ($sale->investor_id == 1) {
+                    // debit profit
+                } else {
+                    // debit payable to alp
+                }
+            } else {
+                
+                // credit loss expense
+            }
             //5 - debit td pft
-            $sale->createLeadgerEntry(10, str_replace(',', '', $request->take_back_td), 1, $mytime, $user->id);
+            // $sale->createLeadgerEntry(10, str_replace(',', '', $request->take_back_td), 1, $mytime, $user->id);
             //* credit alp selected
-            $sale->createLeadgerEntry($request->take_back_td_acc, -str_replace(',', '', $request->take_back_td), 1, $mytime, $user->id);
+            // $sale->createLeadgerEntry($request->take_back_td_acc, -str_replace(',', '', $request->take_back_td), 1, $mytime, $user->id);
             //5 - debit td to inv
-            $sale->createLeadgerEntry($request->take_back_td_acc, str_replace(',', '', $request->take_back_td), $sale->investor_id, $mytime, $user->id);
+            //$sale->createLeadgerEntry($request->take_back_td_acc, str_replace(',', '', $request->take_back_td), $sale->investor_id, $mytime, $user->id);
         } else {
 
             //  leadger entry for debit cash/bank of investory
@@ -444,7 +458,6 @@ class SaleController extends Controller
         $sale->save();
 
         return redirect()->route('sale.show', $sale->id);
-
     }
 
     public function postReturnAdjustment(Request $request)
@@ -568,20 +581,20 @@ class SaleController extends Controller
         $sale = Sale::find($request->sale_id);
         $investor = Investor::find($sale->investor_id);
         $item_price = $investor->inventories()->where('item_id', '=', $sale->item_id)->first()->unit_cost;
+        $loss_profit = $sale->trade_discount;
         $inv_per = $sale->selling_price  / $sale->total;
         $markup_per = 1 - $inv_per;
-
-        if ($sale->type == 1) {
+        // dd('dfdfdf');
+        if ($sale->payment_type == 1) {
             $total_amount_paid = $sale->instalments->sum('amount_paid');
             // dd($total_amount_paid);
             $inventory_money = $total_amount_paid * $inv_per;
             // each investor share in markup profit
             $alp_share = 0.5;
             $inv_share = 1 - $alp_share;
-            
+
             $share_alp = ($total_amount_paid - $inventory_money) * $alp_share;
             $share_inv = ($total_amount_paid - $inventory_money) * $inv_share;
-
         } else {
 
             $total_amount_paid = $sale->total;
@@ -594,7 +607,7 @@ class SaleController extends Controller
             $share_inv =  ($sale->total - $inventory_money - $sale->trade_discount) * $inv_share;
         }
 
-        return view('sale.sale_temp', compact('investors', 'suppliers', 'type', 'sale', 'total_amount_paid', 'inventory_money', 'share_alp','share_inv'));
+        return view('sale.sale_temp', compact('investors', 'suppliers', 'type', 'sale', 'total_amount_paid', 'inventory_money', 'share_alp', 'share_inv', 'loss_profit'));
     }
 
 
@@ -939,7 +952,7 @@ class SaleController extends Controller
         ]);
 
 
-        $sales = Sale::SearchSale($request->from_date, $request->to_date, $request->customer_name, $request->customer_id, $request->invoice_no, $request->status_id);       
+        $sales = Sale::SearchSale($request->from_date, $request->to_date, $request->customer_name, $request->customer_id, $request->invoice_no, $request->status_id);
         $statuses = TransactionStatus::all();
         $from_date = $request->from_date;
         $to_date = $request->to_date;
@@ -965,10 +978,10 @@ class SaleController extends Controller
             'customer_name' => $request->customer_name,
             'customer_id' => $request->customer_id,
             'invoice_no' => $request->invoice_no,
-            'status_id'=>$request->status_id
-            
+            'status_id' => $request->status_id
+
         ]);
 
-        return view('sale.search_sale', compact('sales', 'statuses','from_date', 'to_date', 'statuses', 'sum','customer_name','customer_id','invoice_no'));
+        return view('sale.search_sale', compact('sales', 'statuses', 'from_date', 'to_date', 'statuses', 'sum', 'customer_name', 'customer_id', 'invoice_no'));
     }
 }

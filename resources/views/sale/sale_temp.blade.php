@@ -225,6 +225,12 @@
                                                     Company Mark up Recieved: {{ number_format($share_alp) }}
                                                     <input type="hidden" name="company" value="{{ $share_inv }}">
                                                 </div>
+                                                <div class="col-12 mt-1">
+                                                    {{ $loss_profit>=0? 'Profit' : 'loss'}}: {{ number_format($loss_profit>=0? $loss_profit: $loss_profit*-1) }}
+                                                    <input type="hidden" name="company" value="{{ $share_inv }}">
+                                                </div>
+                                                
+
                                             </div>
                                 
 

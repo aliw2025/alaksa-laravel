@@ -115,7 +115,7 @@
 
                                         <div class="d-flex align-items-center justify-content-between mb-1">
                                             <span class="title">Date:</span>
-                                            <input @if (isset($sale)) value="{{ $sale->sale_date }}" @endif id="sale_date" name="sale_date" type="date" class="form-control invoice-edit-input" @if (isset($sale)) @if(($sale->status!=1)) disabled @endif @endif>
+                                            <input  value="{{ isset($sale)? $sale->sale_date: date('Y-m-d')}}"  id="sale_date" name="sale_date" type="date" class="form-control invoice-edit-input" @if (isset($sale)) @if(($sale->status!=1)) disabled @endif @endif>
                                         </div>
 
                                         @if (!isset($sale))
@@ -140,7 +140,7 @@
                                             <div style="width: 11.21rem; max-width:11.21rem; " class="align-items-center">
                                                 <select name="investor_id" class=" select2 select2-hidden-accessible form-control invoice-edit-input" id="select2-basic" datas-select2-id="select2-basic" tabindex="-1" aria-hidden="true" @if (isset($sale)) @if(($sale->status!=1)) disabled @endif @endif>
                                                     @foreach ($investors as $investor)
-                                                    <option @if (isset($sale)) @if(($sale->investor_id!=$investor->id)) selected @endif @endif value="{{ $investor->id }}">
+                                                    <option @if (isset($sale)) @if(($sale->investor_id==$investor->id)) selected @endif @endif value="{{ $investor->id }}">
                                                         {{ $investor->investor_name }}
                                                     </option>
                                                     @endforeach
