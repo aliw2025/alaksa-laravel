@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Auth;
 
 use Carbon\Carbon;
 use Carbon\Cli\Invoker;
+use Laravel\Sail\Console\InstallCommand;
 
 class InstalmentController extends Controller
 {
@@ -44,7 +45,7 @@ class InstalmentController extends Controller
 
     public function payInstalmentNew(Request $request){
         
-        $instalment = Instalment::find($request->id);
+        $instalment = Instalment::find($request->instalment_id);
         $investors = Investor::all();
         // where('owner_type','App\Models\Investor')->
         $bank_acc = ChartOfAccount::where(
@@ -54,75 +55,194 @@ class InstalmentController extends Controller
              })->get();
                             
         return view('sale.pay-instalment',compact('bank_acc','instalment','investors'));
-        
+
+    }
+
+
+    public function payInstalmentNewShow($id){
+
+
+        $instalmentPayment = InstalmentPayment::find($id); 
+        $instalment = Instalment::find($instalmentPayment->instalment_id);
+        $investors = Investor::all();
+        // where('owner_type','App\Models\Investor')->
+        $bank_acc = ChartOfAccount::where(
+            function($query) {
+              return 
+              $query->where('account_type', '=', 1)->orWhere('account_type', '=', 4);
+             })->get();
+
+             return view('sale.pay-instalment',compact('instalmentPayment','bank_acc','instalment','investors'));
+
     }
 
     
-    public function payInstalmentNewPost(Request $request){
+    public function payInstalmentNewStore(Request $request){
        
-        $user = Auth::user();
-        // dd($requssest->all());
-        $instalment = Instalment::find($request->id);
-        $sale = $instalment->sale;
-        $instalments = $sale->instalments;
-        $instalment->amount_paid = $instalment->amount_paid + str_replace(',', '', $request->amount_paid);
+        $validated = $request->validate([
+            'amount_paid'=>'required',
+            'pay_date'=>'required',
+            'account_id'=>'required',
+        ]);
 
-        if (isset($request->move_to_next)) {
-            $next_instalment = Instalment::find($request->id + 1);
-            if ($next_instalment == NULL || $next_instalment->sale_id != $sale->id) {
-
-                return redirect()->route('get-sale-instalments', ["id" => $sale->id, "user_exception" => "next instalment not found"]);
-            }
-            $next_instalment->amount = $next_instalment->amount + ($instalment->amount - $instalment->amount_paid);
-            $instalment->amount = $instalment->amount_paid;
-            $next_instalment->save();
-
-        }
-
-        if ($instalment->amount_paid > $instalment->amount) {
-            $user_exception = "amount cannot be greater than due amount";
-            return redirect()->route('get-sale-instalments', ["id" => $sale->id, "user_exception" => $user_exception]);
-
-        }
-
+    
+        $instalment = Instalment::find($request->instalment_id);
         // add payment transaction here
         $payment = new InstalmentPayment();
         $payment->instalment_id = $instalment->id;
         $payment->amount = str_replace(',', '', $request->amount_paid);
         $payment->payment_date = $request->pay_date;
         $payment->notes = $request->notes;
+        $payment->account_id= $request->account_id;
+        $instalment->move_to_next = isset($request->move_to_next)?true:false;
+        $payment->status = 1;
+        
         $payment->save();
+        $instalment->save();
+
+        return redirect()->route('instalment-payment-new-show',$payment->id)->with('message','Record Saved');
+    }
+
+
+    public function payInstalmentNewUpdate(Request $request){
+        
+
+
+        if ($request->input('action') == "post") {
+
+            return redirect()->route('pay-instalment-new-post', $request->all());
+
+        }else if ($request->input('action') == "unpost"){
+
+            return redirect()->route('pay-instalment-new-unpost', $request->all());
+        }
+         else if ($request->input('action') == "cancel") {
+            return redirect()->route('pay-instalment-new-cancel', $request->all());
+        }
+
+
+        $validated = $request->validate([
+            'amount_paid'=>'required',
+            'pay_date'=>'required',
+            'account_id'=>'required',
+        ]);
+
+    
+        // add payment transaction here
+        $payment = InstalmentPayment::find($request->id);
+        $instalment = Instalment::find($payment->instalment_id);
+        $payment->amount = str_replace(',', '', $request->amount_paid);
+        $payment->payment_date = $request->pay_date;
+        $payment->notes = $request->notes;
+        $payment->account_id= $request->account_id;
+        $instalment->move_to_next = isset($request->move_to_next)?true:false;
+        $payment->status = 1;
+        $payment->save();
+
+        return redirect()->back()->with('message','Record Saved');
+
+
+    }
+
+    
+    public function payInstalmentNewPost(Request $request){
+
+
+        // dd('i am here ');
+        $instalment = Instalment::find($request->instalment_id);
+        $instalmentPayment = InstalmentPayment::find($request->id);
+        $sale = $instalment->sale;
+        $instalment->amount_paid = $instalment->amount_paid + str_replace(',', '', $instalmentPayment->amount);
+        $user = Auth::user();
+       
+        if (isset($instalment->move_to_next)) {
+            $next_instalment = Instalment::find($request->id + 1);
+            if ($next_instalment == NULL || $next_instalment->sale_id != $sale->id) {
+
+                return redirect()->back()->with("error_m" , "next instalment not found");
+            }
+            $next_instalment->amount = $next_instalment->amount + ($instalment->amount - $instalment->amount_paid);
+            $instalment->moving_amount = $instalment->amount - $instalment->amount_paid;
+            $instalment->amount = $instalment->amount_paid;
+            $next_instalment->save();
+
+        }
+        dd('2nd');
+        if ($instalment->amount_paid > $instalment->amount) {
+            return redirect()->back()->with("error_m" , "Amount cannot be greater than pending amount");
+
+        }
 
         if ($instalment->amount_paid == $instalment->amount) {
             $instalment->instalment_paid = 1;
         }
+
         $instalment->save();
         // calculate commisions 
         $investor = Investor::find($sale->investor_id);
         $inv_per = $sale->selling_price / $sale->total;
         // item price recovry
-        $ins_mon = str_replace(',', '', $request->amount_paid) * $inv_per;
+        $ins_mon = str_replace(',', '', $instalmentPayment->amount) * $inv_per;
         // each investor share in markup profit
        
         $alp_share = 0.5;
         $inv_share = 1-$alp_share;
-        $share1 = (str_replace(',', '', $request->amount_paid) - $ins_mon) * $inv_share;
-        $share2 = (str_replace(',', '', $request->amount_paid) - $ins_mon) * $alp_share;
-
+        $share1 = (str_replace(',', '', $instalmentPayment->amount) - $ins_mon) * $inv_share;
+        $share2 = (str_replace(',', '', $instalmentPayment->amount) - $ins_mon) * $alp_share;
+       
+        $instalmentPayment->status = 3;
+        $instalmentPayment->save();
         //*********************** Leadger  *********************/
         // debit cash of investor for inventory recovery
-        $payment->createLeadgerEntry($request->account, $ins_mon+$share1, $investor->id, $request->pay_date, $user->id);
+        $instalmentPayment->createLeadgerEntry($instalmentPayment->account, $ins_mon+$share1, $investor->id, $instalmentPayment->pay_date, $user->id);
         //  * credit recievable of inventory recovery
-        $payment->createLeadgerEntry(5, -$ins_mon-$share1, $investor->id, $request->pay_date, $user->id);
+        $instalmentPayment->createLeadgerEntry(5, -$ins_mon-$share1, $investor->id, $instalmentPayment->pay_date, $user->id);
         // debit company cash of markup
-        $payment->createLeadgerEntry($request->account, $share2, 1, $request->pay_date, $user->id);
+        $instalmentPayment->createLeadgerEntry($instalmentPayment->account, $share2, 1, $instalmentPayment->pay_date, $user->id);
         // * credit  company  recievable of markup
-        $payment->createLeadgerEntry(5, -$share2, 1, $request->pay_date, $user->id);
+        $instalmentPayment->createLeadgerEntry(5, -$share2, 1, $instalmentPayment->pay_date, $user->id);
        
         //*********************** Instalment Commission  *********************/
-        $instalment->createInstalmentComision($sale, $user->id, $payment);
-        return redirect()->route('get-sale-instalments', ['id' => $sale->id]);
+        $instalment->createInstalmentComision($sale, $user->id, $instalmentPayment);
+
+        return redirect()->back()->with('message','record posted');
+        
     }
+
+
+    public function payInstalmentNewUnPost(Request $request){
+
+        $instalment = Instalment::find($request->id);
+        $payment = InstalmentPayment::find($request->instalment_id);
+        $sale = $instalment->sale;
+
+        if ($instalment->move_to_next==true) {
+            $next_instalment = Instalment::find($request->id + 1);
+            if ($next_instalment == NULL || $next_instalment->sale_id != $sale->id) {
+
+                return redirect()->back()->with("error" , "next instalment not found");
+            }
+            $next_instalment->amount = $next_instalment->amount - $instalment->moving_amount;
+            $instalment->amount = $instalment->amount+$instalment->moving_amount;
+            $instalment->move_to_next = false;
+            $next_instalment->save();
+
+        }
+        $instalment->amount_paid = $instalment->amount_paid - str_replace(',', '', $payment->amount);
+
+        if ($instalment->amount_paid != $instalment->amount) {
+            $instalment->instalment_paid = 0;
+        }
+
+        $instalment->save();    
+        // deleting leadger impact   
+        $payment->leadgerEntries()->delete();
+
+        //*********************** Instalment Commission  deleting *********************/
+        $instalment->saleCommision()->delete();
+        return redirect()->back()->with('message','Record Un Posted');
+    }
+
 
     public function payInstalment(Request $request)
     {

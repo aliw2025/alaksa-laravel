@@ -6,15 +6,20 @@
             <div class="row invoice-add">
                 <!-- Invoice Add Left starts -->
                 <div class="col-xl-12 col-md-12 col-12">
-                    <form class="" method="POST" autocomplete="on" action="{{ isset($instalmentPayment)? route('#',$instalmentPayment->id):route('pay-instalment') }}">
+                    <form class="" method="POST" autocomplete="on" action="{{ isset($instalmentPayment)? route('pay-instalment-new-update',$instalmentPayment->id):route('pay-instalment-new-store') }}">
                         <div class="card invoice-preview-card">
                             <!-- Header starts -->
                             @if(isset($instalmentPayment))
                             {{ method_field('PUT') }}
                             @endif
                             @if(isset($instalmentPayment))
-                                <input type="hidden" name="investment_id" id="" value="{{$instalmentPayment->id}}">
+                            <input type="hidden" name="id" id="" value="{{$instalmentPayment->id}}">
                             @endif
+                            
+                            @foreach ($errors->all() as $error)
+                            <div>{{ $error }}</div>
+                            @endforeach
+                           
                             <div class="card-body invoice-padding pb-0">
                                 <div class="d-flex justify-content-between flex-md-row flex-column invoice-spacing mt-0">
                                     <div>
@@ -28,40 +33,40 @@
                                     <div class="mt-2">
                                         <h4 style="text-decoration: underline">
                                             Instalment Payment</h4>
-                                            @if(isset($instalmentPayment))
-                                                @if(($instalmentPayment->status==2))
-                                                    <h4 style="color:red">Cancelled</h4>
-                                                @elseif(($instalmentPayment->status==3))
-                                                    <h4 style="color:green">Posted</h4>
-                                                @endif
-                                            @endif
+                                        @if(isset($instalmentPayment))
+                                        @if(($instalmentPayment->status==2))
+                                        <h4 style="color:red">Cancelled</h4>
+                                        @elseif(($instalmentPayment->status==3))
+                                        <h4 style="color:green">Posted</h4>
+                                        @endif
+                                        @endif
                                     </div>
                                     <div class="invoice-number-date mt-md-0 mt-2">
                                         <div class="d-flex align-items-center justify-content-between mb-1">
                                             @csrf
-                                           
+
                                         </div>
                                         @if(isset($instalment))
-                                            <input type="hidden" name="id" value="{{$instalment->id}}">
+                                        <input type="hidden" name="instalment_id" value="{{$instalment->id}}">
                                         @endif
                                         <div class="d-flex align-items-center justify-content-between mb-1">
                                             <span class="title">Date:</span>
-                                            
-                                            <input  value="{{ isset($instalmentPayment)? $instalmentPayment->date :now()->format('Y-m-d') }}"  name="pay_date" type="date" class="form-control invoice-edit-input" @if(isset($instalmentPayment)) @if($instalmentPayment->status!=1) disabled @endif @endif>
-                                            
+
+                                            <input value="{{ isset($instalmentPayment)? $instalmentPayment->payment_date :now()->format('Y-m-d') }}" name="pay_date" type="date" class="form-control invoice-edit-input" @if(isset($instalmentPayment)) @if($instalmentPayment->status!=1) disabled @endif @endif>
+
                                         </div>
                                         <div class="d-flex align-items-center justify-content-between mb-1">
                                             <span class="title">Pending Amount:</span>
-                                            
-                                            <input  value="{{ isset($instalment)? $instalment->amount:0}}"  name="date" type="text" class="form-control invoice-edit-input"  disabled >
-                                            
+
+                                            <input value="{{ isset($instalment)? $instalment->amount:0}}" name="date" type="text" class="form-control invoice-edit-input" disabled>
+
                                         </div>
-                                       
+
                                         <div class="d-flex align-items-center justify-content-between mt-1">
                                             <span class="title">Account</span>
-                                           
+
                                             <div style="width: 11.21rem; max-width:11.21rem; " class="align-items-center">
-                                                <select name="account" class="form-select" aria-label="Default select example"  @if(isset($instalmentPayment)) @if($instalmentPayment->status!=1) disabled @endif @endif>
+                                                <select name="account_id" class="form-select" aria-label="Default select example" @if(isset($instalmentPayment)) @if($instalmentPayment->status!=1) disabled @endif @endif>
                                                     @foreach ($bank_acc as $acc)
                                                     <option @if(isset($instalmentPayment)) @if($instalmentPayment->account_id==$acc->id) selected @endif @endif value="{{ $acc->id }}">
                                                         {{ $acc->account_name }}
@@ -70,7 +75,7 @@
                                                 </select>
                                             </div>
                                         </div>
-                                        
+
                                     </div>
                                 </div>
                             </div>
@@ -87,15 +92,15 @@
                                                     <div class="row py-2">
                                                         <div class="col-2 my-lg-0 my-2">
                                                             <p class="card-text col-title mb-md-2 mb-0">Remaining Amount</p>
-                                                            <input @if (isset($instalment))  value="{{ $instalment->amount-$instalment->amount_paid }}" @endif id="rem_amount" name="amount" class="@error('amount') is-invalid @enderror number-separator form-control" placeholder="" @if(isset($instalmentPayment)) @if($instalmentPayment->status!=1) disabled @endif @endif>
+                                                            <input @if (isset($instalment)) value="{{ $instalment->amount-$instalment->amount_paid }}" @endif id="rem_amount" name="amount" class="@error('amount') is-invalid @enderror number-separator form-control" placeholder="" @if(isset($instalmentPayment)) @if($instalmentPayment->status!=1) disabled @endif @endif>
                                                             @error('amount')
                                                             <div class="alert alert-danger"> {{$message}}</div>
                                                             @enderror
                                                         </div>
                                                         <div class="col-2 my-lg-0 my-2">
                                                             <p class="card-text col-title mb-md-2 mb-0">Amount to be paid</p>
-                                                            <input value="0" @if (isset($instalmentPayment))  value="0" @endif id="amount" name="amount_paid" class="@error('amount') is-invalid @enderror number-separator form-control" placeholder="" @if(isset($instalmentPayment)) @if($instalmentPayment->status!=1) disabled @endif @endif>
-                                                            @error('amount')
+                                                            <input @if (isset($instalmentPayment)) value="{{$instalmentPayment->amount}}" @endif id="amount" name="amount_paid" class="@error('amount_paid') is-invalid @enderror number-separator form-control" placeholder="" @if(isset($instalmentPayment)) @if($instalmentPayment->status!=1) disabled @endif @endif>
+                                                            @error('amount_paid')
                                                             <div class="alert alert-danger"> {{$message}}</div>
                                                             @enderror
                                                         </div>
@@ -108,7 +113,7 @@
                                                         </div>
                                                         <div class="col-6 my-lg-0 my-2">
                                                             <p class="card-text col-title mb-md-2 mb-0">Note</p>
-                                                            <input @if (isset($instalmentPayment))  value="{{ $instalmentPayment->description }}" @endif id="cost0" name="description" type="text" class="form-control" value="" placeholder="" @if(isset($instalmentPayment)) @if($instalmentPayment->status!=1) disabled @endif @endif>
+                                                            <input @if (isset($instalmentPayment)) value="{{ $instalmentPayment->description }}" @endif id="cost0" name="description" type="text" class="form-control" value="" placeholder="" @if(isset($instalmentPayment)) @if($instalmentPayment->status!=1) disabled @endif @endif>
                                                         </div>
                                                     </div><s></s>
                                                 </div>
@@ -136,24 +141,24 @@
                             </div>
                             <div class="row p-2">
                                 <div class="col-12">
-                                @if (isset($investment))
-                                    @if ($instalmentPayment->status == 1)
+                                    @if (isset($instalmentPayment))
+                                        @if ($instalmentPayment->status == 1)
+                                        <div class="d-flex justify-content-end">
+                                            <button type="submit" name="action" value="post" class="btn btn-success me-2">Post</button>
+                                            <button type="submit" name="action" value="cancel" class="btn btn-danger me-2">Cancel</button>
+                                            <button type="submit" name="action" value="save" class="btn btn-primary me-2">Save</button>
+                                        </div>
+                                        @elseif($instalmentPayment->status == 3)
+                                        <div class="d-flex justify-content-end">
+                                            <button type="submit" name="action" value="unpost" class="btn btn-danger me-2">Un Post</button>
+                                        </div>
+                                        @endif
+                                    @else
                                     <div class="d-flex justify-content-end">
-                                        <button type="submit" name="action" value="post" class="btn btn-success me-2">Post</button>
-                                        <button type="submit" name="action" value="cancel" class="btn btn-danger me-2">Cancel</button>
-                                        <button type="submit" name="action" value="save" class="btn btn-primary me-2">Save</button>
-                                    </div>
-                                    @elseif($instalmentPayment->status == 3)
-                                    <div class="d-flex justify-content-end">
-                                        <button type="submit" name="action" value="unpost" class="btn btn-danger me-2">Un Post</button>
+                                        <button type="submit" class="btn btn-primary me-2">Save</button>
+                                        <button type="reset" class="btn btn-danger">Reset</button>
                                     </div>
                                     @endif
-                                @else
-                                <div class="d-flex justify-content-end">
-                                    <button type="submit" class="btn btn-primary me-2">Save</button>
-                                    <button type="reset" class="btn btn-danger">Reset</button>
-                                </div>
-                                @endif
 
                                 </div>
                             </div>
@@ -189,12 +194,12 @@
         });
     });
 </script>
-@endif  
+@endif
 <script>
     var rowId = 0;
     $(document).ready(function() {
-      
-        
+
+
         $('.select2-selection__arrow').hide();
     });
 

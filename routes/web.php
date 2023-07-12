@@ -256,9 +256,15 @@ Route::controller(InstalmentController::class)->prefix('instalment')->group(func
         Route::group(['middleware' => ['role_or_permission:admin|payinstalment']], function () {
                 Route::post('/pay-instalment', 'payInstalment')->name('pay-instalment');
         });
+
         // testing route for instalment payment
         Route::get('/pay-instalment-new', 'payInstalmentNew')->name('pay-instalment-new');
-        Route::post('/pay-instalment-new-post', 'payInstalmentNewPost')->name('pay-instalment-new-post');
+        Route::post('/pay-instalment-new-store', 'payInstalmentNewStore')->name('pay-instalment-new-store');
+        Route::put('/pay-instalment-new/{id}', 'payInstalmentNewUpdate')->name('pay-instalment-new-update');
+        Route::get('/pay-instalment-new/{id}', 'payInstalmentNewShow')->name('pay-instalment-new-show');
+        Route::get('/pay-instalment-new-cancel', 'payInstalmentNewCancel')->name('pay-instalment-new-cancel');
+        Route::get('/pay-instalment-new-post', 'payInstalmentNewPost')->name('pay-instalment-new-post');
+        Route::get('/pay-instalment-un-post', 'payInstalmentNewPost')->name('pay-instalment-new-post');
 
 
 
