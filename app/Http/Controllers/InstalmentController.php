@@ -100,7 +100,7 @@ class InstalmentController extends Controller
         $payment->save();
         $instalment->save();
 
-        return redirect()->route('instalment-payment-new-show',$payment->id)->with('message','Record Saved');
+        return redirect()->route('pay-instalment-new-show',$payment->id)->with('message','Record Saved');
     }
 
 
@@ -136,27 +136,28 @@ class InstalmentController extends Controller
         $payment->notes = $request->notes;
         $payment->account_id= $request->account_id;
         $instalment->move_to_next = isset($request->move_to_next)?true:false;
+        $instalment->save();
         $payment->status = 1;
         $payment->save();
+
 
         return redirect()->back()->with('message','Record Saved');
 
 
     }
+    
 
     
     public function payInstalmentNewPost(Request $request){
 
-
-        // dd('i am here ');
         $instalment = Instalment::find($request->instalment_id);
         $instalmentPayment = InstalmentPayment::find($request->id);
         $sale = $instalment->sale;
         $instalment->amount_paid = $instalment->amount_paid + str_replace(',', '', $instalmentPayment->amount);
         $user = Auth::user();
        
-        if (isset($instalment->move_to_next)) {
-            $next_instalment = Instalment::find($request->id + 1);
+        if ($instalment->move_to_next==true) {
+            $next_instalment = Instalment::find($request->instalment_id + 1);
             if ($next_instalment == NULL || $next_instalment->sale_id != $sale->id) {
 
                 return redirect()->back()->with("error_m" , "next instalment not found");
@@ -167,7 +168,6 @@ class InstalmentController extends Controller
             $next_instalment->save();
 
         }
-        dd('2nd');
         if ($instalment->amount_paid > $instalment->amount) {
             return redirect()->back()->with("error_m" , "Amount cannot be greater than pending amount");
 
@@ -194,13 +194,13 @@ class InstalmentController extends Controller
         $instalmentPayment->save();
         //*********************** Leadger  *********************/
         // debit cash of investor for inventory recovery
-        $instalmentPayment->createLeadgerEntry($instalmentPayment->account, $ins_mon+$share1, $investor->id, $instalmentPayment->pay_date, $user->id);
+        $instalmentPayment->createLeadgerEntry($instalmentPayment->account_id, $ins_mon+$share1, $investor->id, $instalmentPayment->payment_date, $user->id);
         //  * credit recievable of inventory recovery
-        $instalmentPayment->createLeadgerEntry(5, -$ins_mon-$share1, $investor->id, $instalmentPayment->pay_date, $user->id);
+        $instalmentPayment->createLeadgerEntry(5, -$ins_mon-$share1, $investor->id, $instalmentPayment->payment_date, $user->id);
         // debit company cash of markup
-        $instalmentPayment->createLeadgerEntry($instalmentPayment->account, $share2, 1, $instalmentPayment->pay_date, $user->id);
+        $instalmentPayment->createLeadgerEntry($instalmentPayment->account_id, $share2, 1, $instalmentPayment->payment_date, $user->id);
         // * credit  company  recievable of markup
-        $instalmentPayment->createLeadgerEntry(5, -$share2, 1, $instalmentPayment->pay_date, $user->id);
+        $instalmentPayment->createLeadgerEntry(5, -$share2, 1, $instalmentPayment->payment_date, $user->id);
        
         //*********************** Instalment Commission  *********************/
         $instalment->createInstalmentComision($sale, $user->id, $instalmentPayment);
@@ -212,19 +212,18 @@ class InstalmentController extends Controller
 
     public function payInstalmentNewUnPost(Request $request){
 
-        $instalment = Instalment::find($request->id);
-        $payment = InstalmentPayment::find($request->instalment_id);
+        $instalment = Instalment::find($request->instalment_id);
+        $payment = InstalmentPayment::find($request->id);
         $sale = $instalment->sale;
 
         if ($instalment->move_to_next==true) {
-            $next_instalment = Instalment::find($request->id + 1);
+            $next_instalment = Instalment::find($request->instalment_id + 1);
             if ($next_instalment == NULL || $next_instalment->sale_id != $sale->id) {
 
                 return redirect()->back()->with("error" , "next instalment not found");
             }
             $next_instalment->amount = $next_instalment->amount - $instalment->moving_amount;
             $instalment->amount = $instalment->amount+$instalment->moving_amount;
-            $instalment->move_to_next = false;
             $next_instalment->save();
 
         }
@@ -234,6 +233,8 @@ class InstalmentController extends Controller
             $instalment->instalment_paid = 0;
         }
 
+        $payment->status=1;
+        $payment->save();
         $instalment->save();    
         // deleting leadger impact   
         $payment->leadgerEntries()->delete();
@@ -241,6 +242,18 @@ class InstalmentController extends Controller
         //*********************** Instalment Commission  deleting *********************/
         $instalment->saleCommision()->delete();
         return redirect()->back()->with('message','Record Un Posted');
+    }
+
+    public function payInstalmentNewCancel(Request $request){
+
+        $instalment = Instalment::find($request->instalment_id);
+        $payment = InstalmentPayment::find($request->id);
+        $payment->status = 2;
+        $payment->save();
+        return redirect()->back()->with('message','Record cancelled');
+
+
+
     }
 
 

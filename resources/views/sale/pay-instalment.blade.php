@@ -56,9 +56,9 @@
 
                                         </div>
                                         <div class="d-flex align-items-center justify-content-between mb-1">
-                                            <span class="title">Pending Amount:</span>
+                                            <span class="title">instalment ID:</span>
 
-                                            <input value="{{ isset($instalment)? $instalment->amount:0}}" name="date" type="text" class="form-control invoice-edit-input" disabled>
+                                            <input value="{{ isset($instalment)? $instalment->id:0}}" name="date" type="text" class="form-control invoice-edit-input" disabled>
 
                                         </div>
 
@@ -106,14 +106,15 @@
                                                         </div>
                                                         <div class="col-2 my-lg-0 my-2">
                                                             <p class="card-text col-title mb-md-2 mb-0">add to next instalment</p>
-                                                            <input name="move_to_next   " class="ms-1 form-check-input" type="checkbox" value="1" id="move_to_next">
+                                                           
+                                                            <input  name="move_to_next" @if (isset($instalment)) @if($instalment->move_to_next)  checked @endif @endif class="ms-1 form-check-input" type="checkbox" value="1" id="move_to_next">
                                                             @error('amount')
                                                             <div class="alert alert-danger"> {{$message}}</div>
                                                             @enderror
                                                         </div>
                                                         <div class="col-6 my-lg-0 my-2">
                                                             <p class="card-text col-title mb-md-2 mb-0">Note</p>
-                                                            <input @if (isset($instalmentPayment)) value="{{ $instalmentPayment->description }}" @endif id="cost0" name="description" type="text" class="form-control" value="" placeholder="" @if(isset($instalmentPayment)) @if($instalmentPayment->status!=1) disabled @endif @endif>
+                                                            <input @if (isset($instalmentPayment)) value="{{ $instalmentPayment->notes }}" @endif id="cost0" name="notes" type="text" class="form-control" value="" placeholder="" @if(isset($instalmentPayment)) @if($instalmentPayment->status!=1) disabled @endif @endif>
                                                         </div>
                                                     </div><s></s>
                                                 </div>

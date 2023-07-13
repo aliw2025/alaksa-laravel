@@ -264,7 +264,7 @@ Route::controller(InstalmentController::class)->prefix('instalment')->group(func
         Route::get('/pay-instalment-new/{id}', 'payInstalmentNewShow')->name('pay-instalment-new-show');
         Route::get('/pay-instalment-new-cancel', 'payInstalmentNewCancel')->name('pay-instalment-new-cancel');
         Route::get('/pay-instalment-new-post', 'payInstalmentNewPost')->name('pay-instalment-new-post');
-        Route::get('/pay-instalment-un-post', 'payInstalmentNewPost')->name('pay-instalment-new-post');
+        Route::get('/pay-instalment-new-unpost', 'payInstalmentNewUnPost')->name('pay-instalment-new-unpost');
 
 
 
@@ -288,6 +288,7 @@ Route::controller(InstalmentController::class)->prefix('instalment')->group(func
         Route::group(['middleware' => ['role_or_permission:admin|get-instalment-extentions']], function () {
                 Route::get('/get-instalment-extentions', 'getInstalmentExt')->name('get-instalment-extentions');
         });
+
 });
 
 // General Leadger Controller
@@ -296,7 +297,7 @@ Route::controller(GLController::class)->group(function () {
         // Route::get('/get-account-balances',  'AccountBalances')->name('get-account-balances');
         // Route::get('/get-user-acc-balances',  'userAccountBalances')->name('get-user-acc-balances');
         // Route::get('/transfer-balances',  'transferBalances')->name('transfer-balances');
-        // Route::get('/user-transfer-balances',  'userTransferBalances')->name('user-transfer-balances');
+        // Route::get('/user-transfer-balances',  'userTransferBalances')->name('usewr-transfer-balances');
         // Route::post('/add-transfer-request',  'addTransferRequest')->name('add-transfer-request');
         // Route::get('/investor-transfer-queue',  'investorApprovalQueue')->name('investor-transfer-queue');
         // Route::get('/ro-transfer-queue',  'userApprovalQueue')->name('ro-transfer-queue');

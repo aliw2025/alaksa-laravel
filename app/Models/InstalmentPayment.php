@@ -24,4 +24,9 @@ class InstalmentPayment extends Model
             'user_id'=>$user_id
         ]);
     }
+    public function transaction_status(){
+        
+        return $this->belongsTo(TransactionStatus::class,'status');
+ 
+    }
 }

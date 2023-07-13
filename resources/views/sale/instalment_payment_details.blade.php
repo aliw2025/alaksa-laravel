@@ -22,6 +22,7 @@
                                         <th scope="col">Total</th>
                                         <th>Note</th>
                                         <th scope="col">Date</th>
+                                        <th>Status</th>
                                         <th scope="col">Action</th>
                                         
                                         {{-- <th scope="col">Action</th> --}}
@@ -40,10 +41,10 @@
                                         <td>{{$pay->notes}}</td>
                                         <td>{{date('d-m-Y', strtotime($pay->payment_date));
                                             }}</td>  
+                                            <td>{{$pay->transaction_status->desc??''}}</td>
                                              <td>
-                                                <a style="text-decoration: none;color:black" href="#"><i data-feather='eye'></i></a>
-                                                <a style="text-decoration: none;color:black" href="#" ><i data-feather='rotate-ccw'></i></i></a>
-                                                <a style="text-decoration: none;color:black" href="#"><i data-feather='dollar-sign'></i></a>
+                                                <a style="text-decoration: none;color:black" href="{{route('pay-instalment-new-show',$pay->id)}}"><i data-feather='eye'></i></a>
+                                                
                                             </td>    
                                     </tr>
                                     @php

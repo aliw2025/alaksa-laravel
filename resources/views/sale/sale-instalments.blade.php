@@ -44,6 +44,7 @@
                                     <tr style="background-color:red !important;">
                                         <th style="width: 2px !important">#</th>
                                         <th scope="col">Instalment #</th>
+                                        <th>instalment Id</th>
                                         <th scope="col">Due Date</th>
                                         <th scope="col">Due Amount</th>
                                         <th scope="col">Amount Paid</th>
@@ -64,6 +65,7 @@
                                     <tr>
                                         <td>{{ $count }}</td>
                                         <td>{{$pur->instalment_no}}</td>
+                                        <td>{{$pur->id}}</td>
                                         <td>
                                             <a id="change_time" data-date1="{{($pur->due_date)}}" data-id="{{$pur->id}}" data-saleid="{{$pur->sale_id}}" data-bs-toggle="modal" data-bs-target="#timeCard" href="#">{{date("d-m-Y", strtotime($pur->due_date))}}</a>
                                         </td>
@@ -90,14 +92,20 @@
                                             </div>
                                             @endif
                                         </td>
-                                        <td style="width:00px">
+                                        <td >
 
-                                            <button @if ($pur->instalment_paid) disabled @endif
+                                            <!-- <button @if ($pur->instalment_paid) disabled @endif
                                                 data-rem={{ $rem }} data-id="{{ $pur->id }}"
                                                 class="abc btn btn-success waves-effect waves-float waves-light"
                                                 data-bs-toggle="modal" data-bs-target="#addNewCard">
                                                 Pay
-                                            </button>
+                                            </button> -->
+                                            <a @if ($pur->instalment_paid) aria-disabled="true" @endif class="btn btn-success waves-effect waves-float waves-light" href="{{ url('instalment/pay-instalment-new?instalment_id='.$pur->id) }}">
+                                                Pay 
+                                            </a>
+                                            <a class=" abc btn btn-secondary waves-effect waves-float waves-light" href="{{ route('show-instalment-payments', $pur->id) }}">
+                                                Details
+                                            </a>
                                             <!-- <a class=" abc btn btn-primary waves-effect waves-float waves-light" href="{{ route('show-instalment-payments', $pur->id) }}">
                                                 Details
                                             </a>
