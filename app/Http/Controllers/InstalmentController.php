@@ -9,8 +9,10 @@ use App\Models\InstalmentPayment;
 use App\Models\Investor;
 use App\Models\Supplier;
 use App\Models\TransactionStatus;
+// use Barryvdh\DomPDF\PDF;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use PDF;    
 
 use Carbon\Carbon;
 use Carbon\Cli\Invoker;
@@ -268,6 +270,25 @@ class InstalmentController extends Controller
        
         //*********************** Instalment Commission  *********************/
         $instalment->createInstalmentComision($sale, $user->id, $instalmentPayment);
+        
+        if ($sale->status != 3) {
+            return "only posted invoices can be printed";
+        }
+        $sale_detail = null;
+        $data = [
+            'title' => 'Welcome to ItSolutionStuff.com',
+            'date' => date('m/d/Y'),
+            'sale' => $sale,
+            'sale_detail' => $sale_detail,
+            'payment_type' => $sale->pay_type_name->name,
+            'selling_price' => 12000,
+            'ins'=>$instalmentPayment,
+            'markup' => 20,
+            'plan' => 6
+
+        ];
+        $pdf = PDF::loadView('instalment.instalment_invoice', $data);
+        return $pdf->stream('my.pdf', array('Attachment' => 0));
 
         return redirect()->back()->with('message','record posted');
         
