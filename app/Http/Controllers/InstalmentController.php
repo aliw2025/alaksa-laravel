@@ -67,7 +67,11 @@ class InstalmentController extends Controller
         return view('sale.instalment_payment_report',compact('investors','suppliers','statuses'));
 
 
+        
+        
+
     }
+
 
     public function payInstalmentNewShow($id){
 

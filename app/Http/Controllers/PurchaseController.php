@@ -198,13 +198,16 @@ class PurchaseController extends Controller
         $purchase->status = 3;
         $purchase->save();
         if($request->purchase_type==2){
-            $request->total_amount = $request->total_amount * -1;
+
+            // $request->total_amount = $request->total_amount * -1;
+            $purchase->total =  $purchase->total * -1;
+            $purchase->save();
             
             
         }
         /******************** Leadger Entries ******************/
-        $purchase->createLeadgerEntry(3,$request->total_amount,$investor->id,$purchase->purchase_date,$user->id); 
-        $purchase->createLeadgerEntry($sup_acc_id,-$request->total_amount,$investor->id,$purchase->purchase_date,$user->id); 
+        $purchase->createLeadgerEntry(3,$purchase->total,$investor->id,$purchase->purchase_date,$user->id); 
+        $purchase->createLeadgerEntry($sup_acc_id,-$purchase->total,$investor->id,$purchase->purchase_date,$user->id); 
        
         return redirect()->back()->with('message','Purchase Posted');
     

@@ -53,18 +53,20 @@ class InstalmentPayment extends Model
             });
          }
          if(isset($customer_name)){
-
             $query= $query->whereHas('instalment', function ($ins) use($customer_name)  {
                     $ins= $ins->whereHas('sale', function ($ins)  use($customer_name) {
                     $ins->where('customer_name','like','%'.$customer_name.'%');
                 });
             });
          }
+
          if(isset($status_id)){
+
             $query=$query->where('status',$status_id);
+
          }
          return $query;
-         
+
         
     }
 }
