@@ -59,6 +59,14 @@
                     
                 </div>
             </div>
+            <div class="col-3">
+                <div class="card">
+                    <div class="card-body">
+                        <a  style="color: black" href="{{route('instalment-payment-report')}}">Payment Reports</a> 
+                    </div>
+                    
+                </div>
+            </div>
         </div>
     </div>
 @endsection

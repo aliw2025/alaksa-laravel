@@ -28,7 +28,7 @@ class Supplier extends Model
 
     public function investor_payments($id){
         // dd($id);
-        return $this->payments()->where('investor_id', '=', $id)->get();
+        return $this->payments()->where('investor_id', '=', $id)->where('status',3)->get();
     }
 
     public function purchases(){
@@ -37,7 +37,7 @@ class Supplier extends Model
     
     public function investor_purchases($id){
        
-       return $this->purchases()->where('investor_id', '=', $id)->get();
+       return $this->purchases()->where('investor_id', '=', $id)->where('status',3)->get();
     }
 
     public function investor_Sup_expenses($id){

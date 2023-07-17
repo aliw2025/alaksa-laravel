@@ -7,7 +7,8 @@ use App\Models\Instalment;
 use App\Models\InstalmentExtention;
 use App\Models\InstalmentPayment;
 use App\Models\Investor;
-
+use App\Models\Supplier;
+use App\Models\TransactionStatus;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -58,6 +59,15 @@ class InstalmentController extends Controller
 
     }
 
+    public function InstalmentPaymentReport(Request $request){
+
+        $statuses = TransactionStatus::all();
+        $investors = Investor::all();
+        $suppliers = Supplier::all(); 
+        return view('sale.instalment_payment_report',compact('investors','suppliers','statuses'));
+
+
+    }
 
     public function payInstalmentNewShow($id){
 
@@ -208,7 +218,6 @@ class InstalmentController extends Controller
         return redirect()->back()->with('message','record posted');
         
     }
-
 
     public function payInstalmentNewUnPost(Request $request){
 

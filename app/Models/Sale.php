@@ -96,7 +96,7 @@ class Sale extends Model
     
          if(isset($customer_id)){
            
-           $query=$query->where('investor_id',$customer_id);
+           $query=$query->where('customer_id',$customer_id);
          }
          if(isset($customer_name)){
             $query= $query->whereHas('customer', function ($cus)  use ($customer_name) {
