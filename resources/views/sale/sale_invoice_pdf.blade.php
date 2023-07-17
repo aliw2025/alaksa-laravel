@@ -135,7 +135,9 @@
         <tr style="background-color:#e4e6eb;">
             <th>#</th>
             <th>Amount</th>
-            {{-- <th>Amound paid</th> --}}
+
+            <th>Amound paid</th>
+            <th>Status</th>
             <th>Due date</th>
            
 
@@ -147,9 +149,25 @@
             <tr>
                 <td>{{$count}}</td>
                 <td>{{$ins->amount}}</td>
-                {{-- <td>{{$ins->amount_paid}}</td> --}}
+                <td>{{$ins->instalmentPayments->sum('amount')}}</td>
+                <td>{{$ins->instalment_paid?'paid':'pending'}}</td>
                 <td>{{date('d-m-Y', strtotime($ins->due_date))}}</td>
             </tr>
+            <!-- <tr>
+            @foreach($ins->instalmentPayments->where('status','3') as $pay)
+                <tr>
+                
+                    <td>{{$pay->amount}}</td>
+                
+                </tr>
+                @endforeach
+
+                
+                
+            </tr> -->
+
+
+
             @php
                 $count = $count+1;
             @endphp

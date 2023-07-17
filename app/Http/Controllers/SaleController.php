@@ -96,7 +96,7 @@ class SaleController extends Controller
 
         // create a 14 digit sale invoice
         $num = str_pad($id + 1, 10, '0', STR_PAD_LEFT);
-        $sale->invoice_no = $investor->prefix . '22' . $num;
+        $sale->invoice_no = $investor->prefix . '23' . $num;
         $sale->customer_id = $request->customer_id;
         $sale->item_id = $request->item_id;
         $sale->store_id = 1;

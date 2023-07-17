@@ -267,7 +267,7 @@ Route::controller(InstalmentController::class)->prefix('instalment')->group(func
         Route::get('/pay-instalment-new-unpost', 'payInstalmentNewUnPost')->name('pay-instalment-new-unpost');
 
         Route::get('/instalment-payment-report', 'InstalmentPaymentReport')->name('instalment-payment-report');
-
+        Route::get('/instalment-payment-report-post', 'InstalmentPaymentReportPost')->name('instalment-payment-report-post');
 
 
 

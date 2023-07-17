@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Purchase Report</title>
+    <title>Sale Report</title>
 
     <style type="text/css">
         table {
@@ -38,7 +38,7 @@
     <table style="margin-bottom: 0;margin-top: 10px">
         <tr>
             <td align="left" style="border-top:1px solid;border-bottom:1px solid;">
-                <p style="text-align:center;margin-top:0;margin-bottom:0">Purchase Reports</p>
+                <p style="text-align:center;margin-top:0;margin-bottom:0">Sale Reports</p>
             </td>
         </tr>
 
@@ -71,7 +71,6 @@
                 <td>{{ number_format( $pur->total)}}</td>
                 <td>{{$pur->transaction_status->desc}}</td>
                 <td>{{date('d-m-Y', strtotime($pur->sale_date))}}</td>
-                <td><a style="text-decoration: none;color:black" href="{{route('purchase.show',$pur->id)}}"><i data-feather='eye'></i></a></td>
             </tr>
             @php
                 $count = $count+1

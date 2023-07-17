@@ -92,7 +92,7 @@ class SupplierPaymentController extends Controller
         $num = str_pad($id + 1, 10, '0', STR_PAD_LEFT);
         $investor = Investor::find($request->investor_id);
         $supplierPayment = new SupplierPayment();
-        $supplierPayment->payment_no = $investor->prefix . '22' . $num;
+        $supplierPayment->payment_no = $investor->prefix . '23' . $num;
         $supplierPayment->investor_id = $request->investor_id;
         $supplierPayment->store_id = 1;
         $supplierPayment->supplier_id = $request->supplier;

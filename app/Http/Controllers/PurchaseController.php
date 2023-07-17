@@ -96,7 +96,7 @@ class PurchaseController extends Controller
         }
        
         $num = str_pad($id+1, 10, '0', STR_PAD_LEFT);
-        $purchase->purchase_no = $investor->prefix.'22'.$num;
+        $purchase->purchase_no = $investor->prefix.'23'.$num;
         $purchase->investor_id = $request->investor_id;
         $purchase->store_id = 1;
         $purchase->supplier = $request->supplier;

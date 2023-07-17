@@ -64,11 +64,61 @@ class InstalmentController extends Controller
         $statuses = TransactionStatus::all();
         $investors = Investor::all();
         $suppliers = Supplier::all(); 
-        return view('sale.instalment_payment_report',compact('investors','suppliers','statuses'));
+        return view('sale.instalment_payment_list',compact('investors','suppliers','statuses'));
 
 
         
-        
+
+    }
+    public function InstalmentPaymentReportPost(Request $request){
+
+
+        // dd($request->all());
+        $request->validate([
+            'from_date' => 'required',
+            'to_date' => 'required'
+        ]);
+
+        // public function scopeSearchInstPayment($query,$from_date,$to_date,$investor,$customer_name,$customer_id,$invoice,$status_id)
+
+        $instalmentPayments = InstalmentPayment::SearchInstPayment($request->from_date, $request->to_date,$request->investor_id, $request->customer_name, $request->customer_id, $request->invoice_no, $request->status_id,$request->instalment_no,$request->instalment_id);
+        $statuses = TransactionStatus::all();
+        $from_date = $request->from_date;
+        $to_date = $request->to_date;
+        $customer_name = $request->customer_name;
+        $customer_id = $request->customer_id;
+        $invoice_no = $request->invoice_no;
+        $instalment_no=$request->instalment_no;
+        $instalment_id=$request->instalment_id;
+        $investors = Investor::all();
+
+
+
+
+        $sum = $instalmentPayments->sum('amount');
+        if ($request->input('action') == "pdf") {
+
+            $instalmentPayments = $instalmentPayments->get();
+            return view('sale.instalment_payment_report', compact('instalmentPayments', 'from_date', 'to_date', 'statuses', 'sum'));
+        }
+       
+        $instalmentPayments = $instalmentPayments->paginate(20);
+        $instalmentPayments->appends([
+            'from_date' => $request->from_date,
+            'to_date' => $request->to_date,
+            'customer_name' => $request->customer_name,
+            'customer_id' => $request->customer_id,
+            'invoice_no' => $request->invoice_no,
+            'status_id' => $request->status_id,
+            'investor_id'=>$request->investor_id,
+            'instalment_id'=>$request->instalment_id,
+            'instalment_no'=>$request->instalment_no
+
+        ]);
+
+        return view('sale.instalment_payment_list', compact('instalmentPayments', 'statuses', 'from_date', 'to_date', 'statuses', 'sum', 'customer_name', 'customer_id', 'invoice_no','investors','instalment_no','instalment_id'));
+
+      
 
     }
 

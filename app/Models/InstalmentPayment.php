@@ -40,7 +40,7 @@ class InstalmentPayment extends Model
   
 
 
-    public function scopeSearchInstPayment($query,$from_date,$to_date,$investor,$customer_name,$customer_id,$invoice,$status_id)
+    public function scopeSearchInstPayment($query,$from_date,$to_date,$investor,$customer_name,$customer_id,$invoice,$status_id,$instalment_no,$instalment_id)
     {   
         // dd($commission);
         $query->whereBetween('payment_date',[$from_date,$to_date]);
@@ -55,10 +55,39 @@ class InstalmentPayment extends Model
          if(isset($customer_name)){
             $query= $query->whereHas('instalment', function ($ins) use($customer_name)  {
                     $ins= $ins->whereHas('sale', function ($ins)  use($customer_name) {
-                    $ins->where('customer_name','like','%'.$customer_name.'%');
+                        $ins= $ins->whereHas('customer', function ($ins)  use($customer_name) {
+                        
+                            $ins->where('customer_name','like','%'.$customer_name.'%');
+                        });   
                 });
             });
          }
+         if(isset($invoice)){
+             $query= $query->whereHas('instalment', function ($ins) use($invoice)  {
+                    $ins= $ins->whereHas('sale', function ($ins)  use($invoice) {
+                    $ins->where('invoice_no','like','%'.$invoice);
+                });
+            });
+         }
+         if(isset($investor)){
+            $query= $query->whereHas('instalment', function ($ins) use($investor)  {
+                   $ins= $ins->whereHas('sale', function ($ins)  use($investor) {
+                   $ins->where('investor_id',$investor);
+               });
+           });
+        }
+        if(isset($instalment_no)){
+            $query= $query->whereHas('instalment', function ($ins) use($instalment_no)  {
+                $ins->where('instalment_no',$instalment_no);
+
+           });
+        }
+        if(isset($instalment_id)){
+            $query= $query->whereHas('instalment', function ($ins) use($instalment_id)  {
+                $ins->where('instalment_id',$instalment_id);
+
+           });
+        }
 
          if(isset($status_id)){
 
