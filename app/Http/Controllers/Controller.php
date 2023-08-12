@@ -118,6 +118,9 @@ class Controller extends BaseController
                 'account_type' => 10,
                 'opening_balance' => 0
             ]);
+
+
+            
             
             /********************** Leadger Entries  ****************************/
 
