@@ -130,7 +130,7 @@
                                     @enderror
                                 </div>
 
-                                <div class="mb-1">
+                                <!-- <div class="mb-1">
                                     <label class="form-label" for="first-name-vertical">supplier</label>
                                     @if (isset($item))
                                         <input
@@ -152,7 +152,7 @@
                                     @enderror
 
 
-                                </div>
+                                </div> -->
 
                                 <div class="mb-1">
                                     <label class="form-label" for="first-name-vertical">category</label>

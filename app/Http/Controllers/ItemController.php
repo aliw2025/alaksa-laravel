@@ -31,7 +31,9 @@ class ItemController extends Controller
      */
     public function getItems(Request $request){
         // dd($request->all());
-        $items = Item::where([['name','like', '%'. $request->key .'%'],['supplier_id',$request->supplier_id]])->whereNotNull('supplier_id')->get();
+        $items = Item::where('name','like', '%'. $request->key .'%')->get();
+        
+        // $items = Item::where([['name','like', '%'. $request->key .'%'],['supplier_id',$request->supplier_id]])->whereNotNull('supplier_id')->get();
         return $items;
     }
     /**
