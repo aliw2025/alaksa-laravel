@@ -25,5 +25,8 @@ class Item extends Model
         
         return $this->hasMany(PropertyValue::class,'item_id');
     }
+    public function Category(){
+        return $this->belongsTo(Category::class,"cat_id");
+    }
 }
 

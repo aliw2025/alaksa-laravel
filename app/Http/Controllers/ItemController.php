@@ -140,6 +140,7 @@ class ItemController extends Controller
         $item->name = $request->name;
         $item->make = $request->make;
         $item->model = $request->model;
+        $item->cat_id =  $request->category_id;
         $item->save();
         $oldProps = PropertyValue::where('item_id',$item->id);
         $oldProps->delete();

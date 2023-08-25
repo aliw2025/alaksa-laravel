@@ -38,7 +38,7 @@
                                                     <th style="width: 2px !important">{{ $count }}</th>
                                                     <td>{{ $i->id }}</td>
                                                     <td>{{ $i->name }}</td>
-                                                    <td>{{ $i->category }}</td>
+                                                    <td>{{ $i->Category->category_name?? ""  }}</td>
                                                     <td>{{ $i->make }}</td>
                                                     <td>{{ $i->model }}</td>
                                                     {{-- <td>{{ $item->Supplier }}</td> --}}

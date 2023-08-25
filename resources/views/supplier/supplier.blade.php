@@ -18,6 +18,7 @@
                                         <th style="width: 2px !important">#</th>
                                         <th scope="col">Supplier name</th>
                                         <th scope="col">Supplier business name</th>
+                                        <th scope="col">Email</th>
                                         <th scope="col">Address</th>
                                         <th scope="col">Phone</th>
                                         <th scope="col">Date Created</th>
@@ -34,8 +35,9 @@
                                         <td>{{ $inv->name }}</td>
                                         <td>{{ $inv->business_name }}</td>
                                         <td>{{ $inv->email }}</td>
-                                        <td>{{ $inv->phone }}</td>
                                         <td>{{ $inv->address }}</td>
+                                        <td>{{ $inv->phone }}</td>
+                                        <td>{{ $inv->created_at }}</td>
                                         <td>
                                             <div class="d-flex align-items-center">
                                                 <form class="" method="POST" autocomplete="on" action="{{ route('supplier.destroy',$inv->id)}}">
