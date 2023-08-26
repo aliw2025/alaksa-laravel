@@ -55,7 +55,7 @@ class Controller extends BaseController
             $investor->prefix = "AD";
             $investor->investor_type = 1;
             $investor->save();
-        }    
+            
             /********************** creating accounts ****************************/
             // 1- cash
             $investor_cash = $investor->charOfAccounts()->create([
@@ -156,7 +156,9 @@ class Controller extends BaseController
             ]);
 
 
-        
+        } else {
+
+        }
         return redirect()->route('index');
     }
 
