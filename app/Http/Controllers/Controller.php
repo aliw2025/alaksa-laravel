@@ -55,13 +55,13 @@ class Controller extends BaseController
             $investor->prefix = "AD";
             $investor->investor_type = 1;
             $investor->save();
-            
+        }    
             /********************** creating accounts ****************************/
             // 1- cash
             $investor_cash = $investor->charOfAccounts()->create([
                 'account_name' => 'cash',
                 'account_type' => 1,
-                'opening_balance' => 120000
+                'opening_balance' => 0
             ]);
             // 2- equipment
             $investor_eq = $investor->charOfAccounts()->create([
@@ -91,7 +91,7 @@ class Controller extends BaseController
             $investor_eqt = $investor->charOfAccounts()->create([
                 'account_name' => $investor->prefix . '_equity',
                 'account_type' => 6,
-                'opening_balance' => -120000
+                'opening_balance' => -0
             ]);
             // 7- payable
             $investor_pyb = $investor->charOfAccounts()->create([
@@ -156,9 +156,7 @@ class Controller extends BaseController
             ]);
 
 
-        } else {
-
-        }
+        
         return redirect()->route('index');
     }
 
