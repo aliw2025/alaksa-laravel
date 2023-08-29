@@ -123,7 +123,7 @@
                                                     <div class="row py-2">
                                                         <div class="col-lg-1 col-12 my-lg-0 my-2">
                                                             <p class="card-text col-title mb-md-2 mb-0">Item Id</p>
-                                                            <input value="{{$pitem->item_id}}" id="passId{{$row_count}}" type="number" class="form-control" value="" placeholder="" disabled>
+                                                            <input value="{{$pitem->item_id}}" id="passId{{$row_count}}" type="number" class="form-control" value="" placeholder="" onkeyup="getItemsById({{$row_count}},this.value)">
                                                             <input value="{{$pitem->item_id}}" name="item_id[]" id="item_id{{$row_count}}" type="hidden" class="form-control" value="" placeholder="">
                                                             <!-- <input type="hidden" value="{{$pitem->id}}" name="item_id[]"> -->
                                                         </div>
