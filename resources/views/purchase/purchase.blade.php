@@ -333,7 +333,7 @@
                             <div class="row py-2">
                                     <div class="col-lg-1 col-12 my-lg-0 my-2">
                                     <p class="card-text col-title mb-md-2 mb-0">Item Id</p>
-                                    <input name="item_id[]" id ="passId${rowId}" type="number" class="form-control" value="" placeholder="" disabled>
+                                    <input name="item_id[]" id ="passId${rowId}" type="number" class="form-control" value="" placeholder="" onkeyup="getItemsById(${rowId},this.value)">
                                     <input name="item_id[]" id="item_id${rowId}" type="hidden" class="form-control"
                                                                     value="" placeholder="" >
                                     </div>
@@ -492,12 +492,14 @@
         console.log(letters);
         var investor_id = $("#select2-basic").val();
         console.log(investor_id);
+        var supplier_id = $('#supplier_id').val();
         $.ajax({
             url: "{{ route('get-investor-items') }}",
             type: "GET",
             data: {
                 key: letters,
-                investor_id: investor_id
+                investor_id: investor_id,
+                supplier_id:supplier_id
             },
             success: function(dataResult) {
 
@@ -527,14 +529,62 @@
 
     }
 
+
+    function getItemsById(rowID, itemId) {
+        console.log("getting by id");
+        var supplier_id = $('#supplier_id').val();
+        if (itemId.length < 1) {
+            $('#cost' + rowID).val("");
+            $('#passId' + rowID).val("");
+            $('#qty' + rowID).val("");
+            $('#cur_cost' + rowID).val("");
+            $('#rowTotal' + rowID).val("");
+            $('#td_loss' + rowID).val("");
+            $('#itemBox' + rowID).val("");
+            return;
+        }
+        $.ajax({
+            url: "{{route('get-items-by-id')}}",
+            type: "GET",
+            data: {
+                item_id: itemId,
+                supplier_id: supplier_id,
+            },
+            success: function(dataResult) {
+
+                console.log('recv1');
+                console.log(dataResult);
+                $("#itemBox" + rowId).val(dataResult.name);
+                $("#passId" + rowId).val(dataResult.id);
+                $("#item_id" + rowId).val(dataResult.id);
+                // var investor_id = $("#select2-basic").val();
+                // var type = $('#tran_type').val();
+
+                // if (type == 2) {
+
+                //     getLastPp(dataResult.id, investor_id);
+                // }
+
+
+            },
+            error: function(xhr, status, error) {
+
+                var err = eval("(" + xhr.responseText + ")");
+                console.log(err);
+
+            },
+        });
+    }
+
     function getItems(id) {
 
-        console.log("arg");
+
         // console.log(set.id);
         var letters = $('#itemBox' + id).val();
         var supplier_id = $('#supplier_id').val();
         if (letters.length < 2) {
             $('#cost' + id).val("");
+            $('#passId' + id).val("");
             $('#qty' + id).val("");
             $('#cur_cost' + id).val("");
             $('#rowTotal' + id).val("");
@@ -542,7 +592,7 @@
 
             return;
         }
-        $("#passId").val("");
+        
         $.ajax({
             url: "{{ route('get-items') }}",
             type: "GET",
@@ -577,6 +627,7 @@
         console.log(letters);
     }
 
+
     function deleteItem(id) {
 
         console.log("removing");
@@ -610,6 +661,32 @@
         }
     });
 
+    function getLastPp(itemId, investor_id) {
+        $.ajax({
+            url: "{{ route('get-last-purchase')}}",
+            type: "GET",
+            data: {
+                item_id: itemId,
+                investor_id: investor_id
+            },
+            success: function(dataResult) {
+
+
+
+                $("#cost" + rowId).val(parseFloat(dataResult).toLocaleString('en-US'));
+
+
+            },
+            error: function(xhr, status, error) {
+
+                var err = eval("(" + xhr.responseText + ")");
+                console.log(err);
+                alert(err);
+            },
+        });
+
+    }
+
     function setText(item, rowId) {
         // var item = JSON.parse(item);
         console.log($('#btnItem' + item).text());
@@ -622,29 +699,30 @@
         console.log(type);
         if (type == 2) {
 
-            $.ajax({
-                url: "{{ route('get-last-purchase')}}",
-                type: "GET",
-                data: {
-                    item_id: item,
-                    investor_id: investor_id
-                },
-                success: function(dataResult) {
+            getLastPp(item, investor_id)
+            // $.ajax({
+            //     url: "{{ route('get-last-purchase')}}",
+            //     type: "GET",
+            //     data: {
+            //         item_id: item,
+            //         investor_id: investor_id
+            //     },
+            //     success: function(dataResult) {
 
-                    console.log('recv1');
-                    console.log(dataResult);
+            //         console.log('recv1');
+            //         console.log(dataResult);
 
-                    $("#cost" + rowId).val(parseFloat(dataResult).toLocaleString('en-US'));
+            //         $("#cost" + rowId).val(parseFloat(dataResult).toLocaleString('en-US'));
 
 
-                },
-                error: function(xhr, status, error) {
+            //     },
+            //     error: function(xhr, status, error) {
 
-                    var err = eval("(" + xhr.responseText + ")");
-                    console.log(err);
-                    alert(err);
-                },
-            });
+            //         var err = eval("(" + xhr.responseText + ")");
+            //         console.log(err);
+            //         alert(err);
+            //     },
+            // });
 
         }
         $('#qty' + rowId).val("");

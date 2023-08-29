@@ -379,6 +379,11 @@ Route::controller(ItemController::class)->group(function () {
                 Route::get('/get-items', 'getItems')->name('get-items');
         });
 
+        Route::group(['middleware' => ['role_or_permission:admin|getitems']], function () {
+                Route::get('/get-items-by-id', 'getItemsById')->name('get-items-by-id');
+        });
+       
+
         Route::group(['middleware' => ['role_or_permission:admin|getitem']], function () {
                 Route::get('/get-item/{id}', 'Itemdetail')->name('get-item');
         });

@@ -18,6 +18,7 @@
                                         <th style="width: 2px !important">#</th>
                                         <th scope="col">Supplier name</th>
                                         <th scope="col">Supplier business name</th>
+                                        <th scope="col">Supplier Category</th>
                                         <th scope="col">Email</th>
                                         <th scope="col">Address</th>
                                         <th scope="col">Phone</th>
@@ -34,6 +35,7 @@
                                         <th style="width: 2px !important">{{$count}}</th>
                                         <td>{{ $inv->name }}</td>
                                         <td>{{ $inv->business_name }}</td>
+                                        <td>{{$inv->category->category_name??""}}</td>
                                         <td>{{ $inv->email }}</td>
                                         <td>{{ $inv->address }}</td>
                                         <td>{{ $inv->phone }}</td>
@@ -121,6 +123,21 @@
                                         <label class="form-label" for="contact-info-vertical">Mobile</label>
                                         <input value="{{old('phone',isset($supplier)? $supplier->phone:'')}}" type="number" id="contact-info-vertical" class="@error('phone') is-invalid @enderror form-control" name="phone" placeholder="Mobile">
                                         @error('phone')
+                                        <div class="alert alert-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                </div>
+
+                                <div class="">
+                                    <div class="mb-1">
+                                        <label class="form-label" for="contact-info-vertical">Supplier  Category</label>
+                                        <select  class="@error('category_id') is-invalid @enderror form-control" name="category_id">
+                                            @foreach($categories as $cat)
+                                                <option @if(isset($supplier)) @if($supplier->category_id==$cat->id) selected @endif @endif value="{{$cat->id}}">{{$cat->category_name}}</option>
+                                            @endforeach
+                                           
+                                        </select>
+                                        @error('category_id')
                                         <div class="alert alert-danger">{{ $message }}</div>
                                         @enderror
                                     </div>

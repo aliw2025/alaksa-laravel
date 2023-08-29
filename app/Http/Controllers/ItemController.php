@@ -31,9 +31,17 @@ class ItemController extends Controller
      */
     public function getItems(Request $request){
         // dd($request->all());
-        $items = Item::where('name','like', '%'. $request->key .'%')->get();
+        // $items = Item::where('name','like', '%'. $request->key .'%')->get();
+        $supplier = Supplier::find($request->supplier_id);
         
-        // $items = Item::where([['name','like', '%'. $request->key .'%'],['supplier_id',$request->supplier_id]])->whereNotNull('supplier_id')->get();
+        $items = Item::where([['name','like', '%'. $request->key .'%'],['cat_id',$supplier->category->id]])->get();
+        return $items;
+    }
+
+    public function getItemsById(Request $request){
+        
+         $supplier = Supplier::find($request->supplier_id);
+        $items = Item::where([['id', $request->item_id],['cat_id',$supplier->category->id]])->first();
         return $items;
     }
     /**

@@ -19,7 +19,10 @@ class Supplier extends Model
 
         return $this->hassMany(Item::class,'supplier_id');
     }
-   
+   public function category(){
+
+    return $this->belongsTo(Category::class,'category_id');
+   }
 
     public function payments(){
         return $this->hasMany(SupplierPayment::class,'supplier_id');

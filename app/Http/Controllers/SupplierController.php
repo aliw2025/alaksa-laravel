@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Supplier;
 use Illuminate\Http\Request;
 
@@ -15,8 +16,10 @@ class SupplierController extends Controller
     public function index()
     {
         //
-        $suppliers = Supplier::all();  
-        return view('supplier.supplier',compact('suppliers'));
+        $suppliers = Supplier::all(); 
+
+        $categories = Category::all();
+        return view('supplier.supplier',compact('suppliers','categories'));
     }
 
     /**
@@ -28,7 +31,8 @@ class SupplierController extends Controller
     {
 
         $suppliers = Supplier::all();  
-        return view('supplier.supplier',compact('suppliers'));
+        $categories = Category::all();
+        return view('supplier.supplier',compact('suppliers','categories'));
     }
 
     /**
@@ -45,7 +49,8 @@ class SupplierController extends Controller
                 'name' => 'required',
                 'email' => 'required|email|unique:suppliers',
                 'phone' => 'required|min:8|max:11|unique:suppliers',
-                 'business_name'=>'required'
+                 'business_name'=>'required',
+                 'category_id'=>'required'
                 
             ],[
                 
@@ -60,6 +65,7 @@ class SupplierController extends Controller
         $supplier->name = $request->name;
         $supplier->email = $request->email;
         $supplier->phone = $request->phone;
+        $supplier->category_id = $request->category_id;
         $supplier->business_name= $request->business_name;
         $supplier->address = $request->address;
         $supplier->save();
@@ -102,7 +108,8 @@ class SupplierController extends Controller
     {
         //
         $suppliers = Supplier ::all();
-        return view('supplier.supplier',compact('suppliers','supplier'));
+        $categories = Category::all();
+        return view('supplier.supplier',compact('suppliers','supplier','categories'));
     }
 
     /**
@@ -135,6 +142,7 @@ class SupplierController extends Controller
         $supplier->email = $request->email;
         $supplier->phone = $request->phone;
         $supplier->address = $request->address;
+        $supplier->category_id = $request->category_id;
         $supplier->business_name= $request->business_name;
         $supplier->save();
         return redirect()->route('supplier.index');
@@ -149,7 +157,7 @@ class SupplierController extends Controller
     public function destroy(Supplier $supplier)
     {
         //
-        $supplier->delete();
+        // $supplier->delete();
         return redirect()->route('supplier.index');
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Inventory;
 use App\Models\Investor;
+use App\Models\Supplier;
 use Illuminate\Http\Request;
 
 class InventoryController extends Controller
@@ -87,8 +88,9 @@ class InventoryController extends Controller
     public function getInvestorInventory(Request $request){
         // dd($request->investor_id);
         // with('item.propertyValues')
-        $items = Inventory::where('investor_id','=',$request->investor_id)->where('quantity','>',0)->whereHas('item', function ($query)  use ($request) {
-            $query->where('name','like','%'.$request->key.'%');
+        $supplier = Supplier::find($request->supplier_id);
+        $items = Inventory::where('investor_id','=',$request->investor_id)->where('quantity','>',0)->whereHas('item', function ($query)  use ($request,$supplier) {
+            $query->where('name','like','%'.$request->key.'%')->where('cat_id',$supplier->category_id);
         })->with('item')->get();
         
         return $items;
