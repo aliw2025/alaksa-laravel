@@ -120,7 +120,8 @@ class PurchaseController extends Controller
             $purchase_item->trade_discount = $request->trade_discount[$a] *$request->qty[$a];
             $purchase_item->purchase_id = $purchase->id;
             // $purchase_item->td_loss = $request->td_loss[$a];
-            $purchase_item->td_loss = isset($request->td_loss[$a]) ?$request->td_loss[$a]:0;
+            $t=str_replace(',','', $request->td_loss[$a]);
+            $purchase_item->td_loss = isset($request->td_loss[$a]) ?$t:0;
             $purchase_item->save();
 
         }   
@@ -348,6 +349,8 @@ class PurchaseController extends Controller
 
     public function getLastPurchase(Request $request){
 
+
+        // dd($request->all());
         // getting all those purchases how have that item
         $purchase = Purchase::where('investor_id','=',$request->investor_id)->whereHas('items', function ($query)  use ($request) {
             $query->where('item_id',$request->item_id);

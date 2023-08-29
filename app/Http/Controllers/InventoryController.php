@@ -95,6 +95,17 @@ class InventoryController extends Controller
         
         return $items;
     }
+    public function getInvestorInventoryById(Request $request){
+        $supplier = Supplier::find($request->supplier_id);
+        if(!isset($supplier->category_id)){
+              return [];
+        }
+        $items = Inventory::where('investor_id','=',$request->investor_id)->where('quantity','>',0)->whereHas('item', function ($query)  use ($request,$supplier) {
+            $query->where('id',$request->item_id)->where('cat_id',$supplier->category_id);
+        })->with('item')->first();
+        
+        return $items;
+    }
 
     public function showInventory($investor_id){
         

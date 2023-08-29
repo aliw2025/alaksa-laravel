@@ -401,6 +401,10 @@ Route::controller(InventoryController::class)->group(function () {
         Route::group(['middleware' => ['role_or_permission:admin|getinvestoritems']], function () {
                 Route::get('/get-investor-items', 'getInvestorInventory')->name('get-investor-items');
         });
+        // 
+        Route::group(['middleware' => ['role_or_permission:admin|getinvestoritemsById']], function () {
+                Route::get('/get-investor-items-by-id', 'getInvestorInventoryById')->name('get-investor-items-by-id');
+        });
 });
 
 // payable Controller
