@@ -123,7 +123,7 @@
                                                     <div class="row py-2">
                                                         <div class="col-lg-1 col-12 my-lg-0 my-2">
                                                             <p class="card-text col-title mb-md-2 mb-0">Item Id</p>
-                                                            <input value="{{$pitem->item_id}}" id="passId{{$row_count}}" type="number" class="form-control" value="" placeholder="" onkeyup="getItemsById({{$row_count}},this.value)">
+                                                            <input value="{{$pitem->item_id}}" id="passId{{$row_count}}" type="number" class="form-control" value="" placeholder="" onkeyup="getItemsById({{$row_count}},this.value)" @if(!($purchase->status==1)) disabled @endif>
                                                             <input value="{{$pitem->item_id}}" name="item_id[]" id="item_id{{$row_count}}" type="hidden" class="form-control" value="" placeholder="">
                                                             <!-- <input type="hidden" value="{{$pitem->id}}" name="item_id[]"> -->
                                                         </div>
@@ -307,6 +307,8 @@
     $(document).on('change', '#supplier_id', function() {
 
         console.log("supplier_changed");
+        location.reload();
+
 
 
     });
@@ -468,6 +470,60 @@
 
     }
 
+    // incomplete
+    function getInvItemsById(id) {
+
+        console.log('function callled2 ' + id);
+        var letters = $('#itemBox' + id).val();
+        if (id < 1) {
+
+            $('#cost' + id).val("");
+            console.log("this sfd " + id);
+            $('#qty' + id).val("");
+            $('#cur_cost' + id).val("");
+            $('#rowTotal' + id).val("");
+            $('#td_loss' + id).val("");
+            return;
+        }
+        console.log(letters);
+        var investor_id = $("#select2-basic").val();
+        console.log(investor_id);
+        var supplier_id = $('#supplier_id').val();
+        $.ajax({
+            url: "{{ route('get-investor-items') }}",
+            type: "GET",
+            data: {
+                item_id: id,
+                investor_id: investor_id,
+                supplier_id: supplier_id
+            },
+            success: function(dataResult) {
+
+                $("#listBody" + id).empty();
+                console.log('recv2');
+                console.log(dataResult);
+                var i;
+                for (i = 0; i < dataResult.length; i++) {
+                    var item = dataResult[i].item;
+                    console.log(item);
+                    markup = `<button id = "btnItem` + item.id +
+                        `"type="button" class="list-group-item list-group-item-action" onclick="setText(` +
+                        item.id + `,${id})">` + item.name + `</button>`;
+                    $("#listBody" + id).append(markup);
+                }
+
+
+            },
+            error: function(xhr, status, error) {
+
+                var err = eval("(" + xhr.responseText + ")");
+                console.log(err);
+                alert(err);
+            },
+        });
+        $("#list" + id).show();
+
+    }
 
 
     function rePrint() {
@@ -482,11 +538,12 @@
         console.log('function callled');
         var letters = $('#itemBox' + id).val();
         if (letters.length < 2) {
-            $('#cost' + rowId).val("");
-            $('#qty' + rowId).val("");
-            $('#cur_cost' + rowId).val("");
-            $('#rowTotal' + rowId).val("");
-            $('#td_loss' + rowId).val("");
+            console.log("riw " + rowId);
+            $('#cost' + id).val("");
+            $('#qty' + id).val("");
+            $('#cur_cost' + id).val("");
+            $('#rowTotal' + id).val("");
+            $('#td_loss' + id).val("");
             return;
         }
         console.log(letters);
@@ -499,7 +556,7 @@
             data: {
                 key: letters,
                 investor_id: investor_id,
-                supplier_id:supplier_id
+                supplier_id: supplier_id
             },
             success: function(dataResult) {
 
@@ -562,7 +619,7 @@
 
                 // if (type == 2) {
 
-                //     getLastPp(dataResult.id, investor_id);
+                //     getLastPp(dataResult.id, investor_id,rowId);
                 // }
 
 
@@ -592,7 +649,7 @@
 
             return;
         }
-        
+
         $.ajax({
             url: "{{ route('get-items') }}",
             type: "GET",
@@ -661,7 +718,7 @@
         }
     });
 
-    function getLastPp(itemId, investor_id) {
+    function getLastPp(itemId, investor_id, rowId) {
         $.ajax({
             url: "{{ route('get-last-purchase')}}",
             type: "GET",
@@ -699,7 +756,7 @@
         console.log(type);
         if (type == 2) {
 
-            getLastPp(item, investor_id)
+            getLastPp(item, investor_id, rowId)
             // $.ajax({
             //     url: "{{ route('get-last-purchase')}}",
             //     type: "GET",
