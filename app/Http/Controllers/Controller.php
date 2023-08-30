@@ -96,7 +96,7 @@ class Controller extends BaseController
             // 7- payable
             $investor_pyb = $investor->charOfAccounts()->create([
                 'account_name' => $investor->prefix . '_payable',
-                'account_type' => 7,
+                'account_type'      => 7,
                 'opening_balance' => 0
             ]);
 
@@ -284,6 +284,7 @@ class Controller extends BaseController
         $total_cash = GLeadger:: where('account_id','=',1)->sum('value');
         // total bank
         $total_bank = GLeadger:: where('account_id','=',4)->sum('value');
+        $total_balance = $total_cash+ $total_bank;
         // investor cash
         $investor_cash = GLeadger:: where('account_id','=',1)->where('investor_id',$id)->sum('value');
         // investor bank
@@ -310,8 +311,8 @@ class Controller extends BaseController
         // sales made by investor
         $sale = Sale::where('investor_id',$id)->sum('total');
         // total balance of the investor
-        $total_balance = $investor_cash+$investor_bank;
-        return view("template.dashboard-content", compact('investors','investor','investor_cash','rcv_cash','pft','sale','asset','total_cash','total_bank','investor_bank','total_balance','others_total','payables','expenses'));
+        $total_balance_investor = $investor_cash+$investor_bank;
+        return view("template.dashboard-content", compact('investors','investor','investor_cash','rcv_cash','pft','sale','asset','total_cash','total_bank','investor_bank','total_balance','total_balance_investor','others_total','payables','expenses'));
     }
 
     public function showInvestments()
