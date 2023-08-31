@@ -308,7 +308,7 @@
     $(document).on('change', '#supplier_id', function() {
 
         console.log("supplier_changed");
-        location.reload();
+        // location.reload();
 
 
 
