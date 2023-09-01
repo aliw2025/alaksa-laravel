@@ -268,12 +268,20 @@ class SupplierPaymentController extends Controller
         if(!SupplierPayment:: NegativeCheck($request->acc_type,$supplierPayment->amount,$request->investor_id)){
             return redirect()->back()->with('error_m', 'Balance insufficient');
         }
-        $supplierPayment->status = 3;
-        $supplierPayment->save();
+      
        
         // // getting supplier supplierPayment account
         $supplier = Supplier::find($request->supplier);
         $sup_acc_id = $supplier->charOfAccounts->where('account_type', 7)->first()->id;
+        $total = SupplierPayment::PayableAmount($supplierPayment->investor_id,$sup_acc_id);
+        dd($total);
+        if($total-$supplierPayment->amount<0){
+            return redirect()->back()->with('error_m','payment exceeded payable amount of '.$total);
+
+        }
+
+        $supplierPayment->status = 3;
+        $supplierPayment->save();
 
         // /************** Leadger Entries **********/
         $supplierPayment->createLeadgerEntry($sup_acc_id,str_replace(',','',$supplierPayment->amount),$supplierPayment->investor_id,$supplierPayment->payment_date,$user->id);

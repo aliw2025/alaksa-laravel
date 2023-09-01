@@ -31,7 +31,7 @@ class GLeadger extends Model
         return $this->belongsTo(investor::class,'investor_id');
     }
   
-    
+    // this is the real one
     public function transaction()
     {
         
@@ -39,6 +39,7 @@ class GLeadger extends Model
         return $this->morphTo();
 
     }
+
     public function account() {
 
         return $this->belongsTo(ChartOfAccount::class,'account_id');

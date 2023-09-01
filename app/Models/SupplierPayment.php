@@ -68,6 +68,15 @@ class SupplierPayment extends Model
          return $query;
 
     }
+
+    public function scopePayableAmount($query,$investor,$sup_acc_no){
+
+        $query = GLeadger::where('account_id',$sup_acc_no)->where('investor_id',$investor);
+        $sum = $query->sum('value');
+        return $sum;
+    }
+
+
     public function scopeNegativeCheck($query,$account,$amount,$investor){
 
         $query = GLeadger::where('account_id','=',$account)->where('investor_id','=',$investor);

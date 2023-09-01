@@ -45,11 +45,12 @@ class Sale extends Model
 
      }
      
-
+    //  this is the real one
     public function leadgerEntries(){
 
         return $this->morphMany(GLeadger::class,'transaction');
     }
+
     public function createLeadgerEntry($accound_id,$value,$investor_id,$date,$user_id ){
 
         $this->leadgerEntries()->create([
