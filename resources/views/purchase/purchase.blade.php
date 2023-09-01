@@ -123,7 +123,8 @@
                                                     <div class="row py-2">
                                                         <div class="col-lg-1 col-12 my-lg-0 my-2">
                                                             <p class="card-text col-title mb-md-2 mb-0">Item Id</p>
-                                                            <input value="{{$pitem->item_id}}" id="passId{{$row_count}}" type="number" class="form-control" value="" placeholder="" onkeyup="getItemsById({{$row_count}},this.value)" @if(!($purchase->status==1)) disabled @endif>
+                                                           
+                                                            <input value="{{$pitem->item_id}}" id="passId{{$row_count}}" type="number" class="form-control" value="" placeholder=""   @if($type==1) onkeyup="getItemsById({{$row_count}},this.value)" @else onkeyup="getInvItemsById({{$row_count}},this.value)"  @endif @if(!($purchase->status==1)) disabled @endif>
                                                             <input value="{{$pitem->item_id}}" name="item_id[]" id="item_id{{$row_count}}" type="hidden" class="form-control" value="" placeholder="">
                                                             <!-- <input type="hidden" value="{{$pitem->id}}" name="item_id[]"> -->
                                                         </div>
@@ -307,7 +308,7 @@
     $(document).on('change', '#supplier_id', function() {
 
         console.log("supplier_changed");
-        location.reload();
+        // location.reload();
 
 
 
@@ -335,7 +336,7 @@
                             <div class="row py-2">
                                     <div class="col-lg-1 col-12 my-lg-0 my-2">
                                     <p class="card-text col-title mb-md-2 mb-0">Item Id</p>
-                                    <input name="item_id[]" id ="passId${rowId}" type="number" class="form-control" value="" placeholder="" onkeyup="getItemsById(${rowId},this.value)">
+                                    <input name="item_id[]" id ="passId${rowId}" type="number" class="form-control" value="" placeholder="" @if($type==1) onkeyup="getItemsById(${rowId},this.value)" @else onkeyup="getInvItemsById(${rowId},this.value)" @endif>
                                     <input name="item_id[]" id="item_id${rowId}" type="hidden" class="form-control"
                                                                     value="" placeholder="" >
                                     </div>
@@ -471,26 +472,27 @@
     }
 
     // incomplete
-    function getInvItemsById(id) {
+    function getInvItemsById(rowId,id) {
 
         console.log('function callled2 ' + id);
-        var letters = $('#itemBox' + id).val();
-        if (id < 1) {
+        if (id.length < 1) {
 
-            $('#cost' + id).val("");
-            console.log("this sfd " + id);
-            $('#qty' + id).val("");
-            $('#cur_cost' + id).val("");
-            $('#rowTotal' + id).val("");
-            $('#td_loss' + id).val("");
+            $('#cost' + rowId).val("");
+            console.log("this sfd " + rowId);
+            $('#qty' + rowId).val("");
+            $('#cur_cost' + rowId).val("");
+            $('#rowTotal' + rowId).val("");
+            $('#itemBox' + rowId).val("");
+
+            $('#td_loss' + rowId).val("");
             return;
         }
-        console.log(letters);
+       
         var investor_id = $("#select2-basic").val();
         console.log(investor_id);
         var supplier_id = $('#supplier_id').val();
         $.ajax({
-            url: "{{ route('get-investor-items') }}",
+            url: "{{ route('get-investor-items-by-id') }}",
             type: "GET",
             data: {
                 item_id: id,
@@ -502,15 +504,17 @@
                 $("#listBody" + id).empty();
                 console.log('recv2');
                 console.log(dataResult);
-                var i;
-                for (i = 0; i < dataResult.length; i++) {
-                    var item = dataResult[i].item;
-                    console.log(item);
-                    markup = `<button id = "btnItem` + item.id +
-                        `"type="button" class="list-group-item list-group-item-action" onclick="setText(` +
-                        item.id + `,${id})">` + item.name + `</button>`;
-                    $("#listBody" + id).append(markup);
+                $("#itemBox" + rowId).val(dataResult.item.name);
+                $("#passId" + rowId).val(dataResult.item.id);
+                $("#item_id" + rowId).val(dataResult.item.id);
+                var investor_id = $("#select2-basic").val();
+                var type = $('#tran_type').val();
+
+                if (type == 2) {
+
+                    getLastPp(dataResult.item.id, investor_id,rowId);
                 }
+               
 
 
             },
@@ -521,7 +525,7 @@
                 alert(err);
             },
         });
-        $("#list" + id).show();
+       
 
     }
 
@@ -544,6 +548,10 @@
             $('#cur_cost' + id).val("");
             $('#rowTotal' + id).val("");
             $('#td_loss' + id).val("");
+            $('#item_id' + id).val("");
+            $('#passId' + id).val("");
+
+
             return;
         }
         console.log(letters);
@@ -719,6 +727,7 @@
     });
 
     function getLastPp(itemId, investor_id, rowId) {
+        console.log(itemId+" "+investor_id+" "+rowId);
         $.ajax({
             url: "{{ route('get-last-purchase')}}",
             type: "GET",
@@ -728,7 +737,8 @@
             },
             success: function(dataResult) {
 
-
+                console.log("PRICE");
+                console.log(dataResult);
 
                 $("#cost" + rowId).val(parseFloat(dataResult).toLocaleString('en-US'));
 
