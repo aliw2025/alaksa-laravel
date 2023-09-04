@@ -271,10 +271,11 @@ class SupplierPaymentController extends Controller
       
        
         // // getting supplier supplierPayment account
-        $supplier = Supplier::find($request->supplier);
+        $supplier = Supplier::find( $supplierPayment->supplier_id);
+        // dd($supplier);
         $sup_acc_id = $supplier->charOfAccounts->where('account_type', 7)->first()->id;
         $total = SupplierPayment::PayableAmount($supplierPayment->investor_id,$sup_acc_id);
-        dd($total);
+        // dd($total);
         if($total-$supplierPayment->amount<0){
             return redirect()->back()->with('error_m','payment exceeded payable amount of '.$total);
 

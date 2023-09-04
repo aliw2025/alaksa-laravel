@@ -120,7 +120,10 @@ class PurchaseController extends Controller
             $purchase_item->trade_discount = $request->trade_discount[$a] *$request->qty[$a];
             $purchase_item->purchase_id = $purchase->id;
             // $purchase_item->td_loss = $request->td_loss[$a];
-            $t=str_replace(',','', $request->td_loss[$a]);
+            $t = 0;
+            if(isset($request->td_loss[$a])){
+                $t=str_replace(',','', $request->td_loss[$a]);
+            }
             $purchase_item->td_loss = isset($request->td_loss[$a]) ?$t:0;
             $purchase_item->save();
 

@@ -288,7 +288,9 @@ class Controller extends BaseController
         // investor cash
         $investor_cash = GLeadger:: where('account_id','=',1)->where('investor_id',$id)->sum('value');
         // investor bank
-        $investor_bank = GLeadger:: where('account_id','=',4)->where('investor_id',$id)->sum('value');
+        $investor_bank = GLeadger:: whereHas('account',function ($query){
+            $query->where('account_type',4);
+        })->where('investor_id',$id)->sum('value');
         //others investors cash 
         $investors_cash = GLeadger:: where('account_id','=',1)->where('investor_id','!=',1)->sum('value');
         // others investor bank balances
