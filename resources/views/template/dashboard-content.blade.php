@@ -161,7 +161,7 @@
                                     </div>
                                     <div class="my-auto">
                                         <h4 class="fw-bolder mb-0">{{number_format($asset)}}</h4>
-                                        <p class="card-text font-small-3 mb-0">Assets</p>
+                                        <p class="card-text font-small-3 mb-0">Inventory</p>
                                     </div>
                                 </div>
                             </div>
@@ -270,7 +270,7 @@
                                     </div>
                                     <div class="my-auto">
                                         <h4 class="fw-bolder mb-0">{{number_format($total_balance)}}</h4>
-                                        <p class="card-text font-small-3 mb-0">Net Available Cash</p>
+                                        <p class="card-text font-small-3 mb-0"> <a href="{{route('get-account-balances')}}" > Net Available Cash</a> </p>
                                     </div>
                                 </div>
                             </div>

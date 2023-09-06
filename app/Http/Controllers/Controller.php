@@ -283,18 +283,23 @@ class Controller extends BaseController
         //tatal cash
         $total_cash = GLeadger:: where('account_id','=',1)->sum('value');
         // total bank
-        $total_bank = GLeadger:: where('account_id','=',4)->sum('value');
+        $total_bank = GLeadger::whereHas('account',function ($query){
+            $query->where('account_type',4)->where('owner_type','App\Models\Investor');
+        })->sum('value');
         $total_balance = $total_cash+ $total_bank;
         // investor cash
         $investor_cash = GLeadger:: where('account_id','=',1)->where('investor_id',$id)->sum('value');
         // investor bank
         $investor_bank = GLeadger:: whereHas('account',function ($query){
-            $query->where('account_type',4);
+            $query->where('account_type',4)->where('owner_type','App\Models\Investor');
         })->where('investor_id',$id)->sum('value');
+        // dd($investor_bank->get());
         //others investors cash 
         $investors_cash = GLeadger:: where('account_id','=',1)->where('investor_id','!=',1)->sum('value');
         // others investor bank balances
-        $investors_bank = GLeadger:: where('account_id','=',4)->where('investor_id','!=',1)->sum('value');
+        $investors_bank = GLeadger::whereHas('account',function ($query){
+            $query->where('account_type',4)->where('owner_type','App\Models\Investor');
+        })->where('investor_id','!=',1)->sum('value');
         // other investors total
         $others_total = $investors_cash+ $investors_bank;
         // payables of investor 
