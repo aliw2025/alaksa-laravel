@@ -33,7 +33,7 @@
                                     <tr>
                                         <td>{{$count}}</td>
                                         <td>{{$item->item->name}}</td>
-                                        <td>{{$item->item->category}}</td>
+                                        <td>{{$item->item->category->category_name}}</td>
                                         <td>{{$item->item->make}}</td>
                                         <td>{{$item->item->model}}</td>
                                         <td>{{number_format($item->unit_cost)}}</td>
