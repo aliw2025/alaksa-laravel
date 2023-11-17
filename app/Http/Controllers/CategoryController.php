@@ -42,7 +42,7 @@ class CategoryController extends Controller
         $category->category_name = $request->category_name;
         $category->save();
 
-        return redirect()->route('category.create');
+        return redirect()->back()->with('message','new record added');
     }
 
     /**
@@ -54,6 +54,7 @@ class CategoryController extends Controller
     public function show(Category $category)
     {
         //
+        return "show";
     }
 
     /**
@@ -64,7 +65,10 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
-        //
+        $categories = Category::all();
+        
+        return view('inventory.categories',compact('categories','category'));
+
     }
 
     /**
@@ -76,7 +80,9 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category)
     {
-        //
+        $category->category_name = $request->category_name;
+        $category->save();
+        return redirect()->back()->with('message','record updated');
     }
 
     /**
@@ -88,5 +94,8 @@ class CategoryController extends Controller
     public function destroy(Category $category)
     {
         //
+        $category->delete();
+        
+        return redirect()->back()->with('message','record deleted');
     }
 }

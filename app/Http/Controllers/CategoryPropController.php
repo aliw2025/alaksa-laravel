@@ -38,6 +38,7 @@ class CategoryPropController extends Controller
 
         $category = Category::find($id);
         $properties = CategoryProperty::where('cat_id',$id)->get();
+        
         return view('inventory.cat-properties',compact('category','properties'));
     }
     /**
@@ -54,6 +55,7 @@ class CategoryPropController extends Controller
         $categoryProperty->property_name = $request->property_name;
         $categoryProperty->save();
 
+        return redirect()->back()->with('message','new record added');
         return redirect()->route('create-property',$request->cat_id);
     }
 
@@ -76,7 +78,9 @@ class CategoryPropController extends Controller
      */
     public function edit(CategoryProperty $categoryProperty)
     {
-        //
+        $category = Category::find($categoryProperty->cat_id);  
+        $properties = CategoryProperty::where('cat_id',$categoryProperty->cat_id)->get();
+        return view('inventory.cat-properties',compact('category','properties','categoryProperty'));
     }
 
     /**
@@ -88,7 +92,10 @@ class CategoryPropController extends Controller
      */
     public function update(Request $request, CategoryProperty $categoryProperty)
     {
-        //
+          
+        $categoryProperty->property_name = $request->property_name;
+        $categoryProperty->save();
+        return redirect()->back()->with('message','record updated');
     }
 
     /**
@@ -100,5 +107,7 @@ class CategoryPropController extends Controller
     public function destroy(CategoryProperty $categoryProperty)
     {
         //
+        $categoryProperty->delete();
+        return redirect()->back()->with('message','record deleted');
     }
 }

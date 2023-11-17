@@ -33,7 +33,18 @@
                                         <td>{{$count}}</td>
                                         <td>{{$prop->property_name}}</td>
                                         <td>
-                                            <a style="text-decoration: none;color:black" href="#"><i data-feather='edit'></i></a>
+                                            <div class="d-flex">
+                                            <a style="text-decoration: none;color:black" href="{{ route('categoryProperty.edit', $prop->id) }}"><i data-feather='edit'></i></a>
+                                                <form method="POST" action="{{ route('categoryProperty.destroy', $prop->id) }}">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" style="border: none; background-color: transparent;">
+                                                        <i data-feather='trash-2'></i>
+                                                    </button>
+                                                </form>
+
+                                            </div>
+                                           
                                         </td>
                                     </tr>
                                     @php
@@ -73,4 +84,15 @@
     </div>
 
 </div>
+@if(Session::has('message'))
+<script>
+    $(document).ready(function() {
+        toastr.success("{{Session::get('message')}}", "Success!", {
+            closeButton: !0,
+            tapToDismiss: !1,
+            rtl: false
+        });
+    });
+</script>
+@endif
 @endsection
