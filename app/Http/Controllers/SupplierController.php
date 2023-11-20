@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Supplier;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 
 class SupplierController extends Controller
@@ -82,7 +83,7 @@ class SupplierController extends Controller
             'value'=> 0,
             'date'=>$supplier->created_at
         ]);        
-        return redirect()->route('supplier.index');
+        return redirect()->route('supplier.index')->with('message', 'Supplier added successfully.');;
 
     }
 
@@ -145,7 +146,7 @@ class SupplierController extends Controller
         $supplier->category_id = $request->category_id;
         $supplier->business_name= $request->business_name;
         $supplier->save();
-        return redirect()->route('supplier.index');
+        return redirect()->route('supplier.index')->with('message', 'Supplier updated successfully.');
     }
 
     /**
@@ -156,8 +157,17 @@ class SupplierController extends Controller
      */
     public function destroy(Supplier $supplier)
     {
-        //
-        // $supplier->delete();
+        try {
+            $acc =  $supplier->charOfAccounts();
+            $supplier->delete();
+            $acc->delete();
+            return redirect()->route('supplier.index')->with('message', 'Supplier deleted successfully.');
+           
+        } catch (QueryException $e) {
+
+            return redirect()->back()->with('error', 'Cannot delete item. It is associated with other records.');
+        }
+        
         return redirect()->route('supplier.index');
     }
 }

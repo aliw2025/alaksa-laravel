@@ -26,7 +26,7 @@ class CategoryPropController extends Controller
     public function create($id)
     {
         //
-        dd($id);
+        createProperty($id);
     }
 
     public function getProperties($id) {
@@ -95,6 +95,9 @@ class CategoryPropController extends Controller
      */
     public function update(Request $request, CategoryProperty $categoryProperty)
     {
+        $request->validate(
+            ['property_name'=>'required']
+        );
           
         $categoryProperty->property_name = $request->property_name;
         $categoryProperty->save();

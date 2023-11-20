@@ -7,6 +7,8 @@ use App\Models\CategoryProperty;
 use App\Models\Item;
 use App\Models\PropertyValue;
 use App\Models\Supplier;
+use Doctrine\DBAL\Query\QueryException;
+use Illuminate\Database\QueryException as DatabaseQueryException;
 use Illuminate\Http\Request;
 
 class ItemController extends Controller
@@ -98,8 +100,7 @@ class ItemController extends Controller
         
         
 
-
-        return redirect()->route('item.create');
+        return redirect()->back()->with('message', 'Item added successfully.');
     }
 
     /**
@@ -161,7 +162,7 @@ class ItemController extends Controller
             $propValue->item_id = $item->id;
             $propValue->save();  
         }
-        return redirect()->route('item.create');
+        return redirect()->back()->with('message', 'Item updated successfully.');
     }
 
     /**
@@ -172,8 +173,13 @@ class ItemController extends Controller
      */
     public function destroy(Item $item)
     {
-        //
-        // $item->delete();
-        return redirect()->route('item.create');
+        try {
+            $item->delete();
+            return redirect()->route('item.create')->with('message', 'Item deleted successfully.');
+            return redirect()->back()->with('message', 'Item deleted successfully.');
+        } catch (DatabaseQueryException $e) {
+
+            return redirect()->back()->with('error', 'Cannot delete item. It is associated with other records.');
+        }
     }
 }

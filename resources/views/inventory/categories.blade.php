@@ -72,7 +72,10 @@
                                         {{ method_field('PUT') }}
                                     @endif
                                 <label class="form-label" for="">Category Name </label>
-                                <input @if(isset($category)) value="{{$category->category_name}}"  @endif type="text" class="form-control" name="category_name">
+                                <input @if(isset($category)) value="{{$category->category_name}}"  @endif type="text" class="form-control @error('category_name') is-invalid @enderror" name="category_name">
+                                @error('category_name')
+                                    <div class="alert alert-danger">{{ $message }}</div>
+                                @enderror
                                 @if(isset($category))
                                     <button class="mt-1 btn btn-primary mt-2">Update</button>
                                 @else

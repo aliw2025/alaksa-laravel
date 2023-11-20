@@ -27,7 +27,7 @@ return new class extends Migration
             $table->timestamps();
 
             $table->foreign('investor_id')->references('id')->on('investors')->onDelete('cascade');
-            $table->foreign('supplier_id')->references('id')->on('suppliers')->onDelete('cascade');
+            // $table->foreign('supplier_id')->references('id')->on('suppliers')->onDelete('restrict');
             $table->foreign('status')->references('id')->on('transaction_statuses')->onDelete('cascade');
             
         });
