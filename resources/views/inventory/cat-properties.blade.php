@@ -61,13 +61,16 @@
                             <div class="card-body">
                                 <div class="card-header d-flex justify-content-center">
                                     <div>
-                                        <h4 class="text-center">Add New Property</h4>
+                                        <h4 class="text-center"> {{isset($categoryProperty)? 'Update Property':'Add New Property'}}  </h4>
                                     </div>
                                 </div>
-                                <form method="POST" class="form form-vertical" autocomplete="on" action="{{route('categoryProperty.store')}}">
-                                    @csrf
+                                <form method="POST" class="form form-vertical" autocomplete="on" action="{{isset($categoryProperty)?? route('categoryProperty.update',$categoryProperty->id):route('categoryProperty.store')}}">
+                                    @csrf 
                                     <label class="form-label" for="">Property Name </label>
-                                    <input type="text" class="form-control" name="property_name" >
+                                    <input type="text" value="{{$categoryProperty->property_name??""}}"  class="form-control @error('property_name') is-invalid @enderror" name="property_name" >
+                                    @error('property_name')
+                                        <div class="alert alert-danger">{{ $message }}</div>
+                                    @enderror
                                     <input type="hidden" name="cat_id" value="{{$category->id}}" >
                                     <button class="mt-1 btn btn-primary mt-2" >save</button>
                                     

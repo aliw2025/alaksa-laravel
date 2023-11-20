@@ -50,6 +50,9 @@ class CategoryPropController extends Controller
     public function store(Request $request)
     {
         //
+        $request->validate(
+            ['property_name'=>'required']
+        );
         $categoryProperty = new CategoryProperty();
         $categoryProperty->cat_id = $request->cat_id;
         $categoryProperty->property_name = $request->property_name;

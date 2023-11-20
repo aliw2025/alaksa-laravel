@@ -109,7 +109,7 @@
                                     <tr>
                                         <td>{{$count}}</td>
                                         <td>{{$pur->investor->investor_name}}</td>
-                                        <td>{{$pur->account->owner->name}}</td>
+                                        <td>{{$pur->account->owner->name??""}}</td>
                                         <td>{{$pur->transaction_type=='App\Models\Purchase'? 'purchase':'return loss'}}</td>
                                         <td>{{ number_format( $pur->value * -1)}}</td>
                                         <td>{{date('d-m-Y', strtotime($pur->date))}}</td>
