@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\CategoryProperty;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 
 class CategoryPropController extends Controller
@@ -112,8 +113,14 @@ class CategoryPropController extends Controller
      */
     public function destroy(CategoryProperty $categoryProperty)
     {
+        try{
+            $categoryProperty->delete();
+            return redirect()->back()->with('message','record deleted');
+        }catch(QueryException $e){
+
+            return redirect()->back()->with('error', 'Cannot delete item. It is associated with other records.');
+        }
         //
-        $categoryProperty->delete();
-        return redirect()->back()->with('message','record deleted');
+    
     }
 }

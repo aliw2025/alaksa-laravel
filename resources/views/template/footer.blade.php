@@ -55,6 +55,28 @@
         }
     })
 </script>
+@if(Session::has('message'))
+<script>
+    $(document).ready(function() {
+        toastr.success("{{Session::get('message')}}", "Success!", {
+            closeButton: !0,
+            tapToDismiss: !1,
+            rtl: false
+        }); 
+    });
+</script>
+@endif
+@if(Session::has('error'))
+<script>
+    $(document).ready(function() {
+        toastr.error("{{ Session::get('error') }}", "Failed!", {
+            closeButton: true,
+            tapToDismiss: false,
+            rtl: false
+        });
+    });
+</script>
+@endif
 
 <!--  to be checked -->
 <!-- <script src="../../../app-assets/vendors/js/extensions/moment.min.js"></script>

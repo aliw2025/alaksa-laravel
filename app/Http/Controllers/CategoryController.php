@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
@@ -96,9 +97,14 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        //
-        $category->delete();
+        try{
+            $category->delete();
+            return redirect()->back()->with('message','record deleted');
+        }catch(QueryException $e){
+
+            return redirect()->back()->with('error', 'Cannot delete item. It is associated with other records.');
+        }
         
-        return redirect()->back()->with('message','record deleted');
+      
     }
 }

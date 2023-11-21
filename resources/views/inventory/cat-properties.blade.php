@@ -95,15 +95,5 @@
     </div>
 
 </div>
-@if(Session::has('message'))
-<script>
-    $(document).ready(function() {
-        toastr.success("{{Session::get('message')}}", "Success!", {
-            closeButton: !0,
-            tapToDismiss: !1,
-            rtl: false
-        });
-    });
-</script>
-@endif
+
 @endsection
