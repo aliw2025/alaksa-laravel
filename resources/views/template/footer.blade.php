@@ -55,7 +55,7 @@
         }
     })
 </script>
-@if(Session::has('message'))
+<!-- @if(Session::has('message'))
 <script>
     $(document).ready(function() {
         toastr.success("{{Session::get('message')}}", "Success!", {
@@ -76,7 +76,7 @@
         });
     });
 </script>
-@endif
+@endif -->
 
 <!--  to be checked -->
 <!-- <script src="../../../app-assets/vendors/js/extensions/moment.min.js"></script>
