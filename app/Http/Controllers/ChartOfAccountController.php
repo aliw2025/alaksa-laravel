@@ -45,6 +45,7 @@ class ChartOfAccountController extends Controller
         $validated = $request->validate(
         [
             'account_name' => 'required',
+            'bank_name'=>'required',
             'account_number' => 'required',
         ]);
 
@@ -52,12 +53,13 @@ class ChartOfAccountController extends Controller
         $investor->charOfAccounts()->create([
             'account_name' => $request->account_name,
             'account_type' => 4,
+            'bank_name'=>$request->bank_name,
             'account_number' => $request->account_number,
             'opening_balance' => 0
         ]);
 
         // dd($request->all());
-        return redirect()->route('chartOfAccount.create');
+        return redirect()->route('chartOfAccount.create')->with('message','record saved');
     }
 
 
@@ -115,7 +117,10 @@ class ChartOfAccountController extends Controller
      */
     public function edit(ChartOfAccount $chartOfAccount)
     {
-    //
+        
+        $accounts = ChartOfAccount::where('account_type', 4)->where('owner_type','App\Models\Investor')->get();
+        return view('capital-investments.accounts', compact('accounts','chartOfAccount'));
+
     }
 
     /**
@@ -127,7 +132,22 @@ class ChartOfAccountController extends Controller
      */
     public function update(Request $request, ChartOfAccount $chartOfAccount)
     {
-    //
+    //  
+    $validated = $request->validate(
+        [
+            'account_name' => 'required',
+            'bank_name'=>'required',
+            'account_number' => 'required',
+        ]);
+
+        $chartOfAccount->account_name = $request->account_name;
+        $chartOfAccount->bank_name = $request->bank_name;
+        $chartOfAccount->account_number= $request->account_number;
+        $chartOfAccount->save();
+
+       
+
+       return redirect()->route('chartOfAccount.create')->with('message','record updated');
     }
 
     /**

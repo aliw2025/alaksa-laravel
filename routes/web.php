@@ -419,6 +419,11 @@ Route::controller(SupplierPaymentController::class)->group(function () {
         // Route::get('/post-supplierPayment',  'postSupplierPayment')->name('post-supplierPayment');
         // Route::get('/unpost-supplierPayment',  'UnpostSupplierPayment')->name('unpost-supplierPayment');
         // Route::get('/cancel-supplierPayment',  'cancelSupplierPayment')->name('cancel-supplierPayment'); 
+
+        Route::group(['middleware' => ['role_or_permission:admin|supplierNetPayable']], function () {
+                Route::get('/get-suppplier-net-payable', 'supplierNetPayable')->name('supplier-net-payable');
+        });
+        
         Route::group(['middleware' => ['role_or_permission:admin|getpayables']], function () {
                 Route::get('/get-payables/{id}', 'getPayables')->name('get-payables');
         });

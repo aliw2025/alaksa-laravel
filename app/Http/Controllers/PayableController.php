@@ -14,7 +14,7 @@ use App\Models\InvestorLeadger;
 use App\Models\Item;
 use App\Models\PurchaseItem;
 use Illuminate\Support\Facades\Auth;
-
+use PhpParser\Node\Stmt\TryCatch;
 
 class PayableController extends Controller
 {
@@ -49,7 +49,9 @@ class PayableController extends Controller
         $suppliers = Supplier::whereIn('id', Purchase::select('supplier')->distinct()->pluck('supplier'))->get();
         return view('payable.payables', compact('suppliers', 'id'));
         
-    }
+    }   
+
+    
     /**
      * Show the form for creating a new resource.
      *

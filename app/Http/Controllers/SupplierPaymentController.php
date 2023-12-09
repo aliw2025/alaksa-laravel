@@ -375,4 +375,27 @@ class SupplierPaymentController extends Controller
     {
         //
     }
+
+    public function supplierNetPayable(Request $request){
+
+        $request->validate([
+           'supplier_id'=>'required', 
+           'investor_id'=>'required',
+        ]);
+
+        try {
+            $supplier = Supplier::find($request->supplier_id);
+            $sup_acc_id = $supplier->charOfAccounts->where('account_type',7)->first()->id;
+            $led =  GLeadger::where('investor_id', '=', $request->investor_id)->where('account_id',$sup_acc_id)->get();
+            $sum = $led->sum('value');
+
+            return $sum *-1;
+
+        } catch (\Throwable $th) {
+            //throw $th;
+            return "failed to get net payable";
+        }
+
+
+    }
 }

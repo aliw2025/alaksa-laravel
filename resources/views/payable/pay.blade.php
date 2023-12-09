@@ -13,7 +13,7 @@
                             {{ method_field('PUT') }}
                             @endif
                             @if(isset($supplierPayment))
-                                <input type="hidden" name="supplierPayment_id" id="" value="{{$supplierPayment->id}}" >
+                            <input type="hidden" name="supplierPayment_id" id="" value="{{$supplierPayment->id}}">
                             @endif
                             <div class="card-body invoice-padding pb-0">
                                 <div class="d-flex justify-content-between flex-md-row flex-column invoice-spacing mt-0">
@@ -28,13 +28,13 @@
                                     <div class="mt-2">
                                         <h4 style="text-decoration: underline">
                                             Supplier Payment</h4>
-                                            @if(isset($supplierPayment))
-                                                @if(($supplierPayment->status==2))
-                                                    <h4 style="color:red">Cancelled</h4>
-                                                @elseif(($supplierPayment->status==3))
-                                                    <h4 style="color:green">Posted</h4>
-                                                @endif
-                                            @endif
+                                        @if(isset($supplierPayment))
+                                        @if(($supplierPayment->status==2))
+                                        <h4 style="color:red">Cancelled</h4>
+                                        @elseif(($supplierPayment->status==3))
+                                        <h4 style="color:green">Posted</h4>
+                                        @endif
+                                        @endif
                                     </div>
                                     <div class="invoice-number-date mt-md-0 mt-2">
                                         <div class="d-flex align-items-center justify-content-between mb-1">
@@ -65,30 +65,30 @@
                                         </div>
                                         <div class="d-flex align-items-center justify-content-between mb-1">
                                             <span class="title">Date:</span>
-                                            
-                                            <input  value="{{ isset($supplierPayment)? $supplierPayment->payment_date :now()->format('Y-m-d') }}"  name="payment_date" type="date" class="form-control invoice-edit-input" @if(isset($supplierPayment)) @if($supplierPayment->status!=1) disabled @endif @endif>
-                                            
+
+                                            <input value="{{ isset($supplierPayment)? $supplierPayment->payment_date :now()->format('Y-m-d') }}" name="payment_date" type="date" class="form-control invoice-edit-input" @if(isset($supplierPayment)) @if($supplierPayment->status!=1) disabled @endif @endif>
+
                                         </div>
                                         <div class="d-flex align-items-center justify-content-between">
                                             <span class="title">Investor:</span>
                                             <div style="width: 11.21rem; max-width:11.21rem; " class="align-items-center">
-                                               
-                                                <select name="investor_id" class=" select2 select2-hidden-accessible form-control invoice-edit-input" id="select2-basic" data-select2-id="select2-basic" tabindex="-1" aria-hidden="true"  @if(isset($supplierPayment)) @if($supplierPayment->status!=1) disabled @endif @endif>
+
+                                                <select name="investor_id" id="investor_id" class=" select2 select2-hidden-accessible form-control invoice-edit-input" data-select2-id="select2-basic" tabindex="-1" aria-hidden="true" @if(isset($supplierPayment)) @if($supplierPayment->status!=1) disabled @endif @endif>
                                                     @foreach ($investors as $investor)
-                                                    <option value="{{ $investor->id }}"  @if(isset($supplierPayment)) @if($supplierPayment->investor_id == $investor->id)  selected @endif @endif >
+                                                    <option value="{{ $investor->id }}" @if(isset($supplierPayment)) @if($supplierPayment->investor_id == $investor->id) selected @endif @endif >
                                                         {{ $investor->investor_name }}
                                                     </option>
                                                     @endforeach
                                                 </select>
-                                                
+
 
                                             </div>
                                         </div>
                                         <div class="d-flex align-items-center justify-content-between mt-1">
                                             <span class="title">Account</span>
-                                           
+
                                             <div style="width: 11.21rem; max-width:11.21rem; " class="align-items-center">
-                                                <select name="acc_type" class="form-select" aria-label="Default select example"  @if(isset($supplierPayment)) @if($supplierPayment->status!=1) disabled @endif @endif>
+                                                <select name="acc_type" class="form-select" aria-label="Default select example" @if(isset($supplierPayment)) @if($supplierPayment->status!=1) disabled @endif @endif>
                                                     @foreach ($bank_acc as $acc)
                                                     <option @if(isset($supplierPayment)) @if($supplierPayment->account_id==$acc->id) selected @endif @endif value="{{ $acc->id }}">
                                                         {{ $acc->account_name }}
@@ -100,8 +100,8 @@
                                         <div class="d-flex align-items-center justify-content-between mt-1">
                                             <span class="title">Supplier</span>
                                             <div style="width: 11.21rem; max-width:11.21rem; " class="align-items-center">
-                                                
-                                                <select name="supplier" class="@error('supplier') is-invalid @enderror form-select" aria-label="Default select example"  @if(isset($supplierPayment)) @if($supplierPayment->status!=1) disabled @endif @endif>
+
+                                                <select name="supplier" id="supplier_id" class="@error('supplier') is-invalid @enderror form-select select2 select2-hidden-accessible" aria-label="Default select example" @if(isset($supplierPayment)) @if($supplierPayment->status!=1) disabled @endif @endif>
                                                     @foreach ($suppliers as $sup)
                                                     <option @if(isset($supplierPayment)) @if($supplierPayment->supplier_id==$sup->id) selected @endif @endif value="{{ $sup->id }}">{{ $sup->name }}</option>
                                                     @endforeach
@@ -110,7 +110,16 @@
                                                 <div class="alert alert-danger"> {{$message}}</div>
                                                 @enderror
                                             </div>
-                                           
+
+                                        </div>
+                                        <div class="d-flex align-items-center justify-content-between mt-1">
+                                            <span class="title">OutStanding Amount</span>
+                                            <div style="width: 11.21rem; max-width:11.21rem; " class="align-items-center">
+
+                                                <input type="text" class="form-control" id="outstanding_amount" disabled>
+
+                                            </div>
+
                                         </div>
                                     </div>
                                 </div>
@@ -128,14 +137,14 @@
                                                     <div class="row py-2">
                                                         <div class="col-3 my-lg-0 my-2">
                                                             <p class="card-text col-title mb-md-2 mb-0">Amount</p>
-                                                            <input @if (isset($supplierPayment))  value="{{ $supplierPayment->amount }}" @endif id="cost0" name="amount" class="@error('amount') is-invalid @enderror number-separator form-control" placeholder="" @if(isset($supplierPayment)) @if($supplierPayment->status!=1) disabled @endif @endif>
+                                                            <input @if (isset($supplierPayment)) value="{{ $supplierPayment->amount }}" @endif id="cost0" name="amount" class="@error('amount') is-invalid @enderror number-separator form-control" placeholder="" @if(isset($supplierPayment)) @if($supplierPayment->status!=1) disabled @endif @endif>
                                                             @error('amount')
                                                             <div class="alert alert-danger"> {{$message}}</div>
                                                             @enderror
                                                         </div>
                                                         <div class="col-9 my-lg-0 my-2">
                                                             <p class="card-text col-title mb-md-2 mb-0">Note</p>
-                                                            <input @if (isset($supplierPayment))  value="{{ $supplierPayment->note }}" @endif id="cost0" name="note" type="text" class="form-control" value="" placeholder="" @if(isset($supplierPayment)) @if($supplierPayment->status!=1) disabled @endif @endif>
+                                                            <input @if (isset($supplierPayment)) value="{{ $supplierPayment->note }}" @endif id="cost0" name="note" type="text" class="form-control" value="" placeholder="" @if(isset($supplierPayment)) @if($supplierPayment->status!=1) disabled @endif @endif>
                                                         </div>
                                                     </div><s></s>
                                                 </div>
@@ -163,7 +172,7 @@
                             </div>
                             <div class="row p-2">
                                 <div class="col-12">
-                                @if (isset($supplierPayment))
+                                    @if (isset($supplierPayment))
                                     @if ($supplierPayment->status == 1)
                                     <div class="d-flex justify-content-end">
                                         <button type="submit" name="action" value="post" class="btn btn-success me-2">Post</button>
@@ -175,12 +184,12 @@
                                         <button type="submit" name="action" value="unpost" class="btn btn-danger me-2">Un Post</button>
                                     </div>
                                     @endif
-                                @else
-                                <div class="d-flex justify-content-end">
-                                    <button type="submit" class="btn btn-primary me-2">Save</button>
-                                    <button type="reset" class="btn btn-danger">Reset</button>
-                                </div>
-                                @endif
+                                    @else
+                                    <div class="d-flex justify-content-end">
+                                        <button type="submit" class="btn btn-primary me-2">Save</button>
+                                        <button type="reset" class="btn btn-danger">Reset</button>
+                                    </div>
+                                    @endif
 
                                 </div>
                             </div>
@@ -220,9 +229,51 @@
 <script>
     var rowId = 0;
     $(document).ready(function() {
-      
-        
+
+
         $('.select2-selection__arrow').hide();
+        getSupplierNetPayable();
     });
+
+    $('#investor_id').on('change', function() {
+
+        getSupplierNetPayable();
+
+    });
+
+    $('#supplier_id').on('change', function() {
+
+        getSupplierNetPayable();
+
+    });
+
+
+    function getSupplierNetPayable() {
+
+        var investorId = $('#investor_id').val();
+        var supplierId = $('#supplier_id').val();
+
+        $.ajax({
+            url: "{{route('supplier-net-payable')}}",
+            type: 'GET',
+            data: {
+                investor_id: investorId,
+                supplier_id: supplierId
+            },
+            success: function(data) {
+                // Handle successful response here
+
+                console.log('Success:', data);
+                $('#outstanding_amount').val(data);
+            },
+            error: function(xhr, status, error) {
+                // Handle error here
+                console.error('Error:', error);
+            }
+        });
+
+    }
+
+    // http://localhost/alpha-digital/get-suppplier-net-payable?investor_id=2&supplier_id=6
 </script>
 @endsection
