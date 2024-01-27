@@ -104,13 +104,14 @@
                                             </div>
                                         </div>
                                         
-                                        <div class="d-flex align-items-center justify-content-between mt-1">
+                                        <!-- removed account tabs from expenese -->
+                                        <!-- <div class="d-flex align-items-center justify-content-between mt-1">
                                             <span class="title">Account</span>
 
                                             <div style="width: 11.21rem; max-width:11.21rem; " class="align-items-center">
                                                 <select @if(isset($expense)) @if(!($expense->status==1)) disabled @endif @endif name="acc_type" class="form-select" aria-label="Default select example">
 
-                                                    <!-- <option value="1"> Cash</option> -->
+                                                   
                                                     @foreach ($bank_acc as $acc)
                                                     <option @if(isset($expense)) @if($expense->account_id == $acc->id) selected @endif @endif value="{{ $acc->id }}">
                                                         {{ $acc->account_name }}    
@@ -120,7 +121,7 @@
                                                 </select>
                                             </div>
 
-                                        </div>
+                                        </div> -->
                                         
 
 
