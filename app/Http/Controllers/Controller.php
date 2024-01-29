@@ -345,6 +345,9 @@ class Controller extends BaseController
         return $investor->accounts->where('account_type', 1)->first()->investor;
         // return  $investor->leadgerEntries()->where('transaction_type','=','App\Models\Investor')->get();
         // return \Illuminate\Support\Facades\DB::table('users')->get();
+
+
+        
     }
 
     
