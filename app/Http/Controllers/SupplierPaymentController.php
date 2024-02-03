@@ -265,10 +265,24 @@ class SupplierPaymentController extends Controller
         }
 
         $user = Auth::user();
+        
+        $request = new Request([
+            'supplier_id' => $supplierPayment->supplier_id, // replace with actual supplier_id
+            'investor_id' => $supplierPayment->investor_id, // replace with actual investor_id
+        ]);
+
+        // Call the supplierNetPayable method
+        $netPayable = $this->supplierNetPayable($request);
+        
+        if($supplierPayment->amount > $netPayable){
+            return redirect()->back()->with('error_m', 'Amount is greater than net payable');
+        }
+
         if(!SupplierPayment:: NegativeCheck($request->acc_type,$supplierPayment->amount,$request->investor_id)){
             return redirect()->back()->with('error_m', 'Balance insufficient');
         }
-      
+
+       
        
         // // getting supplier supplierPayment account
         $supplier = Supplier::find( $supplierPayment->supplier_id);

@@ -441,7 +441,7 @@
                 </li>
                 <li class=" nav-item"><a href="{{ route('show-supplier-payments') }}" class="d-flex align-items-center">
                         <i data-feather="circle"></i>
-                        <span class=" menu-title text-truncate" data-i18n="comision">show Supplier Payments</span></a>
+                        <span class=" menu-title text-truncate" data-i18n="comision">Supplier Payments</span></a>
                 </li>
 
             </ul>
