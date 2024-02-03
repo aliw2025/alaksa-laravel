@@ -121,6 +121,15 @@
                                             </div>
 
                                         </div>
+                                        <div class="d-flex align-items-center justify-content-between mt-1">
+                                            <span class="title">Transaction Expense</span>
+                                            <div style="width: 11.21rem; max-width:11.21rem; " class="align-items-center">
+
+                                                <input @if (isset($supplierPayment)) value="{{ number_format($supplierPayment->transaction_charges)}}" @else value="0" @endif  type="text" class="number-separator form-control" id="tran_expense" name="tran_exp" @if(isset($supplierPayment)) @if($supplierPayment->status!=1) disabled @endif @endif>
+
+                                            </div>
+
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -137,7 +146,7 @@
                                                     <div class="row py-2">
                                                         <div class="col-3 my-lg-0 my-2">
                                                             <p class="card-text col-title mb-md-2 mb-0">Amount</p>
-                                                            <input @if (isset($supplierPayment)) value="{{ $supplierPayment->amount }}" @endif id="cost0" name="amount" class="@error('amount') is-invalid @enderror number-separator form-control" placeholder="" @if(isset($supplierPayment)) @if($supplierPayment->status!=1) disabled @endif @endif>
+                                                            <input @if (isset($supplierPayment)) value="{{number_format($supplierPayment->amount )}}" @endif id="cost0" name="amount" class="@error('amount') is-invalid @enderror number-separator form-control" placeholder="" @if(isset($supplierPayment)) @if($supplierPayment->status!=1) disabled @endif @endif>
                                                             @error('amount')
                                                             <div class="alert alert-danger"> {{$message}}</div>
                                                             @enderror

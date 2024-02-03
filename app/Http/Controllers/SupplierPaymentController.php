@@ -8,6 +8,7 @@ use App\Models\GLeadger;
 use App\Models\Payable;
 use App\Models\Purchase;
 use App\Models\Supplier;
+use App\Models\Expense;
 use Illuminate\Http\Request;
 use Brian2694\Toastr\Facades\Toastr;
 use Symfony\Component\Finder\Glob;
@@ -98,6 +99,7 @@ class SupplierPaymentController extends Controller
         $supplierPayment->supplier_id = $request->supplier;
         $supplierPayment->amount = str_replace(',','',$request->amount); 
         $supplierPayment->note = $request->note;
+        $supplierPayment->transaction_charges = str_replace(',','',$request->tran_exp);
         $supplierPayment->payment_date = $request->payment_date;
         $supplierPayment->status = 1;
         $supplierPayment->account_id = $request->acc_type;
@@ -185,6 +187,7 @@ class SupplierPaymentController extends Controller
         $supplierPayment->store_id = 1;
         $supplierPayment->supplier_id = $request->supplier;
         $supplierPayment->amount = str_replace(',','',$request->amount); 
+        $supplierPayment->transaction_charges = str_replace(',','',$request->tran_exp);
         $supplierPayment->note = $request->note;
         $supplierPayment->payment_date = $request->payment_date;
         $supplierPayment->status = 1;
@@ -284,6 +287,23 @@ class SupplierPaymentController extends Controller
             return redirect()->back()->with('error_m', 'Balance insufficient');
         }
 
+        if($supplierPayment->transaction_charges >0){
+
+            $expense = new Expense();
+            $expense->description = "supplier payment no: ".$supplierPayment->payment_no."  bank charges  ";
+            $expense->amount = str_replace(',','',$supplierPayment->transaction_charges);
+            $expense->date = $supplierPayment->payment_date;
+            $expense->head_id = 1;
+            $expense->status = 3;
+            $expense->investor_id = $supplierPayment->investor_id;
+            $expense->save();
+            $supplierPayment->expense_id = $expense->id;
+            $supplierPayment->save();
+            // creating impact of expense on leadger
+            $expense->createLeadgerEntry(8,$expense->amount,$supplierPayment->investor_id, $expense->date ,$user->id);
+            $expense->createLeadgerEntry($supplierPayment->account_id,-$expense->amount,$supplierPayment->investor_id,$expense->date,$user->id);
+        }
+
        
        
         // // getting supplier supplierPayment account
@@ -320,6 +340,12 @@ class SupplierPaymentController extends Controller
         $supplierPayment->status = 1;
         $supplierPayment->save();
         $supplierPayment->leadgerEntries()->delete();
+        if($supplierPayment->expense_id){
+            $expense = Expense::find($supplierPayment->expense_id);
+            $expense->status = 2;
+            $expense->save();
+            $expense->leadgerEntries()->delete();
+        }
 
        
         return redirect()->back()->with('message','Record Un Posted');
