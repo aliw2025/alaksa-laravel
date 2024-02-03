@@ -238,7 +238,7 @@
                             @endif
                             
                             @if($investor->id==1)
-                            <div class="col-xl-3 col-sm-6 col-12 mb-2 mb-xl-0 card card mt-1 p-2 me-2 p-2">
+                            <!-- <div class="col-xl-3 col-sm-6 col-12 mb-2 mb-xl-0 card card mt-1 p-2 me-2 p-2">
                                 <div class="d-flex flex-row">
                                     <div class="avatar bg-light-danger me-2">
                                         <div class="avatar-content">
@@ -255,7 +255,7 @@
                                         <p class="card-text font-small-3 mb-0">investor's net Total</p>
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
                             <div class="col-xl-3 col-sm-6 col-12 mb-2 mb-xl-0 card card mt-1 p-2 me-2 p-2">
                                 <div class="d-flex flex-row">
                                     <div class="avatar bg-light-danger me-2">
