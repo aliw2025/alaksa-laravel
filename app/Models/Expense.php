@@ -14,6 +14,11 @@ class Expense extends Model
         return $this->morphMany(GLeadger::class,'transaction');
     }
    
+    public function transaction_status(){
+        
+        return $this->belongsTo(TransactionStatus::class,'status');
+ 
+     }
     public function createLeadgerEntry($accound_id,$value,$investor_id,$date,$user_id ){
 
         $this->leadgerEntries()->create([
@@ -36,14 +41,35 @@ class Expense extends Model
     public function investor(){
         return $this->belongsTo(Investor::class,'investor_id');
     }
-    public function scopeShowExpenses($query,$from_date,$to_date,$investor_id)
-    {   
+    public function scopeShowExpenses($query,$from_date,$to_date,$head_id,$sub_head_id,$investor_id,$status_id)
+    {    
+        $query->whereBetween('date',[$from_date,$to_date]);
+    
+        if(isset($investor_id)){
+          
+          $query=$query->where('customer_id',$investor_id);
+        }
         
-        return $query->whereBetween('date',[$from_date,$to_date])->where('investor_id',$investor_id);
+        if(isset($head_id)){
+           $query=$query->where('head_id',$head_id);
+        }
+        if(isset($sub_head_id)){
+            $query=$query->where('sub_head_id',$sub_head_id);
+         }
+
+         if(isset($status_id)){
+            $query=$query->where('status',$status_id);
+         }
+
+       
+
+        return $query;
 
         
     }
     public function scopeNegativeCheck($query,$account,$amount,$investor){
+
+
 
         $query = GLeadger::where('account_id','=',$account)->where('investor_id','=',$investor);
         

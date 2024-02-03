@@ -314,7 +314,7 @@ class Controller extends BaseController
         // assests of the invstors
         $asset = GLeadger:: where('account_id','=',3)->where('investor_id',$id)->sum('value');
         // expenses
-        $expenses = GLeadger:: where('account_id','=',8)->where('investor_id',$id)->sum('value')*-1;
+        $expenses = GLeadger:: where('account_id','=',8)->where('investor_id',$id)->sum('value');
         // sales made by investor
         $sale = Sale::where('investor_id',$id)->sum('total');
         // total balance of the investor

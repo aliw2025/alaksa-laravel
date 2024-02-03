@@ -32,8 +32,16 @@
                                     <tr>
                                         <td>{{$count}}</td>
                                         <td>{{$head->name}}</td>
-                                        <td>
-                                            <a style="text-decoration: none;color:black" href="{{route('add-sub-exp-head',$head->id)}}"><i data-feather='edit'></i></a>
+                                        <td class="d-flex">
+                                            <a style="text-decoration: none;color:black" href="{{route('add-sub-exp-head',$head->id)}}">sub heads</a>
+                                            <a class="ms-2" style="text-decoration: none;color:black" href="#"><i data-feather='edit'></i></a>
+                                            <form method="POST" action="#">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" style="border: none; background-color: transparent;">
+                                                        <i data-feather='trash-2'></i>
+                                                    </button>
+                                                </form>
                                         </td>
                                     </tr>
                                     @php

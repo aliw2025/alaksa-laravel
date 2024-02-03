@@ -488,12 +488,15 @@ Route::controller(ExpenseController::class)->group(function () {
         // Route::get('/post-expense',  'postExpense')->name('post-expense');
         // Route::get('/unpost-expense',  'UnpostExpense')->name('unpost-expense');
         // Route::get('/cancel-expense',  'cancelExpense')->name('cancel-expense');   
+
+        
         Route::group(['middleware' => ['role_or_permission:admin|showexpensespost']], function () {
                 Route::get('/show-expenses-post', 'showExpensesPost')->name('show-expenses-post');
         });
 
         Route::group(['middleware' => ['role_or_permission:admin|showexpenses']], function () {
                 Route::get('/show-expenses', 'showExpenses')->name('show-expenses');
+                // Route::get('/get-sub-heads', 'getSubHeads')->name('get-sub-heads');
         });
 
         Route::group(['middleware' => ['role_or_permission:admin|postexpense']], function () {

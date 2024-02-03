@@ -435,10 +435,10 @@
                         @endforeach
                     </ul>
                 </li>
-                <li class=" nav-item"><a href="{{ route('search-payables') }}" class="d-flex align-items-center">
+                <!-- <li class=" nav-item"><a href="{{ route('search-payables') }}" class="d-flex align-items-center">
                         <i data-feather="circle"></i>
                         <span class=" menu-title text-truncate" data-i18n="comision"> search payables</span></a>
-                </li>
+                </li> -->
                 <li class=" nav-item"><a href="{{ route('show-supplier-payments') }}" class="d-flex align-items-center">
                         <i data-feather="circle"></i>
                         <span class=" menu-title text-truncate" data-i18n="comision">Supplier Payments</span></a>

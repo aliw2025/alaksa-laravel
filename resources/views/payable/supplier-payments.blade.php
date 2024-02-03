@@ -146,7 +146,7 @@
                         @if(isset($sum))
                         <div class="mt-4">
                                 
-                                <p>purchase total : {{number_format( $sum)}}</p>
+                                <p>Total : {{number_format( $sum)}}</p>
                                                                 
                             </div>
                             @endif

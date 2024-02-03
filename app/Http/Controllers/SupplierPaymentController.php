@@ -265,7 +265,7 @@ class SupplierPaymentController extends Controller
         }
 
         $user = Auth::user();
-        
+
         $request = new Request([
             'supplier_id' => $supplierPayment->supplier_id, // replace with actual supplier_id
             'investor_id' => $supplierPayment->investor_id, // replace with actual investor_id
@@ -277,8 +277,10 @@ class SupplierPaymentController extends Controller
         if($supplierPayment->amount > $netPayable){
             return redirect()->back()->with('error_m', 'Amount is greater than net payable');
         }
+        
+       
 
-        if(!SupplierPayment:: NegativeCheck($request->acc_type,$supplierPayment->amount,$request->investor_id)){
+        if(!SupplierPayment:: NegativeCheck($supplierPayment->account_id,$supplierPayment->amount,$request->investor_id)){
             return redirect()->back()->with('error_m', 'Balance insufficient');
         }
 
@@ -300,7 +302,7 @@ class SupplierPaymentController extends Controller
 
         // /************** Leadger Entries **********/
         $supplierPayment->createLeadgerEntry($sup_acc_id,str_replace(',','',$supplierPayment->amount),$supplierPayment->investor_id,$supplierPayment->payment_date,$user->id);
-        $supplierPayment->createLeadgerEntry($request->acc_type,-str_replace(',','',$supplierPayment->amount),$supplierPayment->investor_id,$supplierPayment->payment_date,$user->id);
+        $supplierPayment->createLeadgerEntry($supplierPayment->account_id,-str_replace(',','',$supplierPayment->amount),$supplierPayment->investor_id,$supplierPayment->payment_date,$user->id);
 
         
        

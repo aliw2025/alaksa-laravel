@@ -7,6 +7,7 @@ use App\Models\Investor;
 use App\Models\ChartOfAccount;
 use App\Models\ExpenseHead;
 use App\Models\SubExpenseHead;
+use App\Models\TransactionStatus;
 
 
 
@@ -78,8 +79,20 @@ class ExpenseController extends Controller
     {
 
         $investors = Investor::all();
+        $heads  = ExpenseHead::all();
+        $sheads = SubExpenseHead::all();
+        $statuses = TransactionStatus::all();
 
-        return view('expenses.expenses_all', compact('investors'));
+        return view('expenses.expenses_all', compact('investors','heads','sheads','statuses'));
+    }
+
+    
+    public function getSubHeads(Request $request){
+        $head_id = $request->head_id;
+        
+        dd($head_id);
+        $sheads = SubExpenseHead::where('head_id',$head_id)->get();
+        return sheads;
     }
 
 
@@ -87,14 +100,33 @@ class ExpenseController extends Controller
     {
 
         $investors = Investor::all();
+        $heads  = ExpenseHead::all();
+        $sheads = SubExpenseHead::all();
+        $statuses = TransactionStatus::all();
+        $head_id = $request->head_id;
+        $shead = $request->sub_head_id;
+        
+        $expenses = Expense::ShowExpenses($request->from_date, $request->to_date,$head_id,$shead, $request->investor_id,$request->status_id);
+        $sum = Expense::whereBetween('date', [$request->from_date, $request->to_date]);
 
-        $expenses = Expense::ShowExpenses($request->from_date, $request->to_date, $request->investor_id)->paginate(25);
+        $sum = $expenses->sum('amount');
+        if ($request->input('action') == "pdf") {
+            $from_date = $request->from_date;
+            $to_date = $request->to_date;
+            $expenses = $expenses->get();
+            return view('expenses.expenses_report', compact('expenses', 'from_date', 'to_date', 'sum'));
+        }
+
+        $expenses = $expenses->paginate(20);
         $expenses->appends([
             'from_date' => $request->from_date,
             'to_date' => $request->to_date,
+            'head_id'=>$request->head_id,
+            'sub_head_id'=>$request->sub_head_id,
             'investor_id' => $request->investor_id,
+            'status_id' => $request->status_id
         ]);
-        return view('expenses.expenses_all', compact('expenses', 'investors'));
+        return view('expenses.expenses_all', compact('expenses', 'investors','heads','statuses'));
     }
 
     /**
@@ -185,9 +217,9 @@ class ExpenseController extends Controller
         $expense->status = 3;
         $expense->save();
         $ad_payable_acc_no =  7;
-        $expense->createLeadgerEntry($ad_payable_acc_no, $expense->amount, $request->investor_id, $request->date, $user->id);
+        $expense->createLeadgerEntry($ad_payable_acc_no, -$expense->amount, $request->investor_id, $request->date, $user->id);
         // $expense->createLeadgerEntry($request->acc_type, $expense->amount, $request->investor_id, $request->date, $user->id);
-        $expense->createLeadgerEntry(8, -$expense->amount, $request->investor_id, $request->date, $user->id);
+        $expense->createLeadgerEntry(8, $expense->amount, $request->investor_id, $request->date, $user->id);
         return redirect()->back()->with('message', 'Record Posted');
     }
 
