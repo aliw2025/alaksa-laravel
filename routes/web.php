@@ -409,6 +409,10 @@ Route::controller(InventoryController::class)->group(function () {
 
 // payable Controller
 Route::controller(PayableController::class)->group(function () {
+
+        Route::group(['middleware' => ['role_or_permission:admin|payablereportsmenu']], function () {
+                Route::get('/payable-reports', 'payableMenu')->name('payable-reports-menu');
+        });
 });
 
 Route::controller(SupplierPaymentController::class)->group(function () {
@@ -425,7 +429,10 @@ Route::controller(SupplierPaymentController::class)->group(function () {
         });
         
         Route::group(['middleware' => ['role_or_permission:admin|getpayables']], function () {
-                Route::get('/get-payables/{id}', 'getPayables')->name('get-payables');
+                Route::get('/get-payables/', 'getPayablesg')->name('get-payables');
+        });
+        Route::group(['middleware' => ['role_or_permission:admin|getpayables']], function () {
+                Route::post('/get-payables', 'getPayables')->name('get-payables-post');
         });
 
         Route::group(['middleware' => ['role_or_permission:admin|getpayablestemp']], function () {

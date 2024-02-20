@@ -175,4 +175,8 @@ class PayableController extends Controller
     {
         //
     }
+    public function payableMenu(){
+
+        return view('payable.payable-reports-menu');
+    }
 }

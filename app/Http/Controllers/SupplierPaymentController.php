@@ -42,11 +42,17 @@ class SupplierPaymentController extends Controller
         return  view('payable.payables2', compact('leadger','total'));
     }
 
+    public function getpayablesg(){
+        $investors = Investor::all();
+        return view('payable.payables', compact('investors'));   
+    }
 
-    public function getPayables($id)
-    {
+    public function getPayables(Request $request)
+    {   
+        $investors = Investor::all();
+        $id = $request->investor_id;
         $suppliers = Supplier::whereIn('id', Purchase::select('supplier')->distinct()->pluck('supplier'))->get();
-        return view('payable.payables', compact('suppliers', 'id'));
+        return view('payable.payables', compact('suppliers', 'id','investors'));
         
     }
 

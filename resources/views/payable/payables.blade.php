@@ -10,6 +10,23 @@
                         </div>
                     </div>
                     <div class="card-body">
+                        <form action="{{route('get-payables-post')}}" method="POST" >
+                        @csrf
+                        <div class="row">
+                            <div class="col-3">
+                                <select class="form-select" id = "investor_id" name = "investor_id">
+                                    @foreach($investors as $inv)
+                                        <option value = "{{$inv->id}}">{{$inv->investor_name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-3">
+                               <button class="btn btn-primary">Report</button>
+                            </div>
+                        </div>
+                        </form>
+                       
+                        @if(isset($suppliers))
                         @foreach ($suppliers as $sup)
                             @if (count($sup->investor_purchases($id)) > 0)
                                 <h4 class="mt-1">Supplier : {{ ucfirst($sup->name) }}</h4>
@@ -170,7 +187,7 @@
                                 </div>
                             @endif
                         @endforeach
-
+                        @endif
                     </div>
                 </div>
             </div>

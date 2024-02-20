@@ -418,8 +418,8 @@
                             <i data-feather="circle"></i>
                             <span class=" menu-title text-truncate" data-i18n="comision">Pay Investors</span></a>
                     </li> -->
-                <li class=" nav-item">
-                    <a class="d-flex align-items-center" href="#">
+                <!-- <li class=" nav-item">
+                    <a class="d-flex align-items-center" href="{{ route('get-payables')}}">
                         <i data-feather="circle"></i>
                         <span class="menu-title text-truncate" data-i18n="Dashboards">Supplier Payables</span>
                     </a>
@@ -427,22 +427,24 @@
 
                         @foreach ($inv_sales as $investor)
                         <li>
-                            <a href="{{ route('get-payables', $investor->id) }}" class="d-flex align-items-center ">
+                            <a href="{{ route('get-payables')}}" class="d-flex align-items-center ">
                                 <i data-feather="circle"></i>
                                 <span class="menu-item text-truncate" data-i18n="eCommerce">{{ $investor->prefix }}</span>
                             </a>
                         </li>
                         @endforeach
                     </ul>
-                </li>
+                </li> -->
                 <!-- <li class=" nav-item"><a href="{{ route('search-payables') }}" class="d-flex align-items-center">
                         <i data-feather="circle"></i>
                         <span class=" menu-title text-truncate" data-i18n="comision"> search payables</span></a>
                 </li> -->
-                <li class=" nav-item"><a href="{{ route('show-supplier-payments') }}" class="d-flex align-items-center">
+               
+                <li class=" nav-item"><a href="{{ route('payable-reports-menu') }}" class="d-flex align-items-center">
                         <i data-feather="circle"></i>
-                        <span class=" menu-title text-truncate" data-i18n="comision">Supplier Payments</span></a>
+                        <span class=" menu-title text-truncate" data-i18n="comision">Reports</span></a>
                 </li>
+                
             </ul>
         </li>
         <!-- <li class=" nav-item"><a class="d-flex align-items-center">
