@@ -443,10 +443,9 @@
                         <i data-feather="circle"></i>
                         <span class=" menu-title text-truncate" data-i18n="comision">Supplier Payments</span></a>
                 </li>
-
             </ul>
         </li>
-        <li class=" nav-item"><a class="d-flex align-items-center">
+        <!-- <li class=" nav-item"><a class="d-flex align-items-center">
                 <span class=" menu-title text-truncate" data-i18n="comision">Commision</span></a>
             <ul class="menu-content">
                 <li class=" nav-item"><a href="{{ route('commission.index') }}" class="d-flex align-items-center">
@@ -456,7 +455,7 @@
             </ul>
 
 
-        </li>
+        </li> -->
 
         {{-- <li class=" nav-item"><a class="d-flex align-items-center">
                     <span class=" menu-title text-truncate" data-i18n="recovery">Recovery</span></a>
@@ -484,6 +483,10 @@
                 <li class=" nav-item"><a href="{{ route('show-expenses') }}" class="d-flex align-items-center">
                         <i data-feather="circle"></i>
                         <span class=" menu-title text-truncate" data-i18n="comision">Report</span></a>
+                </li>
+                <li class=" nav-item"><a href="{{ route('commission.index') }}" class="d-flex align-items-center">
+                        <i data-feather="circle"></i>
+                        <span class=" menu-title text-truncate" data-i18n="comision">comissions</span></a>
                 </li>
 
                 <!-- <li class=" nav-item">
