@@ -24,6 +24,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CategoryPropController;
 use App\Http\Controllers\ChangePasswordController;
 use App\Http\Controllers\ExpenseHeadController;
+use App\Http\Controllers\ExpensePaymentController;
 use App\Http\Controllers\GLController;
 use App\Http\Controllers\InvestmentController;
 use App\Http\Controllers\RolePermissionController;
@@ -616,6 +617,17 @@ Route::group(['middleware' => ['role_or_permission:admin|getsalarypost']], funct
         Route::get('/get-salary-post', [\App\Http\Controllers\PaySalaryController::class, 'paySalaryPost'])->name('get-salary-post');
 });
 
+// ExpensePaymentController
+Route::controller(ExpensePaymentController::class)->prefix('expense-payment')->group(function () {
+
+        // Route::group(['middleware' => ['role_or_permission:admin|createuseraccounts']], function () {
+        //         Route::get('/create-cashier-account', 'userAccountsCreate')->name('create-user-accounts');
+        // });
+        // Route::group(['middleware' => ['role_or_permission:admin|storeuseraccounts']], function () {
+        //         Route::post('/store-cashier-account', 'userAccountsStore')->name('store-user-accounts');
+        // });
+});
+
 //  recovery officer Controller
 // Route::get('/ro-dashboard', [\App\Http\Controllers\RecoveryController::class, 'roDashboard'])->name('ro-dashboard');
 
@@ -653,3 +665,5 @@ Route::resource('category', CategoryController::class);
 Route::resource('categoryProperty', CategoryPropController::class);
 Route::resource('expenseHead', ExpenseHeadController::class);
 Route::resource('investment', InvestmentController::class);
+Route::resource('expensePayment', ExpensePaymentController::class);
+

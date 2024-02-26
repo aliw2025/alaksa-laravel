@@ -414,6 +414,11 @@
                         <i data-feather="circle"></i>
                         <span class=" menu-title text-truncate" data-i18n="comision">Pay Supplier Bills</span></a>
                 </li>
+               
+                <li class=" nav-item"><a href="{{ route('expensePayment.create') }}" class="d-flex align-items-center">
+                        <i data-feather="circle"></i>
+                        <span class=" menu-title text-truncate" data-i18n="comision">Pay Expenses</span></a>
+                </li>
                 <!-- <li class=" nav-item"><a href="{{ route('supplierPayment.create') }}" class="d-flex align-items-center">
                             <i data-feather="circle"></i>
                             <span class=" menu-title text-truncate" data-i18n="comision">Pay Investors</span></a>
