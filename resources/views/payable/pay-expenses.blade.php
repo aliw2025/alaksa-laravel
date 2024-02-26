@@ -101,7 +101,7 @@
                                             <span class="title">Head</span>
                                             <div style="width: 11.21rem; max-width:11.21rem; " class="align-items-center">
 
-                                                <select name="supplier" id="supplier_id" class="@error('supplier') is-invalid @enderror form-select select2 select2-hidden-accessible" aria-label="Default select example" @if(isset($expensePayment)) @if($expensePayment->status!=1) disabled @endif @endif>
+                                                <select name="supplier" id="head_id" class="@error('supplier') is-invalid @enderror form-select select2 select2-hidden-accessible" aria-label="Default select example" @if(isset($expensePayment)) @if($expensePayment->status!=1) disabled @endif @endif>
                                                     @foreach ($expense_heads as $head)
                                                     <option @if(isset($expensePayment)) @if($expensePayment->supplier_id==$sup->id) selected @endif @endif value="{{ $head->id }}">{{ $head->name }}</option>
                                                     @endforeach
@@ -116,10 +116,8 @@
                                             <span class="title">Sub Head</span>
                                             <div style="width: 11.21rem; max-width:11.21rem; " class="align-items-center">
 
-                                                <select name="supplier" id="supplier_id" class="@error('supplier') is-invalid @enderror form-select select2 select2-hidden-accessible" aria-label="Default select example" @if(isset($expensePayment)) @if($expensePayment->status!=1) disabled @endif @endif>
-                                                    @foreach ($expense_heads as $head)
-                                                    <option @if(isset($expensePayment)) @if($expensePayment->supplier_id==$sup->id) selected @endif @endif value="{{ $head->id }}">{{ $head->name }}</option>
-                                                    @endforeach
+                                                <select name="supplier" id="shead_id" class="@error('supplier') is-invalid @enderror form-select select2 select2-hidden-accessible" aria-label="Default select example" @if(isset($expensePayment)) @if($expensePayment->status!=1) disabled @endif @endif>
+                                                  
                                                 </select>
                                                 @error('supplier')
                                                 <div class="alert alert-danger"> {{$message}}</div>
@@ -256,23 +254,59 @@
 
 
         $('.select2-selection__arrow').hide();
-        getSupplierNetPayable();
+        getExpenseNetPayable();
     });
 
     $('#investor_id').on('change', function() {
 
-        getSupplierNetPayable();
+        getExpenseNetPayable();
 
     });
 
     $('#supplier_id').on('change', function() {
 
-        getSupplierNetPayable();
+        getExpenseNetPayable();
 
     });
 
+    function getSubHeads(headId){
+        
+        $.ajax({
+            url: "{{ route('get-sub-heads') }}",
+            type: "GET",
+            data: {
+                id: headId,
+            },
+            success: function(dataResult) {
 
-    function getSupplierNetPayable() {
+                $("#shead_id").empty();
+               
+                var i;
+                for (i = 0; i < dataResult.length; i++) {
+                    var item = dataResult[i];
+                    var count = i + 1;
+                    console.log(item);
+                    markup = `<option value='` + item.id + `'>` + item.sub_head_name + `</option>`
+                    $("#shead_id").append(markup);
+                }
+            },
+            error: function(xhr, status, error) {
+
+                var err = eval("(" + xhr.responseText + ")");
+                console.log(err);
+                alert(err);
+            },
+        });
+    }
+
+    $(document).on('change', '#head_id', function() {
+
+        var headId = $(this).val();
+        getSubHeads(headId);
+
+    });
+
+    function getExpenseNetPayable() {
 
         var investorId = $('#investor_id').val();
         var supplierId = $('#supplier_id').val();
@@ -297,7 +331,5 @@
         });
 
     }
-
-    // http://localhost/alpha-digital/get-suppplier-net-payable?investor_id=2&supplier_id=6
 </script>
 @endsection
