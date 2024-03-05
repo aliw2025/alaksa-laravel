@@ -12,6 +12,7 @@ use App\Models\TransactionStatus;
 
 
 use App\Http\Controllers\Controller;
+use App\Models\ExpensePayment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Svg\Tag\Rect;
@@ -83,16 +84,16 @@ class ExpenseController extends Controller
         $sheads = SubExpenseHead::all();
         $statuses = TransactionStatus::all();
 
-        return view('expenses.expenses_all', compact('investors','heads','sheads','statuses'));
+        return view('expenses.expenses_all', compact('investors', 'heads', 'sheads', 'statuses'));
     }
 
-    
-    public function getSubHeads(Request $request){
+
+    public function getSubHeads(Request $request)
+    {
         $head_id = $request->head_id;
-        
-        dd($head_id);
-        $sheads = SubExpenseHead::where('head_id',$head_id)->get();
-        return sheads;
+
+        $sheads = SubExpenseHead::where('head_id', $head_id)->get();
+        return $sheads;
     }
 
 
@@ -105,8 +106,8 @@ class ExpenseController extends Controller
         $statuses = TransactionStatus::all();
         $head_id = $request->head_id;
         $shead = $request->sub_head_id;
-        
-        $expenses = Expense::ShowExpenses($request->from_date, $request->to_date,$head_id,$shead, $request->investor_id,$request->status_id);
+
+        $expenses = Expense::ShowExpenses($request->from_date, $request->to_date, $head_id, $shead, $request->investor_id, $request->status_id);
         $sum = Expense::whereBetween('date', [$request->from_date, $request->to_date]);
 
         $sum = $expenses->sum('amount');
@@ -121,12 +122,12 @@ class ExpenseController extends Controller
         $expenses->appends([
             'from_date' => $request->from_date,
             'to_date' => $request->to_date,
-            'head_id'=>$request->head_id,
-            'sub_head_id'=>$request->sub_head_id,
+            'head_id' => $request->head_id,
+            'sub_head_id' => $request->sub_head_id,
             'investor_id' => $request->investor_id,
             'status_id' => $request->status_id
         ]);
-        return view('expenses.expenses_all', compact('expenses', 'investors','heads','statuses'));
+        return view('expenses.expenses_all', compact('expenses', 'investors', 'heads', 'statuses'));
     }
 
     /**
@@ -246,6 +247,24 @@ class ExpenseController extends Controller
         $expense->status = 2;
         $expense->save();
         return redirect()->back()->with('message', 'Record Cancelled');
+    }
+
+    public function expenseNetPayable(Request $request)
+    {   
+        $request->validate([
+            'head_id'=>'required',
+            'sub_head_id'=>'required',
+            'investor_id'=>'required'
+        ]);
+        $net  = 0;
+        $expenses = Expense::where('investor_id', $request->investor_id)
+            ->where('head_id', $request->head_id)->where('sub_head_id', $request->sub_head_id)->where('status',3)->sum('amount');
+        
+        $payments = ExpensePayment::where('investor_id', $request->investor_id)
+        ->where('head_id', $request->head_id)->where('sub_head_id', $request->sub_head_id)->where('status',3)->sum('amount');
+
+        $net = $expenses - $payments;
+        return $net;
     }
 
     /**

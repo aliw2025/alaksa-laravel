@@ -497,6 +497,9 @@ Route::controller(ExpenseController::class)->group(function () {
         // Route::get('/unpost-expense',  'UnpostExpense')->name('unpost-expense');
         // Route::get('/cancel-expense',  'cancelExpense')->name('cancel-expense');   
 
+        Route::group(['middleware' => ['role_or_permission:admin|expenseNetPayable']], function () {
+                Route::get('/get-expense-net-payable', 'expenseNetPayable')->name('expense-net-payable');
+        });
         
         Route::group(['middleware' => ['role_or_permission:admin|showexpensespost']], function () {
                 Route::get('/show-expenses-post', 'showExpensesPost')->name('show-expenses-post');
@@ -626,6 +629,18 @@ Route::controller(ExpensePaymentController::class)->prefix('expense-payment')->g
         // Route::group(['middleware' => ['role_or_permission:admin|storeuseraccounts']], function () {
         //         Route::post('/store-cashier-account', 'userAccountsStore')->name('store-user-accounts');
         // });
+
+        Route::group(['middleware' => ['role_or_permission:admin|postexpensepayment']], function () {
+                Route::get('/post-expensePayment', 'postexpensePayment')->name('post-expensePayment');
+        });
+
+        Route::group(['middleware' => ['role_or_permission:admin|unpostexpensepayment']], function () {
+                Route::get('/unpost-expensePayment', 'UnpostexpensePayment')->name('unpost-expensePayment');
+        });
+
+        Route::group(['middleware' => ['role_or_permission:admin|cancelexpensepayment']], function () {
+                Route::get('/cancel-expensePayment', 'cancelexpensePayment')->name('cancel-expensePayment');
+        });
 });
 
 //  recovery officer Controller

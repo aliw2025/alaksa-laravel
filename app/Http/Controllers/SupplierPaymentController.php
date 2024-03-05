@@ -96,9 +96,11 @@ class SupplierPaymentController extends Controller
         if ($id == null) {
             $id = 0;
         }
-        $num = str_pad($id + 1, 10, '0', STR_PAD_LEFT);
+        $num = str_pad($id + 1, 10, '0', STR_PAD_LEFT); 
         $investor = Investor::find($request->investor_id);
         $supplierPayment = new SupplierPayment();
+        //$year = date('y'); // Get the current year in two digits (e.g., 24 for 2024)
+        //$supplierPayment->payment_no = $investor->prefix . $year . $num;
         $supplierPayment->payment_no = $investor->prefix . '23' . $num;
         $supplierPayment->investor_id = $request->investor_id;
         $supplierPayment->store_id = 1;
@@ -180,15 +182,9 @@ class SupplierPaymentController extends Controller
             'supplier'=>'required',
             'amount'=>'required'
         ]);
-        $user = Auth::user();
-        $id = SupplierPayment::max('id');
-        if ($id == null) {
-            $id = 0;
-        }
-        $num = str_pad($id + 1, 10, '0', STR_PAD_LEFT);
-        $investor = Investor::find($request->investor_id);
-
-        $supplierPayment->payment_no = $investor->prefix . '22' . $num;
+       
+    
+        
         $supplierPayment->investor_id = $request->investor_id;
         $supplierPayment->store_id = 1;
         $supplierPayment->supplier_id = $request->supplier;

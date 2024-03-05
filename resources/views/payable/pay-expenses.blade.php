@@ -66,7 +66,7 @@
                                         <div class="d-flex align-items-center justify-content-between mb-1">
                                             <span class="title">Date:</span>
 
-                                            <input value="{{ isset($expensePayment)? $expensePayment->payment_date :now()->format('Y-m-d') }}" name="payment_date" type="date" class="form-control invoice-edit-input" @if(isset($expensePayment)) @if($expensePayment->status!=1) disabled @endif @endif>
+                                            <input value="{{ isset($expensePayment)? $expensePayment->payment_date :now()->format('Y-m-d') }}" name="date" type="date" class="form-control invoice-edit-input" @if(isset($expensePayment)) @if($expensePayment->status!=1) disabled @endif @endif>
 
                                         </div>
                                         <div class="d-flex align-items-center justify-content-between">
@@ -101,12 +101,14 @@
                                             <span class="title">Head</span>
                                             <div style="width: 11.21rem; max-width:11.21rem; " class="align-items-center">
 
-                                                <select name="supplier" id="head_id" class="@error('supplier') is-invalid @enderror form-select select2 select2-hidden-accessible" aria-label="Default select example" @if(isset($expensePayment)) @if($expensePayment->status!=1) disabled @endif @endif>
+                                                <select name="head_id" id="head_id" class="@error('supplier') is-invalid @enderror form-select select2 select2-hidden-accessible" aria-label="Default select example" @if(isset($expensePayment)) @if($expensePayment->status!=1) disabled @endif @endif>
                                                     @foreach ($expense_heads as $head)
-                                                    <option @if(isset($expensePayment)) @if($expensePayment->supplier_id==$sup->id) selected @endif @endif value="{{ $head->id }}">{{ $head->name }}</option>
+                                                    @if($head->id!=1)
+                                                    <option @if(isset($expensePayment)) @if($expensePayment->head_id==$head->id) selected @endif @endif value="{{ $head->id }}">{{ $head->name }}</option>
+                                                    @endif
                                                     @endforeach
                                                 </select>
-                                                @error('supplier')
+                                                @error('head_id')
                                                 <div class="alert alert-danger"> {{$message}}</div>
                                                 @enderror
                                             </div>
@@ -116,10 +118,10 @@
                                             <span class="title">Sub Head</span>
                                             <div style="width: 11.21rem; max-width:11.21rem; " class="align-items-center">
 
-                                                <select name="supplier" id="shead_id" class="@error('supplier') is-invalid @enderror form-select select2 select2-hidden-accessible" aria-label="Default select example" @if(isset($expensePayment)) @if($expensePayment->status!=1) disabled @endif @endif>
-                                                  
+                                                <select name="sub_head_id" id="shead_id" class="@error('supplier') is-invalid @enderror form-select select2 select2-hidden-accessible" aria-label="Default select example" @if(isset($expensePayment)) @if($expensePayment->status!=1) disabled @endif @endif>
+
                                                 </select>
-                                                @error('supplier')
+                                                @error('sub_head_id')
                                                 <div class="alert alert-danger"> {{$message}}</div>
                                                 @enderror
                                             </div>
@@ -138,7 +140,7 @@
                                             <span class="title">Transaction Expense</span>
                                             <div style="width: 11.21rem; max-width:11.21rem; " class="align-items-center">
 
-                                                <input @if (isset($expensePayment)) value="{{ number_format($expensePayment->transaction_charges)}}" @else value="0" @endif  type="text" class="number-separator form-control" id="tran_expense" name="tran_exp" @if(isset($expensePayment)) @if($expensePayment->status!=1) disabled @endif @endif>
+                                                <input @if (isset($expensePayment)) value="{{ number_format($expensePayment->transaction_charges)}}" @else value="0" @endif type="text" class="number-separator form-control" id="tran_expense" name="tran_exp" @if(isset($expensePayment)) @if($expensePayment->status!=1) disabled @endif @endif>
 
                                             </div>
 
@@ -251,9 +253,9 @@
 <script>
     var rowId = 0;
     $(document).ready(function() {
-
-
         $('.select2-selection__arrow').hide();
+        var headid = $('#head_id').val();
+        getSubHeads(headid);
         getExpenseNetPayable();
     });
 
@@ -263,14 +265,16 @@
 
     });
 
-    $('#supplier_id').on('change', function() {
+    $('#shead_id').on('change', function() {
 
         getExpenseNetPayable();
 
     });
 
-    function getSubHeads(headId){
-        
+
+
+    function getSubHeads(headId) {
+
         $.ajax({
             url: "{{ route('get-sub-heads') }}",
             type: "GET",
@@ -280,15 +284,25 @@
             success: function(dataResult) {
 
                 $("#shead_id").empty();
-               
+
                 var i;
                 for (i = 0; i < dataResult.length; i++) {
                     var item = dataResult[i];
                     var count = i + 1;
                     console.log(item);
-                    markup = `<option value='` + item.id + `'>` + item.sub_head_name + `</option>`
+                    console.log(item.sub_head_name);
+                    <?php
+                    if (isset($expensePayment) && $expensePayment->sub_head_id == "' + item.id + '") {
+                        echo 'var selected = "selected";';
+                    } else {
+                        echo 'var selected = "";';
+                    }
+                    ?>  
+                    console.log("selected: "+selected+": "+item.sub_head_name);
+                    markup = `<option ${selected}  onchange="getExpenseNetPayable()" value='` + item.id + `'>` + item.sub_head_name + `</option>`
                     $("#shead_id").append(markup);
                 }
+                getExpenseNetPayable();
             },
             error: function(xhr, status, error) {
 
@@ -306,17 +320,25 @@
 
     });
 
+
     function getExpenseNetPayable() {
 
         var investorId = $('#investor_id').val();
-        var supplierId = $('#supplier_id').val();
+        var head_id = $('#head_id').val();
+        var sub_head_id = $('#shead_id').val();
+        console.log('head_id:' + head_id);
+        console.log('sub_head_id:' + sub_head_id);
+        if (head_id == null || sub_head_id == null) {
+            return;
+        }
 
         $.ajax({
-            url: "{{route('supplier-net-payable')}}",
+            url: "{{route('expense-net-payable')}}",
             type: 'GET',
             data: {
                 investor_id: investorId,
-                supplier_id: supplierId
+                head_id: head_id,
+                sub_head_id: sub_head_id
             },
             success: function(data) {
                 // Handle successful response here

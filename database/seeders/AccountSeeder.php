@@ -9,6 +9,7 @@ use App\Models\InvestorLeadger;
 use App\Models\Account;
 use App\Models\AccountType;
 use App\Models\ChartOfAccount;
+use App\Models\ExpenseHead;
 use App\Models\GLeadger;
 use App\Models\PaymentType;
 use App\Models\TransactionStatus;
@@ -219,6 +220,9 @@ class AccountSeeder extends Seeder
 
             ]);
 
+            $expense_head = new  ExpenseHead();
+            $expense_head->name = 'bank charges';
+            $expense_head->save();
 
         } 
     }
