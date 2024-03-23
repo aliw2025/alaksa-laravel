@@ -15,12 +15,12 @@ return new class extends Migration
     {
         Schema::table('expense_payments', function (Blueprint $table) {
             
-            //$table->unsignedBigInteger('account_id')->after('investor_id')->nullable();
-            //$table->unsignedBigInteger('expense_id')->after('investor_id')->nullable();
+            $table->unsignedBigInteger('account_id')->after('investor_id')->nullable();
+            $table->unsignedBigInteger('expense_id')->after('investor_id')->nullable();
             $table->double('transaction_expense')->after('investor_id')->nullable();
 
-            // $table->foreign('account_id')->references('id')->on('chart_of_accounts');
-            // $table->foreign('expense_id')->references('id')->on('expenses');
+            $table->foreign('account_id')->references('id')->on('chart_of_accounts');
+             $table->foreign('expense_id')->references('id')->on('expenses');
 
 
 
