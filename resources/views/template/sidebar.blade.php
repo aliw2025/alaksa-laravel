@@ -491,10 +491,12 @@
                         <i data-feather="circle"></i>
                         <span class=" menu-title text-truncate" data-i18n="comision">Report</span></a>
                 </li>
-                <li class=" nav-item"><a href="{{ route('commission.index') }}" class="d-flex align-items-center">
+
+                <!-- removing for now will discuss -->
+                <!-- <li class=" nav-item"><a href="{{ route('commission.index') }}" class="d-flex align-items-center">
                         <i data-feather="circle"></i>
-                        <span class=" menu-title text-truncate" data-i18n="comision">comissions</span></a>
-                </li>
+                        <span class=" menu-title text-truncate" data-i18n="comision">comissions Reports</span></a>
+                </li> -->
 
                 <!-- <li class=" nav-item">
                         <a class="d-flex align-items-center" href="#">
