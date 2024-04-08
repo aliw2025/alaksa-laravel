@@ -81,7 +81,7 @@
                     @if (isset($item))
                     <div class="d-flex justify-content-end">
                         <div>
-                            <a href='{{ route('item.index') }}'" type=" reset" class="">
+                            <a href="{{ route('item.index') }}" type=" reset" class="">
                                 Add New
                             </a>
                         </div>

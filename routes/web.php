@@ -18,7 +18,6 @@ use App\Http\Controllers\InstalmentController;
 use App\Http\Controllers\desingationContoller;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\PayScaleController;
-use App\Http\Controllers\payScaleContoller;
 use App\Http\Controllers\PaySalaryController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CategoryPropController;
@@ -29,6 +28,8 @@ use App\Http\Controllers\GLController;
 use App\Http\Controllers\InvestmentController;
 use App\Http\Controllers\RolePermissionController;
 use App\Http\Controllers\SupplierPaymentController;
+
+
 use App\Models\Instalment;
 use App\Models\SupplierPayment;
 // use Spatie\Permission\Contracts\Role;
@@ -189,7 +190,7 @@ Route::controller(SaleController::class)->group(function () {
 Route::controller(ChangePasswordController::class)->group(function () {
 
         Route::get('/user-change-password', 'userPassCreate')->name('user-password-change');
-        Route::post('/user-change-password', 'userPassPost')->name('user-password-change');
+        Route::post('/user-change-password', 'userPassPost')->name('user-password-change-post');
 
 
         Route::get('/admin-change-password/{id}', 'adminPassCreate')->name('admin-password-change.create');
@@ -660,6 +661,7 @@ Route::resource('investor', InvestorController::class);
 Route::resource('customer', CustomerController::class);
 Route::resource('account', AccountController::class);
 Route::resource('item', ItemController::class);
+Route::resource('expenseHead', ExpenseHeadController::class);
 Route::resource('store', StoreController::class);
 Route::resource('inventory', InventoryController::class);
 Route::resource('purchase', PurchaseController::class);
@@ -670,7 +672,7 @@ Route::resource('supplierPayment', SupplierPaymentController::class);
 Route::resource('supplier', SupplierController::class);
 Route::resource('commission', CommissionController::class);
 Route::resource('designation', desingationContoller::class);
-Route::resource('payScale', payScaleContoller::class);
+Route::resource('payScale', PayScaleController::class);
 Route::resource('instalment', InstalmentController::class);
 Route::resource('expense', ExpenseController::class);
 Route::resource('payScale', PayScaleController::class);
@@ -678,7 +680,6 @@ Route::resource('paySalary', PaySalaryController::class);
 Route::resource('chartOfAccount', ChartOfAccountController::class);
 Route::resource('category', CategoryController::class);
 Route::resource('categoryProperty', CategoryPropController::class);
-Route::resource('expenseHead', ExpenseHeadController::class);
 Route::resource('investment', InvestmentController::class);
 Route::resource('expensePayment', ExpensePaymentController::class);
 

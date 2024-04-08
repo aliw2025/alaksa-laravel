@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ExpenseHead;
 use App\Models\SubExpenseHead;
+use Illuminate\Database\QueryException as DatabaseQueryException;
 
 use Illuminate\Http\Request;
 
@@ -27,9 +28,10 @@ class ExpenseHeadController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create()
-    {
-        //
-       $heads = ExpenseHead::all();
+    {   
+       
+        
+        $heads = ExpenseHead::all();
         return view('expenses.expense_heads',compact('heads'));
     }
 
@@ -41,9 +43,13 @@ class ExpenseHeadController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'head_name'=>'required',
+            
+        ]);
         $expensehead = new ExpenseHead();
         $expensehead->name = $request->head_name;
+        $expensehead->active = $request->active;
         $expensehead->save();
 
         return redirect()->route('expenseHead.create');
@@ -56,6 +62,34 @@ class ExpenseHeadController extends Controller
         return view('expenses.add-sub-heads',compact('subHeads','expensehead'));
         
     }
+    function storeSubexpHeads(Request $request){
+        
+        $subHead = new SubExpenseHead();
+        $subHead->sub_head_name = $request->head_name;
+        $subHead->head_id = $request->head_id;
+        $subHead->save();
+        return redirect()->route('add-sub-exp-head',$request->head_id);
+
+    }
+
+    function editSubexpHeads($id){
+        $expensehead = ExpenseHead::find($id);
+        $subHeads = SubExpenseHead::where('head_id',$id)->get();
+        // dd($subHeads);  
+        return view('expenses.add-sub-heads',compact('subHeads','expensehead'));
+        
+    }
+
+    function updateSubexpHeads(Request $request,$id){
+        
+        $subHead = SubExpenseHead::find($id);
+        $subHead->sub_head_name = $request->head_name;
+        $subHead->head_id = $request->head_id;
+        $subHead->save();
+        return redirect()->route('add-sub-exp-head',$request->head_id);
+        
+    }
+
 
     function getSubHeads(Request $request){
 
@@ -67,18 +101,7 @@ class ExpenseHeadController extends Controller
 
     }
     
-    function storeSubexpHeads(Request $request){
-        
-        $subHead = new SubExpenseHead();
-        $subHead->sub_head_name = $request->head_name;
-        $subHead->head_id = $request->head_id;
-        $subHead->save();
-
-        
-
-        return redirect()->route('add-sub-exp-head',$request->head_id);
-
-    }
+   
     
 
     /**
@@ -98,9 +121,13 @@ class ExpenseHeadController extends Controller
      * @param  \App\Models\Expensehead  $expensehead
      * @return \Illuminate\Http\Response
      */
-    public function edit(Expensehead $expensehead)
+    public function edit(ExpenseHead $expenseHead)
     {
-        //
+       // $expenseHead = ExpenseHead::find($id);
+       
+        $heads = ExpenseHead::all();
+      
+        return view('expenses.expense_heads',compact('heads','expenseHead'));
     }
 
     /**
@@ -110,9 +137,19 @@ class ExpenseHeadController extends Controller
      * @param  \App\Models\Expensehead  $expensehead
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Expensehead $expensehead)
+    public function update(Request $request, Expensehead $expenseHead)
     {
         //
+        $validated = $request->validate([
+            'head_name'=>'required',
+            
+        ]);
+       
+        $expenseHead->name = $request->head_name;
+        $expenseHead->active = $request->active;
+        $expenseHead->save();
+
+        return redirect()->route('expenseHead.create');
     }
 
     /**
@@ -121,8 +158,16 @@ class ExpenseHeadController extends Controller
      * @param  \App\Models\Expensehead  $expensehead
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Expensehead $expensehead)
+    public function destroy(Expensehead $expenseHead)
     {
         //
+        try {
+            $expenseHead->delete();
+            return redirect()->route('expenseHead.create')->with('message', 'Item deleted successfully.');
+           
+        } catch (DatabaseQueryException $e) {
+
+            return redirect()->back()->with('error', 'Cannot delete item. It is associated with other records.');
+        }
     }
 }
