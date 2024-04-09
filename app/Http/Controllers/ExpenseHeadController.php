@@ -63,7 +63,11 @@ class ExpenseHeadController extends Controller
         
     }
     function storeSubexpHeads(Request $request){
-        
+        $validated = $request->validate([
+            'head_name'=>'required',
+            
+        ]);
+
         $subHead = new SubExpenseHead();
         $subHead->sub_head_name = $request->head_name;
         $subHead->head_id = $request->head_id;
@@ -73,15 +77,18 @@ class ExpenseHeadController extends Controller
     }
 
     function editSubexpHeads($id){
-        $expensehead = ExpenseHead::find($id);
-        $subHeads = SubExpenseHead::where('head_id',$id)->get();
-        // dd($subHeads);  
-        return view('expenses.add-sub-heads',compact('subHeads','expensehead'));
+      
+        $heads = ExpenseHead::all();
+        $subHead = SubExpenseHead::find($id);
+        $expensehead = ExpenseHead::find($subHead->head_id);
+        $subHeads = SubExpenseHead::where('head_id',$subHead->head_id)->get();
+        
+        return view('expenses.add-sub-heads',compact('heads','subHead','expensehead','subHeads'));
         
     }
 
     function updateSubexpHeads(Request $request,$id){
-        
+
         $subHead = SubExpenseHead::find($id);
         $subHead->sub_head_name = $request->head_name;
         $subHead->head_id = $request->head_id;
@@ -89,6 +96,25 @@ class ExpenseHeadController extends Controller
         return redirect()->route('add-sub-exp-head',$request->head_id);
         
     }
+    function deleteSubexpHeads($id){
+      
+       
+        $subHead = SubExpenseHead::find($id);
+        $expensehead = ExpenseHead::find($subHead->head_id);
+       
+
+        try {
+            $subHead->delete();
+           
+            return redirect()->route('add-sub-exp-head', ['id' => $expensehead->id])->with('message', 'Item deleted successfully.');
+           
+        } catch (DatabaseQueryException $e) {
+
+            return redirect()->back()->with('error', 'Cannot delete item. It is associated with other records.');
+        }
+        
+    }
+    
 
 
     function getSubHeads(Request $request){

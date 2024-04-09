@@ -599,6 +599,21 @@ Route::controller(ExpenseHeadController::class)->group(function () {
         Route::group(['middleware' => ['role_or_permission:admin|getsubheads']], function () {
                 Route::get('/get-sub-heads', 'getSubHeads')->name('get-sub-heads');
         });
+
+        Route::group(['middleware' => ['role_or_permission:admin|editsubhead']], function () {
+                Route::get('/edit-sub-head/{id}', 'editSubexpHeads')->name('edit-sub-head');
+        });
+        
+        Route::group(['middleware' => ['role_or_permission:admin|updatesubhead']], function () {
+                Route::put('/update-sub-head/{id}', 'updateSubexpHeads')->name('update-sub-head');
+        });
+        Route::group(['middleware' => ['role_or_permission:admin|deletesubhead']], function () {
+                Route::delete('/delete-sub-head/{id}', 'deleteSubexpHeads')->name('delete-sub-head');
+        });
+        Route::group(['middleware' => ['role_or_permission:admin|deletesubhead']], function () {
+                Route::get('/delete-sub-head/{id}', function(){});
+        });
+
 });
 
 // chartOfAccountController
