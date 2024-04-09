@@ -39,8 +39,10 @@ class ExpenseController extends Controller
     {
         //
         $investors = Investor::all();
-        $heads  = ExpenseHead::all();
-        $sheads = SubExpenseHead::all();
+        $heads = ExpenseHead::where('active', 1)->get();
+        $sheads = SubExpenseHead::where('active', 1)->get();
+        //$heads  = ExpenseHead::all();
+        //$sheads = SubExpenseHead::all();
 
         $bank_acc = ChartOfAccount::where('owner_type', 'App\Models\Investor')->where(
             function ($query) {
@@ -120,8 +122,10 @@ class ExpenseController extends Controller
     {
 
         $investors = Investor::all();
-        $heads  = ExpenseHead::all();
-        $sheads = SubExpenseHead::all();
+        // $heads  = ExpenseHead::all();
+        // $sheads = SubExpenseHead::all();
+        $heads = ExpenseHead::where('active', 1)->get();
+        $sheads = SubExpenseHead::where('active', 1)->get();
         $statuses = TransactionStatus::all();
         $head_id = $request->head_id;
         $shead = $request->sub_head_id;
