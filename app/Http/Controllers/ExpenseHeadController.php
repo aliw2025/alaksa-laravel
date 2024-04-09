@@ -71,6 +71,7 @@ class ExpenseHeadController extends Controller
         $subHead = new SubExpenseHead();
         $subHead->sub_head_name = $request->head_name;
         $subHead->head_id = $request->head_id;
+        $subHead->active = $request->active;
         $subHead->save();
         return redirect()->route('add-sub-exp-head',$request->head_id);
 
@@ -92,6 +93,7 @@ class ExpenseHeadController extends Controller
         $subHead = SubExpenseHead::find($id);
         $subHead->sub_head_name = $request->head_name;
         $subHead->head_id = $request->head_id;
+        $subHead->active = $request->active;
         $subHead->save();
         return redirect()->route('add-sub-exp-head',$request->head_id);
         

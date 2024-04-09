@@ -31,7 +31,7 @@
                                     <tr>
                                         <td>{{$count}}</td>
                                         <td>{{$head->sub_head_name}}</td>
-                                        <td></td>
+                                        <td> <td>@if(isset($head)) {{$head->active}} @endif</td></td>
                                         <td class="d-flex"> 
                                         <a class="ms-2" style="text-decoration: none;color:black" href="{{route('edit-sub-head',$head->id)}}"><i data-feather='edit'></i></a>
                                            
