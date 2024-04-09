@@ -8,6 +8,7 @@ use App\Models\ChartOfAccount;
 use App\Models\ExpenseHead;
 use App\Models\SubExpenseHead;
 use App\Models\TransactionStatus;
+use App\Models\ExpenseAttachment;
 
 
 
@@ -73,6 +74,24 @@ class ExpenseController extends Controller
         $expense->status = 1;
         $expense->account_id = $request->acc_type;
         $expense->save();
+
+        $fileModel = new ExpenseAttachment();
+        // dd($request->all());
+        // dd();
+        if ($request->hasFile('file_name')) {
+            $file = $request->file('file_name');
+            // dd($file);s
+            $fileModel->db_name  = $request->db_name;
+            $fileName = $file->getClientOriginalName();
+            $fileModel->expense_id = $expense->id;
+            $filePath = $request->file('file_name')->storeAs('uploads', $fileName,  'public');
+            $fileModel->name = $file->getClientOriginalName();
+            $fileModel->file_path = url('/') . '/public/storage/' . $filePath;
+            $fileModel->save();
+
+        }
+
+
         return redirect()->route('expense.show', $expense)->with('message', 'Record Saved');
     }
 
@@ -148,7 +167,9 @@ class ExpenseController extends Controller
                     $query->where('account_type', '=', 1)->orWhere('account_type', '=', 4);
             }
         )->get();
-        return view('expenses.expense', compact('investors', 'bank_acc', 'heads', 'sheads', 'expense'));
+        $attachment = ExpenseAttachment::where('expense_id', $expense->id)->latest()->first();
+
+        return view('expenses.expense', compact('investors', 'bank_acc', 'heads', 'sheads', 'expense','attachment'));
     }
 
     /**
@@ -199,6 +220,21 @@ class ExpenseController extends Controller
         $expense->status = 1;
         $expense->account_id = $request->acc_type;
         $expense->save();
+
+        $fileModel = new ExpenseAttachment();
+        if ($request->hasFile('file_name')) {
+            $file = $request->file('file_name');
+            // dd($file);s
+            $fileModel->db_name  = $request->db_name;
+            $fileName = $file->getClientOriginalName();
+            $fileModel->expense_id = $expense->id;
+            $filePath = $request->file('file_name')->storeAs('uploads', $fileName,  'public');
+            $fileModel->name = $file->getClientOriginalName();
+            $fileModel->file_path = url('/') . '/public/storage/' . $filePath;
+            $fileModel->save();
+
+           
+        }
 
 
         return redirect()->back()->with('message', 'Record Saved');

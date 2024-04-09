@@ -32,7 +32,7 @@ class CustomerController extends Controller
      */
 public function create()
     {
-        $this->authorize('customercreate');
+       // $this->authorize('customercreate');
         $customers = customer::all();
         return view('customer.customer', compact('customers'));
     }
@@ -46,7 +46,7 @@ public function create()
     public function store(Request $request)
     {
         
-        $this->authorize('customerstore');
+        // $this->authorize('customerstore');
 
         $validated = $request->validate(
             [
