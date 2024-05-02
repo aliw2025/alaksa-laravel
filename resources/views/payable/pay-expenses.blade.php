@@ -88,7 +88,7 @@
                                             <span class="title">Account</span>
 
                                             <div style="width: 11.21rem; max-width:11.21rem; " class="align-items-center">
-                                                <select name="acc_type" class="form-select" aria-label="Default select example" @if(isset($expensePayment)) @if($expensePayment->status!=1) disabled @endif @endif>
+                                                <select id = "account_id" name="acc_type" class="form-select" aria-label="Default select example" @if(isset($expensePayment)) @if($expensePayment->status!=1) disabled @endif @endif>
                                                     @foreach ($bank_acc as $acc)
                                                     <option @if(isset($expensePayment)) @if($expensePayment->account_id==$acc->id) selected @endif @endif value="{{ $acc->id }}">
                                                         {{ $acc->account_name }}
@@ -140,7 +140,7 @@
                                             <span class="title">Transaction Expense</span>
                                             <div style="width: 11.21rem; max-width:11.21rem; " class="align-items-center">
 
-                                                <input @if (isset($expensePayment)) value="{{ number_format($expensePayment->transaction_charges)}}" @else value="0" @endif type="text" class="number-separator form-control" id="tran_expense" name="tran_exp" @if(isset($expensePayment)) @if($expensePayment->status!=1) disabled @endif @endif>
+                                                <input @if (isset($expensePayment)) value="{{ number_format($expensePayment->transaction_charges)}}" @else value="0" @endif type="text" class="number-separator form-control" id="tran_exp" name="tran_exp" @if(isset($expensePayment)) @if($expensePayment->status!=1) disabled @endif @endif>
 
                                             </div>
 
@@ -257,6 +257,7 @@
         var headid = $('#head_id').val();
         getSubHeads(headid);
         getExpenseNetPayable();
+        setExpenseFeildStatus();
     });
 
     $('#investor_id').on('change', function() {
@@ -271,7 +272,22 @@
 
     });
 
+    function setExpenseFeildStatus(){
 
+        if($('#account_id').val()==1){
+            $('#tran_exp').prop('disabled', true);
+        }else{
+            $('#tran_exp').prop('disabled', false);
+        }
+}
+
+$('#account_id').on('change', function() {
+
+
+setExpenseFeildStatus();
+
+
+});
 
     function getSubHeads(headId) {
 

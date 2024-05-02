@@ -107,7 +107,9 @@ class SupplierPaymentController extends Controller
         $supplierPayment->supplier_id = $request->supplier;
         $supplierPayment->amount = str_replace(',','',$request->amount); 
         $supplierPayment->note = $request->note;
-        $supplierPayment->transaction_charges = str_replace(',','',$request->tran_exp);
+        if($request->tran_exp){
+            $supplierPayment->transaction_charges = str_replace(',','',$request->tran_exp);
+        }
         $supplierPayment->payment_date = $request->payment_date;
         $supplierPayment->status = 1;
         $supplierPayment->account_id = $request->acc_type;

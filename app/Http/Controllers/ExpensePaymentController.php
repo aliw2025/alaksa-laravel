@@ -71,7 +71,10 @@ class ExpensePaymentController extends Controller
         $expense_payment->head_id = $request->head_id;
         $expense_payment->sub_head_id = $request->sub_head_id;
         $expense_payment->status = 1;
-        $expense_payment->transaction_expense = str_replace(',','',$request->tran_exp);
+        if($request->tran_exp){
+            $expense_payment->transaction_expense = str_replace(',','',$request->tran_exp);
+        }
+        
         $expense_payment->account_id = $request->acc_type;
         $expense_payment->save();
         return redirect()->route('expensePayment.show', $expense_payment)->with('message', 'Record Saved');
