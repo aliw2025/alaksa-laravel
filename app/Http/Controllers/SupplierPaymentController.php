@@ -16,6 +16,7 @@ use App\Models\Investor;
 use App\Models\InvestorLeadger;
 use App\Models\Item;
 use App\Models\PurchaseItem;
+use App\Models\SupplierPaymentAttachment;
 use App\Models\TransactionStatus;
 use Illuminate\Support\Facades\Auth;
 
@@ -115,6 +116,22 @@ class SupplierPaymentController extends Controller
         $supplierPayment->account_id = $request->acc_type;
         $supplierPayment->save();
 
+        $fileModel = new SupplierPaymentAttachment();
+        // dd($request->all());
+        // dd();
+        if ($request->hasFile('file_name')) {
+            $file = $request->file('file_name');
+            // dd($file);s
+            $fileModel->db_name  = $request->db_name;
+            $fileName = $file->getClientOriginalName();
+            $fileModel->supplier_payment_id = $supplierPayment->id;
+            $filePath = $request->file('file_name')->storeAs('uploads/supplierPayments', $fileName,  'public');
+            $fileModel->name = $file->getClientOriginalName();
+            $fileModel->file_path = url('/') . '/public/storage/' . $filePath;
+            $fileModel->save();
+
+        }
+
         return redirect()->route('supplierPayment.show',$supplierPayment)->with('message','Record saved');
 
     }
@@ -137,7 +154,8 @@ class SupplierPaymentController extends Controller
               $query->where('account_type', '=', 1)->orWhere('account_type', '=', 4);
              })->get();
 
-        return view('payable.pay', compact('investors', 'suppliers','bank_acc','supplierPayment'));
+        $attachment = SupplierPaymentAttachment::where('supplier_payment_id', $supplierPayment->id)->latest()->first();
+        return view('payable.pay', compact('investors', 'attachment','suppliers','bank_acc','supplierPayment'));
 
 
     }
@@ -191,12 +209,27 @@ class SupplierPaymentController extends Controller
         $supplierPayment->store_id = 1;
         $supplierPayment->supplier_id = $request->supplier;
         $supplierPayment->amount = str_replace(',','',$request->amount); 
-        $supplierPayment->transaction_charges = str_replace(',','',$request->tran_exp);
+        if($request->tran_exp){
+            $supplierPayment->transaction_charges = str_replace(',','',$request->tran_exp);
+        }
         $supplierPayment->note = $request->note;
         $supplierPayment->payment_date = $request->payment_date;
         $supplierPayment->status = 1;
         $supplierPayment->account_id = $request->acc_type;
         $supplierPayment->save();
+        $fileModel = new SupplierPaymentAttachment();
+        if ($request->hasFile('file_name')) {
+            $file = $request->file('file_name');
+            // dd($file);s
+            $fileModel->db_name  = $request->db_name;
+            $fileName = $file->getClientOriginalName();
+            $fileModel->supplier_payment_id = $supplierPayment->id;
+            $filePath = $request->file('file_name')->storeAs('uploads/supplierPayments', $fileName,  'public');
+            $fileModel->name = $file->getClientOriginalName();
+            $fileModel->file_path = url('/') . '/public/storage/' . $filePath;
+            $fileModel->save();
+
+        }
 
         return redirect()->back()->with('message','Record Saved');
 

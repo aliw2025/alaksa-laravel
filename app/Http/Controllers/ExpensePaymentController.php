@@ -6,6 +6,7 @@ use App\Models\ChartOfAccount;
 use App\Models\Expense;
 use App\Models\ExpenseHead;
 use App\Models\ExpensePayment;
+use App\Models\ExpensePaymentAttachment;
 use App\Models\Investor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -77,6 +78,20 @@ class ExpensePaymentController extends Controller
         
         $expense_payment->account_id = $request->acc_type;
         $expense_payment->save();
+        $fileModel = new ExpensePaymentAttachment();
+
+        if ($request->hasFile('file_name')) {
+            $file = $request->file('file_name');
+            // dd($file);s
+            $fileModel->db_name  = $request->db_name;
+            $fileName = $file->getClientOriginalName();
+            $fileModel->expense_payment_id = $expense_payment->id;
+            $filePath = $request->file('file_name')->storeAs('uploads/expensePayments', $fileName,  'public');
+            $fileModel->name = $file->getClientOriginalName();
+            $fileModel->file_path = url('/') . '/public/storage/' . $filePath;
+            $fileModel->save();
+
+        }
         return redirect()->route('expensePayment.show', $expense_payment)->with('message', 'Record Saved');
     }
     
@@ -91,15 +106,17 @@ class ExpensePaymentController extends Controller
      */
     public function show(ExpensePayment $expensePayment)
     {
-
         $investors = Investor::all();
         $expense_heads = ExpenseHead::all();
         $bank_acc = ChartOfAccount::where('owner_type','App\Models\Investor')->where(
             function($query) {
               return 
               $query->where('account_type', '=', 1)->orWhere('account_type', '=', 4);
-             })->get();
-        return view('payable.pay-expenses', compact('investors', 'expense_heads','bank_acc','expensePayment'));
+             }
+            )->get();
+
+        $attachment = ExpensePaymentAttachment::where('expense_payment_id', $expensePayment->id)->latest()->first();
+        return view('payable.pay-expenses', compact('investors', 'attachment','expense_heads','bank_acc','expensePayment'));
 
     }
 
@@ -156,6 +173,20 @@ class ExpensePaymentController extends Controller
         $expensePayment->transaction_expense = str_replace(',','',$request->tran_exp);
         $expensePayment->account_id = $request->acc_type;
         $expensePayment->save();
+        $fileModel = new ExpensePaymentAttachment();
+
+        if ($request->hasFile('file_name')) {
+            $file = $request->file('file_name');
+            // dd($file);s
+            $fileModel->db_name  = $request->db_name;
+            $fileName = $file->getClientOriginalName();
+            $fileModel->expense_payment_id = $expensePayment->id;
+            $filePath = $request->file('file_name')->storeAs('uploads/expensePayments', $fileName,  'public');
+            $fileModel->name = $file->getClientOriginalName();
+            $fileModel->file_path = url('/') . '/public/storage/' . $filePath;
+            $fileModel->save();
+
+        }
 
         return redirect()->back()->with('message','Record Saved');
 

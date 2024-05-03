@@ -171,7 +171,7 @@
                                                 @else
                                                 <div class="col-3">
                                                     <input type="file" class="form-control" name="file_name" accept=".pdf, image/*">
-                                                    <button class="btn btn-primary mt-2">Save</button>
+                                                    <!-- <button class="btn btn-primary mt-2">Save</button> -->
                                                 </div>
                                                 @endif
                                             </div>

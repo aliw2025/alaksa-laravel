@@ -9,6 +9,7 @@ use App\Models\ExpenseHead;
 use App\Models\SubExpenseHead;
 use App\Models\TransactionStatus;
 use App\Models\ExpenseAttachment;
+use Illuminate\Support\Facades\File; 
 
 
 
@@ -86,7 +87,7 @@ class ExpenseController extends Controller
             $fileModel->db_name  = $request->db_name;
             $fileName = $file->getClientOriginalName();
             $fileModel->expense_id = $expense->id;
-            $filePath = $request->file('file_name')->storeAs('uploads', $fileName,  'public');
+            $filePath = $request->file('file_name')->storeAs('uploads/expenses', $fileName,  'public');
             $fileModel->name = $file->getClientOriginalName();
             $fileModel->file_path = url('/') . '/public/storage/' . $filePath;
             $fileModel->save();
@@ -171,6 +172,7 @@ class ExpenseController extends Controller
                     $query->where('account_type', '=', 1)->orWhere('account_type', '=', 4);
             }
         )->get();
+
         $attachment = ExpenseAttachment::where('expense_id', $expense->id)->latest()->first();
 
         return view('expenses.expense', compact('investors', 'bank_acc', 'heads', 'sheads', 'expense','attachment'));
@@ -227,12 +229,16 @@ class ExpenseController extends Controller
 
         $fileModel = new ExpenseAttachment();
         if ($request->hasFile('file_name')) {
+
+            //$OldAttachment = ExpenseAttachment::where('expense_id', $expense->id)->latest()->first();
+            //File::delete($OldAttachment->file_path);
+            //$OldAttachment->delete();
             $file = $request->file('file_name');
             // dd($file);s
             $fileModel->db_name  = $request->db_name;
             $fileName = $file->getClientOriginalName();
             $fileModel->expense_id = $expense->id;
-            $filePath = $request->file('file_name')->storeAs('uploads', $fileName,  'public');
+            $filePath = $request->file('file_name')->storeAs('uploads/expenses', $fileName,  'public');
             $fileModel->name = $file->getClientOriginalName();
             $fileModel->file_path = url('/') . '/public/storage/' . $filePath;
             $fileModel->save();

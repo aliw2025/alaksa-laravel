@@ -6,7 +6,7 @@
             <div class="row invoice-add">
                 <!-- Invoice Add Left starts -->
                 <div class="col-xl-12 col-md-12 col-12">
-                    <form class="" method="POST" autocomplete="on" action="{{ isset($supplierPayment)? route('supplierPayment.update',$supplierPayment->id):route('supplierPayment.store') }}">
+                    <form  enctype="multipart/form-data"  class="" method="POST" autocomplete="on" action="{{ isset($supplierPayment)? route('supplierPayment.update',$supplierPayment->id):route('supplierPayment.store') }}">
                         <div class="card invoice-preview-card">
                             <!-- Header starts -->
                             @if(isset($supplierPayment))
@@ -177,6 +177,20 @@
                                             </div> --}}
                                     </div>
                                 </div>
+                                <div class="row">
+                                                
+                                    @if(isset($attachment))
+                                    <div class="col-3">
+                                        <p>attachment : </p>
+                                        <a  href="{{$attachment->file_path}}"><i data-feather="file"></i></a>
+                                    </div>
+                                    @else
+                                    <div class="col-3">
+                                        <input type="file" class="form-control" name="file_name" accept=".pdf, image/*">
+                                        <!-- <button class="btn btn-primary mt-2">Save</button> -->
+                                    </div>
+                                    @endif
+                                </div>
                                 <!-- Invoice Note ends -->
                             </div>
                             <div class="row p-2">
@@ -201,7 +215,9 @@
                                     @endif
 
                                 </div>
+                                
                             </div>
+                            
 
                         </div>
                     </form>
