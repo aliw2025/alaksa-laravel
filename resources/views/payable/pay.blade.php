@@ -205,6 +205,7 @@
                                     @elseif($supplierPayment->status == 3)
                                     <div class="d-flex justify-content-end">
                                         <button type="submit" name="action" value="unpost" class="btn btn-danger me-2">Un Post</button>
+                                        <button type="submit" name="action" value="print" class="btn btn-primary me-2">print invoice</button>
                                     </div>
                                     @endif
                                     @else

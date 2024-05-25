@@ -19,6 +19,7 @@ use App\Models\PurchaseItem;
 use App\Models\SupplierPaymentAttachment;
 use App\Models\TransactionStatus;
 use Illuminate\Support\Facades\Auth;
+use PDF;
 
 
 class SupplierPaymentController extends Controller
@@ -361,10 +362,19 @@ class SupplierPaymentController extends Controller
         $supplierPayment->createLeadgerEntry($sup_acc_id,str_replace(',','',$supplierPayment->amount),$supplierPayment->investor_id,$supplierPayment->payment_date,$user->id);
         $supplierPayment->createLeadgerEntry($supplierPayment->account_id,-str_replace(',','',$supplierPayment->amount),$supplierPayment->investor_id,$supplierPayment->payment_date,$user->id);
 
-        
-       
+        $sale_detail = null;
+        $data = [
+            'title' => 'Welcome to ItSolutionStuff.com',
+            'date' => date('m/d/Y'),
+            'supplierPayment' => $supplierPayment,
+            'sale_detail' => $sale_detail,
+            'user_id' => $user->id
 
-        return redirect()->back()->with('message','Record Posted');
+        ];
+       
+        $pdf = PDF::loadView('payable.supplier-payment-inv-pdf', $data);
+        return $pdf->stream('my.pdf', array('Attachment' => 0));
+       // return redirect()->back()->with('message','Record Posted');
     }
 
     public function UnpostSupplierPayment(Request $request)
