@@ -948,7 +948,7 @@ class SaleController extends Controller
     {
         // $request->validate([
         //     'from_date' => 'required',
-        //     'to_date' => 'required'
+        //     'to_date' => 'required'c
         // ]);
 
 
