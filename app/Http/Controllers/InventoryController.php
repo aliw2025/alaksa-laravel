@@ -90,7 +90,8 @@ class InventoryController extends Controller
         // with('item.propertyValues')
         $supplier = Supplier::find($request->supplier_id);
         $items = Inventory::where('investor_id','=',$request->investor_id)->where('quantity','>',0)->whereHas('item', function ($query)  use ($request,$supplier) {
-            $query->where('name','like','%'.$request->key.'%')->where('cat_id',$supplier->category_id);
+            $query->where('name','like','%'.$request->key.'%');
+            // ->where('cat_id',$supplier->category_id);
         })->with('item')->get();
         
         return $items;
@@ -101,7 +102,8 @@ class InventoryController extends Controller
               return [];
         }
         $items = Inventory::where('investor_id','=',$request->investor_id)->where('quantity','>',0)->whereHas('item', function ($query)  use ($request,$supplier) {
-            $query->where('id',$request->item_id)->where('cat_id',$supplier->category_id);
+            $query->where('id',$request->item_id);
+            // ->where('cat_id',$supplier->category_id);
         })->with('item')->first();
         
         return $items;

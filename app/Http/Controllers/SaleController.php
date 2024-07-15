@@ -946,10 +946,10 @@ class SaleController extends Controller
 
     public function searchSalesPost(Request $request)
     {
-        $request->validate([
-            'from_date' => 'required',
-            'to_date' => 'required'
-        ]);
+        // $request->validate([
+        //     'from_date' => 'required',
+        //     'to_date' => 'required'
+        // ]);
 
 
         $sales = Sale::SearchSale($request->from_date, $request->to_date, $request->customer_name, $request->customer_id, $request->invoice_no, $request->status_id);

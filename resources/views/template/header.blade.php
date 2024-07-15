@@ -48,6 +48,7 @@
       <link rel="stylesheet" type="text/css" href="{{ url('/resources/css/plugins/forms/pickers/form-flat-pickr.min.css') }}">
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
 </head>
 
